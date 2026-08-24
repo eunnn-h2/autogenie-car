@@ -85,7 +85,7 @@ if (!in_array($productType, ['', 'RENT', 'LEASE'], true)) fail('이용 방식 �
 try {
     $pdo->beginTransaction();
 
-    $insert = $pdo->prepare("INSERT INTO quick_estimates (
+    $insert = $pdo->prepare("INSERT INTO estimate_quick (
         member_id,
         estimate_no,
         customer_name,
@@ -127,7 +127,7 @@ try {
 
     $estimateId = (int)$pdo->lastInsertId();
     $estimateNo = 'Q' . date('Ymd') . '-' . str_pad((string)$estimateId, 6, '0', STR_PAD_LEFT);
-    $pdo->prepare('UPDATE quick_estimates SET estimate_no=? WHERE id=?')->execute([$estimateNo, $estimateId]);
+    $pdo->prepare('UPDATE estimate_quick SET estimate_no=? WHERE id=?')->execute([$estimateNo, $estimateId]);
     $pdo->commit();
 
     echo json_encode([
@@ -141,7 +141,7 @@ try {
     if ($pdo->inTransaction()) $pdo->rollBack();
 
     if ($e instanceof PDOException && str_contains($e->getMessage(), "doesn't exist")) {
-        fail('quick_estimates 테이블이 없습니다. quick_estimates_table.sql을 phpMyAdmin에서 먼저 실행해 주세요.', 500);
+        fail('quick_estimate_direct 테이블이 없습니다. quick_estimates_table.sql을 phpMyAdmin에서 먼저 실행해 주세요.', 500);
     }
 
     fail('간편견적 저장 중 오류가 발생했습니다: ' . $e->getMessage(), 500);

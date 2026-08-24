@@ -19,7 +19,7 @@ function parseRowKey(string $key): ?array {
     if ($id < 1) return null;
     return [
         'source' => $m[1],
-        'table' => $m[1] === 'QUICK' ? 'quick_estimates' : 'estimates',
+        'table' => $m[1] === 'QUICK' ? 'estimate_quick' : 'estimate_direct',
         'id' => $id,
     ];
 }
@@ -58,7 +58,7 @@ try {
         if ($assignedAdminId > 0) {
             $check = $pdo->prepare("
                 SELECT id
-                FROM admins
+                FROM admin_accounts
                 WHERE id = ? AND is_active = 1
                 LIMIT 1
             ");
@@ -104,14 +104,14 @@ try {
         if (!in_array($status, $allowedStatuses, true)) {
             throw new RuntimeException('상태 값이 올바르지 않습니다.');
         }
-        $direct = $pdo->prepare('UPDATE estimates SET status=? WHERE id=?');
-        $quick = $pdo->prepare('UPDATE quick_estimates SET status=? WHERE id=?');
+        $direct = $pdo->prepare('UPDATE estimate_direct SET status=? WHERE id=?');
+        $quick = $pdo->prepare('UPDATE estimate_quick SET status=? WHERE id=?');
         foreach ($parsed as $row) {
             ($row['source'] === 'QUICK' ? $quick : $direct)->execute([$status, $row['id']]);
         }
     } else {
-        $direct = $pdo->prepare('DELETE FROM estimates WHERE id=?');
-        $quick = $pdo->prepare('DELETE FROM quick_estimates WHERE id=?');
+        $direct = $pdo->prepare('DELETE FROM estimate_direct WHERE id=?');
+        $quick = $pdo->prepare('DELETE FROM estimate_quick WHERE id=?');
         foreach ($parsed as $row) {
             ($row['source'] === 'QUICK' ? $quick : $direct)->execute([$row['id']]);
         }

@@ -14,7 +14,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 190) {
     member_response(['ok' => false, 'message' => '올바른 이메일 주소를 입력해 주세요.'], 422);
 }
 
-$stmt = $pdo->prepare('SELECT id, name, email, status, password_reset_requested_at FROM members WHERE email = ? LIMIT 1');
+$stmt = $pdo->prepare('SELECT id, name, email, status, password_reset_requested_at FROM member_accounts WHERE email = ? LIMIT 1');
 $stmt->execute([$email]);
 $member = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -33,7 +33,7 @@ $code = (string)random_int(100000, 999999);
 $codeHash = password_hash($code, PASSWORD_DEFAULT);
 $expiresAt = date('Y-m-d H:i:s', time() + 600);
 
-$pdo->prepare('UPDATE members SET password_reset_code_hash = ?, password_reset_expires_at = ?, password_reset_requested_at = NOW() WHERE id = ?')
+$pdo->prepare('UPDATE member_accounts SET password_reset_code_hash = ?, password_reset_expires_at = ?, password_reset_requested_at = NOW() WHERE id = ?')
     ->execute([$codeHash, $expiresAt, (int)$member['id']]);
 
 $subject = '[오토지니] 비밀번호 재설정 인증번호';
@@ -49,7 +49,7 @@ $host = strtolower((string)($_SERVER['HTTP_HOST'] ?? ''));
 $isLocal = $host === '' || str_contains($host, 'localhost') || str_contains($host, '127.0.0.1');
 
 if (!$mailSent && !$isLocal) {
-    $pdo->prepare('UPDATE members SET password_reset_code_hash = NULL, password_reset_expires_at = NULL WHERE id = ?')
+    $pdo->prepare('UPDATE member_accounts SET password_reset_code_hash = NULL, password_reset_expires_at = NULL WHERE id = ?')
         ->execute([(int)$member['id']]);
     member_response(['ok' => false, 'message' => '인증메일을 발송하지 못했습니다. 서버 메일(SMTP) 설정을 확인해 주세요.'], 500);
 }

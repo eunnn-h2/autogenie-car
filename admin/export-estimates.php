@@ -12,7 +12,7 @@ function addRows(PDO $pdo,string $table,string $kind,string $type,string $status
  $sql='SELECT * FROM '.$table.($where?' WHERE '.implode(' AND ',$where):'').' ORDER BY created_at DESC';
  try{$s=$pdo->prepare($sql);$s->execute($params);foreach($s->fetchAll(PDO::FETCH_ASSOC) as $r){$r['_kind']=$kind;$rows[]=$r;}}catch(Throwable $e){}
 }
-addRows($pdo,'estimates','DIRECT',$type,$status,$q,$source,$rows);addRows($pdo,'quick_estimates','QUICK',$type,$status,$q,$source,$rows);
+addRows($pdo,'estimate_direct','DIRECT',$type,$status,$q,$source,$rows);addRows($pdo,'estimate_quick','QUICK',$type,$status,$q,$source,$rows);
 usort($rows,fn($a,$b)=>strcmp((string)$b['created_at'],(string)$a['created_at']));
 $filename='autogenie_estimates_'.date('Ymd_His').'.xls';
 header('Content-Type: application/vnd.ms-excel; charset=UTF-8');header('Content-Disposition: attachment; filename="'.$filename.'"');header('Cache-Control: no-store');echo "\xEF\xBB\xBF";

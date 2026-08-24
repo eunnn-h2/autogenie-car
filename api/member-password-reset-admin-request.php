@@ -23,7 +23,7 @@ if ($phone === '') {
 try {
     $stmt = $pdo->prepare("
         SELECT id, name, phone, email, status
-        FROM members
+        FROM member_accounts
         WHERE name = ? AND phone = ?
         LIMIT 1
     ");
@@ -34,7 +34,7 @@ try {
     if ($member && ($member['status'] ?? '') === 'ACTIVE') {
         $check = $pdo->prepare("
             SELECT id
-            FROM password_reset_admin_requests
+            FROM admin_password_reset_requests
             WHERE member_id = ?
               AND status = 'PENDING'
               AND requested_at >= DATE_SUB(NOW(), INTERVAL 1 DAY)
@@ -44,7 +44,7 @@ try {
 
         if (!$check->fetchColumn()) {
             $insert = $pdo->prepare("
-                INSERT INTO password_reset_admin_requests (
+                INSERT INTO admin_password_reset_requests (
                     member_id,
                     member_name,
                     member_phone,

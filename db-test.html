@@ -1391,7 +1391,7 @@ body.modal-open{overflow:hidden}
     transform:translateX(-50%);
     z-index:900;
     width:min(350px, calc(100% - 24px));
-    height:72px;
+    height:75px;
     display:grid;
     grid-template-columns:repeat(5,1fr);
     padding:2px 10px;
@@ -1446,10 +1446,6 @@ body.modal-open{overflow:hidden}
 }
 .bottom-nav-item[data-main-nav="mypage"] .bottom-nav-icon img{
     opacity:1;
-}
-.bottom-nav-item > span{
-    font-size: 1.05em;
-    font-weight: 600;
 }
 .bottom-nav-item > span:last-child{
     display:block;
@@ -4000,7 +3996,7 @@ body.modal-open{overflow:hidden}
             <img class="menu-icon-default" src="images/menu-icons/faq-black.png" alt="">
             <img class="menu-icon-active" src="images/menu-icons/faq-orange.png" alt="">
         </span>
-        <span>Q&amp;A</span>
+        <span>자주Q&amp;A</span>
     </button>
 
     <button class="bottom-nav-item" type="button" data-main-nav="mypage">
@@ -4008,7 +4004,7 @@ body.modal-open{overflow:hidden}
             <img class="menu-icon-default" src="images/menu-icons/mypage-black.png" alt="">
             <img class="menu-icon-active" src="images/menu-icons/mypage-orange.png" alt="">
         </span>
-        <span>마이페이지</span>
+        <span>마이</span>
     </button>
 </nav>
 
@@ -5854,7 +5850,7 @@ function renderVehicleInfo(vehicleKey) {
             ` : `
                 <div class="vehicle-info-empty">
                     이 트림에 등록된 옵션 정보가 없습니다.<br>
-                    <strong>vehicle_options</strong>에 트림 옵션을 등록하면 여기에 표시됩니다.
+                    <strong>car_vehicle_options</strong>에 트림 옵션을 등록하면 여기에 표시됩니다.
                 </div>
             `}
         </section>

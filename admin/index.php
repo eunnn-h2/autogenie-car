@@ -227,7 +227,7 @@ function floatValOr(mixed $v, float $default = 0): float
 
 function getBrandId(PDO $pdo, string $brandName): ?int
 {
-    $stmt = $pdo->prepare('SELECT id FROM brands WHERE name = ? LIMIT 1');
+    $stmt = $pdo->prepare('SELECT id FROM car_brands WHERE name = ? LIMIT 1');
     $stmt->execute([$brandName]);
     $id = $stmt->fetchColumn();
     return $id !== false ? (int)$id : null;
@@ -235,7 +235,7 @@ function getBrandId(PDO $pdo, string $brandName): ?int
 
 function getVehicleId(PDO $pdo, string $brandName, string $vehicleName): ?int
 {
-    $stmt = $pdo->prepare('SELECT v.id FROM vehicles v JOIN brands b ON b.id=v.brand_id WHERE b.name=? AND v.name=? LIMIT 1');
+    $stmt = $pdo->prepare('SELECT v.id FROM car_vehicles v JOIN car_brands b ON b.id=v.brand_id WHERE b.name=? AND v.name=? LIMIT 1');
     $stmt->execute([$brandName, $vehicleName]);
     $id = $stmt->fetchColumn();
     return $id !== false ? (int)$id : null;
@@ -243,7 +243,7 @@ function getVehicleId(PDO $pdo, string $brandName, string $vehicleName): ?int
 
 function getTrimId(PDO $pdo, string $brandName, string $vehicleName, string $trimName): ?int
 {
-    $stmt = $pdo->prepare('SELECT t.id FROM trims t JOIN vehicles v ON v.id=t.vehicle_id JOIN brands b ON b.id=v.brand_id WHERE b.name=? AND v.name=? AND t.name=? LIMIT 1');
+    $stmt = $pdo->prepare('SELECT t.id FROM car_trims t JOIN car_vehicles v ON v.id=t.vehicle_id JOIN car_brands b ON b.id=v.brand_id WHERE b.name=? AND v.name=? AND t.name=? LIMIT 1');
     $stmt->execute([$brandName, $vehicleName, $trimName]);
     $id = $stmt->fetchColumn();
     return $id !== false ? (int)$id : null;
@@ -251,9 +251,9 @@ function getTrimId(PDO $pdo, string $brandName, string $vehicleName, string $tri
 
 function importBrands(PDO $pdo, array $rows, array &$log): void
 {
-    $select = $pdo->prepare('SELECT id FROM brands WHERE name=? LIMIT 1');
-    $insert = $pdo->prepare('INSERT INTO brands (name, logo_path, origin_type, sort_order, is_active) VALUES (?, ?, ?, ?, ?)');
-    $update = $pdo->prepare('UPDATE brands SET logo_path=?, origin_type=?, sort_order=?, is_active=? WHERE id=?');
+    $select = $pdo->prepare('SELECT id FROM car_brands WHERE name=? LIMIT 1');
+    $insert = $pdo->prepare('INSERT INTO car_brands (name, logo_path, origin_type, sort_order, is_active) VALUES (?, ?, ?, ?, ?)');
+    $update = $pdo->prepare('UPDATE car_brands SET logo_path=?, origin_type=?, sort_order=?, is_active=? WHERE id=?');
 
     foreach ($rows as $r) {
         $name = trim((string)($r['name'] ?? ''));
@@ -277,8 +277,8 @@ function importBrands(PDO $pdo, array $rows, array &$log): void
 
 function importVehicles(PDO $pdo, array $rows, array &$log, bool $partialUpdate = false): void
 {
-    $select = $pdo->prepare('SELECT v.id FROM vehicles v JOIN brands b ON b.id=v.brand_id WHERE b.name=? AND v.name=? LIMIT 1');
-    $insert = $pdo->prepare('INSERT INTO vehicles (brand_id, name, model_year, fuel_type, base_price, image_path, is_best, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $select = $pdo->prepare('SELECT v.id FROM car_vehicles v JOIN car_brands b ON b.id=v.brand_id WHERE b.name=? AND v.name=? LIMIT 1');
+    $insert = $pdo->prepare('INSERT INTO car_vehicles (brand_id, name, model_year, fuel_type, base_price, image_path, is_best, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
     foreach ($rows as $r) {
         $brandName = trim((string)($r['brand_name'] ?? ''));
@@ -303,7 +303,7 @@ function importVehicles(PDO $pdo, array $rows, array &$log, bool $partialUpdate 
             }
             if ($sets) {
                 $params[] = (int)$id;
-                $stmt = $pdo->prepare('UPDATE vehicles SET '.implode(',', $sets).' WHERE id=?');
+                $stmt = $pdo->prepare('UPDATE car_vehicles SET '.implode(',', $sets).' WHERE id=?');
                 $stmt->execute($params);
             }
             $log[] = "vehicles UPDATE: {$brandName} / {$name}";
@@ -326,8 +326,8 @@ function importVehicles(PDO $pdo, array $rows, array &$log, bool $partialUpdate 
 
 function importColors(PDO $pdo, array $rows, array &$log, bool $partialUpdate = false): void
 {
-    $select = $pdo->prepare('SELECT c.id FROM colors c JOIN vehicles v ON v.id=c.vehicle_id JOIN brands b ON b.id=v.brand_id WHERE b.name=? AND v.name=? AND c.name=? LIMIT 1');
-    $insert = $pdo->prepare('INSERT INTO colors (vehicle_id, name, hex_code, border_color, image_path, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    $select = $pdo->prepare('SELECT c.id FROM car_colors c JOIN car_vehicles v ON v.id=c.vehicle_id JOIN car_brands b ON b.id=v.brand_id WHERE b.name=? AND v.name=? AND c.name=? LIMIT 1');
+    $insert = $pdo->prepare('INSERT INTO car_colors (vehicle_id, name, hex_code, border_color, image_path, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)');
 
     foreach ($rows as $r) {
         $brand = trim((string)($r['brand_name'] ?? ''));
@@ -349,7 +349,7 @@ function importColors(PDO $pdo, array $rows, array &$log, bool $partialUpdate = 
             }
             if ($sets) {
                 $params[]=(int)$id;
-                $stmt=$pdo->prepare('UPDATE colors SET '.implode(',', $sets).' WHERE id=?');
+                $stmt=$pdo->prepare('UPDATE car_colors SET '.implode(',', $sets).' WHERE id=?');
                 $stmt->execute($params);
             }
             $log[]="colors UPDATE: {$brand} / {$vehicle} / {$name}";
@@ -369,8 +369,8 @@ function importColors(PDO $pdo, array $rows, array &$log, bool $partialUpdate = 
 
 function importTrims(PDO $pdo, array $rows, array &$log, bool $partialUpdate = false): void
 {
-    $select=$pdo->prepare('SELECT t.id FROM trims t JOIN vehicles v ON v.id=t.vehicle_id JOIN brands b ON b.id=v.brand_id WHERE b.name=? AND v.name=? AND t.name=? LIMIT 1');
-    $insert=$pdo->prepare('INSERT INTO trims (vehicle_id, name, price, description, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?)');
+    $select=$pdo->prepare('SELECT t.id FROM car_trims t JOIN car_vehicles v ON v.id=t.vehicle_id JOIN car_brands b ON b.id=v.brand_id WHERE b.name=? AND v.name=? AND t.name=? LIMIT 1');
+    $insert=$pdo->prepare('INSERT INTO car_trims (vehicle_id, name, price, description, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?)');
 
     foreach ($rows as $r) {
         $brand=trim((string)($r['brand_name'] ?? ''));
@@ -392,7 +392,7 @@ function importTrims(PDO $pdo, array $rows, array &$log, bool $partialUpdate = f
             }
             if($sets){
                 $params[]=(int)$id;
-                $stmt=$pdo->prepare('UPDATE trims SET '.implode(',',$sets).' WHERE id=?');
+                $stmt=$pdo->prepare('UPDATE car_trims SET '.implode(',',$sets).' WHERE id=?');
                 $stmt->execute($params);
             }
             $log[]="trims UPDATE: {$brand} / {$vehicle} / {$name}";
@@ -408,9 +408,9 @@ function importTrims(PDO $pdo, array $rows, array &$log, bool $partialUpdate = f
 
 function importPrices(PDO $pdo, array $rows, array &$log, bool $partialUpdate = false): void
 {
-    $select=$pdo->prepare('SELECT id FROM prices WHERE trim_id=? AND product_type=? AND contract_months=? AND prepayment_rate=? AND annual_mileage=? LIMIT 1');
-    $insert=$pdo->prepare('INSERT INTO prices (vehicle_id, trim_id, product_type, contract_months, prepayment_rate, annual_mileage, monthly_payment, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-    $update=$pdo->prepare('UPDATE prices SET vehicle_id=?, monthly_payment=?, is_active=? WHERE id=?');
+    $select=$pdo->prepare('SELECT id FROM car_prices WHERE trim_id=? AND product_type=? AND contract_months=? AND prepayment_rate=? AND annual_mileage=? LIMIT 1');
+    $insert=$pdo->prepare('INSERT INTO car_prices (vehicle_id, trim_id, product_type, contract_months, prepayment_rate, annual_mileage, monthly_payment, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+    $update=$pdo->prepare('UPDATE car_prices SET vehicle_id=?, monthly_payment=?, is_active=? WHERE id=?');
 
     foreach($rows as $r){
         $brand=trim((string)($r['brand_name']??''));
@@ -522,24 +522,24 @@ if (
 
             $ph = implode(',', array_fill(0, count($selectedIds), '?'));
 
-            $stmt = $pdo->prepare("DELETE FROM prices WHERE vehicle_id IN ($ph)");
+            $stmt = $pdo->prepare("DELETE FROM car_prices WHERE vehicle_id IN ($ph)");
             $stmt->execute($selectedIds);
 
-            $stmt = $pdo->prepare("DELETE FROM colors WHERE vehicle_id IN ($ph)");
+            $stmt = $pdo->prepare("DELETE FROM car_colors WHERE vehicle_id IN ($ph)");
             $stmt->execute($selectedIds);
 
             $stmt = $pdo->prepare("
-                DELETE FROM vehicle_options
+                DELETE FROM car_vehicle_options
                 WHERE trim_id IN (
-                    SELECT id FROM trims WHERE vehicle_id IN ($ph)
+                    SELECT id FROM car_trims WHERE vehicle_id IN ($ph)
                 )
             ");
             $stmt->execute($selectedIds);
 
-            $stmt = $pdo->prepare("DELETE FROM trims WHERE vehicle_id IN ($ph)");
+            $stmt = $pdo->prepare("DELETE FROM car_trims WHERE vehicle_id IN ($ph)");
             $stmt->execute($selectedIds);
 
-            $stmt = $pdo->prepare("DELETE FROM vehicles WHERE id IN ($ph)");
+            $stmt = $pdo->prepare("DELETE FROM car_vehicles WHERE id IN ($ph)");
             $stmt->execute($selectedIds);
 
             $pdo->commit();
@@ -589,7 +589,7 @@ if (
                     throw new RuntimeException('상태 값을 선택해주세요.');
                 }
 
-                $sql = "UPDATE vehicles SET is_active = ? WHERE id IN ($placeholders)";
+                $sql = "UPDATE car_vehicles SET is_active = ? WHERE id IN ($placeholders)";
                 $params[] = (int)$bulkValue;
             }
 
@@ -600,14 +600,14 @@ if (
                     throw new RuntimeException('브랜드를 선택해주세요.');
                 }
 
-                $check = $pdo->prepare("SELECT COUNT(*) FROM brands WHERE id = ?");
+                $check = $pdo->prepare("SELECT COUNT(*) FROM car_brands WHERE id = ?");
                 $check->execute([$brandIdBulk]);
 
                 if ((int)$check->fetchColumn() === 0) {
                     throw new RuntimeException('선택한 브랜드가 존재하지 않습니다.');
                 }
 
-                $sql = "UPDATE vehicles SET brand_id = ? WHERE id IN ($placeholders)";
+                $sql = "UPDATE car_vehicles SET brand_id = ? WHERE id IN ($placeholders)";
                 $params[] = $brandIdBulk;
             }
 
@@ -618,7 +618,7 @@ if (
                     throw new RuntimeException('연료를 선택해주세요.');
                 }
 
-                $sql = "UPDATE vehicles SET fuel_type = ? WHERE id IN ($placeholders)";
+                $sql = "UPDATE car_vehicles SET fuel_type = ? WHERE id IN ($placeholders)";
                 $params[] = $bulkValue;
             }
 
@@ -661,7 +661,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
         if ($crudAction === 'update_vehicle') {
             $vehicleIdPost = (int)($_POST['vehicle_id'] ?? 0);
             $stmt = $pdo->prepare("
-                UPDATE vehicles
+                UPDATE car_vehicles
                 SET name = :name,
                     model_year = :model_year,
                     fuel_type = :fuel_type,
@@ -691,11 +691,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
             $vehicleIdPost = (int)($_POST['vehicle_id'] ?? 0);
 
             $pdo->beginTransaction();
-            $pdo->prepare("DELETE FROM prices WHERE vehicle_id = ?")->execute([$vehicleIdPost]);
-            $pdo->prepare("DELETE FROM colors WHERE vehicle_id = ?")->execute([$vehicleIdPost]);
-            $pdo->prepare("DELETE FROM vehicle_options WHERE trim_id IN (SELECT id FROM trims WHERE vehicle_id = ?)")->execute([$vehicleIdPost]);
-            $pdo->prepare("DELETE FROM trims WHERE vehicle_id = ?")->execute([$vehicleIdPost]);
-            $pdo->prepare("DELETE FROM vehicles WHERE id = ?")->execute([$vehicleIdPost]);
+            $pdo->prepare("DELETE FROM car_prices WHERE vehicle_id = ?")->execute([$vehicleIdPost]);
+            $pdo->prepare("DELETE FROM car_colors WHERE vehicle_id = ?")->execute([$vehicleIdPost]);
+            $pdo->prepare("DELETE FROM car_vehicle_options WHERE trim_id IN (SELECT id FROM car_trims WHERE vehicle_id = ?)")->execute([$vehicleIdPost]);
+            $pdo->prepare("DELETE FROM car_trims WHERE vehicle_id = ?")->execute([$vehicleIdPost]);
+            $pdo->prepare("DELETE FROM car_vehicles WHERE id = ?")->execute([$vehicleIdPost]);
             $pdo->commit();
 
             $crudMessage = '차량과 연결된 색상·트림·가격 데이터를 삭제했습니다.';
@@ -705,7 +705,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
         if ($crudAction === 'add_color') {
             $vehicleIdPost = (int)$_POST['vehicle_id'];
             $stmt = $pdo->prepare("
-                INSERT INTO colors (
+                INSERT INTO car_colors (
                     vehicle_id, name, hex_code, border_color,
                     image_path, sort_order, is_active
                 ) VALUES (
@@ -730,7 +730,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
             $vehicleIdPost = (int)$_POST['vehicle_id'];
             $colorId = (int)$_POST['color_id'];
             $stmt = $pdo->prepare("
-                UPDATE colors
+                UPDATE car_colors
                 SET name = :name,
                     hex_code = :hex_code,
                     border_color = :border_color,
@@ -756,7 +756,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
         if ($crudAction === 'delete_color') {
             $vehicleIdPost = (int)$_POST['vehicle_id'];
             $colorId = (int)$_POST['color_id'];
-            $pdo->prepare("DELETE FROM colors WHERE id = ? AND vehicle_id = ?")->execute([$colorId, $vehicleIdPost]);
+            $pdo->prepare("DELETE FROM car_colors WHERE id = ? AND vehicle_id = ?")->execute([$colorId, $vehicleIdPost]);
             $crudMessage = '색상을 삭제했습니다.';
             $_GET['vehicle_id'] = $vehicleIdPost;
         }
@@ -764,7 +764,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
         if ($crudAction === 'add_trim') {
             $vehicleIdPost = (int)$_POST['vehicle_id'];
             $stmt = $pdo->prepare("
-                INSERT INTO trims (
+                INSERT INTO car_trims (
                     vehicle_id, name, price, description, sort_order, is_active
                 ) VALUES (
                     :vehicle_id, :name, :price, :description, :sort_order, :is_active
@@ -786,7 +786,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
             $vehicleIdPost = (int)$_POST['vehicle_id'];
             $trimId = (int)$_POST['trim_id'];
             $stmt = $pdo->prepare("
-                UPDATE trims
+                UPDATE car_trims
                 SET name = :name,
                     price = :price,
                     description = :description,
@@ -812,9 +812,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
             $trimId = (int)$_POST['trim_id'];
 
             $pdo->beginTransaction();
-            $pdo->prepare("DELETE FROM prices WHERE trim_id = ?")->execute([$trimId]);
-            $pdo->prepare("DELETE FROM vehicle_options WHERE trim_id = ?")->execute([$trimId]);
-            $pdo->prepare("DELETE FROM trims WHERE id = ? AND vehicle_id = ?")->execute([$trimId, $vehicleIdPost]);
+            $pdo->prepare("DELETE FROM car_prices WHERE trim_id = ?")->execute([$trimId]);
+            $pdo->prepare("DELETE FROM car_vehicle_options WHERE trim_id = ?")->execute([$trimId]);
+            $pdo->prepare("DELETE FROM car_trims WHERE id = ? AND vehicle_id = ?")->execute([$trimId, $vehicleIdPost]);
             $pdo->commit();
 
             $crudMessage = '트림과 연결된 가격 데이터를 삭제했습니다.';
@@ -826,7 +826,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
             $trimId = (int)$_POST['price_trim_id'];
 
             $stmt = $pdo->prepare("
-                INSERT INTO prices (
+                INSERT INTO car_prices (
                     vehicle_id, trim_id, product_type, contract_months,
                     prepayment_rate, annual_mileage, monthly_payment, is_active
                 ) VALUES (
@@ -856,7 +856,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
             $priceId = (int)$_POST['price_id'];
 
             $stmt = $pdo->prepare("
-                UPDATE prices
+                UPDATE car_prices
                 SET trim_id = :trim_id,
                     product_type = :product_type,
                     contract_months = :contract_months,
@@ -884,7 +884,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
         if ($crudAction === 'delete_price') {
             $vehicleIdPost = (int)$_POST['vehicle_id'];
             $priceId = (int)$_POST['price_id'];
-            $pdo->prepare("DELETE FROM prices WHERE id = ? AND vehicle_id = ?")->execute([$priceId, $vehicleIdPost]);
+            $pdo->prepare("DELETE FROM car_prices WHERE id = ? AND vehicle_id = ?")->execute([$priceId, $vehicleIdPost]);
             $crudMessage = '가격 조건을 삭제했습니다.';
             $_GET['vehicle_id'] = $vehicleIdPost;
         }
@@ -904,7 +904,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
             }
 
             $stmt = $pdo->prepare("
-                UPDATE colors
+                UPDATE car_colors
                 SET name = :name,
                     hex_code = :hex_code,
                     border_color = :border_color,
@@ -949,7 +949,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
             }
 
             $stmt = $pdo->prepare("
-                UPDATE trims
+                UPDATE car_trims
                 SET name = :name,
                     price = :price,
                     description = :description,
@@ -994,7 +994,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
             }
 
             $stmt = $pdo->prepare("
-                UPDATE prices
+                UPDATE car_prices
                 SET trim_id = :trim_id,
                     product_type = :product_type,
                     contract_months = :contract_months,
@@ -1075,7 +1075,7 @@ try {
 
     $brandOptions = $pdo->query("
         SELECT id, name
-        FROM brands
+        FROM car_brands
         ORDER BY sort_order ASC, name ASC
     ")->fetchAll(PDO::FETCH_ASSOC);
 
@@ -1115,8 +1115,8 @@ try {
 
     $countSql = "
         SELECT COUNT(*)
-        FROM vehicles v
-        JOIN brands b ON b.id = v.brand_id
+        FROM car_vehicles v
+        JOIN car_brands b ON b.id = v.brand_id
         {$whereSql}
     ";
     $stmt = $pdo->prepare($countSql);
@@ -1140,11 +1140,11 @@ try {
             v.is_active,
             v.sort_order,
             v.created_at,
-            (SELECT COUNT(*) FROM colors c WHERE c.vehicle_id = v.id) AS color_count,
-            (SELECT COUNT(*) FROM trims t WHERE t.vehicle_id = v.id) AS trim_count,
-            (SELECT COUNT(*) FROM prices p WHERE p.vehicle_id = v.id) AS price_count
-        FROM vehicles v
-        JOIN brands b ON b.id = v.brand_id
+            (SELECT COUNT(*) FROM car_colors c WHERE c.vehicle_id = v.id) AS color_count,
+            (SELECT COUNT(*) FROM car_trims t WHERE t.vehicle_id = v.id) AS trim_count,
+            (SELECT COUNT(*) FROM car_prices p WHERE p.vehicle_id = v.id) AS price_count
+        FROM car_vehicles v
+        JOIN car_brands b ON b.id = v.brand_id
         {$whereSql}
         ORDER BY v.id DESC
         LIMIT {$perPage} OFFSET {$offset}
@@ -1156,8 +1156,8 @@ try {
     if ($vehicleId > 0) {
         $stmt = $pdo->prepare("
             SELECT v.*, b.name AS brand_name
-            FROM vehicles v
-            JOIN brands b ON b.id = v.brand_id
+            FROM car_vehicles v
+            JOIN car_brands b ON b.id = v.brand_id
             WHERE v.id = :id
             LIMIT 1
         ");
@@ -1167,7 +1167,7 @@ try {
         if ($vehicleDetail) {
             $stmt = $pdo->prepare("
                 SELECT id, name, hex_code, border_color, image_path, sort_order, is_active
-                FROM colors
+                FROM car_colors
                 WHERE vehicle_id = :vehicle_id
                 ORDER BY sort_order ASC, id ASC
             ");
@@ -1176,7 +1176,7 @@ try {
 
             $stmt = $pdo->prepare("
                 SELECT id, name, price, description, sort_order, is_active
-                FROM trims
+                FROM car_trims
                 WHERE vehicle_id = :vehicle_id
                 ORDER BY sort_order ASC, id ASC
             ");
@@ -1193,8 +1193,8 @@ try {
                     p.annual_mileage,
                     p.monthly_payment,
                     p.is_active
-                FROM prices p
-                JOIN trims t ON t.id = p.trim_id
+                FROM car_prices p
+                JOIN car_trims t ON t.id = p.trim_id
                 WHERE p.vehicle_id = :vehicle_id
                 ORDER BY
                     t.sort_order ASC,

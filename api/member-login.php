@@ -11,7 +11,7 @@ $data = member_json_input();
 $email = strtolower(trim((string)($data['email'] ?? '')));
 $password = (string)($data['password'] ?? '');
 
-$stmt = $pdo->prepare('SELECT id, name, phone, email, password_hash, status, created_at FROM members WHERE email = ? LIMIT 1');
+$stmt = $pdo->prepare('SELECT id, name, phone, email, password_hash, status, created_at FROM member_accounts WHERE email = ? LIMIT 1');
 $stmt->execute([$email]);
 $member = $stmt->fetch();
 
@@ -21,5 +21,5 @@ if (!$member || $member['status'] !== 'ACTIVE' || !password_verify($password, $m
 
 session_regenerate_id(true);
 $_SESSION['member_id'] = (int)$member['id'];
-$pdo->prepare('UPDATE members SET last_login_at = NOW() WHERE id = ?')->execute([(int)$member['id']]);
+$pdo->prepare('UPDATE member_accounts SET last_login_at = NOW() WHERE id = ?')->execute([(int)$member['id']]);
 member_response(['ok' => true, 'member' => member_public($member)]);

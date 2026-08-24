@@ -87,29 +87,29 @@ $middleLength = strlen($phoneDigits) === 10 ? 3 : 4;
 $customerPhone = substr($phoneDigits, 0, 3) . '-' . substr($phoneDigits, 3, $middleLength) . '-' . substr($phoneDigits, 3 + $middleLength);
 
 try {
-    $vehicleStmt = $pdo->prepare("SELECT v.id, v.name AS vehicle_name, b.name AS brand_name FROM vehicles v INNER JOIN brands b ON b.id=v.brand_id WHERE v.id=? AND v.is_active=1 LIMIT 1");
+    $vehicleStmt = $pdo->prepare("SELECT v.id, v.name AS vehicle_name, b.name AS brand_name FROM car_vehicles v INNER JOIN car_brands b ON b.id=v.brand_id WHERE v.id=? AND v.is_active=1 LIMIT 1");
     $vehicleStmt->execute([$vehicleId]);
     $vehicle = $vehicleStmt->fetch();
     if (!$vehicle) fail('선택한 차량을 찾을 수 없습니다.');
 
-    $trimStmt = $pdo->prepare("SELECT id, name FROM trims WHERE id=? AND vehicle_id=? AND is_active=1 LIMIT 1");
+    $trimStmt = $pdo->prepare("SELECT id, name FROM car_trims WHERE id=? AND vehicle_id=? AND is_active=1 LIMIT 1");
     $trimStmt->execute([$trimId, $vehicleId]);
     $trim = $trimStmt->fetch();
     if (!$trim) fail('선택한 트림이 해당 차량과 일치하지 않습니다.');
 
-    $colorStmt = $pdo->prepare("SELECT id, name FROM colors WHERE id=? AND vehicle_id=? AND is_active=1 LIMIT 1");
+    $colorStmt = $pdo->prepare("SELECT id, name FROM car_colors WHERE id=? AND vehicle_id=? AND is_active=1 LIMIT 1");
     $colorStmt->execute([$colorId, $vehicleId]);
     $color = $colorStmt->fetch();
     if (!$color) fail('선택한 색상이 해당 차량과 일치하지 않습니다.');
 
-    $priceStmt = $pdo->prepare("SELECT id, product_type, contract_months, prepayment_rate, annual_mileage, monthly_payment FROM prices WHERE id=? AND vehicle_id=? AND trim_id=? AND is_active=1 LIMIT 1");
+    $priceStmt = $pdo->prepare("SELECT id, product_type, contract_months, prepayment_rate, annual_mileage, monthly_payment FROM car_prices WHERE id=? AND vehicle_id=? AND trim_id=? AND is_active=1 LIMIT 1");
     $priceStmt->execute([$priceId, $vehicleId, $trimId]);
     $price = $priceStmt->fetch();
     if (!$price) fail('선택한 이용조건이 해당 차량/트림과 일치하지 않습니다.');
 
     $pdo->beginTransaction();
 
-    $insert = $pdo->prepare("INSERT INTO estimates (
+    $insert = $pdo->prepare("INSERT INTO estimate_direct (
         member_id,
         estimate_no,
         vehicle_id, trim_id, color_id, price_id,
@@ -162,7 +162,7 @@ try {
     $estimateId = (int)$pdo->lastInsertId();
     $estimateNo = date('Ymd') . '-' . str_pad((string)$estimateId, 6, '0', STR_PAD_LEFT);
 
-    $pdo->prepare('UPDATE estimates SET estimate_no=? WHERE id=?')->execute([$estimateNo, $estimateId]);
+    $pdo->prepare('UPDATE estimate_direct SET estimate_no=? WHERE id=?')->execute([$estimateNo, $estimateId]);
     $pdo->commit();
 
     echo json_encode([
@@ -178,7 +178,7 @@ try {
     }
 
     if ($e instanceof PDOException && str_contains($e->getMessage(), "doesn't exist")) {
-        fail('estimates 테이블이 없습니다. 먼저 estimates_table.sql을 phpMyAdmin에서 실행해 주세요.', 500);
+        fail('estimate_direct 테이블이 없습니다. 먼저 estimates_table.sql을 phpMyAdmin에서 실행해 주세요.', 500);
     }
 
     fail('견적 저장 중 오류가 발생했습니다: ' . $e->getMessage(), 500);

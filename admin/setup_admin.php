@@ -9,7 +9,7 @@ $success = false;
 $locked = false;
 
 try {
-    $count = (int)$pdo->query("SELECT COUNT(*) FROM admins")->fetchColumn();
+    $count = (int)$pdo->query("SELECT COUNT(*) FROM admin_accounts")->fetchColumn();
     if ($count > 0) {
         $locked = true;
     }
@@ -32,7 +32,7 @@ if (!$locked && $error === null && $_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
             $stmt = $pdo->prepare("
-                INSERT INTO admins (
+                INSERT INTO admin_accounts (
                     username, password_hash, name, role, is_active
                 ) VALUES (
                     :username, :password_hash, :name, 'SUPER_ADMIN', 1
@@ -80,7 +80,7 @@ a{color:#3924b9}.back{margin-top:18px;text-align:center;font-size:12px}
 <body>
 <div class="box">
     <h1>최초 관리자 계정 만들기</h1>
-    <p class="desc">이 페이지는 admins 테이블에 계정이 하나도 없을 때만 사용할 수 있습니다.</p>
+    <p class="desc">이 페이지는 admin_accounts 테이블에 계정이 하나도 없을 때만 사용할 수 있습니다.</p>
 
     <?php if ($error): ?><div class="alert error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div><?php endif; ?>
 

@@ -8,7 +8,7 @@ $type = strtolower(trim((string)($_GET['type'] ?? 'direct')));
 $isQuick = $type === 'quick';
 if ($id < 1) { http_response_code(400); exit('잘못된 견적 ID입니다.'); }
 
-$table = $isQuick ? 'quick_estimates' : 'estimates';
+$table = $isQuick ? 'estimate_quick' : 'estimate_direct';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     requireVehicleEditor();
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($assignedAdminId > 0) {
             $check = $pdo->prepare("
                 SELECT id
-                FROM admins
+                FROM admin_accounts
                 WHERE id = ? AND is_active = 1
                 LIMIT 1
             ");
@@ -85,7 +85,7 @@ try {
 } catch (PDOException $ex) {
     if ($isQuick && str_contains($ex->getMessage(), "doesn't exist")) {
         http_response_code(500);
-        exit('quick_estimates 테이블이 없습니다. quick_estimates_table.sql을 먼저 실행해 주세요.');
+        exit('quick_estimate_direct 테이블이 없습니다. quick_estimates_table.sql을 먼저 실행해 주세요.');
     }
     throw $ex;
 }
@@ -93,7 +93,7 @@ if (!$e) { http_response_code(404); exit('견적을 찾을 수 없습니다.'); 
 
 $activeAdmins = $pdo->query("
     SELECT id, username, name
-    FROM admins
+    FROM admin_accounts
     WHERE is_active = 1
     ORDER BY COALESCE(NULLIF(name, ''), username) ASC
 ")->fetchAll(PDO::FETCH_ASSOC);

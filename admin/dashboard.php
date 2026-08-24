@@ -4,19 +4,19 @@ require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/../config/database.php';
 function h(mixed $v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 function scalar(PDO $pdo, string $sql, array $params=[]): int { try {$s=$pdo->prepare($sql);$s->execute($params);return (int)$s->fetchColumn();}catch(Throwable $e){return 0;} }
-$total = scalar($pdo, "SELECT (SELECT COUNT(*) FROM estimates)+(SELECT COUNT(*) FROM quick_estimates)");
-$today = scalar($pdo, "SELECT (SELECT COUNT(*) FROM estimates WHERE DATE(created_at)=CURDATE())+(SELECT COUNT(*) FROM quick_estimates WHERE DATE(created_at)=CURDATE())");
-$new = scalar($pdo, "SELECT (SELECT COUNT(*) FROM estimates WHERE status='NEW')+(SELECT COUNT(*) FROM quick_estimates WHERE status='NEW')");
-$contracted = scalar($pdo, "SELECT (SELECT COUNT(*) FROM estimates WHERE status='CONTRACTED')+(SELECT COUNT(*) FROM quick_estimates WHERE status='CONTRACTED')");
+$total = scalar($pdo, "SELECT (SELECT COUNT(*) FROM estimate_direct)+(SELECT COUNT(*) FROM estimate_quick)");
+$today = scalar($pdo, "SELECT (SELECT COUNT(*) FROM estimate_direct WHERE DATE(created_at)=CURDATE())+(SELECT COUNT(*) FROM estimate_quick WHERE DATE(created_at)=CURDATE())");
+$new = scalar($pdo, "SELECT (SELECT COUNT(*) FROM estimate_direct WHERE status='NEW')+(SELECT COUNT(*) FROM estimate_quick WHERE status='NEW')");
+$contracted = scalar($pdo, "SELECT (SELECT COUNT(*) FROM estimate_direct WHERE status='CONTRACTED')+(SELECT COUNT(*) FROM estimate_quick WHERE status='CONTRACTED')");
 $completedSessions = scalar($pdo, "SELECT COUNT(*) FROM estimate_abandonments WHERE is_completed=1");
 $allSessions = scalar($pdo, "SELECT COUNT(*) FROM estimate_abandonments");
 $conversion = $allSessions > 0 ? round($completedSessions / $allSessions * 100, 1) : 0;
 $sources=[];$vehicles=[];$funnel=[];$recent=[];
 try {
-$sources=$pdo->query("SELECT source, COUNT(*) cnt FROM (SELECT COALESCE(NULLIF(utm_source,''),'직접/기타') source FROM estimates UNION ALL SELECT COALESCE(NULLIF(utm_source,''),'직접/기타') FROM quick_estimates) x GROUP BY source ORDER BY cnt DESC LIMIT 8")->fetchAll();
-$vehicles=$pdo->query("SELECT vehicle_name, COUNT(*) cnt FROM estimates WHERE vehicle_name IS NOT NULL GROUP BY vehicle_name ORDER BY cnt DESC LIMIT 8")->fetchAll();
+$sources=$pdo->query("SELECT source, COUNT(*) cnt FROM (SELECT COALESCE(NULLIF(utm_source,''),'직접/기타') source FROM estimate_direct UNION ALL SELECT COALESCE(NULLIF(utm_source,''),'직접/기타') FROM estimate_quick) x GROUP BY source ORDER BY cnt DESC LIMIT 8")->fetchAll();
+$vehicles=$pdo->query("SELECT vehicle_name, COUNT(*) cnt FROM estimate_direct WHERE vehicle_name IS NOT NULL GROUP BY vehicle_name ORDER BY cnt DESC LIMIT 8")->fetchAll();
 $funnel=$pdo->query("SELECT stage_order, stage, COUNT(*) cnt FROM estimate_abandonments GROUP BY stage_order, stage ORDER BY stage_order")->fetchAll();
-$recent=$pdo->query("SELECT * FROM (SELECT estimate_no,customer_name,vehicle_name AS item,status,created_at,'직접견적' type FROM estimates UNION ALL SELECT estimate_no,customer_name,COALESCE(car_type,'상담 후 결정'),status,created_at,'간편견적' FROM quick_estimates) x ORDER BY created_at DESC LIMIT 10")->fetchAll();
+$recent=$pdo->query("SELECT * FROM (SELECT estimate_no,customer_name,vehicle_name AS item,status,created_at,'직접견적' type FROM estimate_direct UNION ALL SELECT estimate_no,customer_name,COALESCE(car_type,'상담 후 결정'),status,created_at,'간편견적' FROM estimate_quick) x ORDER BY created_at DESC LIMIT 10")->fetchAll();
 } catch(Throwable $e) {}
 $stageLabels=['LANDING'=>'유입','VEHICLE_LIST'=>'차량목록','VEHICLE_DETAIL'=>'차량상세','TRIM_SELECTED'=>'트림선택','CONDITIONS_SELECTED'=>'조건선택','ESTIMATE_FORM'=>'신청폼','CUSTOMER_INPUT'=>'정보입력','COMPLETED'=>'신청완료'];
 $statusLabels=['NEW'=>'신규','CONTACTED'=>'상담중','REVIEWING'=>'심사중','APPROVED'=>'승인','CONTRACTED'=>'계약완료','CANCELED'=>'취소'];

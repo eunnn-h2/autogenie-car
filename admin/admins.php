@@ -17,7 +17,7 @@ function h2(string $value): string {
 function superAdminCount(PDO $pdo): int {
     return (int)$pdo->query("
         SELECT COUNT(*)
-        FROM admins
+        FROM admin_accounts
         WHERE role = 'SUPER_ADMIN'
           AND is_active = 1
     ")->fetchColumn();
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $stmt = $pdo->prepare("
-                INSERT INTO admins (
+                INSERT INTO admin_accounts (
                     username, password_hash, name, role, is_active
                 ) VALUES (
                     :username, :password_hash, :name, :role, 1
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('잘못된 권한입니다.');
             }
 
-            $stmt = $pdo->prepare("SELECT id, role, is_active FROM admins WHERE id = ? LIMIT 1");
+            $stmt = $pdo->prepare("SELECT id, role, is_active FROM admin_accounts WHERE id = ? LIMIT 1");
             $stmt->execute([$targetId]);
             $target = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $stmt = $pdo->prepare("
-                UPDATE admins
+                UPDATE admin_accounts
                 SET name = :name,
                     role = :role,
                     is_active = :is_active
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $stmt = $pdo->prepare("
-                UPDATE admins
+                UPDATE admin_accounts
                 SET password_hash = :password_hash
                 WHERE id = :id
             ");
@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('현재 로그인한 본인 계정은 삭제할 수 없습니다.');
             }
 
-            $stmt = $pdo->prepare("SELECT role, is_active FROM admins WHERE id = ? LIMIT 1");
+            $stmt = $pdo->prepare("SELECT role, is_active FROM admin_accounts WHERE id = ? LIMIT 1");
             $stmt->execute([$targetId]);
             $target = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -163,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('마지막 활성 SUPER_ADMIN 계정은 삭제할 수 없습니다.');
             }
 
-            $pdo->prepare("DELETE FROM admins WHERE id = ?")->execute([$targetId]);
+            $pdo->prepare("DELETE FROM admin_accounts WHERE id = ?")->execute([$targetId]);
             $message = '관리자 계정을 삭제했습니다.';
         }
     } catch (Throwable $e) {
@@ -180,7 +180,7 @@ $admins = $pdo->query("
         is_active,
         last_login_at,
         created_at
-    FROM admins
+    FROM admin_accounts
     ORDER BY id ASC
 ")->fetchAll(PDO::FETCH_ASSOC);
 ?>

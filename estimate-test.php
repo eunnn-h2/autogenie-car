@@ -2,10 +2,10 @@
 declare(strict_types=1);
 require_once __DIR__ . '/config/database.php';
 
-$vehicles = $pdo->query("SELECT v.id, v.name, v.base_price, v.image_path, b.name AS brand_name FROM vehicles v INNER JOIN brands b ON b.id=v.brand_id WHERE v.is_active=1 ORDER BY b.sort_order, v.sort_order, v.id")->fetchAll();
-$trims = $pdo->query("SELECT id, vehicle_id, name, price FROM trims WHERE is_active=1 ORDER BY vehicle_id, sort_order, id")->fetchAll();
-$colors = $pdo->query("SELECT id, vehicle_id, name, image_path, hex_code, border_color FROM colors WHERE is_active=1 ORDER BY vehicle_id, sort_order, id")->fetchAll();
-$prices = $pdo->query("SELECT id, vehicle_id, trim_id, product_type, contract_months, prepayment_rate, annual_mileage, monthly_payment FROM prices WHERE is_active=1 ORDER BY vehicle_id, trim_id, product_type, contract_months, prepayment_rate, annual_mileage, id")->fetchAll();
+$vehicles = $pdo->query("SELECT v.id, v.name, v.base_price, v.image_path, b.name AS brand_name FROM car_vehicles v INNER JOIN car_brands b ON b.id=v.brand_id WHERE v.is_active=1 ORDER BY b.sort_order, v.sort_order, v.id")->fetchAll();
+$trims = $pdo->query("SELECT id, vehicle_id, name, price FROM car_trims WHERE is_active=1 ORDER BY vehicle_id, sort_order, id")->fetchAll();
+$colors = $pdo->query("SELECT id, vehicle_id, name, image_path, hex_code, border_color FROM car_colors WHERE is_active=1 ORDER BY vehicle_id, sort_order, id")->fetchAll();
+$prices = $pdo->query("SELECT id, vehicle_id, trim_id, product_type, contract_months, prepayment_rate, annual_mileage, monthly_payment FROM car_prices WHERE is_active=1 ORDER BY vehicle_id, trim_id, product_type, contract_months, prepayment_rate, annual_mileage, id")->fetchAll();
 
 function j(array $value): string {
     return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);

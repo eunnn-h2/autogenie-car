@@ -20,8 +20,8 @@ try {
             v.is_best,
             v.is_active,
             v.sort_order
-        FROM vehicles v
-        INNER JOIN brands b ON b.id = v.brand_id
+        FROM car_vehicles v
+        INNER JOIN car_brands b ON b.id = v.brand_id
         WHERE v.is_active = 1
         ORDER BY b.sort_order ASC, v.sort_order ASC, v.id ASC
     ");
@@ -38,7 +38,7 @@ try {
             image_path,
             sort_order,
             is_active
-        FROM colors
+        FROM car_colors
         WHERE vehicle_id = :vehicle_id
           AND is_active = 1
         ORDER BY sort_order ASC, id ASC
@@ -53,7 +53,7 @@ try {
             description,
             sort_order,
             is_active
-        FROM trims
+        FROM car_trims
         WHERE vehicle_id = :vehicle_id
           AND is_active = 1
         ORDER BY sort_order ASC, id ASC
@@ -70,7 +70,7 @@ try {
             annual_mileage,
             monthly_payment,
             is_active
-        FROM prices
+        FROM car_prices
         WHERE vehicle_id = :vehicle_id
           AND trim_id = :trim_id
           AND is_active = 1
@@ -83,13 +83,13 @@ try {
     ");
 
 
-    // 트림별 차량 옵션. vehicle_options 테이블이 아직 없는 환경에서도
+    // 트림별 차량 옵션. car_vehicle_options 테이블이 아직 없는 환경에서도
     // 기존 차량/견적 화면은 정상 동작하도록 선택적으로 연결합니다.
     $optionStmt = null;
     try {
         $optionStmt = $pdo->prepare("
             SELECT *
-            FROM vehicle_options
+            FROM car_vehicle_options
             WHERE trim_id = :trim_id
             ORDER BY id ASC
         ");

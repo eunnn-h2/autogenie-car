@@ -15,7 +15,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 190) {
 }
 
 try {
-    $stmt = $pdo->prepare('SELECT id FROM members WHERE email = ? LIMIT 1');
+    $stmt = $pdo->prepare('SELECT id FROM member_accounts WHERE email = ? LIMIT 1');
     $stmt->execute([$email]);
 
     if ($stmt->fetchColumn()) {

@@ -14,11 +14,11 @@
    - 등록/수정/삭제/엑셀등록 불가
 
 [이미 이전 로그인 버전을 설치했다면]
-현재 admins 테이블에 role 컬럼이 없으므로:
+현재 admin_accounts 테이블에 role 컬럼이 없으므로:
 1. phpMyAdmin → autogenie → SQL
 2. admins_role_migration.sql의 내용을 실행
 3. 맨 아래 username을 현재 쓰는 관리자 아이디로 꼭 변경:
-   UPDATE admins SET role='SUPER_ADMIN' WHERE username='현재아이디';
+   UPDATE admin_accounts SET role='SUPER_ADMIN' WHERE username='현재아이디';
 
 [새로 처음 설치한다면]
 admins_table.sql 실행 후 setup_admin.php에서 최초 계정을 만들면

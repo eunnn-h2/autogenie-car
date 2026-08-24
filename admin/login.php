@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $stmt = $pdo->prepare("
                 SELECT id, username, password_hash, name, role, is_active
-                FROM admins
+                FROM admin_accounts
                 WHERE username = :username
                 LIMIT 1
             ");
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['admin_last_activity'] = time();
 
                 $pdo->prepare("
-                    UPDATE admins
+                    UPDATE admin_accounts
                     SET last_login_at = NOW()
                     WHERE id = ?
                 ")->execute([(int)$admin['id']]);
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
         } catch (Throwable $e) {
-            $error = '로그인 처리 중 오류가 발생했습니다. admins 테이블이 생성되어 있는지 확인해주세요.';
+            $error = '로그인 처리 중 오류가 발생했습니다. admin_accounts 테이블이 생성되어 있는지 확인해주세요.';
         }
     }
 }

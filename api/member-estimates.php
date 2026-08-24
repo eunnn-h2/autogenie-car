@@ -37,7 +37,7 @@ try {
     $stmt = $pdo->prepare("
         SELECT id, estimate_no, status, brand_name, vehicle_name, trim_name,
                product_type, contract_months, monthly_payment, created_at
-        FROM estimates
+        FROM estimate_direct
         WHERE member_id = ?
     ");
     $stmt->execute([$memberId]);
@@ -60,7 +60,7 @@ try {
 
     $stmt = $pdo->prepare("
         SELECT id, estimate_no, status, car_type, monthly_budget, product_type, created_at
-        FROM quick_estimates
+        FROM estimate_quick
         WHERE member_id = ?
     ");
     $stmt->execute([$memberId]);

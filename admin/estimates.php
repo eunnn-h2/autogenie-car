@@ -24,7 +24,7 @@ $quickTableMissing = false;
 
 $activeAdmins = $pdo->query("
     SELECT id, username, name
-    FROM admins
+    FROM admin_accounts
     WHERE is_active = 1
     ORDER BY COALESCE(NULLIF(name, ''), username) ASC
 ")->fetchAll(PDO::FETCH_ASSOC);
@@ -48,8 +48,8 @@ if ($type === '' || $type === 'DIRECT') {
     $sql = 'SELECT e.*,
                    a.name AS _assigned_admin_name,
                    a.username AS _assigned_admin_username
-            FROM estimates e
-            LEFT JOIN admins a ON a.id = e.assigned_admin_id'
+            FROM estimate_direct e
+            LEFT JOIN admin_accounts a ON a.id = e.assigned_admin_id'
          . ($where ? ' WHERE ' . implode(' AND ', $where) : '')
          . ' ORDER BY e.id DESC LIMIT 500';
     try {
@@ -83,8 +83,8 @@ if ($type === '' || $type === 'QUICK') {
     $sql = 'SELECT q.*,
                    a.name AS _assigned_admin_name,
                    a.username AS _assigned_admin_username
-            FROM quick_estimates q
-            LEFT JOIN admins a ON a.id = q.assigned_admin_id'
+            FROM estimate_quick q
+            LEFT JOIN admin_accounts a ON a.id = q.assigned_admin_id'
          . ($where ? ' WHERE ' . implode(' AND ', $where) : '')
          . ' ORDER BY q.id DESC LIMIT 500';
     try {
@@ -120,39 +120,15 @@ usort($rows, static function(array $a, array $b): int {
     return $tb <=> $ta;
 });
 
-// 직접견적/간편견적의 id는 서로 다른 테이블에서 증가하므로 관리자 화면의 "번호"는
-// 두 테이블을 신청일 순으로 합친 통합 순번을 별도로 계산한다.
-$globalNumberMap = [];
-$globalRows = [];
-if (!$tableMissing) {
-    try {
-        foreach ($pdo->query("SELECT id, created_at FROM estimates") as $g) {
-            $globalRows[] = ['key' => 'DIRECT:' . (int)$g['id'], 'created_at' => (string)$g['created_at'], 'id' => (int)$g['id'], 'source' => 'DIRECT'];
-        }
-    } catch (PDOException $e) {
-        // 목록 조회에서 이미 테이블 상태를 처리했으므로 여기서는 화면을 계속 표시한다.
-    }
+// 직접견적(estimate_direct)과 간편견적(estimate_quick)은 서로 다른 테이블의 ID를 사용합니다.
+// 화면의 '순번'은 두 테이블을 합친 현재 목록의 표시 순서이고, 'DB ID'는 각 원본 테이블의 실제 id입니다.
+$totalMergedRows = count($rows);
+foreach ($rows as $index => &$row) {
+    $row['_list_no'] = $totalMergedRows - $index;
+    $row['_table_name'] = ($row['_source'] ?? '') === 'QUICK' ? 'estimate_quick' : 'estimate_direct';
 }
-if (!$quickTableMissing) {
-    try {
-        foreach ($pdo->query("SELECT id, created_at FROM quick_estimates") as $g) {
-            $globalRows[] = ['key' => 'QUICK:' . (int)$g['id'], 'created_at' => (string)$g['created_at'], 'id' => (int)$g['id'], 'source' => 'QUICK'];
-        }
-    } catch (PDOException $e) {
-        // quick_estimates가 아직 없더라도 직접견적 목록은 정상 표시한다.
-    }
-}
-usort($globalRows, static function(array $a, array $b): int {
-    $ta = strtotime($a['created_at']) ?: 0;
-    $tb = strtotime($b['created_at']) ?: 0;
-    if ($ta !== $tb) return $ta <=> $tb;
-    $sourceCompare = strcmp($a['source'], $b['source']);
-    if ($sourceCompare !== 0) return $sourceCompare;
-    return $a['id'] <=> $b['id'];
-});
-foreach ($globalRows as $index => $g) {
-    $globalNumberMap[$g['key']] = $index + 1;
-}
+unset($row);
+
 ?>
 <!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>견적 관리 - 오토지니</title><link rel="stylesheet" href="./sidebar.css">
 <style>
@@ -193,12 +169,16 @@ foreach ($globalRows as $index => $g) {
 </head><body><div class="layout">
 <?php $currentAdminPage = 'estimates'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main"><div class="card"><div class="top"><div><h1>견적 신청 관리</h1><div style="margin-top:5px;color:#84949e">직접견적과 간편견적 신청을 최신순으로 확인합니다.</div></div><a href="../db-test.html" target="_blank">+ 실제 화면에서 견적 신청</a></div>
-<?php if ($tableMissing): ?><div class="alert"><strong>estimates 테이블이 없습니다.</strong><br>기존 견적 테이블을 먼저 생성해 주세요.</div><?php endif; ?>
+<?php if ($tableMissing): ?><div class="alert"><strong>estimate_direct 테이블이 없습니다.</strong><br>기존 견적 테이블을 먼저 생성해 주세요.</div><?php endif; ?>
 <?php if ($quickTableMissing): ?><div class="notice"><strong>간편견적 테이블이 아직 없습니다.</strong><br>프로젝트 루트의 <code>quick_estimates_table.sql</code>을 phpMyAdmin에서 한 번 실행하면 간편견적도 여기에 표시됩니다.</div><?php endif; ?>
 <div style="display:flex;justify-content:flex-end;margin:-4px 0 10px"><a class="action-btn primary" style="display:inline-flex;align-items:center" href="./export-estimates.php?<?=h(http_build_query(['type'=>$type,'status'=>$status,'q'=>$q,'source'=>$source]))?>">엑셀 다운로드</a></div><form class="filter" method="get">
 <select name="type"><option value="">전체 유형</option><option value="DIRECT" <?=$type==='DIRECT'?'selected':''?>>직접견적</option><option value="QUICK" <?=$type==='QUICK'?'selected':''?>>간편견적</option></select>
 <input name="source" value="<?=h($source)?>" placeholder="유입경로 (예: naver, daangn)" style="min-width:190px"><select name="status"><option value="">전체 상태</option><?php foreach(['NEW'=>'신규','CONTACTED'=>'상담중','REVIEWING'=>'심사중','APPROVED'=>'승인','CONTRACTED'=>'계약완료','CANCELED'=>'취소'] as $k=>$v): ?><option value="<?=h($k)?>" <?=$status===$k?'selected':''?>><?=h($v)?></option><?php endforeach; ?></select>
 <input name="q" value="<?=h($q)?>" placeholder="견적번호 / 고객명 / 연락처 / 차량·관심차종"><button>검색</button></form>
+<div style="margin:-2px 0 12px;padding:9px 11px;background:#f7f9fb;border:1px solid #e0e6ea;color:#71818b;font-size:11px;line-height:1.5">
+    <strong style="color:#425867">순번</strong>은 직접견적+간편견적을 합친 현재 목록 기준이며,
+    <strong style="color:#425867">DB ID</strong>는 각각 <code>estimate_direct</code> / <code>estimate_quick</code> 테이블의 실제 ID입니다.
+</div>
 <form id="bulkForm" method="post" action="./estimate-actions.php">
 <input type="hidden" name="return_query" value="<?=h(http_build_query(['type'=>$type,'status'=>$status,'q'=>$q,'source'=>$source]))?>">
 <div class="bulkbar">
@@ -211,12 +191,14 @@ foreach ($globalRows as $index => $g) {
     <button class="action-btn primary" type="submit" name="action" value="bulk_status" onclick="return confirmBulkStatus()">선택 상태변경</button>
     <button class="action-btn danger" type="submit" name="action" value="bulk_delete" onclick="return confirmBulkDelete()">선택 삭제</button>
 </div>
-<div class="table-wrap"><table class="table"><thead><tr><th><input class="check" type="checkbox" id="checkAll" aria-label="전체 선택"></th><th>번호</th><th>구분</th><th>견적번호</th><th>상태</th><th>담당자</th><th>고객</th><th>연락처</th><th>차량/관심차종</th><th>트림</th><th>이용조건</th><th>월 납입금</th><th>신청일</th><th>관리</th></tr></thead><tbody>
-<?php if (!$rows): ?><tr><td colspan="14" style="padding:50px;color:#9aabb4">저장된 견적이 없습니다.</td></tr><?php endif; ?>
+<div class="table-wrap"><table class="table"><thead><tr><th><input class="check" type="checkbox" id="checkAll" aria-label="전체 선택"></th><th>순번</th><th>구분</th><th>DB ID</th><th>회원 ID</th><th>견적번호</th><th>상태</th><th>담당자</th><th>고객</th><th>연락처</th><th>차량/관심차종</th><th>트림</th><th>이용조건</th><th>월 납입금</th><th>신청일</th><th>관리</th></tr></thead><tbody>
+<?php if (!$rows): ?><tr><td colspan="16" style="padding:50px;color:#9aabb4">저장된 견적이 없습니다.</td></tr><?php endif; ?>
 <?php foreach($rows as $r): $rowKey = $r['_source'] . ':' . (int)$r['id']; ?><tr>
 <td><input class="check row-check" type="checkbox" name="selected[]" value="<?=h($rowKey)?>" aria-label="<?=h($r['estimate_no'])?> 선택"></td>
-<td class="no"><?=number_format((int)($globalNumberMap[$rowKey] ?? 0))?></td>
-<td><span class="badge <?=$r['_source']==='QUICK'?'kind-quick':'kind-direct'?>"><?=h($r['_source_label'])?></span></td>
+<td class="no"><?=number_format((int)$r['_list_no'])?></td>
+<td><span class="badge <?=$r['_source']==='QUICK'?'kind-quick':'kind-direct'?>" title="저장 테이블: <?=h($r['_table_name'])?>"><?=h($r['_source_label'])?></span></td>
+<td title="<?=h($r['_table_name'])?>.id"><?=number_format((int)$r['id'])?></td>
+<td><?=($r['_source'] === 'DIRECT' && array_key_exists('member_id', $r) && $r['member_id'] !== null) ? number_format((int)$r['member_id']) : '-'?></td>
 <td><a class="detail-link" href="./estimate-detail.php?type=<?=strtolower(h($r['_source']))?>&id=<?=(int)$r['id']?>"><?=h($r['estimate_no'])?></a></td>
 <td>
     <select class="row-status" data-row-key="<?=h($rowKey)?>" aria-label="<?=h($r['estimate_no'])?> 상태">

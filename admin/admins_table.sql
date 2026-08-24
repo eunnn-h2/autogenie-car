@@ -1,6 +1,6 @@
 USE autogenie;
 
-CREATE TABLE IF NOT EXISTS admins (
+CREATE TABLE IF NOT EXISTS admin_accounts (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
@@ -16,19 +16,19 @@ CREATE TABLE IF NOT EXISTS admins (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*
-이미 이전 버전의 admins 테이블을 만든 경우에는 아래 ALTER만 실행하면 됩니다.
+이미 이전 버전의 admin_accounts 테이블을 만든 경우에는 아래 ALTER만 실행하면 됩니다.
 role 컬럼이 이미 존재하면 이 ALTER는 실행하지 마세요.
 */
--- ALTER TABLE admins
+-- ALTER TABLE admin_accounts
 -- ADD COLUMN role ENUM('SUPER_ADMIN','ADMIN','VIEWER') NOT NULL DEFAULT 'ADMIN'
 -- AFTER name;
 
--- ALTER TABLE admins ADD INDEX idx_admins_role (role);
+-- ALTER TABLE admin_accounts ADD INDEX idx_admins_role (role);
 
 /*
 기존 최초 관리자 계정을 SUPER_ADMIN으로 변경:
 아래 username 값을 실제 최초 관리자 아이디로 바꿔서 실행하세요.
 */
--- UPDATE admins
+-- UPDATE admin_accounts
 -- SET role = 'SUPER_ADMIN'
 -- WHERE username = '내관리자아이디';

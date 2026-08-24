@@ -22,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $stmt = $pdo->prepare("
             SELECT r.*, m.id AS actual_member_id
-            FROM password_reset_admin_requests r
-            LEFT JOIN members m ON m.id = r.member_id
+            FROM admin_password_reset_requests r
+            LEFT JOIN member_accounts m ON m.id = r.member_id
             WHERE r.id = ?
             LIMIT 1
         ");
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $pdo->prepare("
-                UPDATE members
+                UPDATE member_accounts
                 SET password_hash = ?,
                     password_reset_code_hash = NULL,
                     password_reset_expires_at = NULL,
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ")->execute([$hash, (int)$request['actual_member_id']]);
 
             $pdo->prepare("
-                UPDATE password_reset_admin_requests
+                UPDATE admin_password_reset_requests
                 SET status = 'RESOLVED',
                     resolved_at = NOW(),
                     resolved_by = ?
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($action === 'dismiss') {
             $pdo->prepare("
-                UPDATE password_reset_admin_requests
+                UPDATE admin_password_reset_requests
                 SET status = 'DISMISSED',
                     resolved_at = NOW(),
                     resolved_by = ?
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $rows = $pdo->query("
     SELECT r.*
-    FROM password_reset_admin_requests r
+    FROM admin_password_reset_requests r
     ORDER BY
         CASE r.status WHEN 'PENDING' THEN 0 ELSE 1 END,
         r.id DESC
@@ -108,7 +108,7 @@ $rows = $pdo->query("
 
 $pendingCount = (int)$pdo->query("
     SELECT COUNT(*)
-    FROM password_reset_admin_requests
+    FROM admin_password_reset_requests
     WHERE status = 'PENDING'
 ")->fetchColumn();
 ?>

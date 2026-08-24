@@ -8,7 +8,7 @@ if ($id <= 0) {
     member_response(['ok' => true, 'member' => null]);
 }
 
-$stmt = $pdo->prepare('SELECT id, name, phone, email, status, created_at FROM members WHERE id = ? LIMIT 1');
+$stmt = $pdo->prepare('SELECT id, name, phone, email, status, created_at FROM member_accounts WHERE id = ? LIMIT 1');
 $stmt->execute([$id]);
 $member = $stmt->fetch();
 

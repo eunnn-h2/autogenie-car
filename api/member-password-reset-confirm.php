@@ -26,7 +26,7 @@ if ($password !== $passwordConfirm) {
     member_response(['ok' => false, 'message' => '비밀번호 확인이 일치하지 않습니다.'], 422);
 }
 
-$stmt = $pdo->prepare('SELECT id, status, password_reset_code_hash, password_reset_expires_at FROM members WHERE email = ? LIMIT 1');
+$stmt = $pdo->prepare('SELECT id, status, password_reset_code_hash, password_reset_expires_at FROM member_accounts WHERE email = ? LIMIT 1');
 $stmt->execute([$email]);
 $member = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -44,7 +44,7 @@ if (!password_verify($code, $hash)) {
 }
 
 $newHash = password_hash($password, PASSWORD_DEFAULT);
-$pdo->prepare('UPDATE members SET password_hash = ?, password_reset_code_hash = NULL, password_reset_expires_at = NULL, password_reset_requested_at = NULL, updated_at = NOW() WHERE id = ?')
+$pdo->prepare('UPDATE member_accounts SET password_hash = ?, password_reset_code_hash = NULL, password_reset_expires_at = NULL, password_reset_requested_at = NULL, updated_at = NOW() WHERE id = ?')
     ->execute([$newHash, (int)$member['id']]);
 
 member_response(['ok' => true]);
