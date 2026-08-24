@@ -1388,7 +1388,7 @@ body.modal-open{overflow:hidden}
     bottom:14px;
     transform:translateX(-50%);
     z-index:900;
-    width:min(390px, calc(100% - 24px));
+    width:min(350px, calc(100% - 24px));
     height:65px;
     display:grid;
     grid-template-columns:repeat(5,1fr);
@@ -1420,16 +1420,16 @@ body.modal-open{overflow:hidden}
 }
 .bottom-nav-item.active{color:var(--accent)}
 .bottom-nav-icon{
-    width:40px;
-    height:40px;
+    width:45px;
+    height:45px;
     display:flex;
     align-items:center;
     justify-content:center;
 }
 .bottom-nav-icon svg,
 .bottom-nav-icon img{
-    width:40px;
-    height:40px;
+    width:45px;
+    height:45px;
     display:block;
     fill:currentColor;
     stroke:none;
@@ -1557,9 +1557,8 @@ body.modal-open{overflow:hidden}
     cursor:pointer;
 }
 .mypage-settings img{
-    width:33px;
-    height:33px;
-    display:block;
+    width:35px;
+    height:35px;
     object-fit:contain;
 }
 
@@ -1601,8 +1600,8 @@ body.modal-open{overflow:hidden}
     transform:rotate(45deg);
 }
 .mypage-progress-icon{
-    width:48px;
-    height:48px;
+    width:45px;
+    height:45px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -2940,8 +2939,8 @@ body.modal-open{overflow:hidden}
     /* 하단 메뉴 */
     .bottom-nav{
         bottom:max(10px,env(safe-area-inset-bottom));
-        width:min(390px, calc(100% - 20px));
-        max-width:390px;
+        width:min(350px, calc(100% - 20px));
+        max-width:350px;
         height:60px;
         padding:2px 8px;
         border-radius:24px;
@@ -2954,13 +2953,13 @@ body.modal-open{overflow:hidden}
         line-height:1;
     }
     .bottom-nav-icon{
-        width:44px;
-        height:44px;
+        width:40px;
+        height:40px;
     }
     .bottom-nav-icon svg,
 .bottom-nav-icon img{
-        width:44px;
-        height:44px;
+        width:40px;
+        height:40px;
     }
 }
 
@@ -3443,18 +3442,18 @@ body.modal-open{overflow:hidden}
 }
 @media(max-width:480px){
     .mypage-progress-item{padding-left:1px!important;padding-right:1px!important}
-    .mypage-progress-icon{width:48px!important;height:48px!important;margin-bottom:6px!important}
+    .mypage-progress-icon{width:44px!important;height:44px!important;margin-bottom:6px!important}
     .mypage-progress-icon svg,
-.mypage-progress-icon img{width:44px!important;height:44px!important}
+.mypage-progress-icon img{width:40px!important;height:40px!important}
     .mypage-progress-label{font-size:11px!important;font-weight:600!important;white-space:nowrap!important}
     .mypage-progress-count{margin-top:6px!important;font-size:15px!important}
-    .mypage-progress-item:after{top:42px!important}
+    .mypage-progress-item:after{top:40px!important}
 }
 @media(max-width:350px){
     .mypage-progress-label{font-size:10px!important}
-    .mypage-progress-icon{width:48px!important;height:48px!important}
+    .mypage-progress-icon{width:44px!important;height:44px!important}
     .mypage-progress-icon svg,
-.mypage-progress-icon img{width:44px!important;height:44px!important}
+.mypage-progress-icon img{width:40px!important;height:40px!important}
 }
 
 </style>
@@ -3466,6 +3465,47 @@ body.modal-open{overflow:hidden}
     touch-action:manipulation;
 }
 
+</style>
+<style>
+
+.member-forgot{
+    margin:-3px 0 2px;
+    text-align:right;
+}
+.member-forgot button{
+    padding:0;
+    border:0;
+    background:transparent;
+    color:#737b84;
+    font:inherit;
+    font-size:11px;
+    font-weight:700;
+    cursor:pointer;
+}
+.member-forgot button:hover{color:var(--accent)}
+.member-reset-code-row{
+    display:grid;
+    grid-template-columns:1fr 104px;
+    gap:8px;
+}
+.member-reset-code-btn{
+    height:48px;
+    border:1px solid #e1e5e9;
+    border-radius:12px;
+    background:#f7f8f9;
+    color:#30353b;
+    font:inherit;
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+}
+.member-reset-code-btn:disabled{opacity:.55;cursor:default}
+.member-reset-help{
+    margin:-2px 0 0;
+    color:#969da5;
+    font-size:11px;
+    line-height:1.5;
+}
 </style>
 </head>
 <body>
@@ -3812,6 +3852,7 @@ body.modal-open{overflow:hidden}
                     <label for="memberLoginPassword">비밀번호</label>
                     <input id="memberLoginPassword" name="password" type="password" autocomplete="current-password" required placeholder="비밀번호">
                 </div>
+                <div class="member-forgot"><button type="button" onclick="openMemberModal('reset')">비밀번호를 잊으셨나요?</button></div>
                 <div id="memberLoginMessage" class="member-form-message"></div>
                 <button class="member-form-submit" type="submit">로그인</button>
             </form>
@@ -3832,7 +3873,18 @@ body.modal-open{overflow:hidden}
                 </div>
                 <div class="member-field">
                     <label for="memberRegisterEmail">이메일</label>
-                    <input id="memberRegisterEmail" name="email" type="email" maxlength="190" autocomplete="email" required placeholder="example@email.com">
+                    <div class="member-reset-code-row">
+                        <input id="memberRegisterEmail" name="email" type="email" maxlength="190" autocomplete="email" required placeholder="example@email.com">
+                        <button class="member-reset-code-btn" id="memberRegisterEmailCodeButton" type="button">인증번호 받기</button>
+                    </div>
+                </div>
+                <div class="member-field">
+                    <label for="memberRegisterEmailCode">이메일 인증번호</label>
+                    <div class="member-reset-code-row">
+                        <input id="memberRegisterEmailCode" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="6자리">
+                        <button class="member-reset-code-btn" id="memberRegisterEmailVerifyButton" type="button">인증 확인</button>
+                    </div>
+                    <p class="member-reset-help" id="memberRegisterEmailVerifyState">이메일 인증을 완료해야 회원가입할 수 있습니다.</p>
                 </div>
                 <div class="member-field">
                     <label for="memberRegisterPassword">비밀번호</label>
@@ -3846,6 +3898,56 @@ body.modal-open{overflow:hidden}
                 <button class="member-form-submit" type="submit">가입하기</button>
             </form>
             <p class="member-switch">이미 가입하셨나요? <button type="button" onclick="openMemberModal('login')">로그인</button></p>
+        </div>
+
+        <div id="memberResetPanel" hidden>
+            <h2 class="member-modal-title">비밀번호 재설정</h2>
+            <p class="member-modal-desc">가입한 이메일로 6자리 인증번호를 받은 뒤 새 비밀번호를 설정해 주세요.</p>
+            <form id="memberResetForm" class="member-form">
+                <div class="member-field">
+                    <label for="memberResetEmail">가입 이메일</label>
+                    <input id="memberResetEmail" name="email" type="email" maxlength="190" autocomplete="email" required placeholder="example@email.com">
+                </div>
+                <div class="member-field">
+                    <label for="memberResetCode">인증번호</label>
+                    <div class="member-reset-code-row">
+                        <input id="memberResetCode" name="code" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required placeholder="6자리">
+                        <button class="member-reset-code-btn" id="memberResetCodeButton" type="button">인증번호 받기</button>
+                    </div>
+                </div>
+                <div class="member-field">
+                    <label for="memberResetPassword">새 비밀번호</label>
+                    <input id="memberResetPassword" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="8자 이상">
+                </div>
+                <div class="member-field">
+                    <label for="memberResetPasswordConfirm">새 비밀번호 확인</label>
+                    <input id="memberResetPasswordConfirm" name="password_confirm" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="비밀번호 다시 입력">
+                </div>
+                <p class="member-reset-help">인증번호는 발급 후 10분 동안 유효합니다.</p>
+                <div id="memberResetMessage" class="member-form-message"></div>
+                <button class="member-form-submit" type="submit">새 비밀번호로 변경</button>
+            </form>
+            <p class="member-switch">비밀번호가 기억나셨나요? <button type="button" onclick="openMemberModal('login')">로그인</button></p>
+            <p class="member-switch">가입 이메일을 사용할 수 없나요? <button type="button" onclick="openMemberModal('reset-support')">관리자에게 재설정 요청</button></p>
+        </div>
+
+        <div id="memberResetSupportPanel" hidden>
+            <h2 class="member-modal-title">관리자에게 재설정 요청</h2>
+            <p class="member-modal-desc">가입 이메일을 사용할 수 없다면 가입 당시 이름과 휴대폰 번호로 요청을 남겨 주세요.</p>
+            <form id="memberResetSupportForm" class="member-form">
+                <div class="member-field">
+                    <label for="memberResetSupportName">가입 이름</label>
+                    <input id="memberResetSupportName" name="name" type="text" maxlength="30" autocomplete="name" required placeholder="가입할 때 사용한 이름">
+                </div>
+                <div class="member-field">
+                    <label for="memberResetSupportPhone">가입 휴대폰 번호</label>
+                    <input id="memberResetSupportPhone" name="phone" type="tel" maxlength="13" inputmode="numeric" autocomplete="tel" required placeholder="010-0000-0000">
+                </div>
+                <p class="member-reset-help">본인 확인 후 관리자가 임시 비밀번호를 안내하는 방식입니다.</p>
+                <div id="memberResetSupportMessage" class="member-form-message"></div>
+                <button class="member-form-submit" type="submit">재설정 요청 보내기</button>
+            </form>
+            <p class="member-switch">이메일 인증이 가능한가요? <button type="button" onclick="openMemberModal('reset')">이메일로 재설정</button></p>
         </div>
 
         <div id="memberSettingsPanel" hidden>
@@ -3892,7 +3994,7 @@ body.modal-open{overflow:hidden}
             <img class="menu-icon-default" src="images/menu-icons/faq-black.png" alt="">
             <img class="menu-icon-active" src="images/menu-icons/faq-orange.png" alt="">
         </span>
-        <span>Q&amp;A</span>
+        <span>자주Q&amp;A</span>
     </button>
 
     <button class="bottom-nav-item" type="button" data-main-nav="mypage">
@@ -3900,7 +4002,7 @@ body.modal-open{overflow:hidden}
             <img class="menu-icon-default" src="images/menu-icons/mypage-black.png" alt="">
             <img class="menu-icon-active" src="images/menu-icons/mypage-orange.png" alt="">
         </span>
-        <span>마이페이지</span>
+        <span>마이</span>
     </button>
 </nav>
 
@@ -6093,16 +6195,22 @@ function openMemberModal(mode = 'login') {
     const modal = document.getElementById('memberModal');
     const login = document.getElementById('memberLoginPanel');
     const register = document.getElementById('memberRegisterPanel');
+    const reset = document.getElementById('memberResetPanel');
+    const resetSupport = document.getElementById('memberResetSupportPanel');
     const settings = document.getElementById('memberSettingsPanel');
     if (!modal) return;
 
     login.hidden = mode !== 'login';
     register.hidden = mode !== 'register';
+    reset.hidden = mode !== 'reset';
+    resetSupport.hidden = mode !== 'reset-support';
     settings.hidden = mode !== 'settings';
     modal.hidden = false;
     document.body.style.overflow = 'hidden';
     setMemberMessage('memberLoginMessage');
     setMemberMessage('memberRegisterMessage');
+    setMemberMessage('memberResetMessage');
+    setMemberMessage('memberResetSupportMessage');
 }
 
 function closeMemberModal() {
@@ -6136,11 +6244,141 @@ document.getElementById('memberRegisterPhone')?.addEventListener('input', event 
     event.currentTarget.value = formatEstimatePhone(event.currentTarget.value);
 });
 
+
+let memberRegisterEmailVerified = '';
+
+function resetMemberRegisterEmailVerification() {
+    memberRegisterEmailVerified = '';
+    const state = document.getElementById('memberRegisterEmailVerifyState');
+    if (state) {
+        state.textContent = '이메일 인증을 완료해야 회원가입할 수 있습니다.';
+        state.style.color = '';
+    }
+}
+
+document.getElementById('memberRegisterEmail')?.addEventListener('input', () => {
+    resetMemberRegisterEmailVerification();
+});
+
+document.getElementById('memberRegisterEmailCode')?.addEventListener('input', event => {
+    event.currentTarget.value = event.currentTarget.value.replace(/\D/g, '').slice(0, 6);
+});
+
+document.getElementById('memberRegisterEmailCodeButton')?.addEventListener('click', async event => {
+    const button = event.currentTarget;
+    const emailInput = document.getElementById('memberRegisterEmail');
+    const codeInput = document.getElementById('memberRegisterEmailCode');
+    const email = String(emailInput?.value || '').trim().toLowerCase();
+
+    setMemberMessage('memberRegisterMessage');
+    resetMemberRegisterEmailVerification();
+
+    if (!email || !emailInput?.checkValidity()) {
+        emailInput?.reportValidity();
+        emailInput?.focus();
+        return;
+    }
+
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = '발송 중...';
+
+    try {
+        const response = await fetch('./api/member-email-verification-request.php', {
+            method:'POST',
+            credentials:'same-origin',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({email})
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+            throw new Error(data.message || '인증번호를 발송하지 못했습니다.');
+        }
+
+        codeInput?.focus();
+
+        let message = data.message || '인증번호를 발송했습니다.';
+        if (data.debug_code) {
+            message += ` 로컬 테스트 인증번호: ${data.debug_code}`;
+            if (codeInput) codeInput.value = data.debug_code;
+        }
+
+        setMemberMessage('memberRegisterMessage', message, 'ok');
+    } catch (error) {
+        setMemberMessage('memberRegisterMessage', error.message || '인증번호를 발송하지 못했습니다.');
+    } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+});
+
+document.getElementById('memberRegisterEmailVerifyButton')?.addEventListener('click', async event => {
+    const button = event.currentTarget;
+    const emailInput = document.getElementById('memberRegisterEmail');
+    const codeInput = document.getElementById('memberRegisterEmailCode');
+    const email = String(emailInput?.value || '').trim().toLowerCase();
+    const code = String(codeInput?.value || '').replace(/\D/g, '');
+
+    setMemberMessage('memberRegisterMessage');
+
+    if (!email || !emailInput?.checkValidity()) {
+        emailInput?.reportValidity();
+        return;
+    }
+    if (code.length !== 6) {
+        setMemberMessage('memberRegisterMessage', '6자리 이메일 인증번호를 입력해 주세요.');
+        codeInput?.focus();
+        return;
+    }
+
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = '확인 중...';
+
+    try {
+        const response = await fetch('./api/member-email-verification-confirm.php', {
+            method:'POST',
+            credentials:'same-origin',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({email, code})
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+            throw new Error(data.message || '이메일 인증에 실패했습니다.');
+        }
+
+        memberRegisterEmailVerified = email;
+        const state = document.getElementById('memberRegisterEmailVerifyState');
+        if (state) {
+            state.textContent = '이메일 인증 완료';
+            state.style.color = '#287044';
+        }
+        setMemberMessage('memberRegisterMessage', '이메일 인증이 완료되었습니다.', 'ok');
+    } catch (error) {
+        resetMemberRegisterEmailVerification();
+        setMemberMessage('memberRegisterMessage', error.message || '이메일 인증에 실패했습니다.');
+    } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+});
+
+
 document.getElementById('memberRegisterForm')?.addEventListener('submit', async event => {
     event.preventDefault();
     const form = event.currentTarget;
     const submit = form.querySelector('[type="submit"]');
     setMemberMessage('memberRegisterMessage');
+
+    const registerEmail = String(document.getElementById('memberRegisterEmail')?.value || '').trim().toLowerCase();
+    if (!memberRegisterEmailVerified || memberRegisterEmailVerified !== registerEmail) {
+        setMemberMessage('memberRegisterMessage', '이메일 인증을 먼저 완료해 주세요.');
+        document.getElementById('memberRegisterEmail')?.focus();
+        return;
+    }
+
     submit.disabled = true;
 
     try {
@@ -6158,6 +6396,7 @@ document.getElementById('memberRegisterForm')?.addEventListener('submit', async 
         setTimeout(() => {
             closeMemberModal();
             form.reset();
+            resetMemberRegisterEmailVerification();
         }, 450);
     } catch (error) {
         setMemberMessage('memberRegisterMessage', error.message || '회원가입에 실패했습니다.');
@@ -6188,6 +6427,121 @@ document.getElementById('memberLoginForm')?.addEventListener('submit', async eve
         form.reset();
     } catch (error) {
         setMemberMessage('memberLoginMessage', error.message || '로그인에 실패했습니다.');
+    } finally {
+        submit.disabled = false;
+    }
+});
+
+
+document.getElementById('memberResetSupportPhone')?.addEventListener('input', event => {
+    event.currentTarget.value = formatEstimatePhone(event.currentTarget.value);
+});
+
+document.getElementById('memberResetSupportForm')?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const submit = form.querySelector('[type="submit"]');
+    setMemberMessage('memberResetSupportMessage');
+    submit.disabled = true;
+
+    try {
+        const response = await fetch('./api/member-password-reset-admin-request.php', {
+            method:'POST',
+            credentials:'same-origin',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(Object.fromEntries(new FormData(form).entries()))
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+            throw new Error(data.message || '재설정 요청을 보내지 못했습니다.');
+        }
+
+        setMemberMessage('memberResetSupportMessage', data.message, 'ok');
+        form.reset();
+    } catch (error) {
+        setMemberMessage('memberResetSupportMessage', error.message || '재설정 요청을 보내지 못했습니다.');
+    } finally {
+        submit.disabled = false;
+    }
+});
+
+
+document.getElementById('memberResetCode')?.addEventListener('input', event => {
+    event.currentTarget.value = event.currentTarget.value.replace(/\D/g, '').slice(0, 6);
+});
+
+document.getElementById('memberResetCodeButton')?.addEventListener('click', async event => {
+    const button = event.currentTarget;
+    const emailInput = document.getElementById('memberResetEmail');
+    const email = String(emailInput?.value || '').trim().toLowerCase();
+    setMemberMessage('memberResetMessage');
+
+    if (!email || !emailInput.checkValidity()) {
+        emailInput?.reportValidity();
+        emailInput?.focus();
+        return;
+    }
+
+    button.disabled = true;
+    const originalText = button.textContent;
+    button.textContent = '발송 중...';
+
+    try {
+        const response = await fetch('./api/member-password-reset-request.php', {
+            method:'POST',
+            credentials:'same-origin',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({email})
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.message || '인증번호 발송에 실패했습니다.');
+
+        let message = data.message || '인증번호를 발송했습니다.';
+        if (data.debug_code) {
+            message += ` 로컬 테스트 인증번호: ${data.debug_code}`;
+        }
+        setMemberMessage('memberResetMessage', message, 'ok');
+    } catch (error) {
+        setMemberMessage('memberResetMessage', error.message || '인증번호 발송에 실패했습니다.');
+    } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+});
+
+document.getElementById('memberResetForm')?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const submit = form.querySelector('[type="submit"]');
+    setMemberMessage('memberResetMessage');
+
+    const payload = Object.fromEntries(new FormData(form).entries());
+    if (payload.password !== payload.password_confirm) {
+        setMemberMessage('memberResetMessage', '새 비밀번호 확인이 일치하지 않습니다.');
+        return;
+    }
+
+    submit.disabled = true;
+    try {
+        const response = await fetch('./api/member-password-reset-confirm.php', {
+            method:'POST',
+            credentials:'same-origin',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.message || '비밀번호 변경에 실패했습니다.');
+
+        setMemberMessage('memberResetMessage', '비밀번호가 변경되었습니다. 새 비밀번호로 로그인해 주세요.', 'ok');
+        setTimeout(() => {
+            form.reset();
+            openMemberModal('login');
+            const loginEmail = document.getElementById('memberLoginEmail');
+            if (loginEmail) loginEmail.value = String(payload.email || '');
+        }, 900);
+    } catch (error) {
+        setMemberMessage('memberResetMessage', error.message || '비밀번호 변경에 실패했습니다.');
     } finally {
         submit.disabled = false;
     }
