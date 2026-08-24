@@ -425,16 +425,16 @@ body.detail-mode .page{
     content:"";
     position:absolute;
     right:25px;
-    top:25px;
+    top:50%;
     width:10px;
     height:10px;
     border-right:2px solid #32353b;
     border-bottom:2px solid #32353b;
-    transform:rotate(45deg);
+    transform:translateY(-65%) rotate(45deg);
     transition:transform .18s ease;
 }
 .color-select.open .color-select-button:after{
-    transform:translateY(5px) rotate(225deg);
+    transform:translateY(-35%) rotate(225deg);
 }
 .color-select-label{
     flex:0 0 auto;
@@ -552,16 +552,16 @@ body.detail-mode .page{
     content:"";
     position:absolute;
     right:25px;
-    top:25px;
+    top:50%;
     width:10px;
     height:10px;
     border-right:2px solid #32353b;
     border-bottom:2px solid #32353b;
-    transform:rotate(45deg);
+    transform:translateY(-65%) rotate(45deg);
     transition:transform .18s ease;
 }
 .trim-select-wrap.open .trim-select-button:after{
-    transform:translateY(5px) rotate(225deg);
+    transform:translateY(-35%) rotate(225deg);
 }
 .trim-select-label{
     flex:0 0 auto;
@@ -981,14 +981,16 @@ body.modal-open{overflow:hidden}
     align-items:center;
     justify-content:center;
     height:20px;
-    padding:0 7px;
     border-radius:4px;
     background:var(--accent);
     color:#fff;
     font-size:10px;
-    font-weight:900;
+    font-weight:600;
     line-height:1;
     white-space:nowrap;
+    letter-spacing: 0.12em;
+    padding: 4px 6px;
+    text-indent: 0.12em;
 }
 .vehicle-list-price{margin-top:7px;display:flex;align-items:baseline;gap:3px}
 .vehicle-list-price strong{
@@ -1389,7 +1391,7 @@ body.modal-open{overflow:hidden}
     transform:translateX(-50%);
     z-index:900;
     width:min(350px, calc(100% - 24px));
-    height:75px;
+    height:65px;
     display:grid;
     grid-template-columns:repeat(5,1fr);
     padding:2px 10px;
