@@ -37,6 +37,16 @@ $customerPhone = trim((string)($data['customer_phone'] ?? ''));
 $customerMemo = trim((string)($data['customer_memo'] ?? ''));
 $memberId = (int)($_SESSION['member_id'] ?? 0);
 
+// 광고/캠페인 유입정보. 프론트에서 전달받되 길이를 제한해 저장합니다.
+$utmSource = mb_substr(trim((string)($data['utm_source'] ?? '')), 0, 100, 'UTF-8');
+$utmMedium = mb_substr(trim((string)($data['utm_medium'] ?? '')), 0, 100, 'UTF-8');
+$utmCampaign = mb_substr(trim((string)($data['utm_campaign'] ?? '')), 0, 150, 'UTF-8');
+$utmContent = mb_substr(trim((string)($data['utm_content'] ?? '')), 0, 150, 'UTF-8');
+$utmTerm = mb_substr(trim((string)($data['utm_term'] ?? '')), 0, 150, 'UTF-8');
+$referrer = mb_substr(trim((string)($data['referrer'] ?? '')), 0, 500, 'UTF-8');
+$landingPage = mb_substr(trim((string)($data['landing_page'] ?? '')), 0, 500, 'UTF-8');
+
+
 if ($vehicleId < 1) fail('차량을 선택해 주세요.');
 if ($trimId < 1) fail('트림을 선택해 주세요.');
 if ($colorId < 1) fail('외장색상을 선택해 주세요.');
@@ -106,6 +116,7 @@ try {
         brand_name, vehicle_name, trim_name, color_name,
         product_type, contract_months, prepayment_rate, annual_mileage, monthly_payment,
         customer_name, customer_phone, customer_memo,
+        utm_source, utm_medium, utm_campaign, utm_content, utm_term, referrer, landing_page,
         status
     ) VALUES (
         :member_id,
@@ -114,6 +125,7 @@ try {
         :brand_name, :vehicle_name, :trim_name, :color_name,
         :product_type, :contract_months, :prepayment_rate, :annual_mileage, :monthly_payment,
         :customer_name, :customer_phone, :customer_memo,
+        :utm_source, :utm_medium, :utm_campaign, :utm_content, :utm_term, :referrer, :landing_page,
         'NEW'
     )");
 
@@ -138,6 +150,13 @@ try {
         ':customer_name' => $customerName,
         ':customer_phone' => $customerPhone,
         ':customer_memo' => $customerMemo !== '' ? $customerMemo : null,
+        ':utm_source' => $utmSource !== '' ? $utmSource : null,
+        ':utm_medium' => $utmMedium !== '' ? $utmMedium : null,
+        ':utm_campaign' => $utmCampaign !== '' ? $utmCampaign : null,
+        ':utm_content' => $utmContent !== '' ? $utmContent : null,
+        ':utm_term' => $utmTerm !== '' ? $utmTerm : null,
+        ':referrer' => $referrer !== '' ? $referrer : null,
+        ':landing_page' => $landingPage !== '' ? $landingPage : null,
     ]);
 
     $estimateId = (int)$pdo->lastInsertId();

@@ -166,6 +166,7 @@ function productLabel(mixed $v): string {
 </form>
 </div>
 <div class="section"><h2>고객 정보</h2><div class="info"><div class="item"><span>성함</span><b><?=h($e['customer_name'])?></b></div><div class="item"><span>연락처</span><b><?=h($e['customer_phone'])?></b></div></div></div>
+<div class="section"><h2>유입 정보</h2><div class="info"><div class="item"><span>유입경로</span><b><?=val($e['utm_source'] ?? null)?></b></div><div class="item"><span>매체</span><b><?=val($e['utm_medium'] ?? null)?></b></div><div class="item"><span>캠페인</span><b><?=val($e['utm_campaign'] ?? null)?></b></div><div class="item"><span>랜딩페이지</span><b><?=val($e['landing_page'] ?? null)?></b></div></div></div>
 <?php if ($isQuick): ?>
 <div class="section"><h2>간편견적 요청 조건</h2><div class="info">
 <div class="item"><span>관심 차종</span><b><?=val($e['car_type'])?></b></div>

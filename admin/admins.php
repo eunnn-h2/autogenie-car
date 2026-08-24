@@ -190,6 +190,7 @@ $admins = $pdo->query("
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 계정 관리</title>
+<link rel="stylesheet" href="./sidebar.css">
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#eef5f8;color:#263b48;font-size:13px}
@@ -239,8 +240,14 @@ table th,table td{word-break:keep-all}
 }
 
 </style>
+<style>
+.admin-admins-main{min-width:0;padding:28px;background:#eef5f8}.admin-admins-main .wrap{width:100%;max-width:none;margin:0;padding:0}.admin-admins-main .top{margin-top:0}@media(max-width:900px){.admin-admins-main{padding:14px}}
+</style>
 </head>
 <body>
+<div class="admin-shell">
+<?php $currentAdminPage = 'admins'; require __DIR__ . '/sidebar.php'; ?>
+<main class="admin-admins-main">
 <div class="wrap">
     <div class="top">
         <div>
@@ -354,6 +361,8 @@ table th,table td{word-break:keep-all}
             </table>
         </div>
     </div>
+</div>
+</main>
 </div>
 </body>
 </html>
