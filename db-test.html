@@ -4097,9 +4097,16 @@ function getBrandName(v){ return v.brand_name ?? v.brand ?? '-'; }
 function getImagePath(v){ return v.image_path ?? v.vehicle_image_path ?? v.image ?? ''; }
 
 function imageCandidates(v) {
+    // 상세 화면의 기본 선택 색상(colors[0])과 상단 차량 이미지를 동일하게 맞춥니다.
+    // 색상 이미지가 있으면 첫 번째 색상 이미지를 우선 사용하고,
+    // 없을 때만 차량 대표 이미지를 fallback으로 사용합니다.
+    const colorCandidates = Array.isArray(v.colors)
+        ? v.colors.map(c => c.image_path ?? c.color_image_path ?? c.image)
+        : [];
+
     const rawCandidates = [
-        v.image_path, v.vehicle_image_path, v.image, v.representative_image, v.thumbnail,
-        ...(Array.isArray(v.colors) ? v.colors.map(c => c.image_path ?? c.color_image_path ?? c.image) : [])
+        ...colorCandidates,
+        v.image_path, v.vehicle_image_path, v.image, v.representative_image, v.thumbnail
     ].filter(Boolean);
 
     const urls = [];
