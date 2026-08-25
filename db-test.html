@@ -3970,11 +3970,11 @@ body.home-main-active .page{
     height:2.5px;
 }
 
-/* 메인 배너: 배경이 허전하지 않도록 곡선형 백그라운드와 큰 차량 비주얼 적용 */
+/* 메인 배너: 모든 화면에서 제목 → 설명 → 큰 차량 이미지 → CTA 순서로 보이도록 기본 구조 자체를 변경 */
 .home-hero{
     position:relative;
-    min-height:272px;
-    padding:24px 22px 22px;
+    min-height:430px;
+    padding:24px 20px 22px;
     overflow:hidden;
     border:0;
     border-radius:22px;
@@ -3994,64 +3994,86 @@ body.home-main-active .page{
 .home-hero:after{
     content:'';
     position:absolute;
-    right:-138px;
-    bottom:-22px;
-    width:470px;
-    height:270px;
+    right:-120px;
+    bottom:92px;
+    width:440px;
+    height:228px;
     border-radius:50%;
-    border:22px solid rgba(255,255,255,.56);
+    border:18px solid rgba(255,255,255,.56);
     border-left-color:transparent;
     border-bottom-color:rgba(255,255,255,.28);
-    transform:rotate(-8deg);
-    box-shadow:inset 0 0 0 16px rgba(255,255,255,.34), inset 0 0 0 38px rgba(255,255,255,.14);
+    transform:rotate(-10deg);
+    box-shadow:inset 0 0 0 13px rgba(255,255,255,.34), inset 0 0 0 31px rgba(255,255,255,.14);
     z-index:0;
     pointer-events:none;
 }
 .home-hero-copy{
     position:relative;
     z-index:2;
-    max-width:52%;
+    max-width:100%;
+    width:100%;
 }
 .home-title{
     margin:0;
-    font-size:28px;
-    line-height:1.18;
+    width:100%;
+    font-size:27px;
+    line-height:1.22;
     font-weight:950;
+    word-break:keep-all;
+    white-space:normal;
 }
 .home-desc{
-    max-width:95%;
+    max-width:100%;
     margin:12px 0 0;
-    font-size:14px;
+    font-size:13px;
     line-height:1.5;
     font-weight:650;
+    word-break:keep-all;
 }
 .home-hero-image{
-    right:-54px;
-    top:34px;
-    width:388px;
-    height:232px;
+    position:absolute;
+    left:0;
+    right:0;
+    top:140px;
+    width:100%;
+    height:182px;
+    display:flex;
     align-items:flex-end;
-    justify-content:flex-end;
+    justify-content:center;
     z-index:1;
 }
 .home-hero-image img{
-    max-width:112%;
-    max-height:112%;
+    width:auto;
+    height:100%;
+    max-width:none;
+    max-height:100%;
+    object-fit:contain;
+    transform:translateX(14px) scale(1.14);
+    transform-origin:center bottom;
     filter:drop-shadow(0 16px 24px rgba(17,22,29,.16));
 }
 .home-primary-action{
-    left:22px;
-    bottom:58px;
-    min-width:190px;
-    height:44px;
+    position:absolute;
+    z-index:3;
+    left:20px;
+    right:20px;
+    bottom:22px;
+    width:calc(100% - 40px);
+    min-width:0;
+    height:48px;
     padding:0 22px;
     border-radius:12px;
-    font-size:14px;
+    font-size:15px;
     font-weight:900;
 }
 .home-secondary-action{
-    left:22px;
+    position:absolute;
+    z-index:3;
+    left:20px;
+    right:20px;
     bottom:24px;
+    width:calc(100% - 40px);
+    text-align:center;
     font-size:12px;
     line-height:1.2;
 }
@@ -4313,7 +4335,7 @@ body.home-main-active .bottom-nav-icon img{
     .home-primary-action{
         left:18px;
         right:18px;
-        bottom:58px;
+        bottom:22px;
         width:calc(100% - 36px);
         min-width:0;
         height:48px;
@@ -4462,6 +4484,92 @@ body.home-main-active .page{
 }
 </style>
 
+
+<style>
+/* ============================================================
+   HOME HERO FORCE FIX 2026-08-25
+   좁은 데스크톱/태블릿 폭에서 홈 히어로 배치를 강하게 덮어씀
+   ============================================================ */
+@media (min-width:391px) and (max-width:768px){
+    body.home-main-active .page{
+        padding-left:18px !important;
+        padding-right:18px !important;
+    }
+    body.home-main-active .home-hero{
+        min-height:430px !important;
+        padding:24px 20px 22px !important;
+        border-radius:20px !important;
+        overflow:hidden !important;
+    }
+    body.home-main-active .home-hero:after{
+        right:-120px !important;
+        bottom:96px !important;
+        width:432px !important;
+        height:224px !important;
+        border-width:18px !important;
+        transform:rotate(-10deg) !important;
+        box-shadow:inset 0 0 0 13px rgba(255,255,255,.32), inset 0 0 0 31px rgba(255,255,255,.14) !important;
+    }
+    body.home-main-active .home-hero-copy{
+        max-width:100% !important;
+        width:100% !important;
+    }
+    body.home-main-active .home-title{
+        width:100% !important;
+        font-size:27px !important;
+        line-height:1.22 !important;
+        white-space:normal !important;
+        word-break:keep-all !important;
+    }
+    body.home-main-active .home-desc{
+        max-width:100% !important;
+        font-size:13px !important;
+    }
+    body.home-main-active .home-hero-image{
+        left:0 !important;
+        right:0 !important;
+        top:140px !important;
+        width:100% !important;
+        height:182px !important;
+        justify-content:center !important;
+        align-items:flex-end !important;
+        z-index:1 !important;
+    }
+    body.home-main-active .home-hero-image img{
+        width:auto !important;
+        height:100% !important;
+        max-width:none !important;
+        max-height:100% !important;
+        object-fit:contain !important;
+        transform:translateX(14px) scale(1.14) !important;
+        transform-origin:center bottom !important;
+    }
+    body.home-main-active .home-primary-action{
+        left:20px !important;
+        right:20px !important;
+        bottom:22px !important;
+        width:calc(100% - 40px) !important;
+        min-width:0 !important;
+        height:48px !important;
+        font-size:15px !important;
+    }
+    body.home-main-active .home-secondary-action{
+        left:20px !important;
+        right:20px !important;
+        bottom:24px !important;
+        width:calc(100% - 40px) !important;
+        text-align:center !important;
+        font-size:12px !important;
+    }
+}
+</style>
+
+
+<style>
+/* 상담 링크 제거: 데스크톱/모바일 공통 */
+.home-secondary-action{display:none !important;}
+</style>
+
 </head>
 <body>
 <div class="page">
@@ -4537,7 +4645,6 @@ body.home-main-active .page{
             </div>
             <div class="home-hero-image" id="homeHeroImage" aria-hidden="true"></div>
             <button class="home-primary-action" type="button" onclick="openMainView('vehicle')">차량 견적 비교하기</button>
-            <button class="home-secondary-action" type="button" onclick="openMainView('quick')">아직 차량을 못 정했다면 상담받기</button>
         </div>
 
         <section class="home-section" aria-labelledby="homePopularTitle">
