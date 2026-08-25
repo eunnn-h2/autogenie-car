@@ -33,16 +33,6 @@ $monthlyBudget = trim((string)($data['monthly_budget'] ?? ''));
 $productType = strtoupper(trim((string)($data['product_type'] ?? '')));
 $memberId = (int)($_SESSION['member_id'] ?? 0);
 
-// 광고/캠페인 유입정보. 프론트에서 전달받되 길이를 제한해 저장합니다.
-$utmSource = mb_substr(trim((string)($data['utm_source'] ?? '')), 0, 100, 'UTF-8');
-$utmMedium = mb_substr(trim((string)($data['utm_medium'] ?? '')), 0, 100, 'UTF-8');
-$utmCampaign = mb_substr(trim((string)($data['utm_campaign'] ?? '')), 0, 150, 'UTF-8');
-$utmContent = mb_substr(trim((string)($data['utm_content'] ?? '')), 0, 150, 'UTF-8');
-$utmTerm = mb_substr(trim((string)($data['utm_term'] ?? '')), 0, 150, 'UTF-8');
-$referrer = mb_substr(trim((string)($data['referrer'] ?? '')), 0, 500, 'UTF-8');
-$landingPage = mb_substr(trim((string)($data['landing_page'] ?? '')), 0, 500, 'UTF-8');
-
-
 if ($customerName === '') fail('성함을 입력해 주세요.');
 if ($customerPhone === '') fail('연락처를 입력해 주세요.');
 
@@ -93,7 +83,6 @@ try {
         car_type,
         monthly_budget,
         product_type,
-        utm_source, utm_medium, utm_campaign, utm_content, utm_term, referrer, landing_page,
         status
     ) VALUES (
         :member_id,
@@ -103,7 +92,6 @@ try {
         :car_type,
         :monthly_budget,
         :product_type,
-        :utm_source, :utm_medium, :utm_campaign, :utm_content, :utm_term, :referrer, :landing_page,
         'NEW'
     )");
 
@@ -116,13 +104,6 @@ try {
         ':car_type' => $carType !== '' ? $carType : null,
         ':monthly_budget' => $monthlyBudget !== '' ? $monthlyBudget : null,
         ':product_type' => $productType !== '' ? $productType : null,
-        ':utm_source' => $utmSource !== '' ? $utmSource : null,
-        ':utm_medium' => $utmMedium !== '' ? $utmMedium : null,
-        ':utm_campaign' => $utmCampaign !== '' ? $utmCampaign : null,
-        ':utm_content' => $utmContent !== '' ? $utmContent : null,
-        ':utm_term' => $utmTerm !== '' ? $utmTerm : null,
-        ':referrer' => $referrer !== '' ? $referrer : null,
-        ':landing_page' => $landingPage !== '' ? $landingPage : null,
     ]);
 
     $estimateId = (int)$pdo->lastInsertId();
@@ -141,7 +122,7 @@ try {
     if ($pdo->inTransaction()) $pdo->rollBack();
 
     if ($e instanceof PDOException && str_contains($e->getMessage(), "doesn't exist")) {
-        fail('quick_estimate_direct 테이블이 없습니다. quick_estimates_table.sql을 phpMyAdmin에서 먼저 실행해 주세요.', 500);
+        fail('quick_estimates 테이블이 없습니다. quick_estimates_table.sql을 phpMyAdmin에서 먼저 실행해 주세요.', 500);
     }
 
     fail('간편견적 저장 중 오류가 발생했습니다: ' . $e->getMessage(), 500);

@@ -16,6 +16,7 @@ $currentAdminPage = $currentAdminPage ?? '';
         <div class="admin-sidebar__section">
             <p>대시보드</p>
             <a class="<?= $currentAdminPage === 'dashboard' ? 'active' : '' ?>" href="./dashboard.php">운영 현황</a>
+            <a class="<?= $currentAdminPage === 'traffic' ? 'active' : '' ?>" href="./traffic.php">유입 분석</a>
         </div>
 
         <div class="admin-sidebar__section">

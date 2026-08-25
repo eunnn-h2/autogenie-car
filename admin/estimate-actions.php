@@ -6,7 +6,7 @@ require_once __DIR__ . '/../config/database.php';
 requireVehicleEditor();
 
 $allowedStatuses = ['NEW', 'CONTACTED', 'REVIEWING', 'APPROVED', 'CONTRACTED', 'CANCELED'];
-$allowedActions = ['single_status', 'single_assign', 'single_delete', 'bulk_status', 'bulk_delete'];
+$allowedActions = ['single_status', 'single_delete', 'bulk_status', 'bulk_delete'];
 $action = (string)($_POST['action'] ?? '');
 if (!in_array($action, $allowedActions, true)) {
     http_response_code(400);
@@ -41,40 +41,6 @@ try {
         }
         $stmt = $pdo->prepare("UPDATE {$row['table']} SET status=? WHERE id=?");
         $stmt->execute([$status, $row['id']]);
-        returnToList();
-    }
-
-    if ($action === 'single_assign') {
-        $row = parseRowKey((string)($_POST['row_key'] ?? ''));
-        $assignedAdminId = (int)($_POST['assigned_admin_id'] ?? 0);
-
-        if (!$row) {
-            http_response_code(400);
-            exit('견적 값이 올바르지 않습니다.');
-        }
-
-        $assignedValue = null;
-
-        if ($assignedAdminId > 0) {
-            $check = $pdo->prepare("
-                SELECT id
-                FROM admin_accounts
-                WHERE id = ? AND is_active = 1
-                LIMIT 1
-            ");
-            $check->execute([$assignedAdminId]);
-
-            if (!$check->fetchColumn()) {
-                http_response_code(400);
-                exit('선택한 담당자를 찾을 수 없습니다.');
-            }
-
-            $assignedValue = $assignedAdminId;
-        }
-
-        $stmt = $pdo->prepare("UPDATE {$row['table']} SET assigned_admin_id=? WHERE id=?");
-        $stmt->execute([$assignedValue, $row['id']]);
-
         returnToList();
     }
 

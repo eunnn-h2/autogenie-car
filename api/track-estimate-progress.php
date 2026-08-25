@@ -33,6 +33,7 @@ if (!isset($stages[$stage])) $stage = 'LANDING';
 $order = $stages[$stage];
 $completed = $stage === 'COMPLETED' ? 1 : 0;
 $memberId = (int)($_SESSION['member_id'] ?? 0);
+$activeSeconds = max(0, min(86400, (int)($data['active_seconds'] ?? 0))); // 한 세션 최대 24시간
 
 $clean = static function($value, int $len): ?string {
     $v = mb_substr(trim((string)$value), 0, $len, 'UTF-8');
@@ -44,12 +45,12 @@ try {
                 session_key, member_id, stage, stage_order,
                 vehicle_id, vehicle_name, trim_id, trim_name, product_type,
                 utm_source, utm_medium, utm_campaign, referrer, landing_page,
-                is_completed, completed_at
+                is_completed, active_seconds, completed_at
             ) VALUES (
                 :session_key, :member_id, :stage, :stage_order,
                 :vehicle_id, :vehicle_name, :trim_id, :trim_name, :product_type,
                 :utm_source, :utm_medium, :utm_campaign, :referrer, :landing_page,
-                :is_completed, IF(:is_completed2=1, NOW(), NULL)
+                :is_completed, :active_seconds, IF(:is_completed2=1, NOW(), NULL)
             )
             ON DUPLICATE KEY UPDATE
                 member_id = COALESCE(VALUES(member_id), member_id),
@@ -66,6 +67,7 @@ try {
                 referrer = COALESCE(VALUES(referrer), referrer),
                 landing_page = COALESCE(VALUES(landing_page), landing_page),
                 is_completed = GREATEST(is_completed, VALUES(is_completed)),
+                active_seconds = GREATEST(active_seconds, VALUES(active_seconds)),
                 completed_at = IF(VALUES(is_completed)=1, COALESCE(completed_at, NOW()), completed_at),
                 last_activity_at = NOW()";
     $stmt = $pdo->prepare($sql);
@@ -85,6 +87,7 @@ try {
         ':referrer'=>$clean($data['referrer'] ?? '', 500),
         ':landing_page'=>$clean($data['landing_page'] ?? '', 500),
         ':is_completed'=>$completed,
+        ':active_seconds'=>$activeSeconds,
         ':is_completed2'=>$completed,
     ]);
     echo json_encode(['success'=>true], JSON_UNESCAPED_UNICODE);

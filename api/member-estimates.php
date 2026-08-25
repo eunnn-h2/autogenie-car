@@ -13,11 +13,6 @@ if ($memberId < 1) {
     ], 401);
 }
 
-function normalize_estimate_status(string $status): string
-{
-    return $status === 'DONE' ? 'APPROVED' : $status;
-}
-
 function estimate_status_label(string $status): string
 {
     return [
@@ -47,8 +42,8 @@ try {
             'estimate_no' => (string)$row['estimate_no'],
             'type' => 'DIRECT',
             'type_label' => '직접견적',
-            'status' => normalize_estimate_status((string)$row['status']),
-            'status_label' => estimate_status_label(normalize_estimate_status((string)$row['status'])),
+            'status' => (string)$row['status'],
+            'status_label' => estimate_status_label((string)$row['status']),
             'title' => trim((string)$row['brand_name'].' '.(string)$row['vehicle_name']),
             'subtitle' => (string)($row['trim_name'] ?? ''),
             'product_type' => (string)($row['product_type'] ?? ''),
@@ -72,8 +67,8 @@ try {
             'estimate_no' => (string)$row['estimate_no'],
             'type' => 'QUICK',
             'type_label' => '간편견적',
-            'status' => normalize_estimate_status((string)$row['status']),
-            'status_label' => estimate_status_label(normalize_estimate_status((string)$row['status'])),
+            'status' => (string)$row['status'],
+            'status_label' => estimate_status_label((string)$row['status']),
             'title' => $carType !== '' ? $carType : '상담 후 차량 결정',
             'subtitle' => $budget !== '' ? '희망 월 예산 '.$budget : '이용방식 상담',
             'product_type' => (string)($row['product_type'] ?? ''),
@@ -86,19 +81,19 @@ try {
     usort($rows, static fn(array $a, array $b): int => strcmp($b['created_at'], $a['created_at']));
 
     $counts = [
-        'total' => count($rows),
-        'estimate' => 0,
-        'contacted' => 0,
-        'reviewing' => 0,
-        'approved' => 0,
-        'contracted' => 0,
-        'canceled' => 0,
+        'total'=>count($rows),
+        'estimate'=>0,
+        'contacted'=>0,
+        'reviewing'=>0,
+        'approved'=>0,
+        'contracted'=>0,
+        'canceled'=>0
     ];
     foreach ($rows as $row) {
         if ($row['status'] === 'NEW') $counts['estimate']++;
         elseif ($row['status'] === 'CONTACTED') $counts['contacted']++;
         elseif ($row['status'] === 'REVIEWING') $counts['reviewing']++;
-        elseif ($row['status'] === 'APPROVED') $counts['approved']++;
+        elseif (in_array($row['status'], ['APPROVED','DONE'], true)) $counts['approved']++;
         elseif ($row['status'] === 'CONTRACTED') $counts['contracted']++;
         elseif ($row['status'] === 'CANCELED') $counts['canceled']++;
     }

@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS customer_inquiries (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    inquiry_no VARCHAR(32) NOT NULL,
+    legacy_id VARCHAR(80) NULL,
+    member_id BIGINT UNSIGNED NULL,
+    guest_key VARCHAR(64) NULL,
+    member_name VARCHAR(100) NULL,
+    member_email VARCHAR(190) NULL,
+    member_phone VARCHAR(30) NULL,
+    message TEXT NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'NEW',
+    answer TEXT NULL,
+    answered_by BIGINT UNSIGNED NULL,
+    answered_at DATETIME NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_customer_inquiries_no (inquiry_no),
+    UNIQUE KEY uq_customer_inquiries_legacy (legacy_id),
+    KEY idx_customer_inquiries_member (member_id, created_at),
+    KEY idx_customer_inquiries_guest (guest_key, created_at),
+    KEY idx_customer_inquiries_status (status, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -83,7 +83,7 @@ try {
     ");
 
 
-    // 트림별 차량 옵션. car_vehicle_options 테이블이 아직 없는 환경에서도
+    // 트림별 차량 옵션. vehicle_options 테이블이 아직 없는 환경에서도
     // 기존 차량/견적 화면은 정상 동작하도록 선택적으로 연결합니다.
     $optionStmt = null;
     try {

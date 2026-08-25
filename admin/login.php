@@ -13,7 +13,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 require_once __DIR__ . '/../config/database.php';
 
 if (isset($_SESSION['admin_id'])) {
-    header('Location: ./dashboard.php');
+    header('Location: ./index.php');
     exit;
 }
 
@@ -58,11 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     WHERE id = ?
                 ")->execute([(int)$admin['id']]);
 
-                header('Location: ./dashboard.php');
+                header('Location: ./index.php');
                 exit;
             }
         } catch (Throwable $e) {
-            $error = '로그인 처리 중 오류가 발생했습니다. admin_accounts 테이블이 생성되어 있는지 확인해주세요.';
+            $error = '로그인 처리 중 오류가 발생했습니다. admins 테이블이 생성되어 있는지 확인해주세요.';
         }
     }
 }
@@ -91,19 +91,6 @@ button{width:100%;height:48px;border:0;border-radius:6px;background:#3924b9;colo
 .alert.info{background:#eef7ff;color:#2563a6;border:1px solid #cce6fa}
 .setup{margin-top:18px;padding-top:16px;border-top:1px solid #edf1f3;text-align:center;font-size:11px;color:#9aabb4}
 .setup a{color:#3924b9;text-decoration:none}
-</style>
-<style>
-
-@media(max-width:520px){
-    body{display:flex;align-items:center;justify-content:center;padding:12px;min-height:100dvh}
-    .login-card{width:100%;padding:24px 18px;border-radius:9px}
-    .logo{width:43px;height:43px;margin-bottom:16px}
-    h1{font-size:21px}
-    .desc{margin-bottom:20px;font-size:12px;line-height:1.5}
-    input{height:48px;font-size:16px}
-    button{height:50px}
-}
-
 </style>
 </head>
 <body>

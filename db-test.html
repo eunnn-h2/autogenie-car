@@ -1452,64 +1452,170 @@ body.modal-open{overflow:hidden}
 }
 
 /* ============================================================
-   FAQ 임시 화면
+   Q&A 화면
    ============================================================ */
 .faq-view,.mypage-view{
     min-height:calc(100vh - 118px);
     padding:4px 0 20px;
 }
-.faq-title,.mypage-title{
-    margin:0 0 6px;
-    font-size:25px;
+.qna-kicker{
+    margin:0 0 24px;
+    font-size:20px;
     font-weight:900;
     letter-spacing:-.04em;
 }
-.faq-desc{
-    margin:0 0 18px;
-    color:#8c949d;
-    font-size:12px;
-    line-height:1.6;
+.qna-hero-title{
+    margin:0;
+    color:#111317;
+    font-size:27px;
+    line-height:1.32;
+    font-weight:900;
+    letter-spacing:-.045em;
+    word-break:keep-all;
 }
-.faq-list{border-top:1px solid #eceef1}
-.faq-item{border-bottom:1px solid #eceef1}
+.qna-compose{
+    margin-top:20px;
+    padding:16px;
+    border-radius:18px;
+    background:#f7f7f8;
+}
+.qna-compose textarea{
+    display:block;
+    width:100%;
+    min-height:84px;
+    padding:0;
+    resize:none;
+    border:0;
+    outline:0;
+    background:transparent;
+    color:#222428;
+    font:inherit;
+    font-size:14px;
+    line-height:1.55;
+}
+.qna-compose textarea::placeholder{color:#a1a8b0}
+.qna-compose-footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-top:10px;
+}
+.qna-compose-count{color:#a0a7af;font-size:11px}
+.qna-submit{
+    height:38px;
+    padding:0 17px;
+    border:0;
+    border-radius:12px;
+    background:#111317;
+    color:#fff;
+    font:inherit;
+    font-size:13px;
+    font-weight:800;
+    cursor:pointer;
+}
+.qna-submit:disabled{opacity:.45;cursor:default}
+.qna-compose-result{
+    display:none;
+    margin:11px 0 0;
+    color:#747c85;
+    font-size:11px;
+    line-height:1.55;
+}
+.qna-compose-result.show{display:block}
+.qna-section{margin-top:30px}
+.qna-section-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:13px;
+}
+.qna-section-title{
+    margin:0;
+    color:#1c2025;
+    font-size:18px;
+    font-weight:900;
+    letter-spacing:-.035em;
+}
+.qna-more{
+    padding:0;
+    border:0;
+    background:transparent;
+    color:#7e8790;
+    font:inherit;
+    font-size:12px;
+    text-decoration:underline;
+    cursor:pointer;
+}
+.qna-topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qna-topic-card{
+    min-height:124px;
+    padding:17px;
+    border:0;
+    border-radius:18px;
+    background:#fff1e8;
+    color:#20242a;
+    text-align:left;
+    font:inherit;
+    cursor:pointer;
+}
+.qna-topic-card:nth-child(2){background:#f4f4f5}
+.qna-topic-category{
+    display:block;
+    margin-bottom:12px;
+    color:var(--accent);
+    font-size:11px;
+    font-weight:800;
+}
+.qna-topic-question{
+    display:block;
+    font-size:14px;
+    line-height:1.45;
+    font-weight:900;
+    word-break:keep-all;
+}
+.qna-list{display:grid;gap:10px}
+.faq-item{
+    border:1px solid #eceef1;
+    border-radius:17px;
+    background:#fff;
+    overflow:hidden;
+}
 .faq-question{
     position:relative;
     width:100%;
-    min-height:62px;
-    padding:14px 38px 14px 2px;
+    padding:16px 42px 15px 16px;
     border:0;
     background:transparent;
     color:#22242a;
     text-align:left;
     font:inherit;
-    font-size:14px;
-    font-weight:800;
     cursor:pointer;
 }
-.faq-question:before{
-    content:'Q';
-    display:inline-block;
-    margin-right:8px;
-    color:var(--accent);
-    font-weight:900;
-}
+.faq-category{display:block;margin-bottom:7px;color:var(--accent);font-size:11px;font-weight:800}
+.faq-question strong{display:block;font-size:14px;line-height:1.45;font-weight:900;word-break:keep-all}
+.faq-preview{display:block;margin-top:5px;color:#8a929b;font-size:11px;line-height:1.5;word-break:keep-all}
+.faq-meta{display:block;margin-top:10px;color:#969da5;font-size:11px}
 .faq-question:after{
     content:'';
     position:absolute;
-    right:8px;
-    top:24px;
+    right:18px;
+    top:50%;
     width:8px;height:8px;
     border-right:2px solid #7d8690;
     border-bottom:2px solid #7d8690;
-    transform:rotate(45deg);
+    transform:translateY(-70%) rotate(45deg);
     transition:.18s ease;
 }
-.faq-item.open .faq-question:after{transform:rotate(225deg);top:29px}
+.faq-item.open .faq-question:after{transform:translateY(-30%) rotate(225deg)}
 .faq-answer{
     display:none;
-    padding:0 14px 18px 28px;
-    color:#6d7680;
-    font-size:13px;
+    margin:0 16px;
+    padding:15px 0 18px;
+    border-top:1px solid #f0f1f2;
+    color:#656e78;
+    font-size:12px;
     line-height:1.7;
 }
 .faq-item.open .faq-answer{display:block}
@@ -1625,6 +1731,9 @@ body.modal-open{overflow:hidden}
     line-height:1;
     font-weight:700;
     color:#cdd2d9;
+}
+.mypage-progress-count.has-count{
+    color:#ff6b00;
 }
 
 /* 섹션 사이 회색 띠 */
@@ -2069,6 +2178,36 @@ body.modal-open{overflow:hidden}
 .my-estimate-sub{margin:5px 0 0;color:#7f8790;font-size:12px;line-height:1.5}
 .my-estimate-meta{display:flex;flex-wrap:wrap;gap:5px 10px;margin-top:11px;padding-top:10px;border-top:1px solid #f0f1f2;color:#939aa2;font-size:11px}
 
+.my-inquiry-item{padding:16px 15px;border:1px solid #e9ebee;border-radius:16px;background:#fff}
+.my-inquiry-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.my-inquiry-date{color:#9aa1a9;font-size:11px;font-weight:700}
+.my-inquiry-status{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;background:#fff0e8;color:#ff5b1a;font-size:10px;font-weight:850}
+.my-inquiry-text{margin:0;color:#20242a;font-size:14px;line-height:1.55;font-weight:650;white-space:pre-wrap;word-break:break-word}
+
+.my-inquiry-answer{margin-top:12px;padding:12px 13px;border-radius:12px;background:#f7f7f8;border-left:3px solid var(--accent)}
+.my-inquiry-answer-label{display:block;margin-bottom:5px;color:var(--accent);font-size:11px;font-weight:900}
+.my-inquiry-answer-text{margin:0;color:#333941;font-size:13px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.my-inquiry-answer-date{display:block;margin-top:7px;color:#9aa1a9;font-size:10px;font-weight:650}
+.my-inquiry-status.answered{background:#eef8f1;color:#39704b}
+
+/* 관리자 문의 답변 테스트 UI: URL에 ?admin=1 일 때만 표시 */
+.admin-inquiry-launcher{
+    position:fixed;right:16px;top:16px;z-index:2800;display:none;height:38px;padding:0 14px;
+    border:0;border-radius:999px;background:#111317;color:#fff;font:inherit;font-size:12px;font-weight:850;
+    box-shadow:0 8px 24px rgba(17,19,23,.18);cursor:pointer
+}
+body.admin-inquiry-mode .admin-inquiry-launcher{display:inline-flex;align-items:center;justify-content:center}
+.admin-inquiry-item{padding:16px;border:1px solid #e8eaed;border-radius:16px;background:#fff}
+.admin-inquiry-item + .admin-inquiry-item{margin-top:10px}
+.admin-inquiry-user{margin:0 0 5px;color:#20242a;font-size:12px;font-weight:850}
+.admin-inquiry-message{margin:0;padding:11px 12px;border-radius:11px;background:#f7f7f8;color:#333941;font-size:13px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.admin-inquiry-reply{margin-top:12px}
+.admin-inquiry-reply textarea{display:block;width:100%;min-height:78px;padding:11px 12px;border:1px solid #e1e4e8;border-radius:11px;outline:0;resize:vertical;font:inherit;font-size:13px;line-height:1.55}
+.admin-inquiry-reply textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.admin-inquiry-actions{display:flex;justify-content:flex-end;margin-top:8px}
+.admin-inquiry-save{height:36px;padding:0 14px;border:0;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-size:12px;font-weight:850;cursor:pointer}
+.admin-inquiry-existing{margin-top:10px;padding:10px 11px;border-radius:10px;background:#fff4ee;color:#633a25;font-size:12px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+
 
 /* 하단 메뉴 PNG 아이콘 상태 전환 */
 .bottom-nav-icon .menu-icon-active{display:none;}
@@ -2077,72 +2216,348 @@ body.modal-open{overflow:hidden}
 .bottom-nav-item:not(.active){color:#42474d;}
 .bottom-nav-item.active{color:var(--accent);}
 
-/* 임시 홈 화면 */
+/* 홈 화면 - 전달받은 레퍼런스 비율에 맞춘 컴팩트 모바일 홈 */
 .home-view{
-    min-height:calc(100vh - 118px);
-    padding:8px 0 24px;
+    min-height:calc(100vh - 92px);
+    padding:0 0 26px;
+}
+.home-topbar{
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:10px;
+}
+.home-logo{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    color:#12161d;
+    font-size:18px;
+    line-height:1;
+    font-weight:950;
+    font-style:italic;
+    letter-spacing:-.035em;
+    white-space:nowrap;
+}
+.home-logo span{color:#ff4f16}
+.home-search-button{
+    position:relative;
+    width:38px;
+    height:38px;
+    margin-right:-4px;
+    padding:0;
+    border:0;
+    background:transparent;
+    cursor:pointer;
+}
+.home-search-button:before{
+    content:'';
+    position:absolute;
+    left:8px;
+    top:7px;
+    width:16px;
+    height:16px;
+    border:2px solid #11161d;
+    border-radius:50%;
+}
+.home-search-button:after{
+    content:'';
+    position:absolute;
+    left:23px;
+    top:23px;
+    width:10px;
+    height:2px;
+    border-radius:999px;
+    background:#11161d;
+    transform:rotate(45deg);
+    transform-origin:left center;
 }
 .home-hero{
-    padding:24px 20px;
-    border-radius:24px;
-    background:linear-gradient(145deg,#f7f7f8,#eeeeef);
+    position:relative;
+    min-height:170px;
+    padding:23px 15px 18px;
+    overflow:hidden;
+    border:1px solid #e6e7e9;
+    border-radius:16px;
+    background:linear-gradient(145deg,#fafafa 0%,#f4f4f5 100%);
 }
-.home-eyebrow{
-    margin:0 0 7px;
-    color:var(--accent);
-    font-size:12px;
-    font-weight:800;
-}
+.home-hero-copy{position:relative;z-index:2;max-width:245px}
 .home-title{
     margin:0;
-    color:#181b20;
-    font-size:27px;
-    line-height:1.25;
-    font-weight:900;
-    letter-spacing:-.045em;
+    color:#111317;
+    font-size:21px;
+    line-height:1.18;
+    font-weight:950;
 }
 .home-desc{
     margin:10px 0 0;
-    color:#747c85;
-    font-size:13px;
-    line-height:1.6;
+    color:#333941;
+    font-size:10.5px;
+    line-height:1.45;
+    font-weight:650;
     word-break:keep-all;
 }
-.home-actions{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:16px;
+.home-hero-image{
+    position:absolute;
+    z-index:1;
+    width:57%;
+    height:102px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
-.home-action{
-    min-height:74px;
-    padding:14px;
-    border:1px solid #e6e8eb;
-    border-radius:18px;
+.home-hero-image img{display:block;max-width:100%;max-height:100%;object-fit:contain}
+.home-primary-action{
+    position:absolute;
+    z-index:3;
+    left:15px;
+    bottom:42px;
+    min-width:129px;
+    height:29px;
+    padding:0 14px;
+    border:0;
+    border-radius:6px;
+    background:linear-gradient(90deg,#ff4a12,#ff641b);
+    color:#fff;
+    font:inherit;
+    font-size:11.5px;
+    font-weight:900;
+    cursor:pointer;
+}
+.home-secondary-action{
+    position:absolute;
+    z-index:3;
+    left:15px;
+    bottom:20px;
+    padding:0;
+    border:0;
+    border-bottom:1px solid #555b62;
+    background:transparent;
+    color:#353a40;
+    font:inherit;
+    font-size:9.5px;
+    font-weight:650;
+    cursor:pointer;
+}
+.home-section{margin-top:18px}
+.home-section-title{
+    margin:0 0 10px;
+    color:#171a1f;
+    font-size:16px;
+    font-weight:950;
+    letter-spacing:-.04em;
+}
+.home-popular-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.home-popular-card{
+    position:relative;
+    min-height:137px;
+    padding:8px 10px 10px;
+    overflow:hidden;
+    border:1px solid #e8eaed;
+    border-radius:12px;
     background:#fff;
-    color:#23272d;
     text-align:left;
     font:inherit;
     cursor:pointer;
 }
-.home-action strong{display:block;font-size:15px;font-weight:900;}
-.home-action span{display:block;margin-top:5px;color:#8a929b;font-size:11px;line-height:1.45;}
-.home-action.primary{border-color:#ffd6c0;background:#fff6f1;}
-.home-action.primary strong{color:var(--accent);}
-.home-guide{
-    margin-top:14px;
-    padding:18px;
-    border:1px solid #eceef1;
-    border-radius:18px;
+.home-popular-image{
+    height:79px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-top:3px;
+}
+.home-popular-image img{display:block;max-width:105%;max-height:100%;object-fit:contain}
+.home-popular-best{position:absolute;left:10px;top:8px;color:#ff4f16;font-size:9px;font-weight:950}
+.home-popular-name{display:block;margin-top:0;color:#20242a;font-size:11px;font-weight:900}
+.home-popular-price{display:flex;align-items:baseline;margin-top:6px;color:#333941;font-size:9px;white-space:nowrap}
+.home-popular-price strong{margin:0 1px 0 4px;color:#ff4f16;font-size:15px;line-height:1;font-weight:950}
+.home-recommend-head{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:4px;
+    padding:0;
+    border:0;
+    background:transparent;
+    color:#171a1f;
+    text-align:left;
+    font:inherit;
+    font-size:14px;
+    font-weight:950;
+    letter-spacing:-.035em;
+    cursor:pointer;
+}
+.home-recommend-head strong{color:#ff4f16}
+.home-recommend-head:after{
+    content:'';
+    width:6px;height:6px;
+    margin:-3px 0 0 2px;
+    border-right:1.6px solid #20242a;
+    border-bottom:1.6px solid #20242a;
+    transform:rotate(45deg);
+}
+.home-recommend-list{
+    display:grid;
+    margin-top:9px;
+    overflow:hidden;
+    border:1px solid #e8eaed;
+    border-bottom:0;
+    border-radius:11px 11px 0 0;
     background:#fff;
 }
-.home-guide-title{margin:0 0 10px;font-size:15px;font-weight:900;}
-.home-guide p{margin:0;color:#777f88;font-size:12px;line-height:1.65;word-break:keep-all;}
-@media(max-width:380px){
-    .home-title{font-size:24px;}
-    .home-actions{grid-template-columns:1fr;}
+.home-recommend-item{
+    display:grid;
+    grid-template-columns:56px 1fr;
+    align-items:center;
+    gap:10px;
+    min-height:41px;
+    padding:4px 8px;
+    border:0;
+    /* border-bottom:1px solid #eceef0; */
+    background:#fff;
+    color:#161a1f;
+    text-align:left;
+    font:inherit;
+    cursor:pointer;
 }
-
+.home-recommend-thumb{
+    width:48px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:6px;
+    background:#f5f6f7;
+}
+.home-recommend-thumb img{display:block;max-width:96%;max-height:96%;object-fit:contain}
+.home-recommend-name{display:block;font-size:9.5px;font-weight:750}
+.home-recommend-price{display:block;margin-top:1px;font-size:10px;line-height:1.15;font-weight:950}
+.home-recommend-loading{
+    padding:22px 12px;
+    color:#8d96a0;
+    text-align:center;
+    font-size:10px;
+    background:#fff;
+}
+.home-all-vehicles{
+    position:relative;
+    width:100%;
+    height:28px;
+    margin-top:0;
+    border:1px solid #e8eaed;
+    border-top:0;
+    border-radius:0 0 11px 11px;
+    background:#f7f7f8;
+    color:#252a30;
+    font:inherit;
+    font-size:9.5px;
+    font-weight:750;
+    cursor:pointer;
+}
+.home-guide{
+    position:relative;
+    min-height:104px;
+    margin-top:10px;
+    padding:12px 118px 11px 14px;
+    overflow:hidden;
+    border:1px solid #e8eaed;
+    border-radius:11px;
+    background:linear-gradient(145deg,#fafafa,#f1f1f2);
+}
+.home-guide:after{
+    content:'?';
+    position:absolute;
+    right:37px;
+    top:5px;
+    color:#f7f7f8;
+    font-size:82px;
+    line-height:1;
+    font-weight:950;
+    text-shadow:0 5px 12px rgba(18,22,28,.12);
+}
+.home-guide-title{position:relative;z-index:1;margin:0;font-size:13px;line-height:1.28;font-weight:950;letter-spacing:-.04em;word-break:keep-all}
+.home-guide p{position:relative;z-index:1;margin:5px 0 0;color:#454b52;font-size:8.5px;line-height:1.35;word-break:keep-all}
+.home-guide-button{position:relative;z-index:1;height:23px;margin-top:6px;padding:0 18px;border:1px solid #252a30;border-radius:4px;background:#fff;color:#20242a;font:inherit;font-size:8.5px;font-weight:800;cursor:pointer}
+.home-consult{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:8px;
+    padding:10px 14px;
+    border-radius:9px;
+    background:linear-gradient(90deg,#ff4610,#ff651c);
+    color:#fff;
+}
+.home-consult strong{font-size:11px;line-height:1.32;font-weight:950;letter-spacing:-.03em;word-break:keep-all}
+.home-consult button{flex:0 0 auto;min-width:114px;height:26px;padding:0 12px;border:0;border-radius:5px;background:#fff;color:#ff4f16;font:inherit;font-size:9.5px;font-weight:950;cursor:pointer}
+.home-recommend-modal{
+    position:fixed;
+    inset:0;
+    z-index:1200;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    background:rgba(17,19,23,.46);
+}
+.home-recommend-modal[hidden]{display:none!important}
+.home-recommend-sheet{
+    width:min(480px,100%);
+    padding:12px 24px max(28px,env(safe-area-inset-bottom));
+    border-radius:20px 20px 0 0;
+    background:#fff;
+    box-shadow:0 -10px 30px rgba(18,22,28,.12);
+}
+.home-recommend-handle{width:42px;height:4px;margin:0 auto 18px;border-radius:999px;background:#dedfe1}
+.home-recommend-options{display:grid}
+.home-recommend-option{
+    position:relative;
+    min-height:56px;
+    padding:0 34px 0 0;
+    border:0;
+    background:transparent;
+    color:#171a1f;
+    text-align:left;
+    font:inherit;
+    font-size:17px;
+    font-weight:900;
+    cursor:pointer;
+}
+.home-recommend-option.active{color:var(--accent)}
+.home-recommend-option.active:after{content:'✓';position:absolute;right:2px;top:17px;color:var(--accent);font-size:17px}
+body.home-modal-open{overflow:hidden}
+body.home-main-active .page{padding-bottom:82px}
+body.home-main-active .bottom-nav{
+    bottom:10px;
+    width:min(350px,calc(100% - 24px));
+    height:62px;
+    padding:0 9px;
+    border-radius:31px;
+}
+body.home-main-active .bottom-nav-item{
+    gap:0;
+    padding:2px 0 6px;
+    font-size:8px;
+}
+body.home-main-active .bottom-nav-icon,
+body.home-main-active .bottom-nav-icon img{width:37px;height:37px}
+body.home-main-active .bottom-nav-item[data-main-nav="mypage"] > span:last-child::after{content:'페이지'}
+@media(max-width:380px){
+    .home-topbar{height:42px;margin-bottom:8px}
+    .home-hero{min-height:166px;padding-left:14px;padding-right:14px}
+    .home-title{font-size:20px}
+    .home-hero-image{right:-36px;width:60%}
+    .home-primary-action,.home-secondary-action{left:14px}
+    .home-popular-card{min-height:132px;padding-left:9px;padding-right:9px}
+    .home-popular-image{height:30px;}
+    .home-recommend-item{grid-template-columns:52px 1fr;gap:8px}
+    .home-recommend-thumb{width:46px;height:32px}
+    .home-guide{padding-right:105px}
+    .home-consult{padding-left:12px;padding-right:12px}
+    .home-consult button{min-width:108px}
+}
 </style>
 <style>
 
@@ -3509,10 +3924,430 @@ body.modal-open{overflow:hidden}
     line-height:1.5;
 }
 </style>
+
+
+
+<style>
+/* ============================================================
+   HOME REBUILD 2026-08-24
+   차량찾기 화면을 기준으로 홈의 여백/타이포/이미지 스케일을 재구성
+   ============================================================ */
+body.home-main-active .page{
+    padding:20px 16px calc(96px + env(safe-area-inset-bottom));
+}
+
+.home-view{
+    min-height:calc(100dvh - 40px);
+    padding:0 0 32px;
+}
+
+.home-topbar{
+    height:52px;
+    margin:0 0 14px;
+}
+.home-logo{
+    gap:6px;
+    font-size:24px;
+    line-height:1;
+    font-weight:950;
+}
+.home-search-button{
+    width:44px;
+    height:44px;
+    margin-right:-5px;
+}
+.home-search-button:before{
+    left:8px;
+    top:7px;
+    width:19px;
+    height:19px;
+    border-width:2.5px;
+}
+.home-search-button:after{
+    left:26px;
+    top:26px;
+    width:12px;
+    height:2.5px;
+}
+
+/* 메인 배너: 차량찾기 카드의 176px 스케일보다 한 단계 크게 */
+.home-hero{
+    min-height:252px;
+    padding:24px 20px 20px;
+    border:0;
+    border-radius:20px;
+    background:#f5f5f6;
+}
+.home-hero-copy{
+    max-width:58%;
+}
+.home-title{
+    margin:0;
+    font-size:28px;
+    line-height:1.18;
+    font-weight:950;
+}
+.home-desc{
+    max-width:95%;
+    margin:12px 0 0;
+    font-size:14px;
+    line-height:1.5;
+    font-weight:650;
+}
+.home-hero-image{
+    right: -188px;
+    top: -26px;
+    width: 400px;
+    height: 250px;
+    align-items:flex-end;
+    justify-content:flex-end;
+}
+.home-hero-image img{
+    max-width:115%;
+    max-height:115%;
+}
+.home-primary-action{
+    left:20px;
+    bottom:54px;
+    min-width:178px;
+    height:42px;
+    padding:0 20px;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:900;
+}
+.home-secondary-action{
+    left:20px;
+    bottom:24px;
+    font-size:12px;
+    line-height:1.2;
+}
+
+.home-section{
+    margin-top:30px;
+}
+.home-section-title{
+    margin:0 0 14px;
+    font-size:20px;
+    line-height:1.3;
+    font-weight:950;
+}
+
+/* 인기차량: 스냅형 가로 슬라이더 + 자동 롤링 + 드래그 */
+.home-popular-marquee{
+    position:relative;
+    overflow:hidden;
+    margin-left:-16px;
+    margin-right:-16px;
+    padding:0 16px;
+    cursor:grab;
+    touch-action:pan-y;
+    user-select:none;
+}
+.home-popular-marquee.is-dragging{cursor:grabbing}
+.home-popular-grid{
+    display:flex;
+    align-items:stretch;
+    gap:12px;
+    width:max-content;
+    transform:translate3d(0,0,0);
+    transition:transform .42s cubic-bezier(.22,.61,.36,1);
+    will-change:transform;
+}
+.home-popular-marquee.is-dragging .home-popular-grid{
+    transition:none;
+}
+.home-popular-card{
+    flex:0 0 clamp(145px, calc((100vw - 56px) / 2), 212px);
+    min-height:0;
+    padding:10px 12px 12px;
+    border:0;
+    border-radius:18px;
+    background:#f5f5f6;
+    text-align:left;
+}
+.home-popular-image{
+    height:116px;
+    margin-top:0;
+    margin-bottom:27px;
+}
+.home-popular-image img{
+    max-width:120%;
+    max-height:120%;
+    pointer-events:none;
+}
+.home-popular-best{
+    left:14px;
+    top:12px;
+    font-size:11px;
+    letter-spacing:.08em;
+}
+.home-popular-name{
+    display:block;
+    margin-top:0;
+    font-size:16px;
+    line-height:1.25;
+    font-weight:900;
+    letter-spacing:-.035em;
+}
+.home-popular-price{
+    display:flex;
+    align-items:baseline;
+    margin-top:6px;
+    font-size:12px;
+    line-height:1;
+    font-weight:800;
+}
+.home-popular-price strong{
+    margin:0 2px 0 4px;
+    font-size:26px;
+    font-weight:950;
+    letter-spacing:-.04em;
+}
+/* 추천목록: 회색 카드 배경을 제거하고 리스트 형태로 정리 */
+.home-recommend-head{
+    gap:7px;
+    font-size:20px;
+    line-height:1.3;
+    font-weight:950;
+}
+.home-recommend-head:after{
+    width:8px;
+    height:8px;
+    margin:-4px 0 0 4px;
+    border-width:2px;
+}
+.home-recommend-list{
+    margin-top:14px;
+    border:0;
+    border-radius:0;
+    background:transparent;
+}
+.home-recommend-item{
+    grid-template-columns:104px 1fr;
+    gap:14px;
+    min-height:82px;
+    padding:5px 0;
+    /* border-bottom:1px solid #e3e5e8; */
+    background:transparent;
+}
+.home-recommend-item:first-child{
+    border-radius:0;
+}
+.home-recommend-thumb{
+    width:90px;
+    height:90px;
+    border-radius:10px;
+    background:#f5f6f7;
+}
+.home-recommend-thumb img{
+    max-width:105%;
+    max-height:105%;
+    margin-bottom: 13px;
+}
+.home-recommend-name{
+    font-size:16px;
+    line-height:1.25;
+    font-weight:900;
+    letter-spacing:-.03em;
+}
+.home-recommend-price{
+    margin-top:6px;
+    font-size:15px;
+    line-height:1.25;
+    font-weight:900;
+}
+.home-recommend-loading{
+    padding:24px 0;
+    font-size:14px;
+}
+.home-all-vehicles{
+    height:48px;
+    margin-top:12px;
+    border:1px solid #e3e5e8;
+    border-radius:14px;
+    background:#f5f5f6;
+    font-size:14px;
+    font-weight:850;
+}
+
+.home-guide{
+    min-height:156px;
+    margin-top:16px;
+    padding:20px 154px 18px 20px;
+    border:0;
+    border-radius:18px;
+    background:#f5f5f6;
+}
+.home-guide:after{
+    right:42px;
+    top:30px;
+    font-size:120px;
+    color:#fff;
+}
+.home-guide-title{
+    font-size:19px;
+    line-height:1.3;
+}
+.home-guide p{
+    margin-top:8px;
+    font-size:13px;
+    line-height:1.45;
+}
+.home-guide-button{
+    height:36px;
+    margin-top:10px;
+    padding:0 22px;
+    border-radius:8px;
+    font-size:12px;
+}
+
+.home-consult{
+    min-height:76px;
+    gap:14px;
+    margin-top:14px;
+    padding:14px 16px;
+    border-radius:16px;
+}
+.home-consult strong{
+    font-size:15px;
+    line-height:1.4;
+}
+.home-consult button{
+    min-width:142px;
+    height:42px;
+    padding:0 14px;
+    border-radius:9px;
+    font-size:13px;
+}
+
+/* 홈만 별도로 작게 만들던 하단메뉴 규칙 제거: 다른 페이지와 같은 비율 */
+body.home-main-active .bottom-nav{
+    bottom:max(10px,env(safe-area-inset-bottom));
+    width:min(350px,calc(100% - 20px));
+    height:60px;
+    padding:2px 8px;
+    border-radius:24px;
+}
+body.home-main-active .bottom-nav-item{
+    gap:1px;
+    padding:4px 0;
+    font-size:10px;
+    line-height:1;
+}
+body.home-main-active .bottom-nav-icon,
+body.home-main-active .bottom-nav-icon img{
+    width:40px;
+    height:40px;
+}
+
+@media (max-width:390px){
+    body.home-main-active .page{padding-left:16px;padding-right:16px}
+    .home-hero{min-height:240px;padding-left:18px;padding-right:18px}
+    .home-title{font-size:26px}
+    .home-desc{font-size:13px}
+    .home-hero-image{right:-26px;top:68px;width:235px;height:148px}
+    .home-primary-action,.home-secondary-action{left:18px}
+    .home-popular-card{flex-basis:calc((100vw - 56px) / 2);min-height:0;padding:9px 11px 11px}
+    .home-popular-image{height:110px}
+    .home-popular-name{font-size:15px}
+    .home-popular-price strong{font-size:24px}
+    .home-recommend-item{grid-template-columns:94px 1fr;min-height:76px;padding-left:0;padding-right:0}
+    .home-recommend-thumb{width:86px;height:58px}
+    .home-recommend-name{font-size:15px}
+    .home-recommend-price{font-size:14px}
+    .home-guide{padding-right:138px}
+}
+
+@media (max-width:350px){
+    .home-logo{font-size:22px}
+    .home-title{font-size:24px}
+    .home-hero{min-height:230px;padding-left:16px;padding-right:16px}
+    .home-hero-image{right:-34px;width:218px;height:140px}
+    .home-primary-action{left:16px;min-width:164px;height:40px;font-size:13px}
+    .home-secondary-action{left:16px;font-size:11px}
+    .home-section-title,.home-recommend-head{font-size:18px}
+    .home-popular-card{flex-basis:calc((100vw - 52px) / 2);min-height:0;padding:9px 10px 10px}
+    .home-popular-image{height:104px}
+    .home-popular-name{font-size:14px}
+    .home-popular-price{font-size:11px}
+    .home-popular-price strong{font-size:22px}
+    .home-recommend-item{grid-template-columns:84px 1fr;gap:10px;min-height:70px;padding:8px 0}
+    .home-recommend-thumb{width:76px;height:52px}
+    .home-recommend-name{font-size:14px}
+    .home-recommend-price{font-size:13px}
+    .home-guide{padding-right:120px}
+    .home-guide-title{font-size:17px}
+    .home-guide p{font-size:12px}
+    .home-consult strong{font-size:14px}
+    .home-consult button{min-width:126px;font-size:12px}
+}
+</style>
+
+<style>
+/* ============================================================
+   BOTTOM NAV UNIFIED 2026-08-24
+   모든 화면에서 차량찾기 화면과 동일한 하단 메뉴 크기/비율 유지
+   ============================================================ */
+.bottom-nav,
+body.home-main-active .bottom-nav{
+    position:fixed !important;
+    left:50% !important;
+    bottom:14px !important;
+    transform:translateX(-50%) !important;
+    z-index:900 !important;
+    width:min(350px, calc(100% - 24px)) !important;
+    height:75px !important;
+    display:grid !important;
+    grid-template-columns:repeat(5,1fr) !important;
+    padding:2px 10px !important;
+    border:1px solid rgba(18,22,28,.05) !important;
+    border-radius:33px !important;
+    background:rgba(255,255,255,.97) !important;
+    box-shadow:0 8px 24px rgba(18,22,28,.12) !important;
+    backdrop-filter:blur(12px) !important;
+    -webkit-backdrop-filter:blur(12px) !important;
+    box-sizing:border-box !important;
+}
+.bottom-nav[hidden]{display:none !important;}
+.bottom-nav-item,
+body.home-main-active .bottom-nav-item{
+    border:0 !important;
+    border-radius:16px !important;
+    background:transparent !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:1px !important;
+    padding:0 0 10px !important;
+    font:inherit !important;
+    font-size:10px !important;
+    line-height:1 !important;
+    font-weight:700 !important;
+}
+.bottom-nav-icon,
+.bottom-nav-icon img,
+.bottom-nav-icon svg,
+body.home-main-active .bottom-nav-icon,
+body.home-main-active .bottom-nav-icon img,
+body.home-main-active .bottom-nav-icon svg{
+    width:45px !important;
+    height:45px !important;
+}
+body.home-main-active .bottom-nav-item[data-main-nav="mypage"] > span:last-child::after{
+    content:none !important;
+}
+/* 홈도 차량찾기와 같은 메뉴 여유 공간 확보 */
+body.home-main-active .page{
+    padding-bottom:96px !important;
+}
+</style>
+
 </head>
 <body>
 <div class="page">
-    <section id="vehicleListView" class="view-section vehicle-list-view">
+    <section id="vehicleListView" class="view-section vehicle-list-view" hidden>
         <div class="vehicle-list-search">
             <span class="vehicle-list-search-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
@@ -3571,25 +4406,46 @@ body.modal-open{overflow:hidden}
 
 
 
-    <section id="homeView" class="view-section home-view" hidden>
+    <section id="homeView" class="view-section home-view">
+        <header class="home-topbar">
+            <div class="home-logo" aria-label="AUTO GENIE">AUTO <span>GENIE</span></div>
+            <button class="home-search-button" type="button" aria-label="차량 검색" onclick="openMainView('vehicle'); setTimeout(() => document.getElementById('vehicleSearchInput')?.focus(), 0)"></button>
+        </header>
+
         <div class="home-hero">
-            <p class="home-eyebrow">AUTOGENIE</p>
-            <h1 class="home-title">내 조건에 맞는 차량을<br>쉽게 비교해보세요.</h1>
-            <p class="home-desc">차량과 이용 조건을 직접 선택하거나, 간단한 정보만 남기고 상담을 받아볼 수 있어요.</p>
-            <div class="home-actions">
-                <button class="home-action primary" type="button" onclick="openMainView('vehicle')">
-                    <strong>차량찾기</strong>
-                    <span>차량·트림·조건을 직접 선택해 견적 확인</span>
-                </button>
-                <button class="home-action" type="button" onclick="openMainView('quick')">
-                    <strong>간편견적</strong>
-                    <span>이름과 연락처만 남기고 상담 후 결정</span>
-                </button>
+            <div class="home-hero-copy">
+                <h1 class="home-title">내 조건에 맞는 차를<br>쉽게 비교해보세요</h1>
+                <p class="home-desc">장기렌트·리스 견적을 한눈에 비교해보세요.</p>
             </div>
+            <div class="home-hero-image" id="homeHeroImage" aria-hidden="true"></div>
+            <button class="home-primary-action" type="button" onclick="openMainView('vehicle')">차량 견적 비교하기</button>
+            <button class="home-secondary-action" type="button" onclick="openMainView('quick')">아직 차량을 못 정했다면 상담받기</button>
         </div>
+
+        <section class="home-section" aria-labelledby="homePopularTitle">
+            <h2 class="home-section-title" id="homePopularTitle">지금 많이 찾는 차량</h2>
+            <div class="home-popular-marquee">
+                <div class="home-popular-grid" id="homePopularGrid"></div>
+            </div>
+        </section>
+
+        <section class="home-section" aria-labelledby="homeRecommendLabel">
+            <button class="home-recommend-head" id="homeRecommendLabel" type="button" aria-haspopup="dialog" aria-expanded="false">
+                고객님을 위한 <strong id="homeRecommendTitle">넉넉한 SUV</strong>
+            </button>
+            <div class="home-recommend-list" id="homeRecommendList"></div>
+            <button class="home-all-vehicles" type="button" onclick="openMainView('vehicle')">전체 차량 보기&nbsp;&nbsp;›</button>
+        </section>
+
         <div class="home-guide">
-            <h2 class="home-guide-title">오토지니 이용 안내</h2>
-            <p>원하는 차량이 정해졌다면 차량찾기를, 아직 차종이나 렌트·리스 방식을 고민 중이라면 간편견적을 이용해 주세요.</p>
+            <h2 class="home-guide-title">장기렌트와 리스,<br>어떤 게 맞을까요?</h2>
+            <p>차이점을 쉽게 확인하고<br>내 상황에 맞게 선택해보세요.</p>
+            <button class="home-guide-button" type="button" onclick="openMainView('faq')">차이 확인하기</button>
+        </div>
+
+        <div class="home-consult">
+            <strong>복잡한 견적,<br>오토지니가 쉽게 안내해드릴게요</strong>
+            <button type="button" onclick="openMainView('quick')">무료 상담 신청하기</button>
         </div>
     </section>
 
@@ -3698,30 +4554,78 @@ body.modal-open{overflow:hidden}
     </section>
 
     <section id="faqView" class="view-section faq-view" hidden>
-        <h1 class="faq-title">자주 묻는 질문</h1>
-        <p class="faq-desc">장기렌트와 리스 이용 전 많이 물어보는 내용을 임시로 정리했습니다.</p>
-        <div class="faq-list" id="faqList">
-            <div class="faq-item">
-                <button class="faq-question" type="button">장기렌트와 리스는 어떤 차이가 있나요?</button>
-                <div class="faq-answer">장기렌트는 렌터카 회사 명의 차량을 이용하며 보험과 자동차세가 월 이용료에 포함되는 경우가 일반적입니다. 리스는 일반 번호판을 사용하고 보험은 별도로 가입하는 방식이 일반적입니다.</div>
+        <p class="qna-kicker">Q&amp;A</p>
+        <h1 class="qna-hero-title">궁금한 점을 남기면<br>직접 답변해드려요</h1>
+
+        <div class="qna-compose">
+            <textarea id="qnaQuestionInput" maxlength="200" placeholder="장기렌트·리스에 대해 궁금한 점을 입력해 주세요."></textarea>
+            <div class="qna-compose-footer">
+                <span class="qna-compose-count"><span id="qnaQuestionCount">0</span>/200</span>
+                <button class="qna-submit" id="qnaSubmitButton" type="button" disabled>문의하기</button>
             </div>
-            <div class="faq-item">
-                <button class="faq-question" type="button">초기비용 없이도 이용할 수 있나요?</button>
-                <div class="faq-answer">차량과 심사 조건에 따라 선납금이나 보증금 없이 진행할 수 있습니다. 실제 가능 여부와 월 이용료는 견적 조건에 따라 달라질 수 있습니다.</div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question" type="button">선납금과 보증금은 뭐가 다른가요?</button>
-                <div class="faq-answer">선납금은 미리 납부하는 이용료라 반환되지 않고, 보증금은 계약 이행을 위한 담보 성격으로 계약 종료 시 정산 후 반환되는 구조입니다.</div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question" type="button">주행거리 초과 시 어떻게 되나요?</button>
-                <div class="faq-answer">약정 주행거리를 초과하면 계약 종료 시 초과 운행거리에 대한 정산금이 발생할 수 있습니다.</div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question" type="button">사고가 나면 어떻게 처리하나요?</button>
-                <div class="faq-answer">장기렌트는 렌터카 회사의 보험 절차에 따라 사고 접수를 진행합니다. 자기부담금 등 세부 조건은 계약 상품마다 다를 수 있습니다.</div>
-            </div>
+            <p class="qna-compose-result" id="qnaComposeResult"></p>
         </div>
+
+        <section class="qna-section" aria-labelledby="qnaTopicTitle">
+            <div class="qna-section-head">
+                <h2 class="qna-section-title" id="qnaTopicTitle">많이 묻는 질문</h2>
+            </div>
+            <div class="qna-topic-grid">
+                <button class="qna-topic-card" type="button" data-qna-target="qnaDepositQuestion">
+                    <span class="qna-topic-category">계약</span>
+                    <span class="qna-topic-question">선납금과 보증금은 뭐가 다른가요?</span>
+                </button>
+                <button class="qna-topic-card" type="button" data-qna-target="qnaMileageQuestion">
+                    <span class="qna-topic-category">이용</span>
+                    <span class="qna-topic-question">주행거리 초과 시 어떻게 되나요?</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="qna-section" aria-labelledby="qnaPopularTitle">
+            <div class="qna-section-head">
+                <h2 class="qna-section-title" id="qnaPopularTitle">이번 주 인기 질문</h2>
+                <button class="qna-more" type="button" data-qna-expand>전체보기</button>
+            </div>
+            <div class="qna-list" id="faqList">
+                <div class="faq-item">
+                    <button class="faq-question" id="qnaInitialQuestion" type="button">
+                        <span class="faq-category">장기렌트</span>
+                        <strong>초기비용 없이도 이용할 수 있나요?</strong>
+                        <span class="faq-preview">차량과 심사 조건에 따라 무보증 진행이 가능해요.</span>
+                        <span class="faq-meta">답변 18</span>
+                    </button>
+                    <div class="faq-answer">차량과 심사 조건에 따라 선납금이나 보증금 없이 진행할 수 있습니다. 실제 가능 여부와 월 이용료는 견적 조건에 따라 달라질 수 있습니다.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" id="qnaRentLeaseQuestion" type="button">
+                        <span class="faq-category">리스</span>
+                        <strong>장기렌트와 리스는 어떤 차이가 있나요?</strong>
+                        <span class="faq-preview">번호판, 보험 가입 방식과 비용 처리 방법이 달라요.</span>
+                        <span class="faq-meta">답변 12</span>
+                    </button>
+                    <div class="faq-answer">장기렌트는 렌터카 회사 명의 차량을 이용하며 보험과 자동차세가 월 이용료에 포함되는 경우가 일반적입니다. 리스는 일반 번호판을 사용하고 보험은 별도로 가입하는 방식이 일반적입니다.</div>
+                </div>
+                <div class="faq-item qna-extra-item" hidden>
+                    <button class="faq-question" id="qnaDepositQuestion" type="button">
+                        <span class="faq-category">계약</span>
+                        <strong>선납금과 보증금은 뭐가 다른가요?</strong>
+                        <span class="faq-preview">반환 여부와 월 이용료에 반영되는 방식이 달라요.</span>
+                        <span class="faq-meta">답변 9</span>
+                    </button>
+                    <div class="faq-answer">선납금은 미리 납부하는 이용료라 반환되지 않고, 보증금은 계약 이행을 위한 담보 성격으로 계약 종료 시 정산 후 반환되는 구조입니다.</div>
+                </div>
+                <div class="faq-item qna-extra-item" hidden>
+                    <button class="faq-question" id="qnaMileageQuestion" type="button">
+                        <span class="faq-category">이용</span>
+                        <strong>주행거리 초과 시 어떻게 되나요?</strong>
+                        <span class="faq-preview">계약 종료 시 초과 운행거리에 따른 정산금이 발생할 수 있어요.</span>
+                        <span class="faq-meta">답변 7</span>
+                    </button>
+                    <div class="faq-answer">약정 주행거리를 초과하면 계약 종료 시 초과 운행거리에 대한 정산금이 발생할 수 있습니다.</div>
+                </div>
+            </div>
+        </section>
     </section>
 
     <section id="mypageView" class="view-section mypage-view" hidden>
@@ -3810,9 +4714,10 @@ body.modal-open{overflow:hidden}
                 </span>
             </button>
 
-            <button class="mypage-menu-item" type="button">
+            <button class="mypage-menu-item" type="button" onclick="openMyInquiries()">
                 <span class="mypage-menu-label">문의하기</span>
                 <span class="mypage-menu-right">
+                    <span class="count" id="mypageInquiryCount">0개</span>
                     <span class="mypage-menu-arrow" aria-hidden="true"></span>
                 </span>
             </button>
@@ -3834,6 +4739,33 @@ body.modal-open{overflow:hidden}
         </div>
         <div id="myEstimatesContent">
             <div class="my-estimates-empty">견적 정보를 불러오는 중입니다.</div>
+        </div>
+    </div>
+</div>
+
+<div id="myInquiriesModal" class="my-estimates-modal" hidden>
+    <div class="my-estimates-card" role="dialog" aria-modal="true" aria-labelledby="myInquiriesTitle">
+        <div class="my-estimates-head">
+            <h2 class="my-estimates-title" id="myInquiriesTitle">문의 내역</h2>
+            <button class="my-estimates-close" type="button" aria-label="닫기" onclick="closeMyInquiries()">×</button>
+        </div>
+        <div id="myInquiriesContent">
+            <div class="my-estimates-empty">문의 내역이 없습니다.</div>
+        </div>
+    </div>
+</div>
+
+
+<button id="adminInquiryLauncher" class="admin-inquiry-launcher" type="button" onclick="openAdminInquiries()">관리자 문의 관리</button>
+
+<div id="adminInquiriesModal" class="my-estimates-modal" hidden>
+    <div class="my-estimates-card" role="dialog" aria-modal="true" aria-labelledby="adminInquiriesTitle">
+        <div class="my-estimates-head">
+            <h2 class="my-estimates-title" id="adminInquiriesTitle">관리자 문의 관리</h2>
+            <button class="my-estimates-close" type="button" aria-label="닫기" onclick="closeAdminInquiries()">×</button>
+        </div>
+        <div id="adminInquiriesContent">
+            <div class="my-estimates-empty">문의 내역을 불러오는 중입니다.</div>
         </div>
     </div>
 </div>
@@ -3966,6 +4898,20 @@ body.modal-open{overflow:hidden}
     </div>
 </div>
 
+<div class="home-recommend-modal" id="homeRecommendModal" hidden>
+    <div class="home-recommend-sheet" role="dialog" aria-modal="true" aria-labelledby="homeRecommendSheetTitle">
+        <div class="home-recommend-handle" aria-hidden="true"></div>
+        <div class="home-recommend-options" id="homeRecommendOptions">
+            <button class="home-recommend-option active" id="homeRecommendSheetTitle" type="button" data-home-recommend="SUV">넉넉한 SUV</button>
+            <button class="home-recommend-option" type="button" data-home-recommend="SEDAN">세련된 세단</button>
+            <button class="home-recommend-option" type="button" data-home-recommend="COMPACT">가성비 경차</button>
+            <button class="home-recommend-option" type="button" data-home-recommend="HYBRID">하이브리드 차량</button>
+            <button class="home-recommend-option" type="button" data-home-recommend="EV">친환경 전기차</button>
+            <button class="home-recommend-option" type="button" data-home-recommend="FIRST">생애 첫 차</button>
+        </div>
+    </div>
+</div>
+
 <nav id="bottomNav" class="bottom-nav" aria-label="하단 메뉴">
     <button class="bottom-nav-item active" type="button" data-main-nav="home">
         <span class="bottom-nav-icon" aria-hidden="true">
@@ -3996,7 +4942,7 @@ body.modal-open{overflow:hidden}
             <img class="menu-icon-default" src="images/menu-icons/faq-black.png" alt="">
             <img class="menu-icon-active" src="images/menu-icons/faq-orange.png" alt="">
         </span>
-        <span>자주Q&amp;A</span>
+        <span>Q&amp;A</span>
     </button>
 
     <button class="bottom-nav-item" type="button" data-main-nav="mypage">
@@ -4004,7 +4950,7 @@ body.modal-open{overflow:hidden}
             <img class="menu-icon-default" src="images/menu-icons/mypage-black.png" alt="">
             <img class="menu-icon-active" src="images/menu-icons/mypage-orange.png" alt="">
         </span>
-        <span>마이</span>
+        <span>마이페이지</span>
     </button>
 </nav>
 
@@ -4076,17 +5022,57 @@ function getEstimateSessionKey(){
 }
 let lastTrackedStageOrder = 0;
 const TRACK_STAGE_ORDER = {LANDING:1,VEHICLE_LIST:2,VEHICLE_DETAIL:3,TRIM_SELECTED:4,CONDITIONS_SELECTED:5,ESTIMATE_FORM:6,CUSTOMER_INPUT:7,COMPLETED:8};
+const TRACK_STAGE_BY_ORDER = Object.fromEntries(Object.entries(TRACK_STAGE_ORDER).map(([stage, order]) => [order, stage]));
+
+// 실제 화면을 보고 있는 시간만 누적합니다. 숨겨진 탭의 시간은 제외합니다.
+const STAY_TIME_KEY = 'autogenie_active_seconds';
+let activeStaySeconds = Number(sessionStorage.getItem(STAY_TIME_KEY) || 0) || 0;
+let activeStayStartedAt = document.visibilityState === 'visible' ? Date.now() : 0;
+function getActiveStaySeconds(){
+    let total = activeStaySeconds;
+    if (activeStayStartedAt) total += Math.floor((Date.now() - activeStayStartedAt) / 1000);
+    return Math.max(0, total);
+}
+function persistActiveStaySeconds(){
+    activeStaySeconds = getActiveStaySeconds();
+    activeStayStartedAt = document.visibilityState === 'visible' ? Date.now() : 0;
+    try { sessionStorage.setItem(STAY_TIME_KEY, String(activeStaySeconds)); } catch (_) {}
+    return activeStaySeconds;
+}
 function trackEstimateProgress(stage, extra = {}){
     const order = TRACK_STAGE_ORDER[stage] || 0;
     if (!order || (order < lastTrackedStageOrder && stage !== 'COMPLETED')) return;
     lastTrackedStageOrder = Math.max(lastTrackedStageOrder, order);
-    const payload = {session_key:getEstimateSessionKey(), stage, ...getAcquisitionData(), ...extra};
+    const payload = {session_key:getEstimateSessionKey(), stage, active_seconds:getActiveStaySeconds(), ...getAcquisitionData(), ...extra};
     try {
         fetch(TRACK_ESTIMATE_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}).catch(()=>{});
     } catch (_) {}
 }
+function trackEstimateHeartbeat(){
+    const stage = TRACK_STAGE_BY_ORDER[lastTrackedStageOrder] || 'LANDING';
+    const payload = {session_key:getEstimateSessionKey(), stage, active_seconds:getActiveStaySeconds(), ...getAcquisitionData()};
+    try {
+        fetch(TRACK_ESTIMATE_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}).catch(()=>{});
+    } catch (_) {}
+}
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+        persistActiveStaySeconds();
+        trackEstimateHeartbeat();
+    } else {
+        activeStayStartedAt = Date.now();
+    }
+});
 getAcquisitionData();
 trackEstimateProgress('LANDING');
+// 10초마다 체류시간을 갱신하고, 페이지 이탈 직전에도 마지막 값을 전송합니다.
+setInterval(() => {
+    if (document.visibilityState === 'visible') trackEstimateHeartbeat();
+}, 10000);
+window.addEventListener('pagehide', () => {
+    persistActiveStaySeconds();
+    trackEstimateHeartbeat();
+});
 
 const quoteStates = new Map();
 let pendingEstimate = null;
@@ -4095,6 +5081,8 @@ let activeListCategory = 'ALL';
 let vehicleSearchKeyword = '';
 let vehicleSortMode = 'PRICE_ASC';
 let vehicleProductFilter = 'ALL';
+let activeHomeRecommend = 'SUV';
+let vehicleDetailReturnView = 'vehicle';
 const DOMESTIC_BRANDS = new Set(['현대','기아','제네시스','쉐보레','르노코리아','르노','KG모빌리티','KGM','쌍용']);
 
 function escapeHtml(value) {
@@ -5592,6 +6580,334 @@ function getFilteredVehicles() {
     return items;
 }
 
+const HOME_RECOMMEND_LABELS = {
+    SUV:'넉넉한 SUV',
+    SEDAN:'세련된 세단',
+    COMPACT:'가성비 경차',
+    HYBRID:'하이브리드 차량',
+    EV:'친환경 전기차',
+    FIRST:'생애 첫 차'
+};
+
+function homeVehicleSearchText(vehicle) {
+    return `${getBrandName(vehicle)} ${getVehicleName(vehicle)} ${vehicle.fuel_type ?? ''}`.toLowerCase().replace(/\s+/g,'');
+}
+
+function getHomeVehiclesByKeywords(keywords, source = allVehicles) {
+    const used = new Set();
+    const result = [];
+    keywords.forEach(keyword => {
+        const normalized = String(keyword).toLowerCase().replace(/\s+/g,'');
+        const found = source.find((vehicle, index) => {
+            const key = getVehicleId(vehicle, index);
+            return !used.has(key) && homeVehicleSearchText(vehicle).includes(normalized);
+        });
+        if (found) {
+            const index = allVehicles.indexOf(found);
+            used.add(getVehicleId(found, index));
+            result.push(found);
+        }
+    });
+    return result;
+}
+
+function getHomeRecommendVehicles(type = activeHomeRecommend) {
+    const priceSorted = [...allVehicles].sort((a, b) => {
+        const pa = getMinMonthlyPrice(a, 'ALL') || Number.MAX_SAFE_INTEGER;
+        const pb = getMinMonthlyPrice(b, 'ALL') || Number.MAX_SAFE_INTEGER;
+        return pa - pb;
+    });
+    let result = [];
+
+    if (type === 'SUV') {
+        result = getHomeVehiclesByKeywords(['셀토스','스포티지','EV3','EV5','쏘렌토','싼타페','카니발','Model Y']);
+    } else if (type === 'SEDAN') {
+        result = getHomeVehiclesByKeywords(['아반떼','K3','쏘나타','K5','그랜저','K8','G70','G80','3시리즈','5시리즈'], priceSorted);
+    } else if (type === 'COMPACT') {
+        result = getHomeVehiclesByKeywords(['모닝','레이','캐스퍼','아반떼','K3'], priceSorted);
+    } else if (type === 'HYBRID') {
+        result = priceSorted.filter(vehicle => /hybrid|하이브리드/i.test(homeVehicleSearchText(vehicle)));
+    } else if (type === 'EV') {
+        result = priceSorted.filter(vehicle => /전기|electric|bev|\bev\b|아이오닉|ioniq|model|i[4-9]|ix/i.test(`${getVehicleName(vehicle)} ${vehicle.fuel_type ?? ''}`));
+    } else if (type === 'FIRST') {
+        result = priceSorted;
+    }
+
+    const used = new Set(result.map(vehicle => getVehicleId(vehicle, allVehicles.indexOf(vehicle))));
+    priceSorted.forEach(vehicle => {
+        if (result.length >= 8) return;
+        const index = allVehicles.indexOf(vehicle);
+        const key = getVehicleId(vehicle, index);
+        if (!used.has(key)) {
+            used.add(key);
+            result.push(vehicle);
+        }
+    });
+    return result.slice(0, 8);
+}
+
+let homePopularSliderState = {
+    index: 2,
+    timer: null,
+    startX: 0,
+    currentX: 0,
+    startTranslate: 0,
+    dragging: false,
+    moved: false,
+    originalCount: 0,
+    cloneCount: 2
+};
+
+function getHomePopularStep() {
+    const grid = document.getElementById('homePopularGrid');
+    const first = grid?.querySelector('.home-popular-card');
+    if (!grid || !first) return 0;
+    const gap = parseFloat(getComputedStyle(grid).gap || '12') || 12;
+    return first.getBoundingClientRect().width + gap;
+}
+
+function setHomePopularPosition(index, animate = true) {
+    const viewport = document.querySelector('.home-popular-marquee');
+    const grid = document.getElementById('homePopularGrid');
+    if (!viewport || !grid) return;
+    const cards = grid.querySelectorAll('.home-popular-card');
+    if (!cards.length) return;
+
+    const step = getHomePopularStep();
+    homePopularSliderState.index = index;
+    grid.style.transition = animate ? 'transform .42s cubic-bezier(.22,.61,.36,1)' : 'none';
+    grid.style.transform = `translate3d(${-homePopularSliderState.index * step}px,0,0)`;
+}
+
+function normalizeHomePopularPosition() {
+    const count = homePopularSliderState.originalCount;
+    const clones = homePopularSliderState.cloneCount;
+    if (!count) return;
+
+    // 뒤에 붙인 첫 차량 복제본까지 자연스럽게 보여준 뒤,
+    // 같은 화면인 원본 첫 위치로 애니메이션 없이 순간 치환한다.
+    if (homePopularSliderState.index >= clones + count) {
+        setHomePopularPosition(clones, false);
+    } else if (homePopularSliderState.index <= 0) {
+        // 반대 방향 드래그도 끊기지 않도록 앞쪽 복제본을 원본 끝 위치로 치환한다.
+        setHomePopularPosition(count, false);
+    }
+}
+
+function stopHomePopularAutoplay() {
+    if (homePopularSliderState.timer) {
+        clearInterval(homePopularSliderState.timer);
+        homePopularSliderState.timer = null;
+    }
+}
+
+function startHomePopularAutoplay() {
+    stopHomePopularAutoplay();
+    if (homePopularSliderState.originalCount < 2) return;
+    homePopularSliderState.timer = setInterval(() => {
+        setHomePopularPosition(homePopularSliderState.index + 1, true);
+    }, 3000);
+}
+
+function setupHomePopularSlider() {
+    const viewport = document.querySelector('.home-popular-marquee');
+    const grid = document.getElementById('homePopularGrid');
+    if (!viewport || !grid) return;
+
+    const originals = Array.from(grid.querySelectorAll('.home-popular-card'));
+    const count = originals.length;
+    if (!count) return;
+
+    homePopularSliderState.originalCount = count;
+    homePopularSliderState.cloneCount = Math.min(2, count);
+
+    // 두 칸이 항상 보이므로 양쪽에 2개씩 복제해서 무한 루프를 만든다.
+    if (count > 1) {
+        const cloneCount = homePopularSliderState.cloneCount;
+        const prepend = originals.slice(-cloneCount).map(card => card.outerHTML).join('');
+        const originalMarkup = originals.map(card => card.outerHTML).join('');
+        const append = originals.slice(0, cloneCount).map(card => card.outerHTML).join('');
+        grid.innerHTML = prepend + originalMarkup + append;
+        homePopularSliderState.index = cloneCount;
+    } else {
+        homePopularSliderState.index = 0;
+    }
+
+    setHomePopularPosition(homePopularSliderState.index, false);
+    startHomePopularAutoplay();
+
+    if (viewport.dataset.sliderReady === '1') return;
+    viewport.dataset.sliderReady = '1';
+
+    const pointerDown = (event) => {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        stopHomePopularAutoplay();
+        homePopularSliderState.dragging = true;
+        homePopularSliderState.moved = false;
+        homePopularSliderState.startX = event.clientX;
+        homePopularSliderState.currentX = event.clientX;
+        homePopularSliderState.startTranslate = -homePopularSliderState.index * getHomePopularStep();
+        viewport.classList.add('is-dragging');
+        viewport.setPointerCapture?.(event.pointerId);
+    };
+
+    const pointerMove = (event) => {
+        if (!homePopularSliderState.dragging) return;
+        homePopularSliderState.currentX = event.clientX;
+        const delta = event.clientX - homePopularSliderState.startX;
+        if (Math.abs(delta) > 5) homePopularSliderState.moved = true;
+        grid.style.transform = `translate3d(${homePopularSliderState.startTranslate + delta}px,0,0)`;
+    };
+
+    const pointerUp = (event) => {
+        if (!homePopularSliderState.dragging) return;
+        homePopularSliderState.dragging = false;
+        viewport.classList.remove('is-dragging');
+        viewport.releasePointerCapture?.(event.pointerId);
+
+        const delta = homePopularSliderState.currentX - homePopularSliderState.startX;
+        const threshold = Math.min(70, getHomePopularStep() * .22);
+        let nextIndex = homePopularSliderState.index;
+        if (delta <= -threshold) nextIndex += 1;
+        else if (delta >= threshold) nextIndex -= 1;
+        setHomePopularPosition(nextIndex, true);
+        setTimeout(startHomePopularAutoplay, 1200);
+    };
+
+    viewport.addEventListener('pointerdown', pointerDown);
+    viewport.addEventListener('pointermove', pointerMove);
+    viewport.addEventListener('pointerup', pointerUp);
+    viewport.addEventListener('pointercancel', pointerUp);
+    viewport.addEventListener('mouseenter', stopHomePopularAutoplay);
+    viewport.addEventListener('mouseleave', () => {
+        if (!homePopularSliderState.dragging) startHomePopularAutoplay();
+    });
+    viewport.addEventListener('click', event => {
+        if (homePopularSliderState.moved) {
+            event.preventDefault();
+            event.stopPropagation();
+            homePopularSliderState.moved = false;
+        }
+    }, true);
+
+    grid.addEventListener('transitionend', event => {
+        if (event.propertyName !== 'transform') return;
+        normalizeHomePopularPosition();
+    });
+
+    window.addEventListener('resize', () => setHomePopularPosition(homePopularSliderState.index, false));
+}
+
+function renderHomePopularVehicles() {
+    const grid = document.getElementById('homePopularGrid');
+    const hero = document.getElementById('homeHeroImage');
+    if (!grid || !allVehicles.length) return;
+
+    const best = allVehicles.filter((vehicle, index) => isBestVehicle(vehicle, index));
+    const priceSorted = [...allVehicles].sort((a,b) => (getMinMonthlyPrice(a,'ALL') || Number.MAX_SAFE_INTEGER) - (getMinMonthlyPrice(b,'ALL') || Number.MAX_SAFE_INTEGER));
+    const preferred = getHomeVehiclesByKeywords(['쏘렌토','5시리즈','셀토스','스포티지','카니발','X1']);
+    const popular = [...preferred, ...best, ...priceSorted.filter(vehicle => !best.includes(vehicle))]
+        .filter((vehicle, index, arr) => arr.findIndex(item => getVehicleId(item, allVehicles.indexOf(item)) === getVehicleId(vehicle, allVehicles.indexOf(vehicle))) === index)
+        .slice(0,6);
+
+    grid.innerHTML = popular.map(vehicle => {
+        const index = allVehicles.indexOf(vehicle);
+        const vehicleKey = getVehicleId(vehicle, index);
+        const minMonthly = getMinMonthlyPrice(vehicle, 'ALL');
+        const isBest = isBestVehicle(vehicle, index);
+        return `
+            <button class="home-popular-card" type="button" onclick="openVehicleDetail('${escapeHtml(vehicleKey)}')">
+                ${isBest ? '<span class="home-popular-best">BEST</span>' : ''}
+                <span class="home-popular-image">${listVehicleImageHtml(vehicle, vehicleKey)}</span>
+                <span class="home-popular-name">${escapeHtml(getVehicleName(vehicle))}</span>
+                <span class="home-popular-price">월 <strong>${minMonthly ? shortMoney(minMonthly) : '-'}</strong>원부터</span>
+            </button>
+        `;
+    }).join('');
+
+    setupHomePopularSlider();
+
+    const heroVehicle = popular[0] || allVehicles[0];
+    const heroIndex = allVehicles.indexOf(heroVehicle);
+    hero.innerHTML = listVehicleImageHtml(heroVehicle, getVehicleId(heroVehicle, heroIndex));
+}
+
+function renderHomeRecommendations() {
+    const list = document.getElementById('homeRecommendList');
+    const title = document.getElementById('homeRecommendTitle');
+    if (!list) return;
+
+    if (title) {
+        title.textContent = HOME_RECOMMEND_LABELS[activeHomeRecommend] || HOME_RECOMMEND_LABELS.SUV;
+    }
+
+    // 홈이 먼저 열린 상태에서도 차량 데이터가 들어오는 즉시 목록이 보이도록 처리
+    if (!allVehicles.length) {
+        list.innerHTML = '<div class="home-recommend-loading">차량 정보를 불러오는 중입니다.</div>';
+        return;
+    }
+
+    let vehicles = getHomeRecommendVehicles(activeHomeRecommend);
+
+    // 추천 조건에 맞는 차량을 찾지 못해도 홈 목록이 비지 않도록 전체 차량에서 보충
+    if (!vehicles.length) {
+        vehicles = [...allVehicles]
+            .sort((a, b) => {
+                const pa = getMinMonthlyPrice(a, 'ALL') || Number.MAX_SAFE_INTEGER;
+                const pb = getMinMonthlyPrice(b, 'ALL') || Number.MAX_SAFE_INTEGER;
+                return pa - pb;
+            })
+            .slice(0, 8);
+    }
+
+    list.innerHTML = vehicles.map(vehicle => {
+        const index = allVehicles.indexOf(vehicle);
+        const vehicleKey = getVehicleId(vehicle, index);
+        const minMonthly = getMinMonthlyPrice(vehicle, 'ALL');
+        return `
+            <button class="home-recommend-item" type="button" onclick="openVehicleDetail('${escapeHtml(vehicleKey)}')">
+                <span class="home-recommend-thumb">${listVehicleImageHtml(vehicle, vehicleKey)}</span>
+                <span>
+                    <span class="home-recommend-name">${escapeHtml(getVehicleName(vehicle))}</span>
+                    <span class="home-recommend-price">월 ${minMonthly ? shortMoney(minMonthly) : '-'}원</span>
+                </span>
+            </button>
+        `;
+    }).join('');
+}
+
+function renderHomeContent() {
+    renderHomePopularVehicles();
+    renderHomeRecommendations();
+}
+
+function openHomeRecommendModal() {
+    const modal = document.getElementById('homeRecommendModal');
+    const trigger = document.getElementById('homeRecommendLabel');
+    if (!modal) return;
+    modal.hidden = false;
+    trigger?.setAttribute('aria-expanded','true');
+    document.body.classList.add('home-modal-open');
+}
+
+function closeHomeRecommendModal() {
+    const modal = document.getElementById('homeRecommendModal');
+    const trigger = document.getElementById('homeRecommendLabel');
+    if (!modal) return;
+    modal.hidden = true;
+    trigger?.setAttribute('aria-expanded','false');
+    document.body.classList.remove('home-modal-open');
+}
+
+function selectHomeRecommend(type) {
+    activeHomeRecommend = HOME_RECOMMEND_LABELS[type] ? type : 'SUV';
+    document.querySelectorAll('[data-home-recommend]').forEach(button => {
+        button.classList.toggle('active', button.dataset.homeRecommend === activeHomeRecommend);
+    });
+    renderHomeRecommendations();
+    closeHomeRecommendModal();
+}
+
 function renderVehicleList() {
     const list = document.getElementById('vehicleList');
     const status = document.getElementById('status');
@@ -5875,6 +7191,8 @@ function closeVehicleInfo() {
 function openVehicleDetail(vehicleKey) {
     const trackedVehicle = allVehicles.find((v, i) => getVehicleId(v, i) === String(vehicleKey));
     trackEstimateProgress('VEHICLE_DETAIL', trackedVehicle ? {vehicle_id:Number((trackedVehicle.vehicle_id ?? trackedVehicle.id) || 0), vehicle_name:getVehicleName(trackedVehicle)} : {});
+    const homeView = document.getElementById('homeView');
+    vehicleDetailReturnView = homeView && !homeView.hidden ? 'home' : 'vehicle';
     setBottomNavVisible(false);
     const index = allVehicles.findIndex((vehicle, i) => getVehicleId(vehicle, i) === String(vehicleKey));
     if (index < 0) return;
@@ -5882,7 +7200,10 @@ function openVehicleDetail(vehicleKey) {
     renderVehicleDetail(allVehicles[index], index);
 
     document.body.classList.add('detail-mode');
-    document.getElementById('vehicleListView').hidden = true;
+    ['homeView','vehicleListView','quickEstimateView','faqView','mypageView','vehicleInfoView'].forEach(id => {
+        const view = document.getElementById(id);
+        if (view) view.hidden = true;
+    });
     document.getElementById('vehicleDetailView').hidden = false;
     window.scrollTo({ top: 0, behavior: 'instant' });
 
@@ -5890,22 +7211,20 @@ function openVehicleDetail(vehicleKey) {
 }
 
 function closeVehicleDetail() {
-    setBottomNavVisible(true);
-    setBottomNavActive('vehicle');
     document.body.classList.remove('detail-mode');
     document.getElementById('vehicleDetailView').hidden = true;
     document.getElementById('vehicleInfoView').hidden = true;
-    document.getElementById('vehicleListView').hidden = false;
     document.getElementById('app').innerHTML = '';
     quoteStates.clear();
     history.replaceState(null, '', location.pathname + location.search);
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    openMainView(vehicleDetailReturnView);
 }
 
 function bindVehicleListControls() {
     document.getElementById('vehicleSearchInput')?.addEventListener('input', event => {
         vehicleSearchKeyword = event.target.value || '';
         renderVehicleList();
+        renderHomeContent();
     });
 
     document.getElementById('vehicleCategoryTabs')?.addEventListener('click', event => {
@@ -5990,6 +7309,7 @@ async function loadData() {
         }
 
         renderVehicleList();
+        renderHomeContent();
 
         const params = new URLSearchParams(location.hash.replace(/^#/, ''));
         const vehicleKey = params.get('vehicle');
@@ -6004,6 +7324,7 @@ async function loadData() {
 document.body.classList.remove('detail-mode');
 bindBottomNavigation();
 bindVehicleListControls();
+bindHomeQnaControls();
 loadData();
 openMainView('home');
 
@@ -6024,6 +7345,7 @@ function setBottomNavActive(name){
 }
 
 function openMainView(name){
+    document.body.classList.toggle('home-main-active', name === 'home');
     const homeView = document.getElementById('homeView');
     const listView = document.getElementById('vehicleListView');
     const detailView = document.getElementById('vehicleDetailView');
@@ -6043,6 +7365,8 @@ function openMainView(name){
 
     if (name === 'home') {
         homeView.hidden = false;
+        // 데이터 로딩 전/후와 관계없이 홈 진입 시 추천 차량 목록을 다시 그린다.
+        renderHomeContent();
     } else if (name === 'quick') {
         quickView.hidden = false;
         trackEstimateProgress('ESTIMATE_FORM');
@@ -6051,6 +7375,7 @@ function openMainView(name){
     } else if (name === 'mypage') {
         mypageView.hidden = false;
         if (currentMember) loadMyEstimates(false);
+        updateInquiryCount();
     } else {
         listView.hidden = false;
         name = 'vehicle';
@@ -6076,6 +7401,59 @@ function bindBottomNavigation(){
         const willOpen = !item.classList.contains('open');
         document.querySelectorAll('.faq-item.open').forEach(openItem => openItem.classList.remove('open'));
         item.classList.toggle('open', willOpen);
+    });
+}
+
+function bindHomeQnaControls(){
+    const recommendTrigger = document.getElementById('homeRecommendLabel');
+    const recommendModal = document.getElementById('homeRecommendModal');
+    recommendTrigger?.addEventListener('click', openHomeRecommendModal);
+    recommendModal?.addEventListener('click', event => {
+        if (event.target === recommendModal) closeHomeRecommendModal();
+        const option = event.target.closest('[data-home-recommend]');
+        if (option) selectHomeRecommend(option.dataset.homeRecommend);
+    });
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && recommendModal && !recommendModal.hidden) closeHomeRecommendModal();
+    });
+
+    const input = document.getElementById('qnaQuestionInput');
+    const count = document.getElementById('qnaQuestionCount');
+    const submit = document.getElementById('qnaSubmitButton');
+    const result = document.getElementById('qnaComposeResult');
+    const syncQuestionState = () => {
+        const length = String(input?.value || '').length;
+        if (count) count.textContent = String(length);
+        if (submit) submit.disabled = length < 5;
+        if (result) result.classList.remove('show');
+    };
+    input?.addEventListener('input', syncQuestionState);
+    submit?.addEventListener('click', () => {
+        const question = String(input?.value || '').trim();
+        if (question.length < 5) return;
+        saveInquiry(question);
+        input.value = '';
+        syncQuestionState();
+        if (result) {
+            result.textContent = '문의가 접수되었습니다. 마이페이지 > 문의하기에서 내역을 확인할 수 있습니다.';
+            result.classList.add('show');
+        }
+    });
+
+    document.querySelectorAll('[data-qna-target]').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.qna-extra-item').forEach(item => { item.hidden = false; });
+            const target = document.getElementById(button.dataset.qnaTarget);
+            target?.click();
+            target?.scrollIntoView({behavior:'smooth', block:'center'});
+        });
+    });
+
+    document.querySelector('[data-qna-expand]')?.addEventListener('click', event => {
+        const extras = [...document.querySelectorAll('.qna-extra-item')];
+        const shouldShow = extras.some(item => item.hidden);
+        extras.forEach(item => { item.hidden = !shouldShow; item.classList.remove('open'); });
+        event.currentTarget.textContent = shouldShow ? '접기' : '전체보기';
     });
 }
 
@@ -6112,7 +7490,9 @@ function updateMyEstimateCounts(counts = {}) {
 
     Object.entries(map).forEach(([id, value]) => {
         const el = document.getElementById(id);
-        if (el) el.textContent = String(value);
+        if (!el) return;
+        el.textContent = String(value);
+        el.classList.toggle('has-count', Number(value) > 0);
     });
 
     const menu = document.getElementById('mypageEstimateMenuCount');
@@ -6229,6 +7609,261 @@ document.getElementById('myEstimatesModal')?.addEventListener('click', event => 
     if (event.target.id === 'myEstimatesModal') closeMyEstimates();
 });
 
+
+// ============================================================
+// Q&A 문의 저장 / 마이페이지 문의 내역 / 관리자 답변
+// 단일 HTML 테스트 환경에서는 브라우저 localStorage에 저장
+// 관리자 테스트: 파일 URL 뒤에 ?admin=1 을 붙이면 관리자 문의 관리 버튼 표시
+// ============================================================
+const INQUIRY_STORAGE_KEY = 'autogenie_inquiries_v1';
+const GLOBAL_INQUIRY_STORAGE_KEY = 'autogenie_inquiries_admin_v1';
+
+function getInquiryMemberKey() {
+    return String(currentMember?.email || currentMember?.id || 'guest');
+}
+
+function getInquiryStorageKey(memberKey = getInquiryMemberKey()) {
+    return `${INQUIRY_STORAGE_KEY}:${memberKey}`;
+}
+
+function getMyInquiries() {
+    try {
+        const raw = localStorage.getItem(getInquiryStorageKey());
+        const items = raw ? JSON.parse(raw) : [];
+        return Array.isArray(items) ? items : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function getAllAdminInquiries() {
+    try {
+        const raw = localStorage.getItem(GLOBAL_INQUIRY_STORAGE_KEY);
+        const items = raw ? JSON.parse(raw) : [];
+        return Array.isArray(items) ? items : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function setAllAdminInquiries(items) {
+    localStorage.setItem(GLOBAL_INQUIRY_STORAGE_KEY, JSON.stringify(Array.isArray(items) ? items : []));
+}
+
+function syncLegacyInquiriesToAdmin() {
+    const adminItems = getAllAdminInquiries();
+    const knownIds = new Set(adminItems.map(item => item.id));
+    let changed = false;
+
+    for (let i = 0; i < localStorage.length; i += 1) {
+        const key = localStorage.key(i);
+        if (!key || !key.startsWith(`${INQUIRY_STORAGE_KEY}:`)) continue;
+        const memberKey = key.slice(`${INQUIRY_STORAGE_KEY}:`.length) || 'guest';
+        try {
+            const list = JSON.parse(localStorage.getItem(key) || '[]');
+            if (!Array.isArray(list)) continue;
+            list.forEach(item => {
+                if (!item?.id || knownIds.has(item.id)) return;
+                adminItems.push({ ...item, member_key: memberKey });
+                knownIds.add(item.id);
+                changed = true;
+            });
+        } catch (error) {}
+    }
+
+    if (changed) {
+        adminItems.sort((a,b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+        setAllAdminInquiries(adminItems);
+    }
+    return adminItems;
+}
+
+function saveInquiry(message) {
+    const memberKey = getInquiryMemberKey();
+    const item = {
+        id: `INQ-${Date.now()}`,
+        member_key: memberKey,
+        member_name: currentMember?.name || '',
+        member_email: currentMember?.email || '',
+        message,
+        status: '접수완료',
+        answer: '',
+        answered_at: '',
+        created_at: new Date().toISOString()
+    };
+
+    const items = getMyInquiries();
+    items.unshift(item);
+    localStorage.setItem(getInquiryStorageKey(memberKey), JSON.stringify(items));
+
+    const adminItems = getAllAdminInquiries();
+    adminItems.unshift(item);
+    setAllAdminInquiries(adminItems);
+    updateInquiryCount();
+}
+
+function updateInquiryCount() {
+    const count = getMyInquiries().length;
+    const el = document.getElementById('mypageInquiryCount');
+    if (el) el.textContent = `${count}개`;
+}
+
+function formatInquiryDate(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+    return new Intl.DateTimeFormat('ko-KR', {
+        year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'
+    }).format(date);
+}
+
+function openMyInquiries() {
+    const modal = document.getElementById('myInquiriesModal');
+    const content = document.getElementById('myInquiriesContent');
+    if (!modal || !content) return;
+
+    const items = getMyInquiries();
+    if (!items.length) {
+        content.innerHTML = '<div class="my-estimates-empty">아직 접수한 문의가 없습니다.<br>Q&amp;A에서 문의를 남겨보세요.</div>';
+    } else {
+        content.innerHTML = `<div class="my-estimates-list">${items.map(item => `
+            <article class="my-inquiry-item">
+                <div class="my-inquiry-top">
+                    <span class="my-inquiry-date">${escapeHtml(formatInquiryDate(item.created_at))}</span>
+                    <span class="my-inquiry-status ${item.answer ? 'answered' : ''}">${escapeHtml(item.answer ? '답변완료' : (item.status || '접수완료'))}</span>
+                </div>
+                <p class="my-inquiry-text">${escapeHtml(item.message || '')}</p>
+                ${item.answer ? `
+                    <div class="my-inquiry-answer">
+                        <span class="my-inquiry-answer-label">오토지니 답변</span>
+                        <p class="my-inquiry-answer-text">${escapeHtml(item.answer)}</p>
+                        ${item.answered_at ? `<span class="my-inquiry-answer-date">${escapeHtml(formatInquiryDate(item.answered_at))}</span>` : ''}
+                    </div>
+                ` : ''}
+            </article>
+        `).join('')}</div>`;
+    }
+
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMyInquiries() {
+    const modal = document.getElementById('myInquiriesModal');
+    if (modal) modal.hidden = true;
+    document.body.style.overflow = '';
+}
+
+document.getElementById('myInquiriesModal')?.addEventListener('click', event => {
+    if (event.target.id === 'myInquiriesModal') closeMyInquiries();
+});
+
+function isAdminInquiryMode() {
+    const params = new URLSearchParams(location.search);
+    return params.get('admin') === '1';
+}
+
+function initializeAdminInquiryMode() {
+    if (!isAdminInquiryMode()) return;
+    document.body.classList.add('admin-inquiry-mode');
+    syncLegacyInquiriesToAdmin();
+}
+
+function openAdminInquiries() {
+    const modal = document.getElementById('adminInquiriesModal');
+    if (!modal) return;
+    renderAdminInquiries();
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+}
+
+function closeAdminInquiries() {
+    const modal = document.getElementById('adminInquiriesModal');
+    if (modal) modal.hidden = true;
+    document.body.style.overflow = '';
+}
+
+function renderAdminInquiries() {
+    const content = document.getElementById('adminInquiriesContent');
+    if (!content) return;
+    const items = syncLegacyInquiriesToAdmin();
+
+    if (!items.length) {
+        content.innerHTML = '<div class="my-estimates-empty">접수된 문의가 없습니다.</div>';
+        return;
+    }
+
+    content.innerHTML = items.map(item => {
+        const who = item.member_name || item.member_email || item.member_key || '비회원';
+        return `
+            <article class="admin-inquiry-item" data-admin-inquiry-id="${escapeHtml(item.id || '')}">
+                <div class="my-inquiry-top">
+                    <span class="my-inquiry-date">${escapeHtml(formatInquiryDate(item.created_at))}</span>
+                    <span class="my-inquiry-status ${item.answer ? 'answered' : ''}">${item.answer ? '답변완료' : '접수완료'}</span>
+                </div>
+                <p class="admin-inquiry-user">문의자 · ${escapeHtml(who)}</p>
+                <p class="admin-inquiry-message">${escapeHtml(item.message || '')}</p>
+                ${item.answer ? `<div class="admin-inquiry-existing"><strong>현재 답변</strong><br>${escapeHtml(item.answer)}</div>` : ''}
+                <div class="admin-inquiry-reply">
+                    <textarea maxlength="1000" placeholder="관리자 답변을 입력해 주세요.">${escapeHtml(item.answer || '')}</textarea>
+                    <div class="admin-inquiry-actions">
+                        <button class="admin-inquiry-save" type="button" onclick="saveAdminInquiryAnswer('${escapeHtml(item.id || '')}', this)">${item.answer ? '답변 수정' : '답변 등록'}</button>
+                    </div>
+                </div>
+            </article>
+        `;
+    }).join('');
+}
+
+function saveAdminInquiryAnswer(id, button) {
+    const article = button?.closest('[data-admin-inquiry-id]');
+    const textarea = article?.querySelector('textarea');
+    const answer = textarea?.value.trim() || '';
+    if (!id || !answer) {
+        textarea?.focus();
+        return;
+    }
+
+    const adminItems = getAllAdminInquiries();
+    const index = adminItems.findIndex(item => item.id === id);
+    if (index < 0) return;
+
+    const answeredAt = new Date().toISOString();
+    adminItems[index] = {
+        ...adminItems[index],
+        answer,
+        answered_at: answeredAt,
+        status: '답변완료'
+    };
+    setAllAdminInquiries(adminItems);
+
+    const memberKey = adminItems[index].member_key || 'guest';
+    try {
+        const memberStorageKey = getInquiryStorageKey(memberKey);
+        const memberItems = JSON.parse(localStorage.getItem(memberStorageKey) || '[]');
+        if (Array.isArray(memberItems)) {
+            const memberIndex = memberItems.findIndex(item => item.id === id);
+            if (memberIndex >= 0) {
+                memberItems[memberIndex] = {
+                    ...memberItems[memberIndex],
+                    answer,
+                    answered_at: answeredAt,
+                    status: '답변완료'
+                };
+                localStorage.setItem(memberStorageKey, JSON.stringify(memberItems));
+            }
+        }
+    } catch (error) {}
+
+    renderAdminInquiries();
+    updateInquiryCount();
+}
+
+document.getElementById('adminInquiriesModal')?.addEventListener('click', event => {
+    if (event.target.id === 'adminInquiriesModal') closeAdminInquiries();
+});
+
+initializeAdminInquiryMode();
+
 // ============================================================
 // 회원 로그인 / 회원가입 / 세션
 // ============================================================
@@ -6255,11 +7890,13 @@ function updateMemberUI(member) {
             signedText.textContent = `${currentMember.email}로 로그인 중입니다.`;
         }
         loadMyEstimates(false);
+        updateInquiryCount();
     } else {
         if (nameEl) nameEl.textContent = '고객님';
         if (guestArea) guestArea.hidden = false;
         if (signedText) signedText.hidden = true;
         updateMyEstimateCounts();
+        updateInquiryCount();
     }
 }
 
@@ -6761,3 +8398,194 @@ document.getElementById('quickEstimateForm')?.addEventListener('submit', async e
 </script>
 </body>
 </html>
+
+<style>
+/* ============================================================
+   2026-08-24 차량찾기 화면 스케일 보정
+   홈 → 차량찾기 전환 시 폰트/차량 이미지가 갑자기 작아 보이지 않도록
+   차량 목록 화면의 모바일 축소 규칙을 기준 크기로 다시 맞춤.
+   ============================================================ */
+@media (max-width:480px){
+    .vehicle-list-view{
+        padding-bottom:28px;
+    }
+
+    .vehicle-list-search{
+        height:auto;
+        margin-bottom:10px;
+        padding:0;
+        border-radius:0;
+    }
+    .vehicle-list-search input{
+        height:56px;
+        padding:0 18px 0 52px;
+        border-radius:16px;
+        font-size:15px !important;
+        font-weight:600;
+    }
+    .vehicle-list-search input::placeholder{
+        font-size:15px;
+    }
+    .vehicle-list-search-icon{
+        left:17px;
+    }
+    .vehicle-list-search-icon svg{
+        width:22px;
+        height:22px;
+    }
+
+    .vehicle-category-tabs{
+        margin-left:-14px;
+        margin-right:-14px;
+        padding:0 14px 10px;
+        gap:0;
+    }
+    .vehicle-category-tab{
+        padding:11px 12px;
+        font-size:15px;
+        font-weight:800;
+    }
+
+    .vehicle-list-tools{
+        height:50px;
+        margin-left:-14px;
+        margin-right:-14px;
+        margin-bottom:24px;
+    }
+    .vehicle-list-tool{
+        height:50px;
+        padding:0 44px 0 24px;
+        font-size:14px !important;
+    }
+    .vehicle-list-tool:after{
+        right:24px;
+    }
+
+    .vehicle-list-grid{
+        gap:14px;
+        padding-top:0;
+    }
+    .vehicle-list-card{
+        min-height:176px;
+        padding:20px;
+        border-radius:18px;
+    }
+    .vehicle-list-copy{
+        width:58%;
+        max-width:58%;
+    }
+    .vehicle-list-name{
+        gap:7px;
+        font-size:16px;
+        line-height:1.25;
+    }
+    .vehicle-list-badge{
+        height:20px;
+        padding:0 6px;
+        font-size:11px;
+    }
+    .vehicle-list-best-badge{
+        height:20px;
+        padding:4px 6px;
+        font-size:10px;
+    }
+    .vehicle-list-price{
+        margin-top:7px;
+        gap:3px;
+    }
+    .vehicle-list-price strong{
+        font-size:28px;
+    }
+    .vehicle-list-price span{
+        font-size:12px;
+    }
+    .vehicle-list-image{
+        right:-12px;
+        bottom:9px;
+        width:250px;
+        height:155px;
+    }
+    .vehicle-list-image img{
+        max-width:115%;
+        max-height:115%;
+        width:auto;
+        height:auto;
+        object-fit:contain;
+    }
+    .vehicle-list-arrow{
+        top:22px;
+        right:22px;
+    }
+}
+
+@media (max-width:390px){
+    .vehicle-category-tabs{
+        margin-left:-12px;
+        margin-right:-12px;
+        padding-left:12px;
+        padding-right:12px;
+    }
+    .vehicle-list-tools{
+        margin-left:-12px;
+        margin-right:-12px;
+    }
+    .vehicle-list-card{
+        min-height:168px;
+        padding:18px 16px;
+    }
+    .vehicle-list-copy{
+        width:58%;
+        max-width:58%;
+    }
+    .vehicle-list-name{
+        font-size:15px;
+    }
+    .vehicle-list-price strong{
+        font-size:26px;
+    }
+    .vehicle-list-image{
+        right:-14px;
+        bottom:7px;
+        width:225px;
+        height:145px;
+    }
+}
+
+@media (max-width:350px){
+    .vehicle-category-tab{
+        padding-left:9px;
+        padding-right:9px;
+        font-size:14px;
+    }
+    .vehicle-list-tool{
+        padding-left:16px;
+        padding-right:34px;
+        font-size:12px !important;
+    }
+    .vehicle-list-tool:after{
+        right:16px;
+    }
+    .vehicle-list-card{
+        min-height:158px;
+        padding:16px 13px;
+    }
+    .vehicle-list-copy{
+        width:60%;
+        max-width:60%;
+    }
+    .vehicle-list-name{
+        font-size:14px;
+    }
+    .vehicle-list-price strong{
+        font-size:24px;
+    }
+    .vehicle-list-price span{
+        font-size:11px;
+    }
+    .vehicle-list-image{
+        right:-16px;
+        width:205px;
+        height:132px;
+    }
+}
+</style>

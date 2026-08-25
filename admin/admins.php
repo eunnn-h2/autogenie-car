@@ -190,7 +190,6 @@ $admins = $pdo->query("
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 계정 관리</title>
-<link rel="stylesheet" href="./sidebar.css">
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#eef5f8;color:#263b48;font-size:13px}
@@ -223,31 +222,8 @@ th{background:#f6f8fa;color:#617582;font-size:11px}
 table th,table td{word-break:keep-all}
 
 </style>
-<style>
-
-@media(max-width:700px){
-    html,body{overflow-x:hidden}
-    .wrap{width:100%!important;margin:0!important;padding:10px!important}
-    .top,.head{display:block!important}
-    h1{font-size:20px!important}
-    .card{padding:13px!important}
-    .create-grid{grid-template-columns:1fr!important}
-    input,select,button{max-width:100%}
-    input,select{font-size:16px}
-    .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-    table{min-width:1050px}
-    .row-form,.pw-form{display:flex;gap:5px;flex-wrap:nowrap}
-}
-
-</style>
-<style>
-.admin-admins-main{min-width:0;padding:28px;background:#eef5f8}.admin-admins-main .wrap{width:100%;max-width:none;margin:0;padding:0}.admin-admins-main .top{margin-top:0}@media(max-width:900px){.admin-admins-main{padding:14px}}
-</style>
 </head>
 <body>
-<div class="admin-shell">
-<?php $currentAdminPage = 'admins'; require __DIR__ . '/sidebar.php'; ?>
-<main class="admin-admins-main">
 <div class="wrap">
     <div class="top">
         <div>
@@ -361,8 +337,6 @@ table th,table td{word-break:keep-all}
             </table>
         </div>
     </div>
-</div>
-</main>
 </div>
 </body>
 </html>

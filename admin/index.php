@@ -1039,11 +1039,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
 // 관리자 목록 / 검색 / 상세
 // -----------------------------
 $dashboardTables = [
-    'brands' => '브랜드',
-    'vehicles' => '차량',
-    'colors' => '색상',
-    'trims' => '트림',
-    'prices' => '가격',
+    'brands' => ['table' => 'car_brands', 'label' => '브랜드'],
+    'vehicles' => ['table' => 'car_vehicles', 'label' => '차량'],
+    'colors' => ['table' => 'car_colors', 'label' => '색상'],
+    'trims' => ['table' => 'car_trims', 'label' => '트림'],
+    'prices' => ['table' => 'car_prices', 'label' => '가격'],
 ];
 
 $dashboardCounts = [];
@@ -1068,9 +1068,10 @@ $totalRows = 0;
 $totalPages = 1;
 
 try {
-    foreach ($dashboardTables as $table => $label) {
-        $stmt = $pdo->query("SELECT COUNT(*) FROM {$table}");
-        $dashboardCounts[$table] = (int)$stmt->fetchColumn();
+    foreach ($dashboardTables as $key => $meta) {
+        $tableName = $meta['table'];
+        $stmt = $pdo->query("SELECT COUNT(*) FROM {$tableName}");
+        $dashboardCounts[$key] = (int)$stmt->fetchColumn();
     }
 
     $brandOptions = $pdo->query("
