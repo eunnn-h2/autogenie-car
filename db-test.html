@@ -2558,6 +2558,102 @@ body.home-main-active .bottom-nav-item[data-main-nav="mypage"] > span:last-child
     .home-consult{padding-left:12px;padding-right:12px}
     .home-consult button{min-width:108px}
 }
+
+/* ============================================================
+   홈 푸터
+   - 차즘의 정보형 푸터 구조를 참고하되 오토지니 회사정보 사용
+   - 홈 화면에서만 표시
+   ============================================================ */
+.home-footer{
+    margin:28px -16px -28px;
+    padding:34px 22px 30px;
+    background:#edf4fb;
+    color:#315879;
+    border-top:1px solid #dbe7f1;
+}
+.home-footer-brand{
+    margin-bottom:24px;
+}
+.home-footer-logo{
+    display:block;
+    color:#123e6c;
+    font-size:16px;
+    font-weight:900;
+    letter-spacing:.04em;
+}
+.home-footer-slogan{
+    margin:7px 0 0;
+    color:#587592;
+    font-size:13px;
+    line-height:1.55;
+}
+.home-footer-divider{
+    height:1px;
+    margin:22px 0;
+    background:#cfdeeb;
+}
+.home-footer-info{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:17px 24px;
+}
+.home-footer-item{
+    min-width:0;
+}
+.home-footer-item.wide{
+    grid-column:1 / -1;
+}
+.home-footer-label{
+    display:block;
+    margin-bottom:5px;
+    color:#7b96b0;
+    font-size:12px;
+    line-height:1.4;
+}
+.home-footer-value{
+    display:block;
+    color:#315879;
+    font-size:13px;
+    font-weight:600;
+    line-height:1.55;
+    word-break:keep-all;
+}
+.home-footer-value a{
+    color:inherit;
+    text-decoration:none;
+}
+.home-footer-copy{
+    color:#7a94ad;
+    font-size:12px;
+    line-height:1.5;
+}
+@media(max-width:380px){
+    .home-footer{
+        padding-left:18px;
+        padding-right:18px;
+    }
+    .home-footer-info{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+    .home-footer-item.wide{
+        grid-column:auto;
+    }
+}
+
+
+/* ============================================================
+   홈 푸터 배경 보정
+   - 푸터 배경: #f5f7f9
+   - 하단 플로팅 메뉴 뒤까지 같은 배경색이 이어지도록 확장
+   ============================================================ */
+.home-footer{
+    background:#f5f7f9 !important;
+    border-top:0 !important;
+    margin-bottom:calc(-96px - env(safe-area-inset-bottom)) !important;
+    padding-bottom:calc(126px + env(safe-area-inset-bottom)) !important;
+}
+
 </style>
 <style>
 
@@ -4570,6 +4666,100 @@ body.home-main-active .page{
 .home-secondary-action{display:none !important;}
 </style>
 
+<style>
+/* ============================================================
+   홈 푸터 하단 흰 여백 제거
+   원인: .page의 하단 96px padding이 푸터 아래에 별도 공간을 만들고 있었음.
+   홈에서는 그 여백을 제거하고, 메뉴바 공간은 푸터 padding으로 확보합니다.
+   ============================================================ */
+body.home-main-active .page{
+    padding-bottom:0 !important;
+}
+
+body.home-main-active .home-footer{
+    margin-bottom:0 !important;
+    padding-bottom:calc(118px + env(safe-area-inset-bottom)) !important;
+    background:#f5f7f9 !important;
+}
+</style>
+<style>
+/* ============================================================
+   홈 최하단 흰 띠 제거
+   - .page 자체 배경을 푸터색으로 변경
+   - 홈 콘텐츠 영역은 다시 흰색 유지
+   - 푸터 아래 남는 영역도 #f5f7f9로 이어짐
+   ============================================================ */
+body.home-main-active .page{
+    background:#f5f7f9 !important;
+    padding-bottom:0 !important;
+}
+
+body.home-main-active #homeView{
+    background:#fff !important;
+}
+
+body.home-main-active .home-footer{
+    background:#f5f7f9 !important;
+    margin-bottom:0 !important;
+    padding-bottom:calc(118px + env(safe-area-inset-bottom)) !important;
+}
+</style>
+<style>
+/* ============================================================
+   홈 푸터 아래 흰 여백 최종 수정
+   실제 원인: .home-view { padding:0 0 32px; }
+   푸터가 #homeView 내부에 있어서 푸터 뒤에 32px 여백이 남고 있었음.
+   ============================================================ */
+body.home-main-active .home-view{
+    padding-bottom:0 !important;
+}
+
+/* 푸터는 메뉴바가 겹치지 않을 만큼 내부 여백만 확보 */
+body.home-main-active .home-footer{
+    margin-bottom:0 !important;
+    padding-bottom:calc(118px + env(safe-area-inset-bottom)) !important;
+    background:#f5f7f9 !important;
+}
+</style>
+<style>
+/* ============================================================
+   홈 전체 여백 최종 보정
+   - 이전 수정에서 .page 배경을 #f5f7f9로 바꾸며
+     페이지 padding 영역이 상하좌우 띠처럼 보였던 문제 복구
+   - 홈 본문은 다시 흰색
+   - 푸터만 #f5f7f9 배경으로 좌우 끝까지 확장
+   ============================================================ */
+body.home-main-active .page{
+    background:#fff !important;
+    padding-bottom:0 !important;
+}
+
+body.home-main-active .home-view,
+body.home-main-active #homeView{
+    background:#fff !important;
+    padding-bottom:0 !important;
+}
+
+/* 푸터만 현재 page 좌우 padding을 상쇄해서 끝까지 채움 */
+body.home-main-active .home-footer{
+    margin-left:-16px !important;
+    margin-right:-16px !important;
+    margin-bottom:0 !important;
+    padding-left:22px !important;
+    padding-right:22px !important;
+    padding-bottom:calc(118px + env(safe-area-inset-bottom)) !important;
+    background:#f5f7f9 !important;
+}
+
+@media (min-width:391px) and (max-width:768px){
+    body.home-main-active .home-footer{
+        margin-left:-18px !important;
+        margin-right:-18px !important;
+        padding-left:22px !important;
+        padding-right:22px !important;
+    }
+}
+</style>
 </head>
 <body>
 <div class="page">
@@ -4672,6 +4862,60 @@ body.home-main-active .page{
             <strong>복잡한 견적,<br>오토지니가 쉽게 안내해드릴게요</strong>
             <button type="button" onclick="openMainView('quick')">무료 상담 신청하기</button>
         </div>
+
+        <footer class="home-footer" aria-label="오토지니 회사정보">
+            <div class="home-footer-brand">
+                <strong class="home-footer-logo">AUTOGENIE</strong>
+                <p class="home-footer-slogan">장기렌트·리스, 좋은 조건을 찾는 가장 쉬운 방법</p>
+            </div>
+
+            <div class="home-footer-divider"></div>
+
+            <div class="home-footer-info">
+                <div class="home-footer-item">
+                    <span class="home-footer-label">상호명</span>
+                    <strong class="home-footer-value">에이지기획 주식회사</strong>
+                </div>
+
+                <div class="home-footer-item">
+                    <span class="home-footer-label">대표자</span>
+                    <strong class="home-footer-value">이태우</strong>
+                </div>
+
+                <div class="home-footer-item">
+                    <span class="home-footer-label">사업자등록번호</span>
+                    <strong class="home-footer-value">438-87-03620</strong>
+                </div>
+
+                <div class="home-footer-item">
+                    <span class="home-footer-label">이메일</span>
+                    <strong class="home-footer-value">
+                        <a href="mailto:chayogi8934@naver.com">chayogi8934@naver.com</a>
+                    </strong>
+                </div>
+
+                <div class="home-footer-item wide">
+                    <span class="home-footer-label">주소</span>
+                    <strong class="home-footer-value">인천광역시 남동구 남동대로 687 3층(기원빌딩)</strong>
+                </div>
+
+                <div class="home-footer-item">
+                    <span class="home-footer-label">대표전화</span>
+                    <strong class="home-footer-value">
+                        <a href="tel:16003481">1600-3481</a>
+                    </strong>
+                </div>
+
+                <div class="home-footer-item">
+                    <span class="home-footer-label">상담시간</span>
+                    <strong class="home-footer-value">평일 09:00 - 18:00 상담 가능</strong>
+                </div>
+            </div>
+
+            <div class="home-footer-divider"></div>
+
+            <div class="home-footer-copy">© AUTOGENIE. All rights reserved.</div>
+        </footer>
     </section>
 
     <section id="quickEstimateView" class="view-section quick-estimate-view" hidden>
