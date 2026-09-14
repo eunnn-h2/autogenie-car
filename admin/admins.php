@@ -190,6 +190,7 @@ $admins = $pdo->query("
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 계정 관리</title>
+<link rel="stylesheet" href="./sidebar.css">
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#eef5f8;color:#263b48;font-size:13px}
@@ -222,9 +223,11 @@ th{background:#f6f8fa;color:#617582;font-size:11px}
 table th,table td{word-break:keep-all}
 
 </style>
-</head>
-<body>
-<div class="wrap">
+<link rel="stylesheet" href="./admin-ui.css"></head>
+<body><div class="admin-shell">
+<?php $currentAdminPage='admins'; require __DIR__.'/sidebar.php'; ?>
+<main class="main"><div class="wrap">
+    <section class="card ag-page-card">
     <div class="top">
         <div>
             <h1>관리자 계정 관리</h1>
@@ -232,6 +235,7 @@ table th,table td{word-break:keep-all}
         </div>
         <a class="back" href="./index.php">관리자로 돌아가기</a>
     </div>
+    </section>
 
     <?php if ($message): ?><div class="alert ok"><?= h2($message) ?></div><?php endif; ?>
     <?php if ($error): ?><div class="alert err"><?= h2($error) ?></div><?php endif; ?>
@@ -337,6 +341,6 @@ table th,table td{word-break:keep-all}
             </table>
         </div>
     </div>
-</div>
+</div></main></div>
 </body>
 </html>

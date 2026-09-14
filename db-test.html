@@ -13,8 +13,8 @@
     --line:#ececec;
     --text:#222428;
     --muted:#8d96a0;
-    --accent:#ff7a2f;
-    --accent-soft:#fff1e8;
+    --accent:#ff5a24;
+    --accent-soft:#fff0e9;
     --dark:#111317;
     --shadow:0 10px 26px rgba(18, 22, 28, .05);
     --radius-xl:24px;
@@ -1360,11 +1360,11 @@ body.modal-open{overflow:hidden}
 .vehicle-info-option:first-child{border-top:0;padding-top:3px}
 .vehicle-info-option-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .vehicle-info-option-name{font-size:14px;line-height:1.45;font-weight:800;color:#20242b;word-break:keep-all}
-.vehicle-info-option-price{flex:0 0 auto;font-size:12px;font-weight:800;color:#ff5a24;white-space:nowrap}
+.vehicle-info-option-price{flex:0 0 auto;font-size:12px;font-weight:800;color:var(--accent);white-space:nowrap}
 .vehicle-info-option-desc{margin-top:5px;font-size:12px;line-height:1.55;color:#7b838d;white-space:pre-line}
 .vehicle-info-option-badge{
     display:inline-flex;align-items:center;height:20px;margin-left:6px;padding:0 7px;border-radius:999px;
-    background:#fff0e9;color:#ff5a24;font-size:10px;font-weight:800;vertical-align:1px;
+    background:var(--accent-soft);color:var(--accent);font-size:10px;font-weight:800;vertical-align:1px;
 }
 .vehicle-info-empty{
     padding:34px 12px;text-align:center;border-radius:16px;background:#f8f8f9;
@@ -1733,7 +1733,7 @@ body.modal-open{overflow:hidden}
     color:#cdd2d9;
 }
 .mypage-progress-count.has-count{
-    color:#ff6b00;
+    color:var(--accent);
 }
 
 /* 섹션 사이 회색 띠 */
@@ -1773,7 +1773,7 @@ body.modal-open{overflow:hidden}
 }
 .mypage-menu-label .new{
     margin-left:5px;
-    color:#ff5a24;
+    color:var(--accent);
     font-size:11px;
     font-weight:900;
 }
@@ -2178,17 +2178,481 @@ body.modal-open{overflow:hidden}
 .my-estimate-sub{margin:5px 0 0;color:#7f8790;font-size:12px;line-height:1.5}
 .my-estimate-meta{display:flex;flex-wrap:wrap;gap:5px 10px;margin-top:11px;padding-top:10px;border-top:1px solid #f0f1f2;color:#939aa2;font-size:11px}
 
-.my-inquiry-item{padding:16px 15px;border:1px solid #e9ebee;border-radius:16px;background:#fff}
-.my-inquiry-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
-.my-inquiry-date{color:#9aa1a9;font-size:11px;font-weight:700}
-.my-inquiry-status{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;background:#fff0e8;color:#ff5b1a;font-size:10px;font-weight:850}
-.my-inquiry-text{margin:0;color:#20242a;font-size:14px;line-height:1.55;font-weight:650;white-space:pre-wrap;word-break:break-word}
+.my-estimates-page-view{padding:18px 18px 96px;background:#fff;min-height:100%}
+.my-estimates-page-head{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.my-estimates-page-back{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:0;background:transparent;color:#20242a;font-size:26px;line-height:1;cursor:pointer}
+.my-estimates-page-title{margin:0;color:#16191e;font-size:22px;font-weight:900;letter-spacing:-.04em}
+.my-estimates-page-content{width:100%}
+.my-estimates-page-view .my-estimates-list{display:grid;gap:12px;width:100%}
+.my-estimates-page-view .my-estimate-item{padding:16px;border:1px solid #e3e7ed;border-radius:14px;background:#fff;box-shadow:0 5px 16px rgba(15,23,42,.035)}
+.my-estimates-page-view .my-estimate-top{margin-bottom:12px}
+.my-estimates-page-view .my-estimate-name{font-size:18px}
+.my-estimates-page-view .my-estimate-sub{font-size:13px}
+.my-estimates-page-view .my-estimate-meta{font-size:12px;line-height:1.6}
+@media (max-width:767px){
+  .my-estimates-page-view{padding:16px 14px 88px}
+  .my-estimates-page-head{margin-bottom:16px}
+  .my-estimates-page-title{font-size:21px}
+}
+.my-inquiries-page-view{padding:18px 18px 96px;background:#fff;min-height:100%}
+.my-inquiries-page-head{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.my-inquiries-back{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:0;background:transparent;color:#20242a;font-size:26px;line-height:1;cursor:pointer}
+.my-inquiries-page-title{margin:0;color:#16191e;font-size:22px;font-weight:900;letter-spacing:-.04em}
+.my-inquiries-page-content{width:100%}
+.my-inquiries-page-view .my-estimates-list{display:block;width:100%}
+@media (max-width:767px){
+  .my-inquiries-page-view{padding:16px 14px 88px}
+  .my-inquiries-page-head{margin-bottom:16px}
+  .my-inquiries-page-title{font-size:21px}
+}
+.my-inquiry-item{padding:0;border:1px solid #dfdfdf;border-radius:0;background:#fff;overflow:hidden}
+.my-inquiry-item + .my-inquiry-item{margin-top:18px}
+.my-inquiry-detail-table{width:100%;border-collapse:collapse;table-layout:fixed}
+.my-inquiry-detail-table col.col-label{width:128px}
+.my-inquiry-detail-table col.col-value{width:auto}
+.my-inquiry-detail-table th,.my-inquiry-detail-table td{border:1px solid #dfdfdf;padding:14px 16px;text-align:left;vertical-align:top}
+.my-inquiry-detail-table th{background:#f8f8f8;color:#4d535b;font-size:13px;font-weight:700}
+.my-inquiry-detail-table td{background:#fff;color:#222;font-size:14px;line-height:1.8;white-space:pre-wrap;word-break:keep-all}
+.my-inquiry-detail-table td.is-content{min-height:96px}
+.my-inquiry-meta{color:#4b5563;font-size:14px;font-weight:600;white-space:normal;word-break:break-all}
+.my-inquiry-date-value{white-space:nowrap;word-break:keep-all}
+.my-inquiry-status{display:inline-flex;align-items:center;justify-content:center;min-height:28px;padding:0 10px;border-radius:4px;background:#fff1e9;color:#ea580c;font-size:12px;font-weight:800}
+.my-inquiry-status.answered{background:#edf7ef;color:#2f7a45}
+.my-inquiry-answer-bar{display:flex;align-items:center;justify-content:center;padding:8px 16px;background:#8b8177;color:#fff;font-size:16px;font-weight:800;letter-spacing:-.02em}
+.my-inquiry-answer-empty{color:#6b7280}
+.my-inquiry-answer-body{min-height:92px;padding:18px 20px;background:#fff;color:#222;font-size:14px;line-height:1.8;white-space:pre-wrap;word-break:keep-all}
+@media (max-width: 767px){
+  .my-inquiry-detail-table col.col-label{width:104px}
+  .my-inquiry-detail-table th,.my-inquiry-detail-table td{padding:12px 12px;font-size:13px}
+  .my-inquiry-answer-bar{font-size:15px}
+  .my-inquiry-answer-body{min-height:76px;padding:16px 14px;font-size:13px}
+}
 
-.my-inquiry-answer{margin-top:12px;padding:12px 13px;border-radius:12px;background:#f7f7f8;border-left:3px solid var(--accent)}
-.my-inquiry-answer-label{display:block;margin-bottom:5px;color:var(--accent);font-size:11px;font-weight:900}
-.my-inquiry-answer-text{margin:0;color:#333941;font-size:13px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
-.my-inquiry-answer-date{display:block;margin-top:7px;color:#9aa1a9;font-size:10px;font-weight:650}
-.my-inquiry-status.answered{background:#eef8f1;color:#39704b}
+/* ============================================================
+   MY PAGE SUBVIEW DESIGN SYSTEM
+   내 견적 / 문의 내역 / 마이페이지에서 진입한 Q&A 공통 프레임
+   ============================================================ */
+.mypage-subview{
+    min-height:100%;
+    padding:16px 14px 92px !important;
+    background:#f6f7f9 !important;
+}
+.mypage-subview-head{
+    display:flex;
+    align-items:center;
+    min-height:48px;
+    gap:8px;
+    margin:0 0 14px;
+}
+.mypage-subview-back{
+    flex:0 0 38px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:38px;
+    height:38px;
+    padding:0;
+    border:0;
+    border-radius:10px;
+    background:transparent;
+    color:#20242a;
+    font:inherit;
+    font-size:28px;
+    line-height:1;
+    cursor:pointer;
+}
+.mypage-subview-back:active{background:#eceef1}
+.mypage-subview-title{
+    margin:0;
+    color:#16191e;
+    font-size:21px;
+    line-height:1.25;
+    font-weight:900;
+    letter-spacing:-.04em;
+}
+.mypage-subview-desc{
+    margin:-5px 0 14px 46px;
+    color:#8a9199;
+    font-size:12px;
+    line-height:1.55;
+}
+.mypage-subview-content{
+    width:100%;
+}
+.mypage-subview-card{
+    overflow:hidden;
+    border:1px solid #e4e7eb;
+    border-radius:14px;
+    background:#fff;
+    box-shadow:0 4px 14px rgba(15,23,42,.035);
+}
+
+/* 견적 */
+.my-estimates-page-view.mypage-subview .my-estimates-list{
+    display:grid;
+    gap:12px;
+}
+.my-estimates-page-view.mypage-subview .my-estimate-item{
+    padding:16px;
+    border:1px solid #e4e7eb;
+    border-radius:14px;
+    background:#fff;
+    box-shadow:0 4px 14px rgba(15,23,42,.035);
+}
+.my-estimates-page-view.mypage-subview .my-estimate-top{
+    margin-bottom:11px;
+}
+.my-estimates-page-view.mypage-subview .my-estimate-no{
+    color:#7b838d;
+    font-size:11px;
+}
+.my-estimates-page-view.mypage-subview .my-estimate-name{
+    font-size:17px;
+    line-height:1.35;
+}
+.my-estimates-page-view.mypage-subview .my-estimate-sub{
+    margin-top:5px;
+    color:#7e8791;
+    font-size:12px;
+}
+.my-estimates-page-view.mypage-subview .my-estimate-meta{
+    gap:6px 12px;
+    margin-top:12px;
+    padding-top:11px;
+    color:#89919a;
+    font-size:11px;
+}
+
+/* 문의 */
+.my-inquiries-page-view.mypage-subview .my-estimates-list{
+    display:grid;
+    gap:12px;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-item{
+    overflow:hidden;
+    border:1px solid #e4e7eb;
+    border-radius:14px;
+    background:#fff;
+    box-shadow:0 4px 14px rgba(15,23,42,.035);
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-detail-table th{
+    background:#f8f9fa;
+    color:#606975;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-answer-bar{
+    background:#8b8177;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-answer-body{
+    min-height:78px;
+}
+
+/* 공통 상태 배지 */
+.mypage-subview .my-estimate-type,
+.mypage-subview .my-estimate-status,
+.mypage-subview .my-inquiry-status{
+    min-height:24px;
+    padding:0 8px;
+    border-radius:6px;
+    font-size:10px;
+    font-weight:800;
+}
+
+/* 마이페이지에서 진입한 Q&A */
+.faq-view.mypage-qna-mode{
+    min-height:100%;
+    padding:16px 14px 92px !important;
+    background:#f6f7f9 !important;
+}
+.faq-view.mypage-qna-mode .qna-hero{display:none!important}
+.faq-view.mypage-qna-mode .mypage-qna-head{display:flex!important}
+.mypage-qna-head{display:none}
+.faq-view.mypage-qna-mode .qna-compose,
+.faq-view.mypage-qna-mode .qna-section{
+    margin-left:0;
+    margin-right:0;
+    border:1px solid #e4e7eb;
+    border-radius:14px;
+    background:#fff;
+    box-shadow:0 4px 14px rgba(15,23,42,.035);
+}
+.faq-view.mypage-qna-mode .qna-compose{
+    padding:16px;
+    margin-bottom:12px;
+}
+.faq-view.mypage-qna-mode .qna-section{
+    padding:16px;
+    margin-top:12px;
+}
+.faq-view.mypage-qna-mode .qna-topic-card,
+.faq-view.mypage-qna-mode .faq-item{
+    border-color:#e7e9ed;
+    border-radius:12px;
+}
+.faq-view.mypage-qna-mode .qna-section-title{
+    font-size:17px;
+}
+@media(max-width:767px){
+    .mypage-subview,
+    .faq-view.mypage-qna-mode{
+        padding:14px 12px 88px !important;
+    }
+    .mypage-subview-head{margin-bottom:12px}
+    .mypage-subview-title{font-size:20px}
+    .mypage-subview-desc{margin-left:44px}
+}
+
+
+/* ============================================================
+   MY PAGE SUBVIEW - BOX UNIFICATION
+   내 견적 / 문의 내역 / 내 Q&A 카드 박스 규칙 통일
+   ============================================================ */
+:root{
+    --mypage-card-bg:#fff;
+    --mypage-card-border:#e4e7eb;
+    --mypage-card-radius:14px;
+    --mypage-card-shadow:0 4px 14px rgba(15,23,42,.035);
+    --mypage-card-padding:16px;
+    --mypage-card-gap:12px;
+    --mypage-card-subtle:#f8f9fa;
+}
+
+/* 모든 서브페이지 콘텐츠 박스 기본 */
+.mypage-subview .my-estimate-item,
+.mypage-subview .my-inquiry-item,
+.faq-view.mypage-qna-mode .qna-compose,
+.faq-view.mypage-qna-mode .qna-section{
+    border:1px solid var(--mypage-card-border) !important;
+    border-radius:var(--mypage-card-radius) !important;
+    background:var(--mypage-card-bg) !important;
+    box-shadow:var(--mypage-card-shadow) !important;
+}
+
+/* 카드 사이 간격 */
+.mypage-subview .my-estimate-item + .my-estimate-item,
+.mypage-subview .my-inquiry-item + .my-inquiry-item,
+.faq-view.mypage-qna-mode .qna-section + .qna-section{
+    margin-top:var(--mypage-card-gap) !important;
+}
+
+/* 내 견적 */
+.my-estimates-page-view.mypage-subview .my-estimate-item{
+    padding:var(--mypage-card-padding) !important;
+}
+.my-estimates-page-view.mypage-subview .my-estimate-top{
+    padding-bottom:11px;
+    margin-bottom:11px;
+    border-bottom:1px solid #eef0f2;
+}
+.my-estimates-page-view.mypage-subview .my-estimate-meta{
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid #eef0f2;
+}
+
+/* 문의 내역 */
+.my-inquiries-page-view.mypage-subview .my-inquiry-item{
+    padding:0 !important;
+    overflow:hidden;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-detail-table{
+    border-collapse:separate;
+    border-spacing:0;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-detail-table th,
+.my-inquiries-page-view.mypage-subview .my-inquiry-detail-table td{
+    border:0 !important;
+    border-bottom:1px solid #eef0f2 !important;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-detail-table tr:last-child th,
+.my-inquiries-page-view.mypage-subview .my-inquiry-detail-table tr:last-child td{
+    border-bottom:0 !important;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-detail-table th{
+    background:var(--mypage-card-subtle) !important;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-answer-bar{
+    margin:0;
+    border-top:1px solid #e8eaed;
+    border-bottom:1px solid #e8eaed;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-answer-body{
+    padding:var(--mypage-card-padding) !important;
+    background:#fff;
+}
+
+/* Q&A */
+.faq-view.mypage-qna-mode .qna-compose,
+.faq-view.mypage-qna-mode .qna-section{
+    padding:var(--mypage-card-padding) !important;
+}
+.faq-view.mypage-qna-mode .qna-compose-head{
+    padding-bottom:12px;
+    margin-bottom:12px;
+    border-bottom:1px solid #eef0f2;
+}
+.faq-view.mypage-qna-mode .qna-topic-grid{
+    gap:10px;
+}
+.faq-view.mypage-qna-mode .qna-topic-card,
+.faq-view.mypage-qna-mode .faq-item{
+    border:1px solid #e7e9ed !important;
+    border-radius:12px !important;
+    background:#fff !important;
+    box-shadow:none !important;
+}
+.faq-view.mypage-qna-mode .faq-question{
+    padding:14px !important;
+}
+.faq-view.mypage-qna-mode .faq-answer{
+    padding:14px !important;
+    border-top:1px solid #eef0f2 !important;
+    background:#fafbfc !important;
+}
+
+/* 제목/설명/본문 간격도 동일 계열 */
+.mypage-subview .my-estimate-name,
+.faq-view.mypage-qna-mode .qna-section-title{
+    letter-spacing:-.03em;
+}
+.mypage-subview .my-estimate-sub,
+.faq-view.mypage-qna-mode .qna-compose-head span,
+.faq-view.mypage-qna-mode .faq-preview{
+    color:#7f8790 !important;
+}
+
+@media(max-width:767px){
+    :root{
+        --mypage-card-padding:14px;
+        --mypage-card-radius:13px;
+        --mypage-card-gap:10px;
+    }
+    .my-estimates-page-view.mypage-subview .my-estimate-item{
+        padding:14px !important;
+    }
+    .faq-view.mypage-qna-mode .qna-compose,
+    .faq-view.mypage-qna-mode .qna-section{
+        padding:14px !important;
+    }
+}
+
+
+/* ============================================================
+   MY PAGE SUBVIEW - SITE COLOR THEME
+   오토지니 메인 컬러(#ff5a24)와 뉴트럴 톤으로 통일
+   ============================================================ */
+.mypage-subview,
+.faq-view.mypage-qna-mode{
+    background:#f4f4f5 !important;
+}
+
+/* 공통 헤더 */
+.mypage-subview-title{
+    color:#222428 !important;
+}
+.mypage-subview-desc{
+    color:#8d96a0 !important;
+}
+.mypage-subview-back{
+    color:#222428 !important;
+}
+.mypage-subview-back:active{
+    background:#ececec !important;
+}
+
+/* 공통 카드 */
+.mypage-subview .my-estimate-item,
+.mypage-subview .my-inquiry-item,
+.faq-view.mypage-qna-mode .qna-compose,
+.faq-view.mypage-qna-mode .qna-section{
+    background:#fff !important;
+    border-color:#ececec !important;
+    box-shadow:0 4px 14px rgba(17,19,23,.035) !important;
+}
+
+/* 견적 배지 */
+.mypage-subview .my-estimate-type.direct{
+    background:#fff0e9 !important;
+    color:#ff5a24 !important;
+}
+.mypage-subview .my-estimate-type.quick{
+    background:#fff7f3 !important;
+    color:#e14d1d !important;
+}
+.mypage-subview .my-estimate-status{
+    background:#f1f7f3 !important;
+    color:#39704b !important;
+}
+.mypage-subview .my-estimate-status.canceled{
+    background:#f1f2f4 !important;
+    color:#717882 !important;
+}
+.mypage-subview .my-estimate-no,
+.mypage-subview .my-estimate-meta{
+    color:#8d96a0 !important;
+}
+
+/* 문의 표 */
+.my-inquiries-page-view.mypage-subview .my-inquiry-detail-table th{
+    background:#fafafa !important;
+    color:#6f7780 !important;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-detail-table td{
+    color:#222428 !important;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-status{
+    background:#fff0e9 !important;
+    color:#ff5a24 !important;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-status.answered{
+    background:#f1f7f3 !important;
+    color:#39704b !important;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-answer-bar{
+    background:#ff5a24 !important;
+    border-color:#ff5a24 !important;
+    color:#fff !important;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-answer-body{
+    background:#fff !important;
+    color:#222428 !important;
+}
+.my-inquiries-page-view.mypage-subview .my-inquiry-answer-empty{
+    color:#8d96a0 !important;
+}
+
+/* Q&A */
+.faq-view.mypage-qna-mode .qna-compose-head-icon{
+    background:#fff0e9 !important;
+    color:#ff5a24 !important;
+}
+.faq-view.mypage-qna-mode .qna-submit{
+    background:#ff5a24 !important;
+    color:#fff !important;
+}
+.faq-view.mypage-qna-mode .qna-submit:disabled{
+    background:#ececec !important;
+    color:#a6acb2 !important;
+}
+.faq-view.mypage-qna-mode .qna-topic-category,
+.faq-view.mypage-qna-mode .faq-category{
+    color:#ff5a24 !important;
+}
+.faq-view.mypage-qna-mode .qna-more{
+    color:#ff5a24 !important;
+}
+.faq-view.mypage-qna-mode .faq-answer{
+    background:#fafafa !important;
+    color:#454a50 !important;
+}
+
+/* 포커스 */
+.faq-view.mypage-qna-mode textarea:focus,
+.mypage-subview input:focus,
+.mypage-subview select:focus{
+    border-color:#ff5a24 !important;
+    box-shadow:0 0 0 3px rgba(255,90,36,.10) !important;
+    outline:0;
+}
 
 /* 관리자 문의 답변 테스트 UI: URL에 ?admin=1 일 때만 표시 */
 .admin-inquiry-launcher{
@@ -2240,7 +2704,7 @@ body.admin-inquiry-mode .admin-inquiry-launcher{display:inline-flex;align-items:
     letter-spacing:-.035em;
     white-space:nowrap;
 }
-.home-logo span{color:#ff4f16}
+.home-logo span{color:var(--accent)}
 .home-search-button{
     position:relative;
     width:38px;
@@ -2318,7 +2782,7 @@ body.admin-inquiry-mode .admin-inquiry-launcher{display:inline-flex;align-items:
     padding:0 14px;
     border:0;
     border-radius:6px;
-    background:linear-gradient(90deg,#ff4a12,#ff641b);
+    background:var(--accent);
     color:#fff;
     font:inherit;
     font-size:11.5px;
@@ -2369,10 +2833,10 @@ body.admin-inquiry-mode .admin-inquiry-launcher{display:inline-flex;align-items:
     margin-top:3px;
 }
 .home-popular-image img{display:block;max-width:105%;max-height:100%;object-fit:contain}
-.home-popular-best{position:absolute;left:10px;top:8px;color:#ff4f16;font-size:9px;font-weight:950}
+.home-popular-best{position:absolute;left:10px;top:8px;color:var(--accent);font-size:9px;font-weight:950}
 .home-popular-name{display:block;margin-top:0;color:#20242a;font-size:11px;font-weight:900}
 .home-popular-price{display:flex;align-items:baseline;margin-top:6px;color:#333941;font-size:9px;white-space:nowrap}
-.home-popular-price strong{margin:0 1px 0 4px;color:#ff4f16;font-size:15px;line-height:1;font-weight:950}
+.home-popular-price strong{margin:0 1px 0 4px;color:var(--accent);font-size:15px;line-height:1;font-weight:950}
 .home-recommend-head{
     width:100%;
     display:flex;
@@ -2389,7 +2853,7 @@ body.admin-inquiry-mode .admin-inquiry-launcher{display:inline-flex;align-items:
     letter-spacing:-.035em;
     cursor:pointer;
 }
-.home-recommend-head strong{color:#ff4f16}
+.home-recommend-head strong{color:var(--accent)}
 .home-recommend-head:after{
     content:'';
     width:6px;height:6px;
@@ -2488,11 +2952,11 @@ body.admin-inquiry-mode .admin-inquiry-launcher{display:inline-flex;align-items:
     margin-top:8px;
     padding:10px 14px;
     border-radius:9px;
-    background:linear-gradient(90deg,#ff4610,#ff651c);
+    background:var(--accent);
     color:#fff;
 }
 .home-consult strong{font-size:11px;line-height:1.32;font-weight:950;letter-spacing:-.03em;word-break:keep-all}
-.home-consult button{flex:0 0 auto;min-width:114px;height:26px;padding:0 12px;border:0;border-radius:5px;background:#fff;color:#ff4f16;font:inherit;font-size:9.5px;font-weight:950;cursor:pointer}
+.home-consult button{flex:0 0 auto;min-width:114px;height:26px;padding:0 12px;border:0;border-radius:5px;background:#fff;color:var(--accent);font:inherit;font-size:9.5px;font-weight:950;cursor:pointer}
 .home-recommend-modal{
     position:fixed;
     inset:0;
@@ -4760,6 +5224,1052 @@ body.home-main-active .home-footer{
     }
 }
 </style>
+
+<style>
+/* ============================================================
+   UI POLISH + RESPONSIVE SYSTEM 2026-09-01
+   모바일 중심 320px~480px / 태블릿·데스크톱은 480px 앱 셸 유지
+   ============================================================ */
+:root{
+    --accent:#ff5a24;
+    --accent-soft:#fff0e9;
+    --app-max:480px;
+    --nav-h:68px;
+    --nav-bottom:12px;
+}
+
+html,body{min-width:320px;}
+body{overflow-x:hidden;background:#f3f3f4;}
+
+/* 모바일 앱형 레이아웃은 유지하되, 데스크톱에서도 안정적으로 중앙 정렬 */
+.page{
+    width:min(100%,var(--app-max));
+    max-width:var(--app-max);
+    min-height:100dvh;
+    margin:0 auto;
+    padding-bottom:calc(112px + env(safe-area-inset-bottom));
+    background:#fff;
+}
+
+@media (min-width:769px){
+    .page{
+        box-shadow:0 0 0 1px rgba(18,22,28,.025), 0 16px 50px rgba(18,22,28,.035);
+    }
+}
+
+/* 브랜드 오렌지 통일 */
+.home-logo span,
+.home-popular-best,
+.home-popular-price strong,
+.home-recommend-head strong,
+.home-consult button,
+.vehicle-info-option-price,
+.vehicle-info-option-badge,
+.my-inquiry-status,
+.mypage-progress-count.has-count,
+.mypage-menu-label .new{
+    color:var(--accent) !important;
+}
+.home-primary-action,
+.home-consult,
+.quick-estimate-submit{
+    background:var(--accent) !important;
+}
+.vehicle-info-option-badge{background:var(--accent-soft) !important;}
+
+/* 타이포 위계 정돈 */
+.home-title,
+.qna-hero-title,
+.mypage-user-name,
+.quick-estimate-title,
+.page-title,
+.qna-section-title,
+.home-section-title,
+.home-recommend-head{
+    font-weight:900 !important;
+    letter-spacing:-.03em !important;
+}
+.home-popular-price strong,
+.vehicle-list-price strong{
+    font-weight:900 !important;
+    letter-spacing:-.03em !important;
+}
+
+/* 하단 플로팅 메뉴: 위치는 유지, 비중만 약 10% 축소 */
+.bottom-nav,
+body.home-main-active .bottom-nav{
+    bottom:max(var(--nav-bottom),env(safe-area-inset-bottom)) !important;
+    width:min(340px,calc(100% - 28px)) !important;
+    max-width:340px !important;
+    height:var(--nav-h) !important;
+    padding:3px 8px !important;
+    border-radius:28px !important;
+    border:1px solid rgba(18,22,28,.045) !important;
+    background:rgba(255,255,255,.975) !important;
+    box-shadow:0 8px 24px rgba(18,22,28,.10),0 2px 8px rgba(18,22,28,.05) !important;
+}
+.bottom-nav-item,
+body.home-main-active .bottom-nav-item{
+    min-width:0 !important;
+    gap:0 !important;
+    padding:3px 0 4px !important;
+    font-size:10px !important;
+    line-height:1.05 !important;
+    font-weight:700 !important;
+}
+.bottom-nav-icon,
+.bottom-nav-icon img,
+.bottom-nav-icon svg,
+body.home-main-active .bottom-nav-icon,
+body.home-main-active .bottom-nav-icon img,
+body.home-main-active .bottom-nav-icon svg{
+    width:36px !important;
+    height:36px !important;
+}
+.bottom-nav-item:not(.active){color:#4e555d !important;}
+.bottom-nav-item.active{color:var(--accent) !important;}
+
+/* 홈: 히어로 차량 존재감 + 인기차량 카드 밀도 */
+.home-hero-image img,
+body.home-main-active .home-hero-image img{
+    transform:translateX(10px) scale(1.20) !important;
+}
+.home-popular-image{
+    margin-bottom:14px !important;
+}
+.home-popular-name{letter-spacing:-.025em !important;}
+.home-popular-price{margin-top:5px !important;}
+
+/* 차량찾기: 반복 카드 스크롤 길이 압축 + 비활성 탭 가독성 */
+.vehicle-category-tab{color:#737b84 !important;}
+.vehicle-category-tab.active{color:var(--accent) !important;}
+.vehicle-list-grid{gap:10px !important;}
+.vehicle-list-card{
+    min-height:154px !important;
+    padding:16px 15px !important;
+    border-radius:18px !important;
+}
+.vehicle-list-image{
+    right:-10px !important;
+    bottom:5px !important;
+    width:225px !important;
+    height:140px !important;
+}
+.vehicle-list-arrow{right:18px !important;top:18px !important;}
+.vehicle-list-name{letter-spacing:-.025em !important;}
+.vehicle-list-price{margin-top:6px !important;}
+
+/* 간편견적: 회색 덩어리 느낌 완화 + 전환 CTA 통일 */
+.quick-estimate-card{
+    padding:20px 18px !important;
+    border-radius:20px !important;
+    background:#f7f7f8 !important;
+    border:1px solid #f0f1f2 !important;
+}
+.quick-estimate-card-title{font-weight:900 !important;letter-spacing:-.03em !important;}
+.quick-estimate-submit{
+    color:#fff !important;
+    box-shadow:0 7px 16px rgba(255,90,36,.16) !important;
+}
+.quick-estimate-submit:active{transform:translateY(1px);}
+
+/* Q&A: Q&A는 섹션 키커로, 질문 카드는 동일 규칙으로 */
+.qna-kicker{
+    margin:0 0 14px !important;
+    color:var(--accent) !important;
+    font-size:14px !important;
+    line-height:1.2 !important;
+    font-weight:900 !important;
+    letter-spacing:.01em !important;
+}
+.qna-hero-title{font-size:27px !important;line-height:1.30 !important;}
+.qna-topic-card,
+.qna-topic-card:nth-child(2){
+    background:#f7f7f8 !important;
+    border:1px solid #f0f1f2 !important;
+}
+.qna-topic-category{color:var(--accent) !important;}
+
+/* 마이페이지: 진행상태 과밀도 완화 + 우측 카운트 가독성 */
+.mypage-progress-icon{
+    width:40px !important;
+    height:40px !important;
+    margin-bottom:6px !important;
+}
+.mypage-progress-icon svg,
+.mypage-progress-icon img{
+    width:36px !important;
+    height:36px !important;
+}
+.mypage-progress-label{
+    font-size:13px !important;
+    line-height:1.2 !important;
+    font-weight:650 !important;
+}
+.mypage-progress-item:not(:last-child)::after{top:35px !important;}
+.mypage-progress-count{
+    margin-top:6px !important;
+    font-size:16px !important;
+    color:#8d96a0 !important;
+}
+.mypage-progress-count.has-count{color:var(--accent) !important;}
+.mypage-menu-right,
+.mypage-menu-right .count{color:#8d96a0 !important;}
+
+/* 홈은 푸터 안에서 플로팅 메뉴 안전영역 확보 */
+body.home-main-active .page{padding-bottom:0 !important;}
+body.home-main-active .home-footer{
+    padding-bottom:calc(112px + env(safe-area-inset-bottom)) !important;
+}
+
+/* 태블릿/좁은 데스크톱: 모바일 UI 폭은 유지하고 패딩만 안정화 */
+@media (min-width:481px) and (max-width:768px){
+    .page{width:480px;max-width:100%;padding-left:18px;padding-right:18px;}
+    body.home-main-active .page{padding-left:18px !important;padding-right:18px !important;}
+    .vehicle-category-tabs,.vehicle-list-tools{margin-left:-18px !important;margin-right:-18px !important;}
+    .mypage-view{margin-left:-18px !important;margin-right:-18px !important;}
+    .vehicle-list-card{min-height:154px !important;}
+}
+
+/* 일반 모바일 */
+@media (max-width:480px){
+    .page{
+        width:100%;
+        max-width:none;
+        margin:0;
+        padding-left:14px;
+        padding-right:14px;
+        padding-bottom:calc(108px + env(safe-area-inset-bottom));
+        box-shadow:none;
+    }
+    body.home-main-active .page{padding-left:14px !important;padding-right:14px !important;padding-bottom:0 !important;}
+    body.home-main-active .home-footer{
+        margin-left:-14px !important;
+        margin-right:-14px !important;
+        padding-bottom:calc(108px + env(safe-area-inset-bottom)) !important;
+    }
+    .vehicle-category-tabs,.vehicle-list-tools{margin-left:-14px !important;margin-right:-14px !important;}
+    .vehicle-list-card{min-height:150px !important;padding:15px 14px !important;}
+    .vehicle-list-copy{width:56% !important;max-width:56% !important;}
+    .vehicle-list-image{width:min(54vw,220px) !important;height:134px !important;right:-11px !important;}
+    .vehicle-list-price strong{font-size:clamp(22px,6.7vw,27px) !important;}
+    .quick-estimate-card{padding:18px 14px !important;}
+    .qna-hero-title{font-size:clamp(24px,7vw,27px) !important;}
+    .mypage-progress-label{font-size:11px !important;}
+    .mypage-progress-item:not(:last-child)::after{top:33px !important;}
+    .mypage-progress-icon{width:38px !important;height:38px !important;}
+    .mypage-progress-icon svg,.mypage-progress-icon img{width:34px !important;height:34px !important;}
+}
+
+/* 작은 모바일 */
+@media (max-width:390px){
+    .page{padding-left:12px;padding-right:12px;}
+    body.home-main-active .page{padding-left:12px !important;padding-right:12px !important;}
+    body.home-main-active .home-footer{margin-left:-12px !important;margin-right:-12px !important;}
+    .vehicle-category-tabs,.vehicle-list-tools{margin-left:-12px !important;margin-right:-12px !important;}
+    .bottom-nav,body.home-main-active .bottom-nav{
+        width:min(330px,calc(100% - 20px)) !important;
+        height:66px !important;
+        border-radius:27px !important;
+    }
+    .bottom-nav-icon,.bottom-nav-icon img,.bottom-nav-icon svg,
+    body.home-main-active .bottom-nav-icon,body.home-main-active .bottom-nav-icon img,body.home-main-active .bottom-nav-icon svg{
+        width:34px !important;height:34px !important;
+    }
+    .vehicle-list-card{min-height:146px !important;}
+    .vehicle-list-copy{width:58% !important;max-width:58% !important;}
+    .vehicle-list-image{width:min(53vw,202px) !important;height:126px !important;}
+    .home-hero-image img,body.home-main-active .home-hero-image img{transform:translateX(10px) scale(1.18) !important;}
+    .home-popular-image{margin-bottom:12px !important;}
+    .mypage-progress-item:not(:last-child)::after{top:31px !important;}
+    .mypage-progress-label{font-size:10.5px !important;}
+    .mypage-progress-count{font-size:15px !important;}
+}
+
+@media (max-width:350px){
+    .page{padding-left:10px;padding-right:10px;}
+    body.home-main-active .page{padding-left:10px !important;padding-right:10px !important;}
+    body.home-main-active .home-footer{margin-left:-10px !important;margin-right:-10px !important;}
+    .vehicle-category-tabs,.vehicle-list-tools{margin-left:-10px !important;margin-right:-10px !important;}
+    .bottom-nav,body.home-main-active .bottom-nav{width:calc(100% - 16px) !important;}
+    .bottom-nav-item,body.home-main-active .bottom-nav-item{font-size:9px !important;}
+    .bottom-nav-icon,.bottom-nav-icon img,.bottom-nav-icon svg,
+    body.home-main-active .bottom-nav-icon,body.home-main-active .bottom-nav-icon img,body.home-main-active .bottom-nav-icon svg{
+        width:32px !important;height:32px !important;
+    }
+    .vehicle-list-card{min-height:142px !important;padding:14px 12px !important;}
+    .vehicle-list-image{width:min(52vw,184px) !important;height:120px !important;}
+    .home-hero-image img,body.home-main-active .home-hero-image img{transform:translateX(8px) scale(1.15) !important;}
+    .qna-topic-grid{gap:8px !important;}
+    .qna-topic-card{padding:14px !important;}
+    .mypage-progress-icon{width:34px !important;height:34px !important;}
+    .mypage-progress-icon svg,.mypage-progress-icon img{width:30px !important;height:30px !important;}
+    .mypage-progress-label{font-size:9.5px !important;}
+}
+</style>
+
+
+<style>
+/* ============================================================
+   HOME + Q&A DETAIL POLISH 2026-09-01
+   구조는 모바일 퍼스트 유지 / 320~480px 최적화 / 태블릿·PC 앱 셸 유지
+   ============================================================ */
+
+/* ---------- HOME : hero information hierarchy ---------- */
+.home-hero{
+    border:1px solid #eef0f2 !important;
+    background:linear-gradient(150deg,#fafafa 0%,#f1f3f5 48%,#eceff2 100%) !important;
+    box-shadow:0 10px 28px rgba(20,26,34,.045) !important;
+}
+.home-hero:before{
+    background:
+        radial-gradient(115% 90% at 12% 2%,rgba(255,255,255,.98) 0%,rgba(255,255,255,.66) 32%,rgba(255,255,255,0) 65%),
+        radial-gradient(80% 72% at 91% 73%,rgba(223,228,233,.76) 0%,rgba(223,228,233,0) 64%) !important;
+}
+.home-hero:after{
+    opacity:.9;
+}
+.home-hero-eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    min-height:27px;
+    margin:0 0 14px;
+    padding:0 10px;
+    border:1px solid rgba(255,90,36,.13);
+    border-radius:999px;
+    background:rgba(255,255,255,.78);
+    color:#5c626a;
+    font-size:11px;
+    line-height:1;
+    font-weight:750;
+    letter-spacing:-.015em;
+    box-shadow:0 3px 10px rgba(22,28,36,.035);
+    backdrop-filter:blur(6px);
+}
+.home-hero-eyebrow-dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 4px rgba(255,90,36,.09);
+}
+.home-title{
+    max-width:330px;
+    font-size:29px !important;
+    line-height:1.18 !important;
+}
+.home-desc{
+    max-width:330px !important;
+    margin-top:11px !important;
+    color:#6d747c !important;
+    font-size:12.5px !important;
+    line-height:1.55 !important;
+    font-weight:600 !important;
+}
+.home-primary-action{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    border:1px solid rgba(231,68,18,.16) !important;
+    box-shadow:0 10px 22px rgba(255,90,36,.18) !important;
+    transition:transform .15s ease,box-shadow .15s ease,filter .15s ease;
+}
+.home-primary-action:after{
+    content:'→';
+    font-size:16px;
+    line-height:1;
+    transform:translateY(-1px);
+}
+.home-primary-action:active{transform:translateY(1px);filter:brightness(.98);box-shadow:0 6px 14px rgba(255,90,36,.15) !important;}
+
+/* 기존 강제 히어로 규칙보다 우선: eyebrow 추가로 생긴 높이를 확보 */
+body.home-main-active .home-hero{
+    min-height:474px !important;
+}
+body.home-main-active .home-title{
+    max-width:330px !important;
+    font-size:29px !important;
+    line-height:1.18 !important;
+}
+body.home-main-active .home-desc{
+    max-width:330px !important;
+    font-size:12.5px !important;
+    line-height:1.55 !important;
+}
+body.home-main-active .home-hero-image{
+    top:181px !important;
+    height:184px !important;
+}
+body.home-main-active .home-hero-image img{
+    transform:translateX(10px) scale(1.18) !important;
+}
+
+/* 히어로 다음 3개 핵심 장점을 짧고 명확하게 노출 */
+.home-benefit-strip{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:0;
+    margin-top:12px;
+    padding:13px 8px;
+    border:1px solid #eceef0;
+    border-radius:17px;
+    background:#fff;
+    box-shadow:0 5px 16px rgba(22,28,36,.035);
+}
+.home-benefit-item{
+    position:relative;
+    min-width:0;
+    padding:0 7px;
+    text-align:center;
+}
+.home-benefit-item + .home-benefit-item:before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:4px;
+    bottom:4px;
+    width:1px;
+    background:#eef0f2;
+}
+.home-benefit-item strong,
+.home-benefit-item span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.home-benefit-item strong{
+    color:#20242a;
+    font-size:11.5px;
+    line-height:1.25;
+    font-weight:900;
+    letter-spacing:-.025em;
+}
+.home-benefit-item span{
+    margin-top:4px;
+    color:#9299a1;
+    font-size:9.5px;
+    line-height:1.2;
+    font-weight:650;
+}
+
+/* section title: 제목 + 설명 + 바로가기의 한 가지 규칙으로 통일 */
+.home-section{margin-top:32px !important;}
+.home-section-head,
+.home-recommend-title-row{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:14px;
+}
+.home-section-head .home-section-title,
+.home-recommend-title-row .home-recommend-head{margin-bottom:0 !important;}
+.home-section-desc{
+    margin:5px 0 0;
+    color:#969da5;
+    font-size:11px;
+    line-height:1.4;
+    font-weight:550;
+    letter-spacing:-.015em;
+}
+.home-section-link{
+    flex:0 0 auto;
+    margin-bottom:1px;
+    padding:5px 1px;
+    border:0;
+    background:transparent;
+    color:#7c848d;
+    font:inherit;
+    font-size:10.5px;
+    font-weight:750;
+    cursor:pointer;
+}
+.home-section-link:after{content:' ›';font-size:13px;}
+
+/* 인기 차량 카드: 카드/이미지/가격의 위계 강화 */
+.home-popular-marquee{padding-top:2px;padding-bottom:3px;}
+.home-popular-card{
+    position:relative;
+    overflow:hidden;
+    border:1px solid #eceef0 !important;
+    background:linear-gradient(180deg,#f8f8f9 0%,#f4f5f6 100%) !important;
+    box-shadow:0 5px 14px rgba(22,28,36,.035);
+    transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;
+}
+.home-popular-card:active{transform:scale(.985);border-color:#e2e5e8 !important;box-shadow:0 2px 8px rgba(22,28,36,.035);}
+.home-popular-image{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:108px !important;
+    margin-bottom:12px !important;
+    border-radius:13px;
+    background:radial-gradient(circle at 50% 72%,#eceff2 0%,rgba(236,239,242,.42) 38%,rgba(236,239,242,0) 72%);
+}
+.home-popular-image:after{
+    content:'';
+    position:absolute;
+    left:18%;
+    right:18%;
+    bottom:9px;
+    height:10px;
+    border-radius:50%;
+    background:rgba(20,26,34,.08);
+    filter:blur(6px);
+    z-index:0;
+}
+.home-popular-image img{position:relative;z-index:1;}
+.home-popular-best{
+    z-index:2;
+    min-height:20px;
+    padding:0 7px;
+    display:inline-flex;
+    align-items:center;
+    border-radius:999px;
+    background:var(--accent-soft);
+    letter-spacing:.06em !important;
+}
+.home-popular-price{color:#727980 !important;font-weight:650 !important;}
+.home-popular-price strong{font-size:23px !important;}
+
+/* 추천 목록: 스캔하기 쉬운 카드형 리스트 */
+.home-recommend-title-row{align-items:center;justify-content:flex-start !important;}
+.home-recommend-head{padding:0;}
+.home-recommend-filter-hint{
+    flex:0 0 auto;
+    display:inline-flex;
+    align-items:center;
+    height:28px;
+    padding:0 9px;
+    border:1px solid #e7e9ec;
+    border-radius:999px;
+    background:#fafafa;
+    color:#7e858d;
+    font-size:9.5px;
+    font-weight:750;
+}
+.home-recommend-filter-hint:after{content:'⌄';margin-left:4px;color:var(--accent);font-size:11px;font-weight:900;}
+.home-recommend-list{
+    display:grid !important;
+    gap:8px !important;
+    margin-top:0 !important;
+}
+.home-recommend-item{
+    position:relative;
+    grid-template-columns:126px minmax(0,1fr) !important;
+    align-items:center !important;
+    gap:14px !important;
+    min-height:94px !important;
+    padding:8px 38px 8px 8px !important;
+    border:1px solid #eef0f2 !important;
+    border-radius:15px !important;
+    background:#fff !important;
+    text-align:left;
+    transition:background .15s ease,transform .15s ease;
+}
+.home-recommend-item:after{
+    content:'';
+    position:absolute;
+    right:17px;
+    top:50%;
+    width:7px;
+    height:7px;
+    border-right:1.5px solid #a2a8af;
+    border-bottom:1.5px solid #a2a8af;
+    transform:translateY(-50%) rotate(-45deg);
+}
+.home-recommend-item:active{transform:scale(.99);background:#fafafa !important;}
+.home-recommend-thumb{
+    width:100% !important;
+    height:78px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    align-self:center !important;
+    justify-self:center !important;
+    margin:auto !important;
+    overflow:hidden !important;
+    border-radius:14px !important;
+    background:#f5f6f7 !important;
+}
+.home-recommend-thumb img{
+    width:110% !important;
+    height:110% !important;
+    max-width:none !important;
+    max-height:none !important;
+    margin:auto !important;
+    object-fit:contain !important;
+    object-position:center center !important;
+    transform:translate(var(--subject-tx, 0px), var(--subject-ty, 0px)) !important;
+    transform-origin:center center !important;
+    will-change:transform;
+}
+.home-recommend-name{font-size:14px !important;}
+.home-recommend-price{margin-top:4px !important;color:#606870;font-size:12px !important;font-weight:800 !important;}
+.home-recommend-body{padding-right:4px;}
+.home-all-vehicles{
+    margin-top:10px !important;
+    border-color:#eaedef !important;
+    background:#fafafa !important;
+    color:#353a40;
+}
+
+/* Guide 카드: 큰 ? 대신 비교 컨셉을 시각화 */
+.home-guide{
+    position:relative;
+    overflow:hidden;
+    min-height:166px !important;
+    padding:20px 164px 18px 20px !important;
+    border:1px solid #eceef0 !important;
+    background:linear-gradient(135deg,#f8f8f9 0%,#f2f3f4 100%) !important;
+}
+.home-guide:before{
+    content:'RENT\A VS\A LEASE';
+    white-space:pre;
+    position:absolute;
+    right:20px;
+    top:25px;
+    width:118px;
+    height:112px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(255,255,255,.86);
+    border-radius:20px;
+    background:rgba(255,255,255,.72);
+    color:#22272d;
+    text-align:center;
+    font-size:14px;
+    line-height:1.48;
+    font-weight:950;
+    letter-spacing:.035em;
+    box-shadow:0 10px 24px rgba(22,28,36,.07);
+    transform:rotate(3deg);
+    z-index:1;
+}
+.home-guide:after{
+    content:'' !important;
+    right:-35px !important;
+    top:-46px !important;
+    width:160px !important;
+    height:160px !important;
+    border-radius:50% !important;
+    background:rgba(255,90,36,.055) !important;
+}
+.home-guide-kicker{
+    position:relative;
+    z-index:2;
+    display:block;
+    margin-bottom:8px;
+    color:var(--accent);
+    font-size:9.5px;
+    font-weight:950;
+    letter-spacing:.08em;
+}
+.home-guide-title,.home-guide p,.home-guide-button{position:relative;z-index:2;}
+.home-guide-button{
+    border-color:#dedfe2 !important;
+    background:#fff !important;
+    box-shadow:0 3px 10px rgba(22,28,36,.04);
+}
+
+.home-consult{
+    position:relative;
+    overflow:hidden;
+    border:1px solid rgba(225,73,27,.10);
+    background:linear-gradient(105deg,#ff5a24 0%,#ff6a35 100%) !important;
+    box-shadow:0 7px 18px rgba(255,90,36,.12);
+}
+.home-consult:before{
+    content:'';
+    position:absolute;
+    width:92px;
+    height:92px;
+    right:92px;
+    top:-55px;
+    border-radius:50%;
+    background:rgba(255,255,255,.09);
+}
+.home-consult strong,.home-consult button{position:relative;z-index:1;}
+.home-consult button:after{content:' →';}
+
+/* ---------- Q&A : 정보 탐색과 직접 문의를 명확히 분리 ---------- */
+.faq-view{padding-top:7px !important;}
+.qna-hero{padding:2px 0 0;}
+.qna-kicker{
+    display:inline-flex;
+    align-items:center;
+    height:25px;
+    margin-bottom:13px !important;
+    padding:0 9px;
+    border-radius:999px;
+    background:var(--accent-soft);
+    font-size:10px !important;
+    letter-spacing:.08em !important;
+}
+.qna-hero-title{
+    max-width:355px;
+    font-size:29px !important;
+    line-height:1.22 !important;
+}
+.qna-hero-desc{
+    max-width:390px;
+    margin:11px 0 0;
+    color:#858d96;
+    font-size:12px;
+    line-height:1.6;
+    font-weight:550;
+    letter-spacing:-.015em;
+    word-break:keep-all;
+}
+.qna-compose{
+    margin-top:22px !important;
+    padding:15px !important;
+    border:1px solid #eceef0;
+    border-radius:20px !important;
+    background:#fafafa !important;
+    box-shadow:0 5px 16px rgba(22,28,36,.035);
+}
+.qna-compose-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+}
+.qna-compose-head-icon{
+    flex:0 0 auto;
+    width:34px;
+    height:34px;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    border-radius:12px;
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:15px;
+    line-height:1 !important;
+    font-weight:950;
+    text-align:center;
+}
+.qna-compose-head div{min-width:0;}
+.qna-compose-head strong,
+.qna-compose-head span{display:block;}
+.qna-compose-head strong{
+    color:#23272c;
+    font-size:13px;
+    line-height:1.25;
+    font-weight:900;
+    letter-spacing:-.025em;
+}
+.qna-compose-head div > span{
+    margin-top:3px;
+    color:#9aa1a9;
+    font-size:9.5px;
+    line-height:1.3;
+    font-weight:550;
+}
+.qna-compose-input{
+    padding:13px 14px;
+    border:1px solid #e7e9ec;
+    border-radius:14px;
+    background:#fff;
+    transition:border-color .15s ease,box-shadow .15s ease;
+}
+.qna-compose-input:focus-within{
+    border-color:rgba(255,90,36,.46);
+    box-shadow:0 0 0 3px rgba(255,90,36,.07);
+}
+.qna-compose textarea{
+    min-height:76px !important;
+    font-size:13px !important;
+    line-height:1.55 !important;
+}
+.qna-compose textarea::placeholder{color:#adb3ba !important;}
+.qna-compose-footer{margin-top:10px !important;}
+.qna-compose-count{padding-left:2px;color:#a1a8af !important;font-size:10px !important;}
+.qna-submit{
+    min-width:88px;
+    height:36px !important;
+    padding:0 13px !important;
+    border-radius:11px !important;
+    background:#d6d8db !important;
+    font-size:11.5px !important;
+    box-shadow:none;
+    transition:transform .15s ease,background .15s ease,box-shadow .15s ease;
+}
+.qna-submit:not(:disabled){
+    background:var(--accent) !important;
+    box-shadow:0 6px 14px rgba(255,90,36,.16);
+}
+.qna-submit:not(:disabled):active{transform:translateY(1px);}
+.qna-submit span{margin-left:3px;font-size:13px;}
+
+.qna-section{margin-top:32px !important;}
+.qna-section-head{margin-bottom:12px !important;}
+.qna-section-title{font-size:17px !important;}
+.qna-more{
+    text-decoration:none !important;
+    color:#858d96 !important;
+    font-size:10.5px !important;
+    font-weight:700;
+}
+.qna-more:after{content:' ›';font-size:13px;}
+
+/* 많이 묻는 질문: 둘 다 같은 카드 규칙, 카테고리와 화살표만 강조 */
+.qna-topic-grid{gap:9px !important;}
+.qna-topic-card,
+.qna-topic-card:nth-child(2){
+    position:relative;
+    min-height:118px !important;
+    padding:15px 38px 15px 15px !important;
+    overflow:hidden;
+    border:1px solid #eceef0 !important;
+    border-radius:17px !important;
+    background:linear-gradient(145deg,#fafafa 0%,#f6f7f8 100%) !important;
+    box-shadow:0 4px 12px rgba(22,28,36,.025);
+    transition:transform .15s ease,border-color .15s ease;
+}
+.qna-topic-card:before{
+    content:'';
+    position:absolute;
+    right:-18px;
+    bottom:-26px;
+    width:78px;
+    height:78px;
+    border-radius:50%;
+    background:rgba(255,90,36,.05);
+}
+.qna-topic-card:after{
+    content:'';
+    position:absolute;
+    right:16px;
+    top:18px;
+    width:7px;
+    height:7px;
+    border-right:1.5px solid #9ea5ad;
+    border-bottom:1.5px solid #9ea5ad;
+    transform:rotate(-45deg);
+}
+.qna-topic-card:active{transform:scale(.985);border-color:#e2e5e8 !important;}
+.qna-topic-category{
+    position:relative;
+    z-index:1;
+    display:inline-flex !important;
+    align-items:center;
+    min-height:22px;
+    margin-bottom:11px !important;
+    padding:0 8px;
+    border-radius:999px;
+    background:var(--accent-soft);
+    font-size:9.5px !important;
+    font-weight:850 !important;
+}
+.qna-topic-question{
+    position:relative;
+    z-index:1;
+    max-width:135px;
+    font-size:13px !important;
+    line-height:1.45 !important;
+    letter-spacing:-.025em;
+}
+
+/* 인기 질문 Accordion */
+.qna-list{gap:8px !important;}
+.faq-item{
+    border:1px solid #eceef0 !important;
+    border-radius:16px !important;
+    box-shadow:0 3px 10px rgba(22,28,36,.018);
+    transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.faq-item.open{
+    border-color:rgba(255,90,36,.25) !important;
+    background:#fffdfc;
+    box-shadow:0 7px 18px rgba(255,90,36,.055);
+}
+.faq-question{
+    padding:15px 44px 15px 15px !important;
+}
+.faq-category{
+    display:inline-flex !important;
+    align-items:center;
+    min-height:21px;
+    margin-bottom:8px !important;
+    padding:0 7px;
+    border-radius:999px;
+    background:var(--accent-soft);
+    font-size:9px !important;
+    font-weight:850 !important;
+}
+.faq-question strong{
+    font-size:13.5px !important;
+    line-height:1.4 !important;
+    letter-spacing:-.025em;
+}
+.faq-preview{
+    margin-top:6px !important;
+    color:#8e969f !important;
+    font-size:10.5px !important;
+    line-height:1.45 !important;
+}
+.faq-meta{
+    display:inline-flex !important;
+    align-items:center;
+    min-height:20px;
+    margin-top:9px !important;
+    padding:0 7px;
+    border-radius:999px;
+    background:#f5f6f7;
+    color:#858d96 !important;
+    font-size:9px !important;
+    font-weight:700;
+}
+.faq-question:after{
+    right:18px !important;
+    width:7px !important;
+    height:7px !important;
+    border-color:#8f969e !important;
+}
+.faq-answer{
+    margin:0 15px !important;
+    padding:13px 0 16px !important;
+    color:#636b74 !important;
+    font-size:11.5px !important;
+    line-height:1.72 !important;
+}
+
+/* ---------- responsive fine tuning ---------- */
+@media (max-width:390px){
+    body.home-main-active .home-hero{min-height:462px !important;}
+    body.home-main-active .home-hero-image{top:177px !important;height:176px !important;}
+    body.home-main-active .home-hero-image img{transform:translateX(9px) scale(1.16) !important;}
+    .home-hero-eyebrow{margin-bottom:12px;font-size:10px;}
+    body.home-main-active .home-title{font-size:27px !important;}
+    body.home-main-active .home-desc{font-size:11.5px !important;}
+    .home-benefit-strip{padding:12px 5px;}
+    .home-benefit-item{padding:0 5px;}
+    .home-benefit-item strong{font-size:10.5px;}
+    .home-benefit-item span{font-size:9px;}
+    .home-section-desc{font-size:10px;}
+    .home-section-link{font-size:10px;}
+    .home-popular-image{height:100px !important;}
+    .home-popular-price strong{font-size:21px !important;}
+    .home-recommend-item{grid-template-columns:112px minmax(0,1fr) !important;gap:11px !important;min-height:88px !important;padding:7px 34px 7px 7px !important;}
+    .home-recommend-thumb{width:100% !important;height:72px !important;}
+    .home-recommend-thumb img{width:110% !important;height:110% !important;object-position:center center !important;transform:translate(var(--subject-tx, 0px), var(--subject-ty, 0px)) !important;}
+    .home-guide{padding-right:145px !important;}
+    .home-guide:before{right:16px;width:104px;height:104px;font-size:12px;}
+    .qna-hero-title{font-size:27px !important;}
+    .qna-hero-desc{font-size:11px;}
+    .qna-compose{padding:13px !important;}
+    .qna-compose-head div > span{font-size:9px;}
+    .qna-topic-card,.qna-topic-card:nth-child(2){padding:14px 34px 14px 13px !important;}
+    .qna-topic-question{font-size:12px !important;}
+}
+
+@media (max-width:350px){
+    body.home-main-active .home-hero{min-height:446px !important;}
+    body.home-main-active .home-hero-image{top:171px !important;height:165px !important;}
+    body.home-main-active .home-title{font-size:25px !important;}
+    .home-benefit-item strong{font-size:9.8px;}
+    .home-benefit-item span{font-size:8.5px;}
+    .home-recommend-item{grid-template-columns:104px minmax(0,1fr) !important;gap:9px !important;min-height:84px !important;padding-left:7px !important;}
+    .home-recommend-thumb{width:100% !important;height:68px !important;}
+    .home-recommend-thumb img{width:110% !important;height:110% !important;object-position:center center !important;transform:translate(var(--subject-tx, 0px), var(--subject-ty, 0px)) !important;}
+    .home-guide{padding-right:126px !important;}
+    .home-guide:before{right:11px;width:92px;height:96px;font-size:10.5px;border-radius:16px;}
+    .qna-hero-title{font-size:25px !important;}
+    .qna-topic-grid{grid-template-columns:1fr !important;}
+    .qna-topic-card,.qna-topic-card:nth-child(2){min-height:94px !important;}
+    .qna-topic-question{max-width:210px;}
+}
+</style>
+
+
+<style>
+/* ============================================================
+   VEHICLE DETAIL RESTORE 2026-09-01
+   - 견적 상세 화면 전체 배경을 그레이로 유지
+   - 고정 하단 메뉴와 마지막 콘텐츠가 겹치지 않도록 안전 여백 확보
+   ============================================================ */
+body.detail-mode{
+    background:#f3f4f5 !important;
+}
+body.detail-mode .page{
+    background:#f3f4f5 !important;
+    padding-bottom:calc(148px + env(safe-area-inset-bottom)) !important;
+}
+body.detail-mode #vehicleDetailView,
+body.detail-mode .detail-view,
+body.detail-mode #vehicleDetailView #app{
+    background:transparent !important;
+}
+body.detail-mode .vehicle-card{
+    background:transparent !important;
+}
+body.detail-mode #vehicleDetailView #app{
+    padding-bottom:18px;
+}
+</style>
+
+
+<style>
+/* 차량찾기 썸네일 자동 정규화: 원본 투명 여백 대신 실제 차량 영역 기준 */
+.vehicle-list-image{
+    overflow:visible !important;
+}
+.vehicle-list-image img{
+    position:absolute !important;
+    display:block !important;
+    max-width:none !important;
+    max-height:none !important;
+    object-fit:contain !important;
+    transform:none !important;
+    transform-origin:center center !important;
+    transition:none !important;
+}
+.vehicle-list-image img.vehicle-thumb-fallback{
+    position:static !important;
+    width:100% !important;
+    height:100% !important;
+    max-width:100% !important;
+    max-height:100% !important;
+    object-fit:contain !important;
+    margin-left:auto !important;
+    margin-top:auto !important;
+}
+</style>
+
+<style id="vehicle-list-subject-normalize-fix">
+/* 차량찾기 썸네일: 실제 차량 피사체 기준 고정 앵커 */
+.vehicle-list-image{
+    right:4px !important;
+    bottom:6px !important;
+    width:min(50vw,220px) !important;
+    height:136px !important;
+    display:block !important;
+}
+.vehicle-list-image img{
+    position:absolute !important;
+    max-width:none !important;
+    max-height:none !important;
+    object-fit:fill !important;
+    transform:none !important;
+    transform-origin:0 0 !important;
+}
+.vehicle-list-image img.vehicle-thumb-fallback{
+    position:static !important;
+    width:100% !important;
+    height:100% !important;
+    max-width:100% !important;
+    max-height:100% !important;
+    object-fit:contain !important;
+}
+@media(max-width:380px){
+    .vehicle-list-image{width:min(49vw,196px) !important;height:126px !important;right:2px !important}
+}
+@media(max-width:340px){
+    .vehicle-list-image{width:min(48vw,172px) !important;height:116px !important;right:0 !important}
+}
+</style>
 </head>
 <body>
 <div class="page">
@@ -4830,29 +6340,57 @@ body.home-main-active .home-footer{
 
         <div class="home-hero">
             <div class="home-hero-copy">
+                <span class="home-hero-eyebrow"><span class="home-hero-eyebrow-dot" aria-hidden="true"></span>장기렌트 · 리스 한눈에 비교</span>
                 <h1 class="home-title">내 조건에 맞는 차를<br>쉽게 비교해보세요</h1>
-                <p class="home-desc">장기렌트·리스 견적을 한눈에 비교해보세요.</p>
+                <p class="home-desc">차량부터 이용 조건까지, 원하는 기준으로 빠르게 비교해보세요.</p>
             </div>
             <div class="home-hero-image" id="homeHeroImage" aria-hidden="true"></div>
             <button class="home-primary-action" type="button" onclick="openMainView('vehicle')">차량 견적 비교하기</button>
         </div>
 
+        <div class="home-benefit-strip" aria-label="오토지니 서비스 특징">
+            <div class="home-benefit-item">
+                <strong>국산 · 수입차</strong>
+                <span>한 번에 비교</span>
+            </div>
+            <div class="home-benefit-item">
+                <strong>렌트 · 리스</strong>
+                <span>조건별 확인</span>
+            </div>
+            <div class="home-benefit-item">
+                <strong>무료 상담</strong>
+                <span>간편 신청</span>
+            </div>
+        </div>
+
         <section class="home-section" aria-labelledby="homePopularTitle">
-            <h2 class="home-section-title" id="homePopularTitle">지금 많이 찾는 차량</h2>
+            <div class="home-section-head">
+                <div>
+                    <h2 class="home-section-title" id="homePopularTitle">지금 많이 찾는 차량</h2>
+                    <p class="home-section-desc">고객들이 많이 비교하고 있는 차량이에요.</p>
+                </div>
+                <button class="home-section-link" type="button" onclick="openMainView('vehicle')">전체보기</button>
+            </div>
             <div class="home-popular-marquee">
                 <div class="home-popular-grid" id="homePopularGrid"></div>
             </div>
         </section>
 
-        <section class="home-section" aria-labelledby="homeRecommendLabel">
-            <button class="home-recommend-head" id="homeRecommendLabel" type="button" aria-haspopup="dialog" aria-expanded="false">
-                고객님을 위한 <strong id="homeRecommendTitle">넉넉한 SUV</strong>
-            </button>
+        <section class="home-section home-recommend-section" aria-labelledby="homeRecommendLabel">
+            <div class="home-recommend-title-row">
+                <div>
+                    <button class="home-recommend-head" id="homeRecommendLabel" type="button" aria-haspopup="dialog" aria-expanded="false">
+                        고객님을 위한 <strong id="homeRecommendTitle">넉넉한 SUV</strong>
+                    </button>
+                    <p class="home-section-desc home-recommend-desc">추천 기준을 눌러 원하는 차량군으로 바꿔보세요.</p>
+                </div>
+            </div>
             <div class="home-recommend-list" id="homeRecommendList"></div>
             <button class="home-all-vehicles" type="button" onclick="openMainView('vehicle')">전체 차량 보기&nbsp;&nbsp;›</button>
         </section>
 
         <div class="home-guide">
+            <span class="home-guide-kicker">GUIDE</span>
             <h2 class="home-guide-title">장기렌트와 리스,<br>어떤 게 맞을까요?</h2>
             <p>차이점을 쉽게 확인하고<br>내 상황에 맞게 선택해보세요.</p>
             <button class="home-guide-button" type="button" onclick="openMainView('faq')">차이 확인하기</button>
@@ -5023,14 +6561,31 @@ body.home-main-active .home-footer{
     </section>
 
     <section id="faqView" class="view-section faq-view" hidden>
-        <p class="qna-kicker">Q&amp;A</p>
-        <h1 class="qna-hero-title">궁금한 점을 남기면<br>직접 답변해드려요</h1>
+        <div id="mypageQnaHead" class="mypage-qna-head mypage-subview-head">
+            <button class="mypage-subview-back" type="button" aria-label="마이페이지로 돌아가기" onclick="closeMypageQna()">‹</button>
+            <h1 class="mypage-subview-title">내 Q&amp;A</h1>
+        </div>
+        <p id="mypageQnaDesc" class="mypage-subview-desc" hidden>궁금한 내용을 남기고 자주 묻는 질문을 확인할 수 있어요.</p>
+        <div class="qna-hero">
+            <p class="qna-kicker">Q&amp;A</p>
+            <h1 class="qna-hero-title">궁금한 점을 남기면<br>직접 답변해드려요</h1>
+            <p class="qna-hero-desc">계약부터 차량 이용까지, 자주 묻는 질문을 먼저 확인하거나 궁금한 내용을 직접 남겨주세요.</p>
+        </div>
 
         <div class="qna-compose">
-            <textarea id="qnaQuestionInput" maxlength="200" placeholder="장기렌트·리스에 대해 궁금한 점을 입력해 주세요."></textarea>
+            <div class="qna-compose-head">
+                <span class="qna-compose-head-icon" aria-hidden="true">?</span>
+                <div>
+                    <strong>직접 문의하기</strong>
+                    <span>궁금한 내용을 남겨주시면 확인 후 답변드려요.</span>
+                </div>
+            </div>
+            <div class="qna-compose-input">
+                <textarea id="qnaQuestionInput" maxlength="200" placeholder="장기렌트·리스에 대해 궁금한 점을 입력해 주세요."></textarea>
+            </div>
             <div class="qna-compose-footer">
                 <span class="qna-compose-count"><span id="qnaQuestionCount">0</span>/200</span>
-                <button class="qna-submit" id="qnaSubmitButton" type="button" disabled>문의하기</button>
+                <button class="qna-submit" id="qnaSubmitButton" type="button" disabled>문의하기 <span aria-hidden="true">→</span></button>
             </div>
             <p class="qna-compose-result" id="qnaComposeResult"></p>
         </div>
@@ -5176,7 +6731,7 @@ body.home-main-active .home-footer{
                 </span>
             </button>
 
-            <button class="mypage-menu-item" type="button" onclick="openMainView('faq')">
+            <button class="mypage-menu-item" type="button" onclick="openMypageQna()">
                 <span class="mypage-menu-label">내 Q&amp;A <span class="new">NEW</span></span>
                 <span class="mypage-menu-right">
                     <span class="mypage-menu-arrow" aria-hidden="true"></span>
@@ -5190,6 +6745,28 @@ body.home-main-active .home-footer{
                     <span class="mypage-menu-arrow" aria-hidden="true"></span>
                 </span>
             </button>
+        </div>
+    </section>
+
+    <section id="myEstimatesView" class="view-section my-estimates-page-view mypage-subview" hidden>
+        <div class="mypage-subview-head">
+            <button class="mypage-subview-back" type="button" aria-label="마이페이지로 돌아가기" onclick="closeMyEstimates()">‹</button>
+            <h1 class="mypage-subview-title" id="myEstimatesPageTitle">내 견적</h1>
+        </div>
+        <p class="mypage-subview-desc">신청한 견적과 진행 상태를 확인할 수 있어요.</p>
+        <div id="myEstimatesPageContent" class="my-estimates-page-content mypage-subview-content">
+            <div class="my-estimates-empty">견적 정보를 불러오는 중입니다.</div>
+        </div>
+    </section>
+
+    <section id="myInquiriesView" class="view-section my-inquiries-page-view mypage-subview" hidden>
+        <div class="mypage-subview-head">
+            <button class="mypage-subview-back" type="button" aria-label="마이페이지로 돌아가기" onclick="closeMyInquiries()">‹</button>
+            <h1 class="mypage-subview-title">문의 내역</h1>
+        </div>
+        <p class="mypage-subview-desc">접수한 문의와 답변 내용을 확인할 수 있어요.</p>
+        <div id="myInquiriesPageContent" class="my-inquiries-page-content mypage-subview-content">
+            <div class="my-estimates-empty">문의 내역을 불러오는 중입니다.</div>
         </div>
     </section>
 
@@ -5643,6 +7220,7 @@ function vehicleImageHtml(v, vehicleKey) {
             data-vehicle-preview="${escapeHtml(vehicleKey)}"
             data-image-candidates='${escapeHtml(JSON.stringify(candidates))}'
             data-image-index="0"
+            onload="normalizeVehicleListImage(this)"
             onerror="tryNextVehicleImage(this)"
         >
     `;
@@ -7015,6 +8593,183 @@ function listVehicleImageHtml(vehicle, vehicleKey) {
     `;
 }
 
+
+const vehicleListThumbBoundsCache = new Map();
+
+function getVehicleListImageBounds(img) {
+    const srcKey = img.currentSrc || img.src || '';
+    if (vehicleListThumbBoundsCache.has(srcKey)) {
+        return vehicleListThumbBoundsCache.get(srcKey);
+    }
+
+    const nw = img.naturalWidth || 0;
+    const nh = img.naturalHeight || 0;
+    if (!nw || !nh) return null;
+
+    // 큰 원본도 매번 전체 픽셀을 읽지 않도록 분석용 캔버스만 축소합니다.
+    const maxSample = 360;
+    const sampleScale = Math.min(1, maxSample / Math.max(nw, nh));
+    const sw = Math.max(1, Math.round(nw * sampleScale));
+    const sh = Math.max(1, Math.round(nh * sampleScale));
+    const canvas = document.createElement('canvas');
+    canvas.width = sw;
+    canvas.height = sh;
+    const ctx = canvas.getContext('2d', {willReadFrequently:true});
+    if (!ctx) return null;
+
+    try {
+        ctx.clearRect(0, 0, sw, sh);
+        ctx.drawImage(img, 0, 0, sw, sh);
+        const pixels = ctx.getImageData(0, 0, sw, sh).data;
+
+        let minX = sw, minY = sh, maxX = -1, maxY = -1;
+        const alphaThreshold = 48;
+        let visibleCount = 0;
+        const colCount = new Uint16Array(sw);
+        const rowCount = new Uint16Array(sh);
+
+        // 투명 그림자나 외곽의 희미한 픽셀은 차량 본체 크기/중심 계산에서 제외합니다.
+        for (let y = 0; y < sh; y++) {
+            for (let x = 0; x < sw; x++) {
+                const i = (y * sw + x) * 4;
+                if (pixels[i + 3] >= alphaThreshold) {
+                    visibleCount++;
+                    colCount[x]++;
+                    rowCount[y]++;
+                }
+            }
+        }
+
+        const alphaCoverage = visibleCount / (sw * sh);
+
+        // 한두 픽셀짜리 안테나/그림자/노이즈가 경계가 되지 않도록
+        // 실제 차량 픽셀이 일정량 존재하는 행/열만 피사체 경계로 사용합니다.
+        const minColumnPixels = Math.max(2, Math.round(sh * 0.012));
+        const minRowPixels = Math.max(2, Math.round(sw * 0.012));
+        for (let x = 0; x < sw; x++) {
+            if (colCount[x] >= minColumnPixels) {
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+            }
+        }
+        for (let y = 0; y < sh; y++) {
+            if (rowCount[y] >= minRowPixels) {
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
+            }
+        }
+
+        // 2차: 배경이 완전 불투명한 이미지라면 모서리 배경색과 다른 영역을 차량으로 추정합니다.
+        if (alphaCoverage > 0.94) {
+            const cornerSize = Math.max(2, Math.round(Math.min(sw, sh) * 0.035));
+            let rs = 0, gs = 0, bs = 0, cs = 0;
+            const addCorner = (x0, y0) => {
+                for (let y = y0; y < Math.min(sh, y0 + cornerSize); y++) {
+                    for (let x = x0; x < Math.min(sw, x0 + cornerSize); x++) {
+                        const i = (y * sw + x) * 4;
+                        rs += pixels[i]; gs += pixels[i+1]; bs += pixels[i+2]; cs++;
+                    }
+                }
+            };
+            addCorner(0, 0);
+            addCorner(Math.max(0, sw - cornerSize), 0);
+            addCorner(0, Math.max(0, sh - cornerSize));
+            addCorner(Math.max(0, sw - cornerSize), Math.max(0, sh - cornerSize));
+            const br = rs / Math.max(1, cs), bg = gs / Math.max(1, cs), bb = bs / Math.max(1, cs);
+
+            minX = sw; minY = sh; maxX = -1; maxY = -1;
+            for (let y = 0; y < sh; y++) {
+                for (let x = 0; x < sw; x++) {
+                    const i = (y * sw + x) * 4;
+                    const dr = pixels[i] - br;
+                    const dg = pixels[i+1] - bg;
+                    const db = pixels[i+2] - bb;
+                    const distance = Math.sqrt(dr*dr + dg*dg + db*db);
+                    if (distance > 30) {
+                        if (x < minX) minX = x;
+                        if (x > maxX) maxX = x;
+                        if (y < minY) minY = y;
+                        if (y > maxY) maxY = y;
+                    }
+                }
+            }
+        }
+
+        if (maxX < minX || maxY < minY) return null;
+
+        // 1~2px의 잡음이 외곽 경계가 되는 것을 줄이기 위한 아주 작은 인셋입니다.
+        const padX = Math.max(0, Math.round((maxX - minX + 1) * 0.006));
+        const padY = Math.max(0, Math.round((maxY - minY + 1) * 0.006));
+        minX = Math.min(maxX, minX + padX);
+        maxX = Math.max(minX, maxX - padX);
+        minY = Math.min(maxY, minY + padY);
+        maxY = Math.max(minY, maxY - padY);
+
+        const result = {
+            left: minX / sw,
+            top: minY / sh,
+            right: (maxX + 1) / sw,
+            bottom: (maxY + 1) / sh
+        };
+        vehicleListThumbBoundsCache.set(srcKey, result);
+        return result;
+    } catch (error) {
+        // 같은 출처가 아닌 이미지 등 캔버스를 읽을 수 없는 경우 기존 contain 방식으로 안전하게 표시합니다.
+        return null;
+    }
+}
+
+function normalizeVehicleListImage(img) {
+    if (!img || !img.complete || !img.naturalWidth || !img.naturalHeight) return;
+    const holder = img.closest('.vehicle-list-image');
+    if (!holder) return;
+
+    const bounds = getVehicleListImageBounds(img);
+    if (!bounds) {
+        img.classList.add('vehicle-thumb-fallback');
+        return;
+    }
+
+    const cw = holder.clientWidth;
+    const ch = holder.clientHeight;
+    if (!cw || !ch) return;
+
+    const nw = img.naturalWidth;
+    const nh = img.naturalHeight;
+    const boxW = Math.max(1, (bounds.right - bounds.left) * nw);
+    const boxH = Math.max(1, (bounds.bottom - bounds.top) * nh);
+
+    // 리스트에서는 차종마다 높이 차이가 커도 가로 폭이 지나치게 작아지지 않게 합니다.
+    // 기본은 피사체 가로폭을 맞추고, 너무 높은 차량만 높이 상한으로 제한합니다.
+    const targetW = cw * 0.92;
+    const targetH = ch * 0.84;
+    let scale = targetW / boxW;
+    if (boxH * scale > targetH) scale = targetH / boxH;
+
+    const displayW = nw * scale;
+    const displayH = nh * scale;
+    const subjectCenterX = ((bounds.left + bounds.right) / 2) * displayW;
+    const subjectBottomY = bounds.bottom * displayH;
+
+    // 차량 본체의 중심과 바닥선을 고정 앵커에 맞춥니다.
+    // 우측 끝으로 몰려 보이지 않도록 기존보다 중심을 약간 왼쪽에 둡니다.
+    const targetCenterX = cw * 0.47;
+    const targetBottomY = ch * 0.89;
+
+    img.classList.remove('vehicle-thumb-fallback');
+    img.style.width = `${displayW.toFixed(2)}px`;
+    img.style.height = `${displayH.toFixed(2)}px`;
+    img.style.left = `${(targetCenterX - subjectCenterX).toFixed(2)}px`;
+    img.style.top = `${(targetBottomY - subjectBottomY).toFixed(2)}px`;
+}
+
+function normalizeVehicleListThumbnails(scope = document) {
+    const images = scope.querySelectorAll?.('.vehicle-list-image img') || [];
+    images.forEach(img => {
+        if (img.complete && img.naturalWidth) normalizeVehicleListImage(img);
+    });
+}
+
 function getFilteredVehicles() {
     const keyword = vehicleSearchKeyword.trim().toLowerCase();
     const items = allVehicles
@@ -7123,6 +8878,7 @@ let homePopularSliderState = {
     startTranslate: 0,
     dragging: false,
     moved: false,
+    pressedVehicleKey: null,
     originalCount: 0,
     cloneCount: 2
 };
@@ -7210,9 +8966,13 @@ function setupHomePopularSlider() {
 
     const pointerDown = (event) => {
         if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+        const pressedCard = event.target.closest('.home-popular-card');
+
         stopHomePopularAutoplay();
         homePopularSliderState.dragging = true;
         homePopularSliderState.moved = false;
+        homePopularSliderState.pressedVehicleKey = pressedCard?.dataset.vehicleKey || null;
         homePopularSliderState.startX = event.clientX;
         homePopularSliderState.currentX = event.clientX;
         homePopularSliderState.startTranslate = -homePopularSliderState.index * getHomePopularStep();
@@ -7224,22 +8984,44 @@ function setupHomePopularSlider() {
         if (!homePopularSliderState.dragging) return;
         homePopularSliderState.currentX = event.clientX;
         const delta = event.clientX - homePopularSliderState.startX;
-        if (Math.abs(delta) > 5) homePopularSliderState.moved = true;
+
+        if (Math.abs(delta) > 5) {
+            homePopularSliderState.moved = true;
+            homePopularSliderState.pressedVehicleKey = null;
+        }
+
         grid.style.transform = `translate3d(${homePopularSliderState.startTranslate + delta}px,0,0)`;
     };
 
     const pointerUp = (event) => {
         if (!homePopularSliderState.dragging) return;
+
+        const isCancelled = event.type === 'pointercancel';
+        const tappedVehicleKey = !isCancelled && !homePopularSliderState.moved
+            ? homePopularSliderState.pressedVehicleKey
+            : null;
+
         homePopularSliderState.dragging = false;
+        homePopularSliderState.pressedVehicleKey = null;
         viewport.classList.remove('is-dragging');
         viewport.releasePointerCapture?.(event.pointerId);
+
+        // 드래그가 아닌 단순 탭/클릭이면 누른 카드의 차량 상세로 이동
+        if (tappedVehicleKey) {
+            homePopularSliderState.moved = false;
+            setHomePopularPosition(homePopularSliderState.index, false);
+            openVehicleDetail(tappedVehicleKey);
+            return;
+        }
 
         const delta = homePopularSliderState.currentX - homePopularSliderState.startX;
         const threshold = Math.min(70, getHomePopularStep() * .22);
         let nextIndex = homePopularSliderState.index;
         if (delta <= -threshold) nextIndex += 1;
         else if (delta >= threshold) nextIndex -= 1;
+
         setHomePopularPosition(nextIndex, true);
+        homePopularSliderState.moved = false;
         setTimeout(startHomePopularAutoplay, 1200);
     };
 
@@ -7251,13 +9033,19 @@ function setupHomePopularSlider() {
     viewport.addEventListener('mouseleave', () => {
         if (!homePopularSliderState.dragging) startHomePopularAutoplay();
     });
+
+    // 키보드 Enter/Space 접근성용.
+    // 포인터 입력은 pointerUp에서 처리하므로 중복 이동시키지 않는다.
     viewport.addEventListener('click', event => {
-        if (homePopularSliderState.moved) {
-            event.preventDefault();
-            event.stopPropagation();
-            homePopularSliderState.moved = false;
-        }
-    }, true);
+        if (event.detail !== 0) return;
+
+        const card = event.target.closest('.home-popular-card');
+        const vehicleKey = card?.dataset.vehicleKey;
+        if (!vehicleKey) return;
+
+        event.preventDefault();
+        openVehicleDetail(vehicleKey);
+    });
 
     grid.addEventListener('transitionend', event => {
         if (event.propertyName !== 'transform') return;
@@ -7285,7 +9073,7 @@ function renderHomePopularVehicles() {
         const minMonthly = getMinMonthlyPrice(vehicle, 'ALL');
         const isBest = isBestVehicle(vehicle, index);
         return `
-            <button class="home-popular-card" type="button" onclick="openVehicleDetail('${escapeHtml(vehicleKey)}')">
+            <button class="home-popular-card" type="button" data-vehicle-key="${escapeHtml(vehicleKey)}">
                 ${isBest ? '<span class="home-popular-best">BEST</span>' : ''}
                 <span class="home-popular-image">${listVehicleImageHtml(vehicle, vehicleKey)}</span>
                 <span class="home-popular-name">${escapeHtml(getVehicleName(vehicle))}</span>
@@ -7300,6 +9088,157 @@ function renderHomePopularVehicles() {
     const heroIndex = allVehicles.indexOf(heroVehicle);
     hero.innerHTML = listVehicleImageHtml(heroVehicle, getVehicleId(heroVehicle, heroIndex));
 }
+
+
+// 홈 추천 차량: 이미지 캔버스가 아니라 실제 차량 피사체 기준으로 중앙 정렬
+// - 투명 배경의 alpha 영역을 분석해 피사체 중심점을 계산합니다.
+// - CSS의 width/height 110%는 그대로 유지하고 위치만 보정합니다.
+const homeRecommendSubjectCache = new Map();
+let homeRecommendSubjectResizeTimer = null;
+
+function analyzeHomeRecommendSubject(img) {
+    const width = img.naturalWidth || 0;
+    const height = img.naturalHeight || 0;
+    if (!width || !height) return null;
+
+    const sourceKey = img.currentSrc || img.src || '';
+    if (sourceKey && homeRecommendSubjectCache.has(sourceKey)) {
+        return homeRecommendSubjectCache.get(sourceKey);
+    }
+
+    try {
+        // 분석 비용을 낮추되 중심점 정밀도는 충분히 유지
+        const maxSide = 360;
+        const ratio = Math.min(1, maxSide / Math.max(width, height));
+        const scanWidth = Math.max(1, Math.round(width * ratio));
+        const scanHeight = Math.max(1, Math.round(height * ratio));
+
+        const canvas = document.createElement('canvas');
+        canvas.width = scanWidth;
+        canvas.height = scanHeight;
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        if (!ctx) return null;
+
+        ctx.clearRect(0, 0, scanWidth, scanHeight);
+        ctx.drawImage(img, 0, 0, scanWidth, scanHeight);
+        const pixels = ctx.getImageData(0, 0, scanWidth, scanHeight).data;
+
+        // 흐린 그림자/안티앨리어싱은 제외하고 실제 차량 영역에 가깝게 잡음
+        const alphaThreshold = 48;
+        let minX = scanWidth;
+        let minY = scanHeight;
+        let maxX = -1;
+        let maxY = -1;
+
+        for (let y = 0; y < scanHeight; y++) {
+            for (let x = 0; x < scanWidth; x++) {
+                const alpha = pixels[(y * scanWidth + x) * 4 + 3];
+                if (alpha < alphaThreshold) continue;
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
+            }
+        }
+
+        if (maxX < minX || maxY < minY) return null;
+
+        const subject = {
+            centerX: ((minX + maxX + 1) / 2) / scanWidth,
+            centerY: ((minY + maxY + 1) / 2) / scanHeight
+        };
+
+        if (sourceKey) homeRecommendSubjectCache.set(sourceKey, subject);
+        return subject;
+    } catch (error) {
+        // 다른 출처 이미지 등 canvas 접근이 제한되는 경우 기존 가운데 정렬 유지
+        return null;
+    }
+}
+
+function positionHomeRecommendSubject(img, subject) {
+    const thumb = img.closest('.home-recommend-thumb');
+    if (!thumb || !subject || !img.naturalWidth || !img.naturalHeight) {
+        img.style.setProperty('--subject-tx', '0px');
+        img.style.setProperty('--subject-ty', '0px');
+        return;
+    }
+
+    const imageRect = img.getBoundingClientRect();
+    const imageWidth = imageRect.width;
+    const imageHeight = imageRect.height;
+    if (!imageWidth || !imageHeight) return;
+
+    // object-fit: contain으로 실제 원본 캔버스가 img 요소 내부에서 차지하는 영역 계산
+    const naturalRatio = img.naturalWidth / img.naturalHeight;
+    const elementRatio = imageWidth / imageHeight;
+    let renderedWidth;
+    let renderedHeight;
+    let offsetX;
+    let offsetY;
+
+    if (naturalRatio >= elementRatio) {
+        renderedWidth = imageWidth;
+        renderedHeight = imageWidth / naturalRatio;
+        offsetX = 0;
+        offsetY = (imageHeight - renderedHeight) / 2;
+    } else {
+        renderedHeight = imageHeight;
+        renderedWidth = imageHeight * naturalRatio;
+        offsetX = (imageWidth - renderedWidth) / 2;
+        offsetY = 0;
+    }
+
+    const subjectX = offsetX + subject.centerX * renderedWidth;
+    const subjectY = offsetY + subject.centerY * renderedHeight;
+
+    // img 요소 자체는 회색 박스 중앙에 있으므로, 피사체 중심과 img 중심의 차이만큼 반대로 이동
+    let translateX = imageWidth / 2 - subjectX;
+    let translateY = imageHeight / 2 - subjectY;
+
+    // 잘못된 이미지가 들어와도 과도하게 튀지 않도록 보정값 제한
+    const maxX = imageWidth * 0.22;
+    const maxY = imageHeight * 0.22;
+    translateX = Math.max(-maxX, Math.min(maxX, translateX));
+    translateY = Math.max(-maxY, Math.min(maxY, translateY));
+
+    img.style.setProperty('--subject-tx', `${translateX.toFixed(2)}px`);
+    img.style.setProperty('--subject-ty', `${translateY.toFixed(2)}px`);
+}
+
+function centerHomeRecommendSubject(img) {
+    if (!img || !img.complete || !img.naturalWidth || !img.naturalHeight) return;
+    const subject = analyzeHomeRecommendSubject(img);
+    if (!subject) {
+        img.style.setProperty('--subject-tx', '0px');
+        img.style.setProperty('--subject-ty', '0px');
+        return;
+    }
+    positionHomeRecommendSubject(img, subject);
+}
+
+function centerHomeRecommendSubjects(root = document) {
+    const images = root.querySelectorAll('.home-recommend-thumb img');
+    images.forEach(img => {
+        if (!img.dataset.subjectCenterBound) {
+            img.dataset.subjectCenterBound = '1';
+            img.addEventListener('load', () => {
+                requestAnimationFrame(() => centerHomeRecommendSubject(img));
+            });
+        }
+
+        if (img.complete && img.naturalWidth) {
+            requestAnimationFrame(() => centerHomeRecommendSubject(img));
+        }
+    });
+}
+
+window.addEventListener('resize', () => {
+    clearTimeout(homeRecommendSubjectResizeTimer);
+    homeRecommendSubjectResizeTimer = setTimeout(() => {
+        centerHomeRecommendSubjects(document);
+    }, 80);
+});
 
 function renderHomeRecommendations() {
     const list = document.getElementById('homeRecommendList');
@@ -7343,6 +9282,8 @@ function renderHomeRecommendations() {
             </button>
         `;
     }).join('');
+
+    centerHomeRecommendSubjects(list);
 }
 
 function renderHomeContent() {
@@ -7412,6 +9353,8 @@ function renderVehicleList() {
             </button>
         `;
     }).join('');
+
+    requestAnimationFrame(() => normalizeVehicleListThumbnails(list));
 }
 
 function renderVehicleDetail(vehicle, index = 0) {
@@ -7643,18 +9586,18 @@ function renderVehicleInfo(vehicleKey) {
 }
 
 function openVehicleInfo(vehicleKey) {
-    setBottomNavVisible(false);
+    setBottomNavVisible(true);
     renderVehicleInfo(vehicleKey);
     document.body.classList.add('detail-mode');
     document.getElementById('vehicleDetailView').hidden = true;
     document.getElementById('vehicleInfoView').hidden = false;
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    resetPageScroll();
 }
 
 function closeVehicleInfo() {
     document.getElementById('vehicleInfoView').hidden = true;
     document.getElementById('vehicleDetailView').hidden = false;
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    resetPageScroll();
 }
 
 function openVehicleDetail(vehicleKey) {
@@ -7662,19 +9605,21 @@ function openVehicleDetail(vehicleKey) {
     trackEstimateProgress('VEHICLE_DETAIL', trackedVehicle ? {vehicle_id:Number((trackedVehicle.vehicle_id ?? trackedVehicle.id) || 0), vehicle_name:getVehicleName(trackedVehicle)} : {});
     const homeView = document.getElementById('homeView');
     vehicleDetailReturnView = homeView && !homeView.hidden ? 'home' : 'vehicle';
-    setBottomNavVisible(false);
+    setBottomNavVisible(true);
     const index = allVehicles.findIndex((vehicle, i) => getVehicleId(vehicle, i) === String(vehicleKey));
     if (index < 0) return;
 
     renderVehicleDetail(allVehicles[index], index);
 
+    // 홈 전용 배경/하단 여백 규칙이 차량 상세에 남지 않도록 먼저 해제
+    document.body.classList.remove('home-main-active');
     document.body.classList.add('detail-mode');
-    ['homeView','vehicleListView','quickEstimateView','faqView','mypageView','vehicleInfoView'].forEach(id => {
+    ['homeView','vehicleListView','quickEstimateView','faqView','mypageView','myInquiriesView','vehicleInfoView'].forEach(id => {
         const view = document.getElementById(id);
         if (view) view.hidden = true;
     });
     document.getElementById('vehicleDetailView').hidden = false;
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    resetPageScroll();
 
     history.replaceState({vehicleKey:String(vehicleKey)}, '', `#vehicle=${encodeURIComponent(vehicleKey)}`);
 }
@@ -7813,6 +9758,22 @@ function setBottomNavActive(name){
     });
 }
 
+function resetPageScroll(){
+    const page = document.querySelector('.page');
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    if (page) page.scrollTop = 0;
+    window.scrollTo(0, 0);
+
+    // hidden 화면을 교체한 직후 브라우저가 이전 스크롤 위치를 복원하는 경우까지 방지
+    requestAnimationFrame(() => {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        if (page) page.scrollTop = 0;
+        window.scrollTo(0, 0);
+    });
+}
+
 function openMainView(name){
     document.body.classList.toggle('home-main-active', name === 'home');
     const homeView = document.getElementById('homeView');
@@ -7823,6 +9784,14 @@ function openMainView(name){
     const faqView = document.getElementById('faqView');
     const mypageView = document.getElementById('mypageView');
 
+    if (name !== 'faq') {
+        faqView?.classList.remove('mypage-qna-mode');
+        const qnaDesc = document.getElementById('mypageQnaDesc');
+        if (qnaDesc) qnaDesc.hidden = true;
+    }
+    const myEstimatesView = document.getElementById('myEstimatesView');
+    const myInquiriesView = document.getElementById('myInquiriesView');
+
     if (homeView) homeView.hidden = true;
     if (detailView) detailView.hidden = true;
     if (infoView) infoView.hidden = true;
@@ -7830,6 +9799,8 @@ function openMainView(name){
     if (quickView) quickView.hidden = true;
     if (faqView) faqView.hidden = true;
     if (mypageView) mypageView.hidden = true;
+    if (myEstimatesView) myEstimatesView.hidden = true;
+    if (myInquiriesView) myInquiriesView.hidden = true;
     document.body.classList.remove('detail-mode');
 
     if (name === 'home') {
@@ -7855,7 +9826,27 @@ function openMainView(name){
 
     setBottomNavActive(name);
     setBottomNavVisible(true);
-    window.scrollTo({top:0, behavior:'instant'});
+    resetPageScroll();
+}
+
+
+function openMypageQna(){
+    openMainView('faq');
+    const faqView = document.getElementById('faqView');
+    const qnaDesc = document.getElementById('mypageQnaDesc');
+    faqView?.classList.add('mypage-qna-mode');
+    if (qnaDesc) qnaDesc.hidden = false;
+    setBottomNavActive('mypage');
+    setBottomNavVisible(true);
+    resetPageScroll();
+}
+
+function closeMypageQna(){
+    const faqView = document.getElementById('faqView');
+    const qnaDesc = document.getElementById('mypageQnaDesc');
+    faqView?.classList.remove('mypage-qna-mode');
+    if (qnaDesc) qnaDesc.hidden = true;
+    openMainView('mypage');
 }
 
 function bindBottomNavigation(){
@@ -7968,7 +9959,7 @@ function updateMyEstimateCounts(counts = {}) {
     if (menu) menu.textContent = `${total}개`;
 }
 function renderMyEstimates(estimates = [], emptyLabel = '해당 상태') {
-    const content = document.getElementById('myEstimatesContent');
+    const content = document.getElementById('myEstimatesPageContent') || document.getElementById('myEstimatesContent');
     if (!content) return;
     if (!estimates.length) {
         content.innerHTML = `<div class="my-estimates-empty">${escapeEstimateText(emptyLabel)} 견적이 없습니다.</div>`;
@@ -8013,7 +10004,7 @@ async function loadMyEstimates(showError = false, statusFilter = 'ALL', titleLab
 
         if (!response.ok || !data.ok) {
             if (showError) {
-                const content = document.getElementById('myEstimatesContent');
+                const content = document.getElementById('myEstimatesPageContent') || document.getElementById('myEstimatesContent');
                 if (content) {
                     content.innerHTML = `<div class="my-estimates-empty">${escapeEstimateText(data.message || '내 견적을 불러오지 못했습니다.')}</div>`;
                 }
@@ -8033,7 +10024,7 @@ async function loadMyEstimates(showError = false, statusFilter = 'ALL', titleLab
         return filtered;
     } catch (error) {
         if (showError) {
-            const content = document.getElementById('myEstimatesContent');
+            const content = document.getElementById('myEstimatesPageContent') || document.getElementById('myEstimatesContent');
             if (content) content.innerHTML = '<div class="my-estimates-empty">내 견적을 불러오지 못했습니다.</div>';
         }
         return [];
@@ -8045,17 +10036,21 @@ async function openMyEstimates(statusFilter = 'ALL', titleLabel = '내 견적 �
         return;
     }
 
-    const modal = document.getElementById('myEstimatesModal');
-    const content = document.getElementById('myEstimatesContent');
-    const title = document.getElementById('myEstimatesTitle');
+    const mypageView = document.getElementById('mypageView');
+    const view = document.getElementById('myEstimatesView');
+    const content = document.getElementById('myEstimatesPageContent');
+    const title = document.getElementById('myEstimatesPageTitle');
 
-    if (!modal) return;
+    if (!view || !content) return;
 
-    if (title) title.textContent = titleLabel;
-    if (content) content.innerHTML = '<div class="my-estimates-empty">견적 정보를 불러오는 중입니다.</div>';
+    if (mypageView) mypageView.hidden = true;
+    view.hidden = false;
+    if (title) title.textContent = titleLabel || '내 견적';
+    content.innerHTML = '<div class="my-estimates-empty">견적 정보를 불러오는 중입니다.</div>';
 
-    modal.hidden = false;
-    document.body.style.overflow = 'hidden';
+    setBottomNavActive('mypage');
+    setBottomNavVisible(true);
+    resetPageScroll();
 
     await loadMyEstimates(true, statusFilter, titleLabel);
 }
@@ -8070,13 +10065,14 @@ document.querySelectorAll('[data-estimate-status]').forEach(button => {
 });
 
 function closeMyEstimates() {
-    const modal = document.getElementById('myEstimatesModal');
-    if (modal) modal.hidden = true;
-    document.body.style.overflow = '';
+    const view = document.getElementById('myEstimatesView');
+    const mypageView = document.getElementById('mypageView');
+    if (view) view.hidden = true;
+    if (mypageView) mypageView.hidden = false;
+    setBottomNavActive('mypage');
+    setBottomNavVisible(true);
+    resetPageScroll();
 }
-document.getElementById('myEstimatesModal')?.addEventListener('click', event => {
-    if (event.target.id === 'myEstimatesModal') closeMyEstimates();
-});
 
 
 // ============================================================
@@ -8086,6 +10082,8 @@ document.getElementById('myEstimatesModal')?.addEventListener('click', event => 
 // ============================================================
 const INQUIRY_STORAGE_KEY = 'autogenie_inquiries_v1';
 const GLOBAL_INQUIRY_STORAGE_KEY = 'autogenie_inquiries_admin_v1';
+const INQUIRY_GUEST_KEY_STORAGE = 'autogenie_inquiry_guest_key_v1';
+let inquiryRemoteCache = [];
 
 function getInquiryMemberKey() {
     return String(currentMember?.email || currentMember?.id || 'guest');
@@ -8095,7 +10093,17 @@ function getInquiryStorageKey(memberKey = getInquiryMemberKey()) {
     return `${INQUIRY_STORAGE_KEY}:${memberKey}`;
 }
 
-function getMyInquiries() {
+function getInquiryGuestKey() {
+    if (currentMember) return '';
+    let key = localStorage.getItem(INQUIRY_GUEST_KEY_STORAGE) || '';
+    if (!/^[A-Za-z0-9_-]{20,64}$/.test(key)) {
+        key = `g_${Date.now().toString(36)}_${Math.random().toString(36).slice(2)}_${Math.random().toString(36).slice(2)}`.slice(0, 64);
+        localStorage.setItem(INQUIRY_GUEST_KEY_STORAGE, key);
+    }
+    return key;
+}
+
+function getMyInquiriesLocal() {
     try {
         const raw = localStorage.getItem(getInquiryStorageKey());
         const items = raw ? JSON.parse(raw) : [];
@@ -8103,6 +10111,40 @@ function getMyInquiries() {
     } catch (error) {
         return [];
     }
+}
+
+function getMyInquiries() {
+    return inquiryRemoteCache.length ? inquiryRemoteCache : getMyInquiriesLocal();
+}
+
+async function migrateLegacyInquiries() {
+    const items = getMyInquiriesLocal();
+    if (!items.length) return;
+    try {
+        await fetch('./api/inquiry-migrate.php', {
+            method: 'POST',
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({items, guest_key: getInquiryGuestKey()})
+        });
+    } catch (error) {}
+}
+
+async function loadMyInquiriesFromServer() {
+    try {
+        await migrateLegacyInquiries();
+        const guest = getInquiryGuestKey();
+        const url = './api/inquiry-list.php' + (guest ? `?guest_key=${encodeURIComponent(guest)}&_=${Date.now()}` : `?_=${Date.now()}`);
+        const response = await fetch(url, {credentials:'same-origin', cache:'no-store'});
+        const data = await response.json();
+        if (response.ok && data?.ok && Array.isArray(data.inquiries)) {
+            inquiryRemoteCache = data.inquiries;
+            return inquiryRemoteCache;
+        }
+    } catch (error) {}
+    inquiryRemoteCache = getMyInquiriesLocal();
+    return inquiryRemoteCache;
 }
 
 function getAllAdminInquiries() {
@@ -8147,9 +10189,9 @@ function syncLegacyInquiriesToAdmin() {
     return adminItems;
 }
 
-function saveInquiry(message) {
+async function saveInquiry(message) {
     const memberKey = getInquiryMemberKey();
-    const item = {
+    const fallbackItem = {
         id: `INQ-${Date.now()}`,
         member_key: memberKey,
         member_name: currentMember?.name || '',
@@ -8161,20 +10203,33 @@ function saveInquiry(message) {
         created_at: new Date().toISOString()
     };
 
-    const items = getMyInquiries();
-    items.unshift(item);
-    localStorage.setItem(getInquiryStorageKey(memberKey), JSON.stringify(items));
+    let savedToServer = false;
+    try {
+        const response = await fetch('./api/inquiry-create.php', {
+            method: 'POST',
+            credentials: 'same-origin',
+            cache: 'no-store',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({message, guest_key: getInquiryGuestKey()})
+        });
+        const data = await response.json();
+        savedToServer = !!(response.ok && data?.ok);
+    } catch (error) {}
 
-    const adminItems = getAllAdminInquiries();
-    adminItems.unshift(item);
-    setAllAdminInquiries(adminItems);
-    updateInquiryCount();
+    // 서버 저장 실패 시에만 브라우저 저장소에 임시 보관합니다.
+    if (!savedToServer) {
+        const localItems = getMyInquiriesLocal();
+        localItems.unshift(fallbackItem);
+        localStorage.setItem(getInquiryStorageKey(memberKey), JSON.stringify(localItems));
+    }
+
+    await updateInquiryCount();
 }
 
-function updateInquiryCount() {
-    const count = getMyInquiries().length;
+async function updateInquiryCount() {
+    const items = await loadMyInquiriesFromServer();
     const el = document.getElementById('mypageInquiryCount');
-    if (el) el.textContent = `${count}개`;
+    if (el) el.textContent = `${items.length}개`;
 }
 
 function formatInquiryDate(value) {
@@ -8185,46 +10240,71 @@ function formatInquiryDate(value) {
     }).format(date);
 }
 
-function openMyInquiries() {
-    const modal = document.getElementById('myInquiriesModal');
-    const content = document.getElementById('myInquiriesContent');
-    if (!modal || !content) return;
+async function openMyInquiries() {
+    const mypageView = document.getElementById('mypageView');
+    const view = document.getElementById('myInquiriesView');
+    const content = document.getElementById('myInquiriesPageContent');
+    if (!view || !content) return;
 
-    const items = getMyInquiries();
+    if (mypageView) mypageView.hidden = true;
+    view.hidden = false;
+    setBottomNavActive('mypage');
+    setBottomNavVisible(true);
+    resetPageScroll();
+
+    content.innerHTML = '<div class="my-estimates-empty">문의 내역을 불러오는 중입니다.</div>';
+
+    const items = await loadMyInquiriesFromServer();
     if (!items.length) {
         content.innerHTML = '<div class="my-estimates-empty">아직 접수한 문의가 없습니다.<br>Q&amp;A에서 문의를 남겨보세요.</div>';
     } else {
-        content.innerHTML = `<div class="my-estimates-list">${items.map(item => `
+        content.innerHTML = `<div class="my-estimates-list">${items.map(item => {
+            const answered = !!item.answer;
+            const statusText = answered ? '답변 완료' : '접수 완료';
+            const answerText = answered
+                ? escapeHtml(item.answer)
+                : '<span class="my-inquiry-answer-empty">아직 답변이 등록되지 않았습니다. 빠르게 확인 후 안내드리겠습니다.</span>';
+            return `
             <article class="my-inquiry-item">
-                <div class="my-inquiry-top">
-                    <span class="my-inquiry-date">${escapeHtml(formatInquiryDate(item.created_at))}</span>
-                    <span class="my-inquiry-status ${item.answer ? 'answered' : ''}">${escapeHtml(item.answer ? '답변완료' : (item.status || '접수완료'))}</span>
-                </div>
-                <p class="my-inquiry-text">${escapeHtml(item.message || '')}</p>
-                ${item.answer ? `
-                    <div class="my-inquiry-answer">
-                        <span class="my-inquiry-answer-label">오토지니 답변</span>
-                        <p class="my-inquiry-answer-text">${escapeHtml(item.answer)}</p>
-                        ${item.answered_at ? `<span class="my-inquiry-answer-date">${escapeHtml(formatInquiryDate(item.answered_at))}</span>` : ''}
-                    </div>
-                ` : ''}
-            </article>
-        `).join('')}</div>`;
+                <table class="my-inquiry-detail-table" role="presentation">
+                    <colgroup>
+                        <col class="col-label"><col class="col-value">
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th scope="row">문의 번호</th>
+                            <td><span class="my-inquiry-meta">${escapeHtml(item.inquiry_no || '-')}</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">문의 일시</th>
+                            <td><span class="my-inquiry-meta my-inquiry-date-value">${escapeHtml(formatInquiryDate(item.created_at))}</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">처리 상태</th>
+                            <td><span class="my-inquiry-status ${answered ? 'answered' : ''}">${escapeHtml(statusText)}</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">문의 내용</th>
+                            <td class="is-content">${escapeHtml(item.message || '')}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="my-inquiry-answer-bar">문의 답변</div>
+                <div class="my-inquiry-answer-body">${answerText}</div>
+            </article>`;
+        }).join('')}</div>`;
     }
-
-    modal.hidden = false;
-    document.body.style.overflow = 'hidden';
 }
 
 function closeMyInquiries() {
-    const modal = document.getElementById('myInquiriesModal');
-    if (modal) modal.hidden = true;
-    document.body.style.overflow = '';
+    const view = document.getElementById('myInquiriesView');
+    const mypageView = document.getElementById('mypageView');
+    if (view) view.hidden = true;
+    if (mypageView) mypageView.hidden = false;
+    setBottomNavActive('mypage');
+    setBottomNavVisible(true);
+    resetPageScroll();
 }
-
-document.getElementById('myInquiriesModal')?.addEventListener('click', event => {
-    if (event.target.id === 'myInquiriesModal') closeMyInquiries();
-});
 
 function isAdminInquiryMode() {
     const params = new URLSearchParams(location.search);

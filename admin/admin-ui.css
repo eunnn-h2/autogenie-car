@@ -1,0 +1,182 @@
+:root{
+  --ag-bg:#f4f7fb;
+  --ag-card:#fff;
+  --ag-border:#dfe6ee;
+  --ag-border-soft:#edf1f5;
+  --ag-text:#1f2d3d;
+  --ag-muted:#7a8a99;
+  --ag-primary:#3b2bbd;
+  --ag-primary-soft:#f0eeff;
+  --ag-success:#15803d;
+  --ag-success-soft:#ecf8f0;
+  --ag-warning:#d97706;
+  --ag-warning-soft:#fff6e8;
+  --ag-danger:#dc2626;
+  --ag-danger-soft:#fff1f2;
+  --ag-radius:12px;
+  --ag-shadow:0 3px 12px rgba(15,23,42,.035);
+}
+*{box-sizing:border-box}
+html,body{background:var(--ag-bg)!important;color:var(--ag-text)!important}
+body{font-family:Pretendard,"Noto Sans KR",Arial,sans-serif!important;font-size:13px!important}
+a{color:inherit}
+.admin-shell,.layout,.admin-layout{min-height:100vh!important;background:var(--ag-bg)!important}
+.main,.admin-main{padding:28px 30px!important;min-width:0!important}
+
+/* page heading */
+.head,.top,.page-header{display:flex!important;justify-content:space-between!important;align-items:flex-start!important;gap:18px!important;margin:0 0 18px!important;padding:0!important;background:transparent!important;border:0!important}
+.head h1,.top h1,.page-header h1,.wrap h1{margin:0!important;font-size:24px!important;line-height:1.3!important;font-weight:800!important;letter-spacing:-.5px!important;color:#172334!important}
+.head p,.top p,.page-header p,.page-header .description,.sub{margin:6px 0 0!important;color:var(--ag-muted)!important;font-size:13px!important;line-height:1.55!important}
+
+/* cards / panels */
+.card,.panel,.admin-card,.filter-panel,.filter-box{background:var(--ag-card)!important;border:1px solid var(--ag-border)!important;border-radius:var(--ag-radius)!important;box-shadow:var(--ag-shadow)!important}
+.card,.panel,.admin-card{padding:20px!important;margin-bottom:16px!important}
+.filter-panel,.filter-box{padding:16px!important;margin-bottom:16px!important}
+.card h2,.panel h2,.admin-card h2,.card-title h2,.panel-head h2{margin:0!important;font-size:16px!important;line-height:1.4!important;font-weight:800!important;color:#243447!important}
+.card-title,.panel-head{display:flex!important;justify-content:space-between!important;align-items:center!important;gap:12px!important;margin-bottom:14px!important;padding-bottom:13px!important;border-bottom:1px solid var(--ag-border-soft)!important}
+
+/* KPI */
+.cards{gap:12px!important;margin-bottom:16px!important}
+.metric{background:#fff!important;border:1px solid var(--ag-border)!important;border-radius:var(--ag-radius)!important;box-shadow:var(--ag-shadow)!important;padding:18px 20px!important;min-height:106px!important;transition:border-color .15s,transform .15s!important}
+a.metric:hover{border-color:#c7bfff!important;transform:translateY(-1px)!important}
+.metric .label,.metric span{font-size:12px!important;color:var(--ag-muted)!important;font-weight:600!important}
+.metric strong{display:block!important;margin-top:8px!important;font-size:27px!important;line-height:1.1!important;font-weight:800!important;letter-spacing:-.7px!important;color:#152238!important}
+.metric small{display:block!important;margin-top:8px!important;color:#8795a2!important;font-size:11px!important}
+
+/* form controls */
+input[type=text],input[type=search],input[type=password],input[type=date],input[type=number],select,textarea{
+  border:1px solid #cfd9e4!important;border-radius:7px!important;background:#fff!important;color:#243447!important;outline:none!important;transition:border-color .15s,box-shadow .15s!important
+}
+input[type=text],input[type=search],input[type=password],input[type=date],input[type=number],select{height:38px!important;padding:0 11px!important}
+textarea{padding:11px 12px!important;line-height:1.55!important}
+input:focus,select:focus,textarea:focus{border-color:#8b7ce8!important;box-shadow:0 0 0 3px rgba(59,43,189,.08)!important}
+label,.filter-label{font-size:11px!important;color:#66788a!important;font-weight:700!important}
+
+/* filter layouts */
+.filter,.filter-grid,.filter-top{background:#fff!important}
+.filter{gap:9px!important}
+.filter-item,.filter-group{min-width:0}
+.filter-actions{padding-top:13px!important;margin-top:13px!important;border-top:1px solid var(--ag-border-soft)!important}
+.filter-summary{margin-top:10px!important;padding-top:10px!important;border-top:1px solid var(--ag-border-soft)!important;color:var(--ag-muted)!important}
+
+/* buttons */
+button,.btn,.primary,.back,.reset,.copy-btn,.filter button,.filter-actions button,.filter-actions a{
+  border-radius:7px!important;min-height:36px!important;font-weight:700!important;box-shadow:none!important
+}
+button.primary,.btn.primary,.primary,.filter button[type=submit],.copy-btn{background:var(--ag-primary)!important;color:#fff!important;border:1px solid var(--ag-primary)!important}
+.btn:not(.primary),.back,.reset,.filter .reset{background:#fff!important;color:#526476!important;border:1px solid #cfd9e4!important}
+button:hover,.btn:hover,.back:hover,.reset:hover{filter:brightness(.985)}
+
+/* tables */
+.table-wrap{overflow:auto!important;border:1px solid var(--ag-border-soft)!important;border-radius:9px!important;background:#fff!important}
+.table,.admin-table,.inquiry-table,.summary-table,.wrap table{width:100%!important;border-collapse:separate!important;border-spacing:0!important}
+.table th,.admin-table th,.inquiry-table th,.summary-table th,.wrap table th{
+  background:#f7f9fc!important;color:#607286!important;font-size:11px!important;font-weight:800!important;padding:11px 10px!important;border-bottom:1px solid var(--ag-border)!important;white-space:nowrap!important
+}
+.table td,.admin-table td,.inquiry-table td,.summary-table td,.wrap table td{
+  background:#fff!important;color:#304257!important;padding:12px 10px!important;border-bottom:1px solid var(--ag-border-soft)!important;vertical-align:middle!important
+}
+.table tbody tr:hover td,.admin-table tbody tr:hover td,.inquiry-table tbody tr:hover td,.summary-table tbody tr:hover td,.wrap table tbody tr:hover td{background:#fbfcfe!important}
+.table tbody tr:last-child td,.admin-table tbody tr:last-child td,.inquiry-table tbody tr:last-child td,.summary-table tbody tr:last-child td{border-bottom:0!important}
+
+/* status badges */
+.pill,.status,.state{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:25px!important;padding:3px 8px!important;border-radius:999px!important;font-size:11px!important;font-weight:800!important;white-space:nowrap!important}
+.state.new,.status-off,.off{background:var(--ag-warning-soft)!important;color:var(--ag-warning)!important}
+.state.answered,.status-active,.done,.on{background:var(--ag-success-soft)!important;color:var(--ag-success)!important}
+
+/* pagination */
+.pagination{display:flex!important;gap:5px!important;align-items:center!important;justify-content:center!important;margin-top:16px!important}
+.pagination a,.page-link{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:34px!important;height:34px!important;border:1px solid var(--ag-border)!important;border-radius:7px!important;background:#fff!important;color:#66788a!important}
+.pagination a.active,.page-link.active{background:var(--ag-primary)!important;border-color:var(--ag-primary)!important;color:#fff!important}
+
+/* dashboard specifics */
+.funnel{gap:10px!important}
+.step{border:1px solid var(--ag-border)!important;border-radius:10px!important;background:#fbfcfe!important;padding:15px 12px!important}
+.step b{color:var(--ag-primary)!important}
+.quick-links{gap:8px!important}
+.quick-links a{border:1px solid var(--ag-border)!important;border-radius:8px!important;background:#fafbfe!important;padding:12px 14px!important;font-weight:700!important}
+
+/* inquiry detail */
+.detail-row td{padding:0!important;background:#f9fbfd!important}
+.detail-box{border-top:1px solid var(--ag-border)!important;background:#f9fbfd!important;padding:18px!important}
+.question-box,.reply-box{background:#fff!important;border:1px solid var(--ag-border)!important;border-radius:10px!important;padding:16px!important}
+
+/* admin accounts page */
+body>.wrap{max-width:none!important;margin:0!important;padding:28px 30px!important}
+.wrap .card{border-radius:var(--ag-radius)!important}
+.note{border-radius:9px!important;margin-bottom:16px!important}
+
+@media(max-width:900px){
+  .main,.admin-main,body>.wrap{padding:16px!important}
+  .head,.top,.page-header{flex-direction:column!important;align-items:flex-start!important}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:560px){.cards{grid-template-columns:1fr!important}}
+.top-stats{display:flex!important;gap:8px!important;align-items:center!important;flex-wrap:wrap!important}
+.top-stats .stat{display:inline-flex!important;align-items:center!important;gap:5px!important;height:34px!important;padding:0 11px!important;border:1px solid var(--ag-border)!important;border-radius:8px!important;background:#fff!important;color:#6c7c8c!important;font-size:11px!important;font-weight:700!important}
+.top-stats .stat b{color:#243447!important;font-size:13px!important}
+.top-stats .stat.alert{background:var(--ag-danger-soft)!important;border-color:#fecdd3!important;color:#be123c!important}
+
+
+/* ===== 관리자 전체 화면 공통 레이아웃 v2 ===== */
+.main{max-width:none!important;padding:24px 28px 40px!important}
+.ag-page-card{padding:20px 22px!important;margin:0 0 16px!important;border-radius:12px!important}
+.ag-page-card>.top{margin:0!important;padding:0!important;border:0!important;background:transparent!important;align-items:center!important}
+.ag-page-card>.top h1{font-size:22px!important;font-weight:800!important;color:#18263a!important;letter-spacing:-.45px!important}
+.ag-page-card>.top p,.ag-page-card>.top .sub{margin-top:6px!important;color:#7b8b99!important;font-size:12px!important}
+.ag-page-card .top-stats{margin-left:auto!important}
+
+/* 모든 관리 페이지의 섹션 간격/외형 */
+.main>.card,.main>.panel,.main>.admin-card,.wrap>.card,.wrap>.note{margin-bottom:16px!important}
+.panel,.admin-card,.wrap>.card{border-radius:12px!important;border-color:var(--ag-border)!important;box-shadow:var(--ag-shadow)!important}
+.admin-card{margin-left:0!important;margin-right:0!important;margin-top:0!important}
+
+/* 차량 페이지에 남아있는 페이지 전용 스타일보다 공통 UI 우선 */
+.product-create-card,.admin-card{background:#fff!important}
+.vehicle-create-grid,.create-grid{gap:12px!important}
+.card-title{padding-bottom:13px!important;margin-bottom:16px!important}
+.card-title p{font-size:12px!important;color:#7b8b99!important}
+
+/* 검색/필터는 동일한 회색 인셋 박스 */
+.filter-box,.filter-panel,.ag-inline-filter{background:#f8fafc!important;border:1px solid #e2e8f0!important;border-radius:9px!important;box-shadow:none!important;padding:14px!important;margin:14px 0 0!important}
+.ag-inline-filter .filter-control{display:flex!important;gap:8px!important;align-items:center!important;margin-top:7px!important}
+.ag-inline-filter input{min-width:320px!important;max-width:460px!important}
+.filter-grid{gap:0!important;border:1px solid #e0e6ed!important;border-radius:8px!important;overflow:hidden!important;background:#fff!important}
+.filter-grid>.filter-item{padding:11px 14px!important;border-bottom:1px solid #e8edf2!important;background:#fff!important}
+.filter-grid>.filter-item:last-child{border-bottom:0!important}
+.filter-label{display:block!important;margin-bottom:7px!important}
+.filter-control{gap:8px!important}
+
+/* 유입분석의 grid filter도 같은 톤 */
+.ag-page-card .filter{background:transparent!important}
+.ag-page-card .filter label{margin-bottom:6px!important}
+
+/* 상단 요약칩 */
+.top-stats .stat{height:32px!important;background:#f8fafc!important;border-color:#e2e8f0!important;border-radius:7px!important}
+.top-stats .stat b{color:var(--ag-primary)!important}
+
+/* 테이블을 전 페이지 동일하게 */
+.table-wrap{border-radius:9px!important;border:1px solid #e2e8f0!important}
+.table th,.admin-table th,.inquiry-table th,.summary-table th,.wrap table th{height:42px!important;background:#f6f8fb!important;color:#64758a!important;font-size:11px!important;text-align:left!important}
+.table td,.admin-table td,.inquiry-table td,.summary-table td,.wrap table td{height:48px!important;font-size:12px!important}
+.summary-table th:not(:first-child),.summary-table td:not(:first-child){text-align:right!important}
+
+/* 모든 주요 액션 버튼을 보라색 primary + 회색 secondary로 통일 */
+.search-btn,.save-btn,.new-btn,.bulk-change-btn,.copy-btn,.btn.save,.btn.pw{background:var(--ag-primary)!important;border:1px solid var(--ag-primary)!important;color:#fff!important;border-radius:7px!important}
+.gray-btn,.back,.reset,.bulk-delete-btn{background:#fff!important;border:1px solid #cfd9e4!important;color:#526476!important;border-radius:7px!important}
+
+/* 관리자 목록 전용 */
+.wrap{max-width:none!important;margin:0!important;padding:0!important}
+.wrap>.note{background:#f8fafc!important;border:1px solid #e2e8f0!important;color:#66788a!important;padding:13px 15px!important}
+
+/* 대시보드도 다른 페이지와 같은 헤더 카드 사용 */
+.date{font-size:12px!important;color:#6f8192!important}
+
+@media(max-width:900px){
+ .main{padding:14px!important}
+ .ag-page-card{padding:17px!important}
+ .ag-page-card>.top{align-items:flex-start!important;flex-direction:column!important}
+ .ag-page-card .top-stats{margin-left:0!important}
+ .ag-inline-filter .filter-control{flex-wrap:wrap!important}
+ .ag-inline-filter input{min-width:0!important;width:100%!important;max-width:none!important}
+}

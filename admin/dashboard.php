@@ -1,33 +1,105 @@
 <?php
 declare(strict_types=1);
-require_once __DIR__ . '/auth.php';
-require_once __DIR__ . '/../config/database.php';
-function h(mixed $v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
-function scalar(PDO $pdo, string $sql, array $params=[]): int { try {$s=$pdo->prepare($sql);$s->execute($params);return (int)$s->fetchColumn();}catch(Throwable $e){return 0;} }
-$total = scalar($pdo, "SELECT (SELECT COUNT(*) FROM estimate_direct)+(SELECT COUNT(*) FROM estimate_quick)");
-$today = scalar($pdo, "SELECT (SELECT COUNT(*) FROM estimate_direct WHERE DATE(created_at)=CURDATE())+(SELECT COUNT(*) FROM estimate_quick WHERE DATE(created_at)=CURDATE())");
-$new = scalar($pdo, "SELECT (SELECT COUNT(*) FROM estimate_direct WHERE status='NEW')+(SELECT COUNT(*) FROM estimate_quick WHERE status='NEW')");
-$contracted = scalar($pdo, "SELECT (SELECT COUNT(*) FROM estimate_direct WHERE status='CONTRACTED')+(SELECT COUNT(*) FROM estimate_quick WHERE status='CONTRACTED')");
-$completedSessions = scalar($pdo, "SELECT COUNT(*) FROM estimate_abandonments WHERE is_completed=1");
-$allSessions = scalar($pdo, "SELECT COUNT(*) FROM estimate_abandonments");
-$conversion = $allSessions > 0 ? round($completedSessions / $allSessions * 100, 1) : 0;
-$sources=[];$vehicles=[];$funnel=[];$recent=[];
+require_once __DIR__.'/auth.php';
+require_once __DIR__.'/../config/database.php';
+require_once __DIR__.'/admin_helpers.php';
+
+function dashCount(PDO $pdo, string $table, string $where='1=1', array $params=[]): int {
+    if (!ag_table_exists($pdo, $table)) return 0;
+    return ag_scalar($pdo, "SELECT COUNT(*) FROM {$table} WHERE {$where}", $params);
+}
+
+$hasDirect = ag_table_exists($pdo, 'estimate_direct');
+$hasQuick = ag_table_exists($pdo, 'estimate_quick');
+$hasInquiry = ag_table_exists($pdo, 'customer_inquiries');
+
+$directToday = dashCount($pdo, 'estimate_direct', 'DATE(created_at)=CURDATE()');
+$quickToday = dashCount($pdo, 'estimate_quick', 'DATE(created_at)=CURDATE()');
+$directMonth = dashCount($pdo, 'estimate_direct', 'YEAR(created_at)=YEAR(CURDATE()) AND MONTH(created_at)=MONTH(CURDATE())');
+$quickMonth = dashCount($pdo, 'estimate_quick', 'YEAR(created_at)=YEAR(CURDATE()) AND MONTH(created_at)=MONTH(CURDATE())');
+$directTotal = dashCount($pdo, 'estimate_direct');
+$quickTotal = dashCount($pdo, 'estimate_quick');
+$estimateToday = $directToday + $quickToday;
+$estimateMonth = $directMonth + $quickMonth;
+$estimateTotal = $directTotal + $quickTotal;
+
+$inquiryToday = dashCount($pdo, 'customer_inquiries', 'DATE(created_at)=CURDATE()');
+$inquiryMonth = dashCount($pdo, 'customer_inquiries', 'YEAR(created_at)=YEAR(CURDATE()) AND MONTH(created_at)=MONTH(CURDATE())');
+$inquiryTotal = dashCount($pdo, 'customer_inquiries');
+$inquiryPending = dashCount($pdo, 'customer_inquiries', 'status=?', ['NEW']);
+
+$statusOrder = ['NEW','CONTACTED','REVIEWING','APPROVED','CONTRACTED'];
+$statusLabels = ['NEW'=>'신규','CONTACTED'=>'상담중','REVIEWING'=>'심사중','APPROVED'=>'승인','CONTRACTED'=>'계약완료','CANCELED'=>'취소'];
+$estimateStatusCounts = [];
+foreach ($statusOrder as $st) {
+    $estimateStatusCounts[$st] = dashCount($pdo, 'estimate_direct', 'status=?', [$st]) + dashCount($pdo, 'estimate_quick', 'status=?', [$st]);
+}
+$estimateCanceled = dashCount($pdo, 'estimate_direct', 'status=?', ['CANCELED']) + dashCount($pdo, 'estimate_quick', 'status=?', ['CANCELED']);
+
+$recentEstimates = [];
 try {
-$sources=$pdo->query("SELECT source, COUNT(*) cnt FROM (SELECT COALESCE(NULLIF(utm_source,''),'직접/기타') source FROM estimate_direct UNION ALL SELECT COALESCE(NULLIF(utm_source,''),'직접/기타') FROM estimate_quick) x GROUP BY source ORDER BY cnt DESC LIMIT 8")->fetchAll();
-$vehicles=$pdo->query("SELECT vehicle_name, COUNT(*) cnt FROM estimate_direct WHERE vehicle_name IS NOT NULL GROUP BY vehicle_name ORDER BY cnt DESC LIMIT 8")->fetchAll();
-$funnel=$pdo->query("SELECT stage_order, stage, COUNT(*) cnt FROM estimate_abandonments GROUP BY stage_order, stage ORDER BY stage_order")->fetchAll();
-$recent=$pdo->query("SELECT * FROM (SELECT estimate_no,customer_name,vehicle_name AS item,status,created_at,'직접견적' type FROM estimate_direct UNION ALL SELECT estimate_no,customer_name,COALESCE(car_type,'상담 후 결정'),status,created_at,'간편견적' FROM estimate_quick) x ORDER BY created_at DESC LIMIT 10")->fetchAll();
-} catch(Throwable $e) {}
-$stageLabels=['LANDING'=>'유입','VEHICLE_LIST'=>'차량목록','VEHICLE_DETAIL'=>'차량상세','TRIM_SELECTED'=>'트림선택','CONDITIONS_SELECTED'=>'조건선택','ESTIMATE_FORM'=>'신청폼','CUSTOMER_INPUT'=>'정보입력','COMPLETED'=>'신청완료'];
-$statusLabels=['NEW'=>'신규','CONTACTED'=>'상담중','REVIEWING'=>'심사중','APPROVED'=>'승인','CONTRACTED'=>'계약완료','CANCELED'=>'취소'];
-?><!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>관리자 대시보드 - 오토지니</title><link rel="stylesheet" href="./sidebar.css"><style>
-*{box-sizing:border-box}body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#eef5f8;color:#25384a;font-size:13px}a{text-decoration:none;color:inherit}.layout{display:grid;grid-template-columns:264px 1fr;min-height:100vh}.side{background:#fff;border-right:1px solid #dbe4e9;padding:18px 14px;display:flex;flex-direction:column;gap:14px}
-.admin-menu{margin-top:18px;display:grid;gap:14px}.admin-menu-group{padding:12px;border:1px solid #e5ebef;border-radius:14px;background:#fbfcfd}.admin-menu-group.current{border-color:#cfc9f4;background:#f7f5ff;box-shadow:0 0 0 1px rgba(57,36,185,.04) inset}.admin-menu-group p{font-size:11px;color:#778893;font-weight:800;margin:0 0 10px;letter-spacing:.02em}.admin-menu-link{display:flex;align-items:flex-start;gap:10px;padding:10px 11px;border:1px solid transparent;border-radius:10px;color:#5c7080;transition:.15s;background:transparent}.admin-menu-link + .admin-menu-link{margin-top:6px}.admin-menu-link:hover{background:#f2f6f9;border-color:#e0e7ec}.admin-menu-link.active{background:#3924b9;color:#fff;border-color:#3924b9;box-shadow:0 8px 18px rgba(57,36,185,.18)}.admin-menu-link.active .admin-menu-icon{background:rgba(255,255,255,.16);color:#fff}.admin-menu-link.active small{color:rgba(255,255,255,.82)}.admin-menu-icon{flex:0 0 34px;width:34px;height:34px;border-radius:10px;background:#eef2f7;color:#3924b9;font-size:11px;font-weight:800;display:grid;place-items:center}.admin-menu-text{display:block;min-width:0}.admin-menu-text strong{display:block;font-size:13px;line-height:1.3}.admin-menu-text small{display:block;margin-top:3px;font-size:11px;line-height:1.45;color:#81919b}.admin-tool-note{margin-top:14px;padding:11px 12px;border-radius:12px;background:#f6f9fb;border:1px solid #e5ecef}.admin-tool-note div{display:flex;justify-content:space-between;gap:10px;padding:4px 0}.admin-tool-note span{color:#7a8a94}.admin-tool-note b{color:#21384a}.admin-userbox{display:flex;gap:10px;align-items:center;padding-bottom:18px;border-bottom:1px solid #edf1f3}.admin-userbox .mark{width:38px;height:38px;border-radius:10px;background:#29bed1;color:#fff;display:grid;place-items:center;font-weight:800}.admin-userbox strong,.admin-userbox span,.admin-userbox small,.admin-userbox a{display:block}.admin-userbox strong{font-size:15px}.admin-userbox span{font-size:11px;color:#93a3ad;margin-top:2px}.admin-userbox .role{display:inline-block;margin-top:4px;padding:2px 6px;border-radius:999px;background:#eef2ff;color:#4338ca;font-size:10px;font-weight:800}.admin-userbox .logout{margin-top:5px;font-size:11px;color:#25bcd0;text-decoration:none}.admin-userbox .logout:hover{text-decoration:underline}
-.main{padding:28px}.head{display:flex;justify-content:space-between;align-items:end;margin-bottom:18px}.head h1{margin:0;font-size:24px}.head p{margin:6px 0 0;color:#80919c}.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:14px}.metric,.panel{background:#fff;border:1px solid #d8e2e7;border-radius:8px}.metric{padding:18px}.metric span{color:#7d8e99;font-size:12px}.metric strong{display:block;margin-top:8px;font-size:25px;color:#24394a}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel{padding:18px;margin-bottom:14px}.panel h2{margin:0 0 14px;font-size:16px}.bar-row{display:grid;grid-template-columns:110px 1fr 45px;align-items:center;gap:10px;margin:10px 0}.bar{height:8px;background:#eef1f4;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;background:#3924b9;border-radius:inherit}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:10px 8px;border-bottom:1px solid #edf1f3;text-align:left}.table th{font-size:11px;color:#81919b}.pill{display:inline-flex;padding:4px 7px;border-radius:999px;background:#edf1ff;color:#405bd7;font-size:11px;font-weight:700}.actions{display:flex;gap:8px}.btn{background:#3924b9;color:#fff;padding:9px 12px;border-radius:5px;font-weight:700}.btn.sub{background:#fff;color:#3924b9;border:1px solid #cfc9f4}@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}@media(max-width:920px){.layout{grid-template-columns:1fr}.side{display:none}.main{padding:14px}.cards{grid-template-columns:1fr 1fr}}@media(max-width:640px){.cards{grid-template-columns:1fr}}
-.layout{grid-template-columns:228px minmax(0,1fr)!important}@media(max-width:900px){.layout{grid-template-columns:1fr!important}}</style></head><body><div class="layout"><?php $currentAdminPage = 'dashboard'; require __DIR__ . '/sidebar.php'; ?><main class="main"><div class="head"><div><h1>운영 대시보드</h1><p>견적 신청·유입경로·이탈구간을 한눈에 확인합니다.</p></div><div class="actions"><a class="btn" href="./estimates.php">견적 신청 관리</a></div></div>
-<div class="cards"><div class="metric"><span>오늘 견적</span><strong><?=number_format($today)?></strong></div><div class="metric"><span>전체 견적</span><strong><?=number_format($total)?></strong></div><div class="metric"><span>신규 상담</span><strong><?=number_format($new)?></strong></div><div class="metric"><span>계약 완료</span><strong><?=number_format($contracted)?></strong></div><div class="metric"><span>견적 완료율</span><strong><?=h($conversion)?>%</strong></div></div>
-<div class="grid"><section class="panel"><h2>유입경로 TOP</h2><?php $max=max(array_map(fn($r)=>(int)$r['cnt'],$sources)?:[1]); foreach($sources as $r):?><div class="bar-row"><span><?=h($r['source'])?></span><div class="bar"><i style="width:<?=max(3,(int)$r['cnt']/$max*100)?>%"></i></div><b><?=number_format((int)$r['cnt'])?></b></div><?php endforeach;if(!$sources):?><p>아직 유입 데이터가 없습니다.</p><?php endif;?></section>
-<section class="panel"><h2>인기 차량 TOP</h2><?php $maxv=max(array_map(fn($r)=>(int)$r['cnt'],$vehicles)?:[1]); foreach($vehicles as $r):?><div class="bar-row"><span><?=h($r['vehicle_name'])?></span><div class="bar"><i style="width:<?=max(3,(int)$r['cnt']/$maxv*100)?>%"></i></div><b><?=number_format((int)$r['cnt'])?></b></div><?php endforeach;if(!$vehicles):?><p>아직 차량 견적 데이터가 없습니다.</p><?php endif;?></section></div>
-<section class="panel"><h2>견적 퍼널 / 이탈 단계</h2><div style="display:grid;grid-template-columns:repeat(8,1fr);gap:8px;overflow:auto"><?php foreach($funnel as $r):?><div style="min-width:100px;padding:13px 10px;background:#f7f9fb;border-radius:7px;text-align:center"><div style="color:#7c8d98;font-size:11px"><?=h($stageLabels[$r['stage']]??$r['stage'])?></div><strong style="display:block;margin-top:6px;font-size:20px"><?=number_format((int)$r['cnt'])?></strong></div><?php endforeach;?></div><?php if(!$funnel):?><p>이탈 추적 데이터가 없습니다. analytics_migration.sql 실행 후 사용자 유입부터 집계됩니다.</p><?php endif;?></section>
-<section class="panel"><h2>최근 견적</h2><table class="table"><thead><tr><th>구분</th><th>견적번호</th><th>고객</th><th>차량/관심차종</th><th>상태</th><th>신청일</th></tr></thead><tbody><?php foreach($recent as $r):?><tr><td><span class="pill"><?=h($r['type'])?></span></td><td><?=h($r['estimate_no'])?></td><td><?=h($r['customer_name'])?></td><td><?=h($r['item'])?></td><td><?=h($statusLabels[$r['status']]??$r['status'])?></td><td><?=h($r['created_at'])?></td></tr><?php endforeach;?></tbody></table></section>
+    if ($hasDirect) {
+        foreach ($pdo->query("SELECT id,estimate_no,customer_name,customer_phone,CONCAT(COALESCE(brand_name,''),' ',COALESCE(vehicle_name,'')) AS item,status,created_at,'DIRECT' AS src FROM estimate_direct ORDER BY id DESC LIMIT 10") as $r) $recentEstimates[] = $r;
+    }
+} catch (Throwable $e) {}
+try {
+    if ($hasQuick) {
+        foreach ($pdo->query("SELECT id,estimate_no,customer_name,customer_phone,COALESCE(NULLIF(car_type,''),'상담 후 결정') AS item,status,created_at,'QUICK' AS src FROM estimate_quick ORDER BY id DESC LIMIT 10") as $r) $recentEstimates[] = $r;
+    }
+} catch (Throwable $e) {}
+usort($recentEstimates, static fn($a,$b)=>(strtotime((string)$b['created_at'])?:0) <=> (strtotime((string)$a['created_at'])?:0));
+$recentEstimates = array_slice($recentEstimates,0,7);
+
+$recentInquiries = [];
+try {
+    if ($hasInquiry) $recentInquiries = $pdo->query("SELECT id,inquiry_no,member_name,subject,status,created_at FROM customer_inquiries ORDER BY id DESC LIMIT 7")->fetchAll();
+} catch (Throwable $e) {}
+
+$trend = [];
+for ($i=6; $i>=0; $i--) {
+    $date = date('Y-m-d', strtotime("-{$i} day"));
+    $trend[] = [
+        'date'=>$date,
+        'estimate'=>dashCount($pdo,'estimate_direct','DATE(created_at)=?',[$date]) + dashCount($pdo,'estimate_quick','DATE(created_at)=?',[$date]),
+        'inquiry'=>dashCount($pdo,'customer_inquiries','DATE(created_at)=?',[$date]),
+    ];
+}
+
+$popularVehicles = [];
+try {
+    if ($hasDirect) $popularVehicles = $pdo->query("SELECT TRIM(CONCAT(COALESCE(brand_name,''),' ',COALESCE(vehicle_name,''))) vehicle, COUNT(*) cnt FROM estimate_direct WHERE COALESCE(vehicle_name,'')<>'' GROUP BY brand_name,vehicle_name ORDER BY cnt DESC LIMIT 6")->fetchAll();
+} catch (Throwable $e) {}
+
+$activeEstimate = $estimateStatusCounts['NEW'] + $estimateStatusCounts['CONTACTED'] + $estimateStatusCounts['REVIEWING'] + $estimateStatusCounts['APPROVED'];
+$contractRate = $estimateTotal > 0 ? round(($estimateStatusCounts['CONTRACTED'] / $estimateTotal) * 100, 1) : 0;
+?>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>관리자 대시보드 - 오토지니</title><link rel="stylesheet" href="./sidebar.css"><style>
+*{box-sizing:border-box}body{margin:0;font:13px Pretendard,"Noto Sans KR",Arial,sans-serif;background:#f3f7f9;color:#25384a}.layout{display:grid;grid-template-columns:228px minmax(0,1fr);min-height:100vh}.main{padding:28px;min-width:0}.head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:20px}.head h1{margin:0;font-size:25px}.head p{margin:7px 0 0;color:#7f909c}.date{color:#7f909c;font-size:12px}.cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:14px}.metric{display:block;background:#fff;border:1px solid #dce5ea;border-radius:12px;padding:17px;text-decoration:none;color:inherit}.metric .label{color:#758793;font-size:12px}.metric strong{display:block;margin-top:8px;font-size:25px}.metric small{display:block;margin-top:7px;color:#98a6af}.metric.primary strong{color:#4c35c4}.metric.warn strong{color:#e76d22}.metric.green strong{color:#278657}.panel{background:#fff;border:1px solid #dce5ea;border-radius:12px;padding:18px;margin-bottom:14px;min-width:0}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}.panel h2{margin:0;font-size:16px}.panel-head a{font-size:12px;color:#4c35c4;text-decoration:none;font-weight:700}.section-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr);gap:14px}.funnel{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.step{position:relative;padding:18px 12px;border:1px solid #e3e9ed;border-radius:10px;background:#fafcfd;text-align:center}.step:not(:last-child):after{content:'›';position:absolute;right:-9px;top:50%;transform:translateY(-50%);z-index:2;color:#9aa8b1;font-size:24px;background:#fff;width:16px}.step span{display:block;color:#7a8b96;font-size:12px}.step b{display:block;font-size:24px;margin-top:7px}.step small{display:block;margin-top:5px;color:#9aa8b1}.trend{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;height:205px;align-items:end}.trend-day{height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:7px}.trend-bars{height:145px;display:flex;align-items:flex-end;justify-content:center;gap:5px}.tb{width:15px;min-height:3px;border-radius:4px 4px 1px 1px}.tb.direct{background:#4b35c5}.tb.quick{background:#47a0d8}.trend-day small{font-size:10px;color:#8797a0}.legend{display:flex;gap:14px;justify-content:flex-end;margin-top:8px;color:#7d8e98;font-size:11px}.legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:650px}.table th,.table td{padding:10px 8px;border-bottom:1px solid #edf1f3;text-align:left}.table th{font-size:11px;color:#80919b}.table a{color:#273b4c;text-decoration:none}.pill{display:inline-flex;padding:4px 7px;border-radius:999px;background:#edf1ff;color:#405bd7;font-size:11px;font-weight:800}.ellipsis{max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.two-list{display:grid;grid-template-columns:1fr 1fr;gap:14px}.status-row{display:grid;grid-template-columns:180px 1fr 40px;gap:10px;align-items:center;margin:10px 0}.bar{height:8px;background:#eef2f5;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:#4b35c5;border-radius:99px}.quick-links{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.quick-links a{padding:14px;border:1px solid #dce5ea;border-radius:9px;text-decoration:none;color:#344a5b;background:#fff;font-weight:700;text-align:center}.empty{padding:22px;text-align:center;color:#94a2aa}@media(max-width:1300px){.cards{grid-template-columns:repeat(3,1fr)}.section-grid,.two-list{grid-template-columns:1fr}}@media(max-width:900px){.layout{grid-template-columns:1fr}.admin-sidebar{display:none}.main{padding:14px}.cards{grid-template-columns:1fr 1fr}.funnel{grid-template-columns:1fr}.step:after{display:none}}@media(max-width:540px){.cards{grid-template-columns:1fr}.quick-links{grid-template-columns:1fr}}
+</style><link rel="stylesheet" href="./admin-ui.css"></head><body><div class="layout"><?php $currentAdminPage='dashboard';require __DIR__.'/sidebar.php';?><main class="main">
+<section class="card ag-page-card"><div class="top"><div><h1>운영 대시보드</h1><p>견적 진행상황과 상담 유입을 한 화면에서 확인합니다.</p></div><div class="top-stats"><span class="stat">오늘 <b><?=date('Y.m.d')?></b></span></div></div></section>
+
+<div class="cards">
+<a class="metric primary" href="./estimates.php"><div class="label">누적 견적</div><strong><?=number_format($estimateTotal)?></strong><small>차량견적 <?=number_format($directTotal)?> · 간편견적 <?=number_format($quickTotal)?></small></a>
+<a class="metric" href="./estimates.php"><div class="label">이번 달 견적</div><strong><?=number_format($estimateMonth)?></strong><small>오늘 <?=number_format($estimateToday)?>건</small></a>
+<a class="metric" href="./inquiries.php"><div class="label">누적 고객문의</div><strong><?=number_format($inquiryTotal)?></strong><small>이번 달 <?=number_format($inquiryMonth)?>건</small></a>
+<a class="metric warn" href="./estimates.php?status=NEW"><div class="label">상담 대기</div><strong><?=number_format($estimateStatusCounts['NEW'])?></strong><small>신규 견적</small></a>
+<a class="metric green" href="./estimates.php?status=CONTACTED"><div class="label">진행중 견적</div><strong><?=number_format($activeEstimate)?></strong><small>신규~승인 단계</small></a>
+<a class="metric" href="./estimates.php?status=CONTRACTED"><div class="label">계약 완료</div><strong><?=number_format($estimateStatusCounts['CONTRACTED'])?></strong><small>누적 계약률 <?=$contractRate?>%</small></a>
+</div>
+
+<section class="panel"><div class="panel-head"><h2>견적 진행 현황</h2><a href="./estimates.php">견적문의 전체보기</a></div><div class="funnel"><?php foreach($statusOrder as $k): ?><a class="step" href="./estimates.php?status=<?=$k?>" style="text-decoration:none;color:inherit"><span><?=$statusLabels[$k]?></span><b><?=number_format($estimateStatusCounts[$k])?></b><small>건</small></a><?php endforeach;?></div><?php if($estimateCanceled>0): ?><div style="margin-top:10px;color:#8b99a2;font-size:12px">취소 <?=number_format($estimateCanceled)?>건</div><?php endif;?></section>
+
+<div class="section-grid">
+<section class="panel"><div class="panel-head"><h2>최근 7일 유입 추이</h2><span style="font-size:11px;color:#8999a2">견적문의 / 고객문의</span></div><?php $maxTrend=max(array_map(fn($r)=>max($r['estimate'],$r['inquiry']),$trend)?:[1]);$maxTrend=max(1,$maxTrend);?><div class="trend"><?php foreach($trend as $r):?><div class="trend-day"><div class="trend-bars"><i class="tb direct" style="height:<?=max(3,round($r['estimate']/$maxTrend*135))?>px"></i><i class="tb quick" style="height:<?=max(3,round($r['inquiry']/$maxTrend*135))?>px"></i></div><b style="font-size:11px"><?=number_format($r['estimate']+$r['inquiry'])?></b><small><?=date('m/d',strtotime($r['date']))?></small></div><?php endforeach;?></div><div class="legend"><span><i style="background:#4b35c5"></i>견적문의</span><span><i style="background:#47a0d8"></i>고객문의</span></div></section>
+<section class="panel"><div class="panel-head"><h2>이번 달 운영 요약</h2></div><div class="status-row"><span>견적문의</span><div class="bar"><i style="width:<?=($estimateMonth+$inquiryMonth)>0?($estimateMonth/($estimateMonth+$inquiryMonth)*100):0?>%"></i></div><b><?=number_format($estimateMonth)?></b></div><div class="status-row"><span>고객문의</span><div class="bar"><i style="width:<?=($estimateMonth+$inquiryMonth)>0?($inquiryMonth/($estimateMonth+$inquiryMonth)*100):0?>%;background:#47a0d8"></i></div><b><?=number_format($inquiryMonth)?></b></div><div style="margin-top:18px;padding-top:15px;border-top:1px solid #edf1f3"><b style="font-size:22px"><?=number_format($estimateMonth+$inquiryMonth)?></b><span style="margin-left:7px;color:#83939d">이번 달 전체 상담 유입</span></div><div style="margin-top:10px;color:#8b99a2">미처리 고객문의 <?=number_format($inquiryPending)?>건</div></section>
+</div>
+
+<div class="two-list">
+<section class="panel"><div class="panel-head"><h2>최근 견적문의</h2><a href="./estimates.php">전체보기</a></div><div class="table-wrap"><table class="table"><thead><tr><th>구분</th><th>고객</th><th>차량/관심차종</th><th>상태</th><th>신청일</th></tr></thead><tbody><?php foreach($recentEstimates as $r):?><tr><td><span class="pill"><?=($r['src']==='QUICK'?'간편견적':'차량견적')?></span></td><td><a href="./estimate-detail.php?type=<?=strtolower($r['src'])?>&id=<?=(int)$r['id']?>"><b><?=ag_h($r['customer_name'])?></b></a></td><td class="ellipsis"><?=ag_h(trim((string)$r['item'])?:'-')?></td><td><span class="pill"><?=ag_h($statusLabels[$r['status']]??$r['status'])?></span></td><td><?=date('m/d H:i',strtotime($r['created_at']))?></td></tr><?php endforeach;?><?php if(!$recentEstimates):?><tr><td colspan="5" class="empty">견적문의가 없습니다.</td></tr><?php endif;?></tbody></table></div></section>
+<section class="panel"><div class="panel-head"><h2>최근 고객문의</h2><a href="./inquiries.php">전체보기</a></div><div class="table-wrap"><table class="table"><thead><tr><th>고객</th><th>문의내용</th><th>상태</th><th>등록일</th></tr></thead><tbody><?php foreach($recentInquiries as $r):?><tr><td><b><?=ag_h($r['member_name']?:'비회원')?></b></td><td class="ellipsis"><a href="./inquiries.php?open=<?=(int)$r['id']?>"><?=ag_h($r['subject']?:'-')?></a></td><td><span class="pill"><?=($r['status']==='ANSWERED'?'답변완료':'미처리')?></span></td><td><?=date('m/d H:i',strtotime($r['created_at']))?></td></tr><?php endforeach;?><?php if(!$recentInquiries):?><tr><td colspan="4" class="empty">고객문의가 없습니다.</td></tr><?php endif;?></tbody></table></div></section>
+</div>
+
+<?php if($popularVehicles):?><section class="panel"><div class="panel-head"><h2>차량견적 인기 차량 TOP 6</h2><a href="./estimates.php?type=DIRECT">차량견적 보기</a></div><?php $pvmax=max(1,max(array_map(fn($r)=>(int)$r['cnt'],$popularVehicles))); foreach($popularVehicles as $r):?><div class="status-row"><span><?=ag_h($r['vehicle'])?></span><div class="bar"><i style="width:<?=((int)$r['cnt']/$pvmax*100)?>%"></i></div><b><?=number_format((int)$r['cnt'])?></b></div><?php endforeach;?></section><?php endif;?>
+
+<section class="panel"><div class="panel-head"><h2>빠른 관리</h2></div><div class="quick-links"><a href="./estimates.php">견적문의 관리</a><a href="./inquiries.php">고객문의 관리</a><a href="./customers.php">고객 관리</a></div></section>
 </main></div></body></html>

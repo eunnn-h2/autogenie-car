@@ -5,7 +5,7 @@ require_once __DIR__ . '/../config/database.php';
 
 $status = trim((string)($_GET['status'] ?? ''));
 $q = trim((string)($_GET['q'] ?? ''));
-$type = trim((string)($_GET['type'] ?? ''));
+$type = trim((string)($_GET['type'] ?? '')); // DIRECT=차량견적, QUICK=간편견적, 빈값=전체 견적
 
 function h(mixed $v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 function statusLabel(string $s): string { return ['NEW'=>'신규','CONTACTED'=>'상담중','REVIEWING'=>'심사중','APPROVED'=>'승인','CONTRACTED'=>'계약완료','CANCELED'=>'취소'][$s] ?? $s; }
@@ -37,7 +37,7 @@ if ($type === '' || $type === 'DIRECT') {
         $stmt->execute($params);
         foreach ($stmt->fetchAll() as $r) {
             $r['_source'] = 'DIRECT';
-            $r['_source_label'] = '직접견적';
+            $r['_source_label'] = '차량견적';
             $r['_vehicle_display'] = trim((string)($r['brand_name'] ?? '') . ' ' . (string)($r['vehicle_name'] ?? '')) ?: '-';
             $r['_condition_display'] = productLabel($r['product_type'] ?? null) . ' / ' . (($r['contract_months'] ?? null) ? $r['contract_months'] . '개월' : '-');
             $r['_monthly_display'] = isset($r['monthly_payment']) && $r['monthly_payment'] !== null ? number_format((int)$r['monthly_payment']) . '원' : '-';
@@ -127,16 +127,16 @@ foreach ($globalRows as $index => $g) {
     $globalNumberMap[$g['key']] = $index + 1;
 }
 ?>
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>견적 관리 - 오토지니</title>
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>견적 관리 - 오토지니</title><link rel="stylesheet" href="./sidebar.css">
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#eef5f8;color:#25384a;font-size:13px}a{text-decoration:none;color:inherit}.layout{display:grid;grid-template-columns:228px 1fr;min-height:100vh}.side{background:#fff;border-right:1px solid #dbe4e9;padding:24px 14px}.logo{font-size:16px;font-weight:800;padding:0 10px 20px;border-bottom:1px solid #edf1f3}.menu{margin-top:18px}.menu p{font-size:11px;color:#81919b;font-weight:700;margin:18px 10px 7px}.menu a{display:block;padding:10px 12px;border-radius:5px;color:#667a88}.menu a.active{background:#3924b9;color:#fff;font-weight:700}.main{padding:28px}.card{background:#fff;border:1px solid #d8e2e7;padding:18px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:16px}.top h1{font-size:20px;margin:0}.top a{color:#3657d6;font-weight:700}.filter{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}.filter select,.filter input{height:38px;border:1px solid #c7d2d9;padding:0 10px}.filter input{min-width:300px}.filter button{border:0;background:#24bfd1;color:#fff;font-weight:700;padding:0 18px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:1160px}.table th,.table td{padding:11px 9px;border-bottom:1px solid #e2e8ec;text-align:center}.table th{color:#536b77;font-size:12px}.table tbody tr:nth-child(odd){background:#f7f9fb}.no{color:#315cff}.name{text-align:left!important}.detail-link{color:#315cff;font-weight:700}.detail-link:hover{text-decoration:underline}.bulkbar{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:10px 12px;background:#f7f9fb;border:1px solid #e0e6ea}.bulkbar .selected-count{margin-right:auto;color:#71818b;font-size:12px}.bulkbar select,.row-status{height:32px;border:1px solid #c7d2d9;background:#fff;padding:0 8px}.action-btn{height:32px;border:0;border-radius:4px;padding:0 11px;font-weight:700;cursor:pointer}.action-btn.primary{background:#3924b9;color:#fff}.action-btn.danger{background:#fff0f0;color:#c23838;border:1px solid #efc7c7}.action-btn.small{height:29px;padding:0 8px;font-size:11px}.check{width:16px;height:16px;cursor:pointer}.row-actions{display:flex;justify-content:center;align-items:center;gap:6px;white-space:nowrap}.badge{display:inline-flex;align-items:center;justify-content:center;padding:4px 7px;border-radius:4px;background:#e9eef4;font-weight:700}.new{background:#eaf8ef;color:#16713a}.kind-direct{background:#edf1ff;color:#405bd7}.kind-quick{background:#fff0e8;color:#ef6a2c}.alert{margin-bottom:12px;padding:14px;background:#fff3f3;border:1px solid #f3bbbb;color:#a5232e}.notice{margin-bottom:12px;padding:12px 14px;background:#fff8e8;border:1px solid #f2dca4;color:#805d13}@media(max-width:850px){.layout{grid-template-columns:1fr}.side{display:none}.main{padding:12px}.filter input{min-width:0;flex:1}}
-</style></head><body><div class="layout">
-<aside class="side"><div class="logo">오토지니 관리자</div><div class="menu"><p>상품</p><a href="./index.php">차량 관리</a><p>견적</p><a class="active" href="./estimates.php">견적 신청 관리</a><p>바로가기</p><a href="../db-test.html" target="_blank">사용자 견적 화면</a></div></aside>
-<main class="main"><div class="card"><div class="top"><div><h1>견적 신청 관리</h1><div style="margin-top:5px;color:#84949e">직접견적과 간편견적 신청을 최신순으로 확인합니다.</div></div><a href="../db-test.html" target="_blank">+ 실제 화면에서 견적 신청</a></div>
+</style><link rel="stylesheet" href="./admin-ui.css"></head><body><div class="layout">
+<?php $currentAdminPage = 'estimates'; require __DIR__ . '/sidebar.php'; ?>
+<main class="main"><div class="card"><div class="top"><div><h1>견적문의 관리</h1><div style="margin-top:5px;color:#84949e">차량 선택 견적과 간편견적을 한 곳에서 최신순으로 확인합니다.</div></div><a href="../db-test.html" target="_blank">+ 실제 화면에서 견적 신청</a></div>
 <?php if ($tableMissing): ?><div class="alert"><strong>estimates 테이블이 없습니다.</strong><br>기존 견적 테이블을 먼저 생성해 주세요.</div><?php endif; ?>
 <?php if ($quickTableMissing): ?><div class="notice"><strong>간편견적 테이블이 아직 없습니다.</strong><br>프로젝트 루트의 <code>quick_estimates_table.sql</code>을 phpMyAdmin에서 한 번 실행하면 간편견적도 여기에 표시됩니다.</div><?php endif; ?>
 <form class="filter" method="get">
-<select name="type"><option value="">전체 유형</option><option value="DIRECT" <?=$type==='DIRECT'?'selected':''?>>직접견적</option><option value="QUICK" <?=$type==='QUICK'?'selected':''?>>간편견적</option></select>
+<select name="type"><option value="">전체 견적</option><option value="DIRECT" <?=$type==='DIRECT'?'selected':''?>>차량견적</option><option value="QUICK" <?=$type==='QUICK'?'selected':''?>>간편견적</option></select>
 <select name="status"><option value="">전체 상태</option><?php foreach(['NEW'=>'신규','CONTACTED'=>'상담중','REVIEWING'=>'심사중','APPROVED'=>'승인','CONTRACTED'=>'계약완료','CANCELED'=>'취소'] as $k=>$v): ?><option value="<?=h($k)?>" <?=$status===$k?'selected':''?>><?=h($v)?></option><?php endforeach; ?></select>
 <input name="q" value="<?=h($q)?>" placeholder="견적번호 / 고객명 / 연락처 / 차량·관심차종"><button>검색</button></form>
 <form id="bulkForm" method="post" action="./estimate-actions.php">
