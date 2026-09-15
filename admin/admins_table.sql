@@ -5,14 +5,20 @@ CREATE TABLE IF NOT EXISTS admin_accounts (
     username VARCHAR(100) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     name VARCHAR(100) DEFAULT NULL,
-    role ENUM('SUPER_ADMIN','ADMIN','VIEWER') NOT NULL DEFAULT 'ADMIN',
+    role ENUM('SUPER_ADMIN','ADMIN','VIEWER','SALES') NOT NULL DEFAULT 'ADMIN',
+    parent_admin_id INT UNSIGNED DEFAULT NULL,
+    can_create TINYINT(1) NOT NULL DEFAULT 0,
+    can_update TINYINT(1) NOT NULL DEFAULT 0,
+    can_delete TINYINT(1) NOT NULL DEFAULT 0,
+    category_permissions TEXT NULL,
     is_active TINYINT(1) NOT NULL DEFAULT 1,
     last_login_at DATETIME DEFAULT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY uk_admins_username (username),
     INDEX idx_admins_active (is_active),
-    INDEX idx_admins_role (role)
+    INDEX idx_admins_role (role),
+    INDEX idx_admins_parent (parent_admin_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*
@@ -23,7 +29,8 @@ role 컬럼이 이미 존재하면 이 ALTER는 실행하지 마세요.
 -- ADD COLUMN role ENUM('SUPER_ADMIN','ADMIN','VIEWER') NOT NULL DEFAULT 'ADMIN'
 -- AFTER name;
 
--- ALTER TABLE admin_accounts ADD INDEX idx_admins_role (role);
+-- ALTER TABLE admin_accounts ADD INDEX idx_admins_role (role),
+--     ADD INDEX idx_admins_parent (parent_admin_id);
 
 /*
 기존 최초 관리자 계정을 SUPER_ADMIN으로 변경:

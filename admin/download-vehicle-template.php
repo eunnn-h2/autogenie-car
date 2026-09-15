@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/auth.php';
+requireAdminCategory('vehicles');
 
 $fileName = '오토지니_차량일괄등록_한장양식.xlsx';
 $filePath = __DIR__ . DIRECTORY_SEPARATOR . $fileName;

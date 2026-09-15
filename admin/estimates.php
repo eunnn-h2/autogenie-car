@@ -1,6 +1,10 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/auth.php';
+requireAdminCategory('estimates');
+require_once __DIR__ . '/estimate-date-filter.php';
+try { $dates = estimateDateRange($_GET); }
+catch (InvalidArgumentException $e) { http_response_code(400); exit(htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8')); }
 require_once __DIR__ . '/../config/database.php';
 
 $status = trim((string)($_GET['status'] ?? ''));
@@ -25,6 +29,7 @@ $quickTableMissing = false;
 if ($type === '' || $type === 'DIRECT') {
     $params = [];
     $where = [];
+    applyEstimateDateRange($where, $params, $dates, 'e.created_at');
     if ($status !== '') { $where[] = 'e.status = ?'; $params[] = $status; }
     if ($q !== '') {
         $where[] = '(e.estimate_no LIKE ? OR e.customer_name LIKE ? OR e.customer_phone LIKE ? OR e.vehicle_name LIKE ?)';
@@ -53,6 +58,7 @@ if ($type === '' || $type === 'DIRECT') {
 if ($type === '' || $type === 'QUICK') {
     $params = [];
     $where = [];
+    applyEstimateDateRange($where, $params, $dates, 'q.created_at');
     if ($status !== '') { $where[] = 'q.status = ?'; $params[] = $status; }
     if ($q !== '') {
         $where[] = '(q.estimate_no LIKE ? OR q.customer_name LIKE ? OR q.customer_phone LIKE ? OR q.car_type LIKE ?)';
@@ -129,18 +135,19 @@ foreach ($globalRows as $index => $g) {
 ?>
 <!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>견적 관리 - 오토지니</title><link rel="stylesheet" href="./sidebar.css">
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#eef5f8;color:#25384a;font-size:13px}a{text-decoration:none;color:inherit}.layout{display:grid;grid-template-columns:228px 1fr;min-height:100vh}.side{background:#fff;border-right:1px solid #dbe4e9;padding:24px 14px}.logo{font-size:16px;font-weight:800;padding:0 10px 20px;border-bottom:1px solid #edf1f3}.menu{margin-top:18px}.menu p{font-size:11px;color:#81919b;font-weight:700;margin:18px 10px 7px}.menu a{display:block;padding:10px 12px;border-radius:5px;color:#667a88}.menu a.active{background:#3924b9;color:#fff;font-weight:700}.main{padding:28px}.card{background:#fff;border:1px solid #d8e2e7;padding:18px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:16px}.top h1{font-size:20px;margin:0}.top a{color:#3657d6;font-weight:700}.filter{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}.filter select,.filter input{height:38px;border:1px solid #c7d2d9;padding:0 10px}.filter input{min-width:300px}.filter button{border:0;background:#24bfd1;color:#fff;font-weight:700;padding:0 18px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:1160px}.table th,.table td{padding:11px 9px;border-bottom:1px solid #e2e8ec;text-align:center}.table th{color:#536b77;font-size:12px}.table tbody tr:nth-child(odd){background:#f7f9fb}.no{color:#315cff}.name{text-align:left!important}.detail-link{color:#315cff;font-weight:700}.detail-link:hover{text-decoration:underline}.bulkbar{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:10px 12px;background:#f7f9fb;border:1px solid #e0e6ea}.bulkbar .selected-count{margin-right:auto;color:#71818b;font-size:12px}.bulkbar select,.row-status{height:32px;border:1px solid #c7d2d9;background:#fff;padding:0 8px}.action-btn{height:32px;border:0;border-radius:4px;padding:0 11px;font-weight:700;cursor:pointer}.action-btn.primary{background:#3924b9;color:#fff}.action-btn.danger{background:#fff0f0;color:#c23838;border:1px solid #efc7c7}.action-btn.small{height:29px;padding:0 8px;font-size:11px}.check{width:16px;height:16px;cursor:pointer}.row-actions{display:flex;justify-content:center;align-items:center;gap:6px;white-space:nowrap}.badge{display:inline-flex;align-items:center;justify-content:center;padding:4px 7px;border-radius:4px;background:#e9eef4;font-weight:700}.new{background:#eaf8ef;color:#16713a}.kind-direct{background:#edf1ff;color:#405bd7}.kind-quick{background:#fff0e8;color:#ef6a2c}.alert{margin-bottom:12px;padding:14px;background:#fff3f3;border:1px solid #f3bbbb;color:#a5232e}.notice{margin-bottom:12px;padding:12px 14px;background:#fff8e8;border:1px solid #f2dca4;color:#805d13}@media(max-width:850px){.layout{grid-template-columns:1fr}.side{display:none}.main{padding:12px}.filter input{min-width:0;flex:1}}
-</style><link rel="stylesheet" href="./admin-ui.css"></head><body><div class="layout">
+*{box-sizing:border-box}body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#eef5f8;color:#25384a;font-size:14px}a{text-decoration:none;color:inherit}.layout{display:grid;grid-template-columns:228px 1fr;min-height:100vh}.side{background:#fff;border-right:1px solid #dbe4e9;padding:24px 14px}.logo{font-size:16px;font-weight:800;padding:0 10px 20px;border-bottom:1px solid #edf1f3}.menu{margin-top:18px}.menu p{font-size:14px;color:#81919b;font-weight:700;margin:18px 10px 7px}.menu a{display:block;padding:10px 12px;border-radius:5px;color:#667a88}.menu a.active{background:#3924b9;color:#fff;font-weight:700}.main{padding:28px}.card{background:#fff;border:1px solid #d8e2e7;padding:18px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:16px}.top h1{font-size:20px;margin:0}.top a{color:#3657d6;font-weight:700}.filter{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}.filter select,.filter input{height:38px;border:1px solid #c7d2d9;padding:0 10px}.filter input{min-width:300px}.filter button{border:0;background:#24bfd1;color:#fff;font-weight:700;padding:0 18px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:1000px}.table th,.table td{padding:11px 9px;border-bottom:1px solid #e2e8ec;text-align:center;white-space:nowrap}.table th{color:#536b77;font-size:14px}.table tbody tr:nth-child(odd){background:#f7f9fb}.no{color:#315cff}.name{text-align:left!important}.detail-link{color:#315cff;font-weight:700}.detail-link:hover{text-decoration:underline}.bulkbar{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:10px 12px;background:#f7f9fb;border:1px solid #e0e6ea}.bulkbar .selected-count{margin-right:auto;color:#71818b;font-size:14px}.bulkbar select,.row-status{height:32px;border:1px solid #c7d2d9;background:#fff;padding:0 8px}.action-btn{height:32px;border:0;border-radius:4px;padding:0 11px;font-weight:700;cursor:pointer}.action-btn.primary{background:#3924b9;color:#fff}.action-btn.danger{background:#fff0f0;color:#c23838;border:1px solid #efc7c7}.action-btn.small{height:29px;padding:0 8px;font-size:14px}.check{width:16px;height:16px;cursor:pointer}.row-actions{display:flex;justify-content:center;align-items:center;gap:6px;white-space:nowrap}.badge{display:inline-flex;align-items:center;justify-content:center;padding:4px 7px;border-radius:4px;background:#e9eef4;font-weight:700}.new{background:#eaf8ef;color:#16713a}.kind-direct{background:#edf1ff;color:#405bd7}.kind-quick{background:#fff0e8;color:#ef6a2c}.alert{margin-bottom:12px;padding:14px;background:#fff3f3;border:1px solid #f3bbbb;color:#a5232e}.notice{margin-bottom:12px;padding:12px 14px;background:#fff8e8;border:1px solid #f2dca4;color:#805d13}@media(max-width:850px){.layout{grid-template-columns:1fr}.side{display:none}.main{padding:12px}.filter input{min-width:0;flex:1}}
+.estimate-date-range{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.filter .estimate-date-range input[type=date]{min-width:160px;width:160px;flex:none}.estimate-reset{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 14px;font-size:14px;font-weight:700;white-space:nowrap}</style><link rel="stylesheet" href="./admin-ui.css"><link rel="stylesheet" href="./date-range-picker.css"><script src="./date-range-picker.js" defer></script></head><body><div class="layout">
 <?php $currentAdminPage = 'estimates'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main"><div class="card"><div class="top"><div><h1>견적문의 관리</h1><div style="margin-top:5px;color:#84949e">차량 선택 견적과 간편견적을 한 곳에서 최신순으로 확인합니다.</div></div><a href="../db-test.html" target="_blank">+ 실제 화면에서 견적 신청</a></div>
 <?php if ($tableMissing): ?><div class="alert"><strong>estimates 테이블이 없습니다.</strong><br>기존 견적 테이블을 먼저 생성해 주세요.</div><?php endif; ?>
 <?php if ($quickTableMissing): ?><div class="notice"><strong>간편견적 테이블이 아직 없습니다.</strong><br>프로젝트 루트의 <code>quick_estimates_table.sql</code>을 phpMyAdmin에서 한 번 실행하면 간편견적도 여기에 표시됩니다.</div><?php endif; ?>
 <form class="filter" method="get">
+<div class="estimate-date-range" data-date-range data-label="신청일"><span data-range-separator>신청일</span><input type="date" name="from" aria-label="조회 시작일" value="<?=h($dates['from'])?>"><span data-range-separator>~</span><input type="date" name="to" aria-label="조회 종료일" value="<?=h($dates['to'])?>"></div>
 <select name="type"><option value="">전체 견적</option><option value="DIRECT" <?=$type==='DIRECT'?'selected':''?>>차량견적</option><option value="QUICK" <?=$type==='QUICK'?'selected':''?>>간편견적</option></select>
 <select name="status"><option value="">전체 상태</option><?php foreach(['NEW'=>'신규','CONTACTED'=>'상담중','REVIEWING'=>'심사중','APPROVED'=>'승인','CONTRACTED'=>'계약완료','CANCELED'=>'취소'] as $k=>$v): ?><option value="<?=h($k)?>" <?=$status===$k?'selected':''?>><?=h($v)?></option><?php endforeach; ?></select>
-<input name="q" value="<?=h($q)?>" placeholder="견적번호 / 고객명 / 연락처 / 차량·관심차종"><button>검색</button></form>
+<input name="q" value="<?=h($q)?>" placeholder="견적번호 / 고객명 / 연락처 / 차량·관심차종"><button type="submit">검색</button><a class="estimate-reset reset" href="./estimates.php">초기화</a></form>
 <form id="bulkForm" method="post" action="./estimate-actions.php">
-<input type="hidden" name="return_query" value="<?=h(http_build_query(['type'=>$type,'status'=>$status,'q'=>$q]))?>">
+<input type="hidden" name="return_query" value="<?=h(http_build_query(['type'=>$type,'status'=>$status,'q'=>$q,'from'=>$dates['from'],'to'=>$dates['to']]))?>">
 <div class="bulkbar">
     <strong>선택 항목</strong>
     <span class="selected-count"><span id="selectedCount">0</span>건 선택</span>
@@ -151,8 +158,8 @@ foreach ($globalRows as $index => $g) {
     <button class="action-btn primary" type="submit" name="action" value="bulk_status" onclick="return confirmBulkStatus()">선택 상태변경</button>
     <button class="action-btn danger" type="submit" name="action" value="bulk_delete" onclick="return confirmBulkDelete()">선택 삭제</button>
 </div>
-<div class="table-wrap"><table class="table"><thead><tr><th><input class="check" type="checkbox" id="checkAll" aria-label="전체 선택"></th><th>번호</th><th>구분</th><th>견적번호</th><th>상태</th><th>고객</th><th>연락처</th><th>차량/관심차종</th><th>트림</th><th>이용조건</th><th>월 납입금</th><th>신청일</th><th>관리</th></tr></thead><tbody>
-<?php if (!$rows): ?><tr><td colspan="13" style="padding:50px;color:#9aabb4">저장된 견적이 없습니다.</td></tr><?php endif; ?>
+<div class="table-wrap"><table class="table"><thead><tr><th><input class="check" type="checkbox" id="checkAll" aria-label="전체 선택"></th><th>번호</th><th>구분</th><th>견적번호</th><th>상태</th><th>고객</th><th>연락처</th><th>차량/관심차종</th><th>신청일</th><th>관리</th></tr></thead><tbody>
+<?php if (!$rows): ?><tr><td colspan="10" style="padding:50px;color:#9aabb4">저장된 견적이 없습니다.</td></tr><?php endif; ?>
 <?php foreach($rows as $r): $rowKey = $r['_source'] . ':' . (int)$r['id']; ?><tr>
 <td><input class="check row-check" type="checkbox" name="selected[]" value="<?=h($rowKey)?>" aria-label="<?=h($r['estimate_no'])?> 선택"></td>
 <td class="no"><?=number_format((int)($globalNumberMap[$rowKey] ?? 0))?></td>
@@ -164,15 +171,14 @@ foreach ($globalRows as $index => $g) {
     </select>
 </td>
 <td><a class="detail-link" href="./estimate-detail.php?type=<?=strtolower(h($r['_source']))?>&id=<?=(int)$r['id']?>"><?=h($r['customer_name'])?></a></td><td><?=h($r['customer_phone'])?></td>
-<td class="name"><?=h($r['_vehicle_display'])?></td><td><?=h($r['trim_name'] ?? '-')?></td>
-<td><?=h($r['_condition_display'])?></td><td><?=h($r['_monthly_display'])?></td><td><?=h($r['created_at'])?></td>
+<td class="name"><?=h($r['_vehicle_display'])?></td><td><?=h($r['created_at'])?></td>
 <td><div class="row-actions"><button class="action-btn primary small" type="button" onclick="saveRowStatus(this, '<?=h($rowKey)?>')">상태저장</button><button class="action-btn danger small" type="button" onclick="deleteRow('<?=h($rowKey)?>', '<?=h($r['estimate_no'])?>')">삭제</button></div></td>
 </tr><?php endforeach; ?>
 </tbody></table></div></form></div></main></div><form id="singleActionForm" method="post" action="./estimate-actions.php" hidden>
     <input type="hidden" name="action" id="singleAction">
     <input type="hidden" name="row_key" id="singleRowKey">
     <input type="hidden" name="status" id="singleStatus">
-    <input type="hidden" name="return_query" value="<?=h(http_build_query(['type'=>$type,'status'=>$status,'q'=>$q]))?>">
+    <input type="hidden" name="return_query" value="<?=h(http_build_query(['type'=>$type,'status'=>$status,'q'=>$q,'from'=>$dates['from'],'to'=>$dates['to']]))?>">
 </form>
 <script>
 const checkAll = document.getElementById('checkAll');

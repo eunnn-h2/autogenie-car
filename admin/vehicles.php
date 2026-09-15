@@ -16,11 +16,17 @@ declare(strict_types=1);
 
 header('Content-Type: text/html; charset=utf-8');
 require_once __DIR__ . '/auth.php';
+requireAdminCategory('vehicles');
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/admin_helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    requireVehicleEditor();
+    $permissionAction = (string)($_POST['crud_action'] ?? '');
+    if ($permissionAction !== '') {
+        requireVehicleCrudAction($permissionAction);
+    } elseif (isset($_FILES['xlsx'])) {
+        requireVehicleImport();
+    }
 }
 
 
@@ -1557,27 +1563,27 @@ function adminQuery(array $overrides = []): string {
 <title>차량 데이터 관리 - 오토지니 관리자</title>
 <link rel="stylesheet" href="./sidebar.css">
 <style>
-*{box-sizing:border-box}html{scroll-behavior:auto}body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#eef5f8;color:#25384a;font-size:13px}a{text-decoration:none;color:inherit}.admin-layout{display:grid;grid-template-columns:228px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;background:#fff;border-right:1px solid #dbe4e9;padding:18px 14px 24px;display:flex;flex-direction:column;gap:14px}.logo-area{height:auto;display:flex;align-items:center;gap:10px;border-bottom:1px solid #edf1f3;margin-bottom:0;padding-bottom:18px}.logo-mark{width:38px;height:38px;border-radius:10px;background:#29bed1;color:#fff;display:grid;place-items:center;font-weight:800}.logo-area strong,.logo-area span{display:block}.logo-area strong{font-size:15px}.logo-area span{font-size:11px;color:#93a3ad;margin-top:2px}.menu-section{margin-bottom:0}.menu-section>p{font-size:11px;font-weight:800;color:#72838f;margin:0 0 10px;letter-spacing:.02em}.menu-item{display:flex;align-items:flex-start;gap:10px;padding:10px 11px;color:#5c7080;border-radius:10px;border:1px solid transparent;transition:.15s}.menu-item + .menu-item{margin-top:6px}.menu-item:hover{background:#f2f6f9;border-color:#e0e7ec}.menu-item.active{background:#3924b9;color:#fff;border-color:#3924b9;box-shadow:0 8px 18px rgba(57,36,185,.18)}.menu-item.active .menu-icon{background:rgba(255,255,255,.16);color:#fff}.menu-item.active small{color:rgba(255,255,255,.82)}.menu-icon{flex:0 0 34px;width:34px;height:34px;border-radius:10px;background:#eef2f7;color:#3924b9;display:grid;place-items:center;font-size:11px;font-weight:800}.menu-text{display:block;min-width:0}.menu-text strong{display:block;font-size:13px;line-height:1.3}.menu-text small{display:block;margin-top:3px;font-size:11px;line-height:1.45;color:#81919b}.admin-menu{display:grid;gap:14px}.admin-menu-group{padding:12px;border:1px solid #e5ebef;border-radius:14px;background:#fbfcfd}.admin-menu-group.current{border-color:#cfc9f4;background:#f7f5ff;box-shadow:0 0 0 1px rgba(57,36,185,.04) inset}.sidebar-stats{margin-top:auto;background:#f6f9fb;border:1px solid #e5ecef;border-radius:12px;padding:10px}.sidebar-stats div{display:flex;justify-content:space-between;padding:5px}.sidebar-stats span{color:#7a8a94}.main{min-width:0}.page-header{height:56px;background:#fff;border-bottom:1px solid #dfe8ec;padding:9px 16px;display:flex;align-items:center}.page-header h1{display:inline;margin:0;color:#3822b9;font-size:18px}.page-header p{display:inline;margin-left:7px;color:#3822b9}.admin-card{margin:28px 14px;background:#fff;border:1px solid #d8e2e7;border-radius:4px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.02)}.card-title{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:16px}.card-title h2{margin:0;font-size:17px;font-weight:500}.card-title p{margin:4px 0 0;color:#a2b2bd}.card-title p strong{color:#6c8190}.new-btn{background:#2499ef;color:#fff;padding:10px 14px;border-radius:2px;font-weight:700}.filter-panel{border-top:1px solid #eef2f4;padding-top:14px}.filter-top{display:flex;gap:9px;align-items:end;flex-wrap:wrap}.filter-group{width:180px}.filter-group label,.keyword-group label{display:block;color:#82939e;font-size:11px;margin-bottom:5px}.filter-group select,.keyword-row select,.keyword-row input{height:36px;border:1px solid #bfcbd2;background:#fff;padding:0 10px;color:#657784}.keyword-group{margin-left:auto;min-width:520px}.keyword-row{display:flex;gap:6px}.keyword-row select,.keyword-row input{border-radius:0}.search-type{width:76px}.per-page{width:88px}.keyword-row input{flex:1;min-width:180px}.search-btn{height:36px;border:0;background:#24bfd1;color:#fff;font-weight:700;padding:0 18px}.filter-actions{text-align:right;margin-top:8px}.filter-actions a{color:#8fa0aa;font-size:11px}.table-wrap{overflow-x:auto;border-top:1px solid #dce4e8;margin-top:14px}.admin-table{border-collapse:collapse;width:100%;min-width:1220px;font-size:12px}.admin-table th,.admin-table td{height:41px;padding:7px 9px;border-right:1px solid #e5eaed;border-bottom:1px solid #dfe5e8;text-align:center;white-space:nowrap}.admin-table th{background:#fff;color:#526875;font-weight:600}.admin-table tbody tr:nth-child(odd){background:#f2f4f7}.admin-table tbody tr:nth-child(even){background:#fff}.admin-table tbody tr:hover{background:#eaf6fb}.admin-table .number{color:#315cff}.admin-table .vehicle-name{color:#284fdb}.check{width:36px}.status{display:inline-block;padding:4px 7px;border-radius:3px;font-weight:800;font-size:11px}.status-active{background:#1f2937;color:#fff}.status-off{background:#ee293d;color:#fff}.best{display:inline-block;margin-left:5px;padding:2px 5px;background:#ffedd5;color:#9a3412;border-radius:3px;font-size:9px}.detail-btn{color:#2261ee;font-weight:700}.empty{height:90px!important;color:#99a9b2}.pagination{display:flex;justify-content:center;align-items:center;margin:14px 0 0}.pagination a{min-width:31px;height:31px;padding:0 8px;border:1px solid #cbd5db;border-right:0;display:flex;align-items:center;justify-content:center;background:#fff;color:#60727d}.pagination a:last-child{border-right:1px solid #cbd5db}.pagination a.active{background:#5e6c77;color:#fff}.gray-btn{padding:8px 12px;border:1px solid #c8d2d8;background:#fff;color:#687b87}.detail-top{display:grid;grid-template-columns:340px 1fr;gap:16px}.preview{border:1px solid #dfe6ea;background:#fafcfd;min-height:220px;display:grid;place-items:center}.preview img{max-width:100%;height:220px;object-fit:contain}.preview span{color:#a1b0b8}.info-table{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #dfe5e8;border-left:1px solid #dfe5e8}.info-table div{display:grid;grid-template-columns:110px 1fr;border-right:1px solid #dfe5e8;border-bottom:1px solid #dfe5e8}.info-table span{background:#f5f7f9;color:#667986;padding:12px}.info-table b{padding:12px;font-weight:600}.detail-columns{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.detail-box{border:1px solid #dfe6ea;padding:14px}.detail-box h3{margin:0 0 12px;font-size:14px}.detail-box h3 em{font-style:normal;color:#2aaec0}.line-item{display:flex;align-items:center;gap:8px;padding:9px;border-bottom:1px solid #eef1f3}.line-item.split{justify-content:space-between}.color-dot{width:17px;height:17px;border-radius:50%;border:1px solid}.empty-small{color:#9aabb4;text-align:center;padding:20px}.price-box{margin-top:16px}.payment{font-weight:700}.import-flow{padding:12px;background:#f5f8fa;border:1px solid #e4ebef;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.import-flow span{font-weight:700}.upload-form{margin-top:15px}.upload-box{border:2px dashed #c7d5dc;min-height:115px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;background:#fbfdfe}.upload-box strong{width:100%;text-align:center}.upload-box span{color:#84959f}.upload-btn{width:100%;margin-top:10px;height:44px;border:0;background:#162030;color:#fff;font-weight:800}
-.upload-template-btn{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 12px;border:1px solid #ff5a24;border-radius:4px;background:#fff;color:#ff5a24;text-decoration:none;font-size:12px;font-weight:800;white-space:nowrap}
+*{box-sizing:border-box}html{scroll-behavior:auto}body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#eef5f8;color:#25384a;font-size:14px}a{text-decoration:none;color:inherit}.admin-layout{display:grid;grid-template-columns:228px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;background:#fff;border-right:1px solid #dbe4e9;padding:18px 14px 24px;display:flex;flex-direction:column;gap:14px}.logo-area{height:auto;display:flex;align-items:center;gap:10px;border-bottom:1px solid #edf1f3;margin-bottom:0;padding-bottom:18px}.logo-mark{width:38px;height:38px;border-radius:10px;background:#29bed1;color:#fff;display:grid;place-items:center;font-weight:800}.logo-area strong,.logo-area span{display:block}.logo-area strong{font-size:15px}.logo-area span{font-size:14px;color:#93a3ad;margin-top:2px}.menu-section{margin-bottom:0}.menu-section>p{font-size:14px;font-weight:800;color:#72838f;margin:0 0 10px;letter-spacing:.02em}.menu-item{display:flex;align-items:flex-start;gap:10px;padding:10px 11px;color:#5c7080;border-radius:10px;border:1px solid transparent;transition:.15s}.menu-item + .menu-item{margin-top:6px}.menu-item:hover{background:#f2f6f9;border-color:#e0e7ec}.menu-item.active{background:#3924b9;color:#fff;border-color:#3924b9;box-shadow:0 8px 18px rgba(57,36,185,.18)}.menu-item.active .menu-icon{background:rgba(255,255,255,.16);color:#fff}.menu-item.active small{color:rgba(255,255,255,.82)}.menu-icon{flex:0 0 34px;width:34px;height:34px;border-radius:10px;background:#eef2f7;color:#3924b9;display:grid;place-items:center;font-size:14px;font-weight:800}.menu-text{display:block;min-width:0}.menu-text strong{display:block;font-size:14px;line-height:1.3}.menu-text small{display:block;margin-top:3px;font-size:14px;line-height:1.45;color:#81919b}.admin-menu{display:grid;gap:14px}.admin-menu-group{padding:12px;border:1px solid #e5ebef;border-radius:14px;background:#fbfcfd}.admin-menu-group.current{border-color:#cfc9f4;background:#f7f5ff;box-shadow:0 0 0 1px rgba(57,36,185,.04) inset}.sidebar-stats{margin-top:auto;background:#f6f9fb;border:1px solid #e5ecef;border-radius:12px;padding:10px}.sidebar-stats div{display:flex;justify-content:space-between;padding:5px}.sidebar-stats span{color:#7a8a94}.main{min-width:0}.page-header{height:56px;background:#fff;border-bottom:1px solid #dfe8ec;padding:9px 16px;display:flex;align-items:center}.page-header h1{display:inline;margin:0;color:#3822b9;font-size:18px}.page-header p{display:inline;margin-left:7px;color:#3822b9}.admin-card{margin:28px 14px;background:#fff;border:1px solid #d8e2e7;border-radius:4px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.02)}.card-title{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:16px}.card-title h2{margin:0;font-size:17px;font-weight:500}.card-title p{margin:4px 0 0;color:#a2b2bd}.card-title p strong{color:#6c8190}.new-btn{background:#2499ef;color:#fff;padding:10px 14px;border-radius:2px;font-weight:700}.filter-panel{border-top:1px solid #eef2f4;padding-top:14px}.filter-top{display:flex;gap:9px;align-items:end;flex-wrap:wrap}.filter-group{width:180px}.filter-group label,.keyword-group label{display:block;color:#82939e;font-size:14px;margin-bottom:5px}.filter-group select,.keyword-row select,.keyword-row input{height:36px;border:1px solid #bfcbd2;background:#fff;padding:0 10px;color:#657784}.keyword-group{margin-left:auto;min-width:520px}.keyword-row{display:flex;gap:6px}.keyword-row select,.keyword-row input{border-radius:0}.search-type{width:76px}.per-page{width:88px}.keyword-row input{flex:1;min-width:180px}.search-btn{height:36px;border:0;background:#24bfd1;color:#fff;font-weight:700;padding:0 18px}.filter-actions{text-align:right;margin-top:8px}.filter-actions a{color:#8fa0aa;font-size:14px}.table-wrap{overflow-x:auto;border-top:1px solid #dce4e8;margin-top:14px}.admin-table{border-collapse:collapse;width:100%;min-width:1220px;font-size:14px}.admin-table th,.admin-table td{height:41px;padding:7px 9px;border-right:1px solid #e5eaed;border-bottom:1px solid #dfe5e8;text-align:center;white-space:nowrap}.admin-table th{background:#fff;color:#526875;font-weight:600}.admin-table tbody tr:nth-child(odd){background:#f2f4f7}.admin-table tbody tr:nth-child(even){background:#fff}.admin-table tbody tr:hover{background:#eaf6fb}.admin-table .number{color:#315cff}.admin-table .vehicle-name{color:#284fdb}.check{width:36px}.status{display:inline-block;padding:4px 7px;border-radius:3px;font-weight:800;font-size:14px}.status-active{background:#1f2937;color:#fff}.status-off{background:#ee293d;color:#fff}.best{display:inline-block;margin-left:5px;padding:2px 5px;background:#ffedd5;color:#9a3412;border-radius:3px;font-size:14px}.detail-btn{color:#2261ee;font-weight:700}.empty{height:90px!important;color:#99a9b2}.pagination{display:flex;justify-content:center;align-items:center;margin:14px 0 0}.pagination a{min-width:31px;height:31px;padding:0 8px;border:1px solid #cbd5db;border-right:0;display:flex;align-items:center;justify-content:center;background:#fff;color:#60727d}.pagination a:last-child{border-right:1px solid #cbd5db}.pagination a.active{background:#5e6c77;color:#fff}.gray-btn{padding:8px 12px;border:1px solid #c8d2d8;background:#fff;color:#687b87}.detail-top{display:grid;grid-template-columns:340px 1fr;gap:16px}.preview{border:1px solid #dfe6ea;background:#fafcfd;min-height:220px;display:grid;place-items:center}.preview img{max-width:100%;height:220px;object-fit:contain}.preview span{color:#a1b0b8}.info-table{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #dfe5e8;border-left:1px solid #dfe5e8}.info-table div{display:grid;grid-template-columns:110px 1fr;border-right:1px solid #dfe5e8;border-bottom:1px solid #dfe5e8}.info-table span{background:#f5f7f9;color:#667986;padding:12px}.info-table b{padding:12px;font-weight:600}.detail-columns{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.detail-box{border:1px solid #dfe6ea;padding:14px}.detail-box h3{margin:0 0 12px;font-size:14px}.detail-box h3 em{font-style:normal;color:#2aaec0}.line-item{display:flex;align-items:center;gap:8px;padding:9px;border-bottom:1px solid #eef1f3}.line-item.split{justify-content:space-between}.color-dot{width:17px;height:17px;border-radius:50%;border:1px solid}.empty-small{color:#9aabb4;text-align:center;padding:20px}.price-box{margin-top:16px}.payment{font-weight:700}.import-flow{padding:12px;background:#f5f8fa;border:1px solid #e4ebef;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.import-flow span{font-weight:700}.upload-form{margin-top:15px}.upload-box{border:2px dashed #c7d5dc;min-height:115px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;background:#fbfdfe}.upload-box strong{width:100%;text-align:center}.upload-box span{color:#84959f}.upload-btn{width:100%;margin-top:10px;height:44px;border:0;background:#162030;color:#fff;font-weight:800}
+.upload-template-btn{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 12px;border:1px solid #ff5a24;border-radius:4px;background:#fff;color:#ff5a24;text-decoration:none;font-size:14px;font-weight:800;white-space:nowrap}
 .upload-template-btn:hover{background:#fff0e9}.alert{margin:15px 0;padding:12px;border-radius:3px}.alert strong,.alert span{display:block}.alert span{margin-top:4px}.alert.success{background:#edf9f2;border:1px solid #bde8ca;color:#16733a}.alert.error{background:#fff2f2;border:1px solid #ffb9b9;color:#b01625}.log{background:#17202b;color:#dce6eb;padding:12px;max-height:300px;overflow:auto}.footer{padding:0 16px 24px;color:#8da0ab}.footer code{background:#e8eef1;padding:2px 5px}@media(max-width:1050px){.admin-layout{grid-template-columns:1fr}.sidebar{position:static;height:auto}.keyword-group{margin-left:0;min-width:100%;width:100%}.detail-top,.detail-columns{grid-template-columns:1fr}}@media(max-width:650px){.filter-group{width:100%}.keyword-row{flex-wrap:wrap}.keyword-row>*{width:100%!important;flex:auto!important}.detail-top{grid-template-columns:1fr}.info-table{grid-template-columns:1fr}.admin-card{margin:14px 8px}}
 
 
-.crud-alert{margin:0 14px 14px;padding:12px 14px;border-radius:4px}.crud-alert.ok{background:#edf9f2;border:1px solid #bde8ca;color:#16733a}.crud-alert.error{background:#fff2f2;border:1px solid #ffb9b9;color:#b01625}.crud-toolbar{display:flex;gap:8px;align-items:center}.danger-btn{padding:8px 12px;border:0;background:#ef3340;color:#fff;cursor:pointer}.edit-btn,.add-btn,.save-btn,.small-btn{border:0;cursor:pointer;font-weight:700}.edit-btn,.add-btn{padding:8px 12px;background:#25bcd0;color:#fff}.save-btn{padding:8px 13px;background:#3924b9;color:#fff}.small-btn{padding:5px 8px;background:#eef2f5;color:#4b6270}.small-btn.delete{background:#fff1f1;color:#d02c38}.crud-section{margin-top:16px;border:1px solid #dfe6ea}.crud-section-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#f5f8fa;border-bottom:1px solid #dfe6ea}.crud-section-head h3{margin:0;font-size:14px}.crud-form{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:10px;padding:12px}.crud-form .wide{grid-column:span 2}.crud-form label{font-size:11px;color:#748792;display:block;margin-bottom:4px}.crud-form input,.crud-form select,.crud-form textarea{width:100%;min-height:35px;border:1px solid #c9d3d9;padding:7px 9px;background:#fff}.crud-form textarea{min-height:68px;resize:vertical}.crud-actions{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end}.crud-list{padding:0 12px 12px}.crud-row{display:grid;grid-template-columns:minmax(160px,1fr) repeat(4,minmax(90px,.6fr)) auto;gap:8px;align-items:end;padding:10px 0;border-bottom:1px solid #edf1f3}.crud-row.color-row{grid-template-columns:minmax(160px,1fr) 110px 110px minmax(230px,1.4fr) 80px 90px auto}.crud-row.price-row{grid-template-columns:minmax(130px,1fr) 100px 90px 90px 110px 120px 90px auto}.crud-row label{font-size:10px;color:#82939e;display:block;margin-bottom:3px}.crud-row input,.crud-row select{width:100%;height:33px;border:1px solid #cbd5db;padding:0 7px;background:#fff}.crud-row-actions{display:flex;gap:5px;align-items:center}.vehicle-edit-form{margin-top:16px;border:1px solid #dfe6ea;background:#fbfdfe;padding:12px}.vehicle-edit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.vehicle-edit-grid label{display:block;font-size:11px;color:#748792;margin-bottom:4px}.vehicle-edit-grid input,.vehicle-edit-grid select{width:100%;height:36px;border:1px solid #c8d3d9;padding:0 8px}.vehicle-edit-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}@media(max-width:1100px){.crud-form,.vehicle-edit-grid{grid-template-columns:repeat(2,1fr)}.crud-row,.crud-row.color-row,.crud-row.price-row{grid-template-columns:repeat(2,1fr)}.crud-row-actions{grid-column:1/-1}}@media(max-width:650px){.crud-form,.vehicle-edit-grid,.crud-row,.crud-row.color-row,.crud-row.price-row{grid-template-columns:1fr}.crud-form .wide{grid-column:auto}}
+.crud-alert{margin:0 14px 14px;padding:12px 14px;border-radius:4px}.crud-alert.ok{background:#edf9f2;border:1px solid #bde8ca;color:#16733a}.crud-alert.error{background:#fff2f2;border:1px solid #ffb9b9;color:#b01625}.crud-toolbar{display:flex;gap:8px;align-items:center}.danger-btn{padding:8px 12px;border:0;background:#ef3340;color:#fff;cursor:pointer}.edit-btn,.add-btn,.save-btn,.small-btn{border:0;cursor:pointer;font-weight:700}.edit-btn,.add-btn{padding:8px 12px;background:#25bcd0;color:#fff}.save-btn{padding:8px 13px;background:#3924b9;color:#fff}.small-btn{padding:5px 8px;background:#eef2f5;color:#4b6270}.small-btn.delete{background:#fff1f1;color:#d02c38}.crud-section{margin-top:16px;border:1px solid #dfe6ea}.crud-section-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#f5f8fa;border-bottom:1px solid #dfe6ea}.crud-section-head h3{margin:0;font-size:14px}.crud-form{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:10px;padding:12px}.crud-form .wide{grid-column:span 2}.crud-form label{font-size:14px;color:#748792;display:block;margin-bottom:4px}.crud-form input,.crud-form select,.crud-form textarea{width:100%;min-height:35px;border:1px solid #c9d3d9;padding:7px 9px;background:#fff}.crud-form textarea{min-height:68px;resize:vertical}.crud-actions{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end}.crud-list{padding:0 12px 12px}.crud-row{display:grid;grid-template-columns:minmax(160px,1fr) repeat(4,minmax(90px,.6fr)) auto;gap:8px;align-items:end;padding:10px 0;border-bottom:1px solid #edf1f3}.crud-row.color-row{grid-template-columns:minmax(160px,1fr) 110px 110px minmax(230px,1.4fr) 80px 90px auto}.crud-row.price-row{grid-template-columns:minmax(130px,1fr) 100px 90px 90px 110px 120px 90px auto}.crud-row label{font-size:14px;color:#82939e;display:block;margin-bottom:3px}.crud-row input,.crud-row select{width:100%;height:33px;border:1px solid #cbd5db;padding:0 7px;background:#fff}.crud-row-actions{display:flex;gap:5px;align-items:center}.vehicle-edit-form{margin-top:16px;border:1px solid #dfe6ea;background:#fbfdfe;padding:12px}.vehicle-edit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.vehicle-edit-grid label{display:block;font-size:14px;color:#748792;margin-bottom:4px}.vehicle-edit-grid input,.vehicle-edit-grid select{width:100%;height:36px;border:1px solid #c8d3d9;padding:0 8px}.vehicle-edit-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}@media(max-width:1100px){.crud-form,.vehicle-edit-grid{grid-template-columns:repeat(2,1fr)}.crud-row,.crud-row.color-row,.crud-row.price-row{grid-template-columns:repeat(2,1fr)}.crud-row-actions{grid-column:1/-1}}@media(max-width:650px){.crud-form,.vehicle-edit-grid,.crud-row,.crud-row.color-row,.crud-row.price-row{grid-template-columns:1fr}.crud-form .wide{grid-column:auto}}
 
 
 .admin-user-area strong,.admin-user-area span,.admin-user-area a{display:block}
-.admin-user-area span{margin-top:2px;font-size:11px;color:#8da0ab}
-.admin-user-area .logout{margin-top:5px;font-size:11px;color:#25bcd0;text-decoration:none}
+.admin-user-area span{margin-top:2px;font-size:14px;color:#8da0ab}
+.admin-user-area .logout{margin-top:5px;font-size:14px;color:#25bcd0;text-decoration:none}
 .admin-user-area .logout:hover{text-decoration:underline}
 
-.admin-user-area .role{display:inline-block;margin-top:4px;padding:2px 6px;border-radius:999px;background:#eef2ff;color:#4338ca;font-size:10px;font-weight:800}
+.admin-user-area .role{display:inline-block;margin-top:4px;padding:2px 6px;border-radius:999px;background:#eef2ff;color:#4338ca;font-size:14px;font-weight:800}
 
 .filter-top{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap}
 .filter-left-group{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
 .filter-left-group .filter-group{width:145px}
 .keyword-group{margin-left:auto;min-width:520px}
 .bulk-action-bar{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding:8px 10px;border:1px solid #dfe7eb;background:#f7f9fb}
-.bulk-selection{font-size:12px;color:#647985}
+.bulk-selection{font-size:14px;color:#647985}
 .bulk-delete-btn{border:0;background:#e93442;color:#fff;padding:8px 13px;font-weight:800;cursor:pointer}
 .bulk-delete-btn:disabled{opacity:.4;cursor:not-allowed}
 .admin-table input[type="checkbox"]{width:15px;height:15px;cursor:pointer}
@@ -1696,7 +1702,7 @@ function adminQuery(array $overrides = []): string {
     border:1px solid #dce7ec;
     background:#f7fbfd;
     color:#60737f;
-    font-size:12px;
+    font-size:14px;
 }
 .hidden-bulk-form{display:none}
 
@@ -1721,8 +1727,8 @@ function adminQuery(array $overrides = []): string {
     .menu-section>p{margin-top:0}
     .menu-item{padding:9px 10px}
     .menu-icon{flex-basis:32px;width:32px;height:32px}
-    .menu-text strong{font-size:12px}
-    .menu-text small{font-size:10px}
+    .menu-text strong{font-size:14px}
+    .menu-text small{font-size:14px}
     .sidebar-stats{display:none}
     .page-header{
         height:auto;
@@ -1731,11 +1737,11 @@ function adminQuery(array $overrides = []): string {
         flex-wrap:wrap;
     }
     .page-header h1{font-size:16px}
-    .page-header p{font-size:11px;margin-left:5px}
+    .page-header p{font-size:14px;margin-left:5px}
     .admin-card{margin:10px 8px;padding:12px}
     .card-title{display:block;margin-bottom:12px}
     .card-title h2{font-size:16px}
-    .card-title p{font-size:11px;line-height:1.45}
+    .card-title p{font-size:14px;line-height:1.45}
     .new-btn,.gray-btn{display:inline-flex;margin-top:8px}
     .filter-top{display:grid;grid-template-columns:1fr 1fr;gap:7px}
     .filter-group{width:100%}
@@ -1758,10 +1764,10 @@ function adminQuery(array $overrides = []): string {
     .preview img{height:190px}
     .info-table{grid-template-columns:1fr}
     .info-table div{grid-template-columns:90px minmax(0,1fr)}
-    .info-table span,.info-table b{padding:10px;font-size:11px;overflow-wrap:anywhere}
+    .info-table span,.info-table b{padding:10px;font-size:14px;overflow-wrap:anywhere}
     .detail-columns{gap:10px}
     .detail-box{padding:11px}
-    .import-flow{font-size:11px;line-height:1.5}
+    .import-flow{font-size:14px;line-height:1.5}
     .upload-box{padding:12px;min-height:100px}
     .crud-form,.vehicle-edit-grid,.crud-row,.crud-row.color-row,.crud-row.price-row{
         grid-template-columns:1fr!important;
@@ -1792,7 +1798,7 @@ function adminQuery(array $overrides = []): string {
 </style>
 <style>.admin-layout{grid-template-columns:228px minmax(0,1fr)!important}@media(max-width:900px){.admin-layout{grid-template-columns:1fr!important}}</style>
 <style>
-.product-create-card{border-top:3px solid #3924b9}.vehicle-create-grid{display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:10px}.vehicle-create-grid label{display:block;font-size:11px;color:#6f818d;font-weight:700;margin-bottom:5px}.vehicle-create-grid input,.vehicle-create-grid select{width:100%;height:38px;border:1px solid #c7d2d9;background:#fff;padding:0 9px}.vehicle-create-grid input[type=file]{padding:7px}.vehicle-create-grid .wide{grid-column:span 2}.vehicle-create-grid small{display:block;color:#91a0a9;margin-top:4px}.create-actions{grid-column:1/-1;display:flex;justify-content:flex-end}.product-thumb{width:88px;height:54px;object-fit:contain;display:block;margin:auto;background:#f5f7f8;border:1px solid #e3e8eb}.no-thumb{display:inline-flex;width:88px;height:54px;align-items:center;justify-content:center;background:#f6f7f8;color:#a2adb4;font-size:10px}.mini-flag{display:inline-block;padding:3px 6px;border-radius:3px;font-size:10px;font-weight:800}.best-flag{background:#ff4d26;color:#fff}.rec-flag{background:#3924b9;color:#fff}.admin-table td{vertical-align:middle}.admin-table tbody tr{height:68px}.admin-table .vehicle-name{font-weight:800}.page-header{position:sticky;top:0;z-index:15}.bulk-action-bar{position:sticky;top:56px;z-index:10}.card-title .gray-btn{display:inline-flex;align-items:center;background:#fff}.detail-card{scroll-margin-top:120px}@media(max-width:1200px){.vehicle-create-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){.vehicle-create-grid{grid-template-columns:1fr}.vehicle-create-grid .wide{grid-column:auto}}
+.product-create-card{border-top:3px solid #3924b9}.vehicle-create-grid{display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:10px}.vehicle-create-grid label{display:block;font-size:14px;color:#6f818d;font-weight:700;margin-bottom:5px}.vehicle-create-grid input,.vehicle-create-grid select{width:100%;height:38px;border:1px solid #c7d2d9;background:#fff;padding:0 9px}.vehicle-create-grid input[type=file]{padding:7px}.vehicle-create-grid .wide{grid-column:span 2}.vehicle-create-grid small{display:block;color:#91a0a9;margin-top:4px}.create-actions{grid-column:1/-1;display:flex;justify-content:flex-end}.product-thumb{width:88px;height:54px;object-fit:contain;display:block;margin:auto;background:#f5f7f8;border:1px solid #e3e8eb}.no-thumb{display:inline-flex;width:88px;height:54px;align-items:center;justify-content:center;background:#f6f7f8;color:#a2adb4;font-size:14px}.mini-flag{display:inline-block;padding:3px 6px;border-radius:3px;font-size:14px;font-weight:800}.best-flag{background:#ff4d26;color:#fff}.rec-flag{background:#3924b9;color:#fff}.admin-table td{vertical-align:middle}.admin-table tbody tr{height:68px}.admin-table .vehicle-name{font-weight:800}.page-header{position:sticky;top:0;z-index:15}.bulk-action-bar{position:static;top:auto;z-index:auto}.card-title .gray-btn{display:inline-flex;align-items:center;background:#fff}.detail-card{scroll-margin-top:120px}@media(max-width:1200px){.vehicle-create-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){.vehicle-create-grid{grid-template-columns:1fr}.vehicle-create-grid .wide{grid-column:auto}}
 </style>
 <link rel="stylesheet" href="./admin-ui.css"></head>
 <body>
@@ -1803,7 +1809,14 @@ function adminQuery(array $overrides = []): string {
 
     <main class="main">
         <?php if (!canEditVehicleData()): ?>
-            <div class="crud-alert error">현재 계정은 VIEWER 권한입니다. 조회만 가능하며 등록·수정·삭제는 사용할 수 없습니다.</div>
+            <div class="crud-alert error">현재 계정은 조회만 가능합니다. SUPER_ADMIN에게 등록·수정·삭제 권한을 요청해주세요.</div>
+        <?php elseif (isSalesAdmin()): ?>
+            <div class="crud-alert ok">
+                영업사원 작업 권한 ·
+                등록 <?= canCreateVehicleData() ? '허용' : '차단' ?> /
+                수정 <?= canUpdateVehicleData() ? '허용' : '차단' ?> /
+                삭제 <?= canDeleteVehicleData() ? '허용' : '차단' ?>
+            </div>
         <?php endif; ?>
         <?php if ($crudMessage): ?>
             <div class="crud-alert ok"><?= h($crudMessage) ?></div>
@@ -1829,7 +1842,7 @@ function adminQuery(array $overrides = []): string {
             </div>
         <?php endif; ?>
 
-        <?php if (canEditVehicleData()): ?>
+        <?php if (canCreateVehicleData()): ?>
         <section id="vehicle-create" class="admin-card product-create-card">
             <div class="card-title">
                 <div>
@@ -1861,7 +1874,10 @@ function adminQuery(array $overrides = []): string {
                     <h2>차량 상품 목록</h2>
                     <p>등록된 차량 상품 <strong><?= number_format($totalRows) ?></strong>개를 관리합니다.</p>
                 </div>
-                <div style="display:flex;gap:8px"><a class="gray-btn" href="#vehicle-create">+ 차량등록</a><a class="new-btn" href="#bulk-import">+ 엑셀 일괄등록</a></div>
+                <div style="display:flex;gap:8px">
+                    <?php if (canCreateVehicleData()): ?><a class="gray-btn" href="#vehicle-create">+ 차량등록</a><?php endif; ?>
+                    <?php if (canCreateVehicleData() && canUpdateVehicleData()): ?><a class="new-btn" href="#bulk-import">+ 엑셀 일괄등록</a><?php endif; ?>
+                </div>
             </div>
 
             <form method="get" action="./vehicles.php" class="filter-panel" id="searchForm">
@@ -1908,7 +1924,7 @@ function adminQuery(array $overrides = []): string {
                             </select>
                             <input id="adminSearchInput" type="search" name="q" value="<?= h($q) ?>"
                                    placeholder="브랜드 또는 차량명 검색" autocomplete="off">
-                            <select name="per_page" class="per-page">
+                            <select name="per_page" class="per-page" onchange="this.form.submit()">
                                 <?php foreach ([10,20,50,100] as $n): ?>
                                     <option value="<?= $n ?>" <?= $perPage === $n ? 'selected' : '' ?>><?= $n ?>개씩</option>
                                 <?php endforeach; ?>
@@ -1928,8 +1944,9 @@ function adminQuery(array $overrides = []): string {
                     선택 <strong id="selectedCount">0</strong>개
                 </div>
 
-                <?php if (canEditVehicleData()): ?>
+                <?php if (canUpdateVehicleData() || canDeleteVehicleData()): ?>
                 <div class="bulk-tools">
+                    <?php if (canUpdateVehicleData()): ?>
                     <form method="post" id="bulkUpdateForm" class="bulk-update-form">
                         <input type="hidden" name="crud_action" value="bulk_update_vehicles">
 
@@ -1950,7 +1967,9 @@ function adminQuery(array $overrides = []): string {
                             선택 변경
                         </button>
                     </form>
+                    <?php endif; ?>
 
+                    <?php if (canDeleteVehicleData()): ?>
                     <form method="post" id="bulkDeleteForm"
                           onsubmit="return confirm('선택한 차량과 연결된 색상·트림·가격 데이터를 삭제할까요?');">
                         <input type="hidden" name="crud_action" value="bulk_delete_vehicles">
@@ -1958,6 +1977,7 @@ function adminQuery(array $overrides = []): string {
                             선택 삭제
                         </button>
                     </form>
+                    <?php endif; ?>
                 </div>
                 <?php endif; ?>
             </div>
@@ -2058,11 +2078,13 @@ function adminQuery(array $overrides = []): string {
                 </div>
                 <div class="crud-toolbar">
                     <a class="gray-btn" href="./vehicles.php?<?= h(adminQuery(['vehicle_id' => null])) ?>#product-list">목록으로</a>
+                    <?php if (canDeleteVehicleData()): ?>
                     <form method="post" onsubmit="return confirm('이 차량과 연결된 색상·트림·가격 데이터를 모두 삭제할까요?');">
                         <input type="hidden" name="crud_action" value="delete_vehicle">
                         <input type="hidden" name="vehicle_id" value="<?= (int)$vehicleDetail['id'] ?>">
                         <button class="danger-btn" type="submit">차량 삭제</button>
                     </form>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -2154,18 +2176,23 @@ function adminQuery(array $overrides = []): string {
                     </div>
                 </div>
                 <div class="vehicle-edit-actions">
+                    <?php if (canUpdateVehicleData()): ?>
                     <button type="submit" class="save-btn">차량 기본정보 수정</button>
+                    <?php else: ?>
+                    <span class="bulk-help">수정 권한이 없습니다.</span>
+                    <?php endif; ?>
                 </div>
             </form>
 
             <div class="crud-section">
                 <div class="crud-section-head">
                     <h3>색상 관리 (<?= count($detailColors) ?>)</h3>
-                    <?php if (!empty($detailColors)): ?>
+                    <?php if (!empty($detailColors) && canUpdateVehicleData()): ?>
                     <button type="button" class="bulk-save-btn" onclick="submitBulkSection('color')">색상 일괄수정</button>
                     <?php endif; ?>
                 </div>
 
+                <?php if (canCreateVehicleData()): ?>
                 <form method="post" class="crud-form">
                     <input type="hidden" name="crud_action" value="add_color">
                     <input type="hidden" name="vehicle_id" value="<?= (int)$vehicleDetail['id'] ?>">
@@ -2177,13 +2204,15 @@ function adminQuery(array $overrides = []): string {
                     <div><label>상태</label><select name="color_is_active"><option value="1">사용중</option><option value="0">비활성</option></select></div>
                     <div class="crud-actions"><button class="add-btn" type="submit">+ 색상 추가</button></div>
                 </form>
+                <?php endif; ?>
 
+                <?php if (canUpdateVehicleData()): ?>
                 <form method="post" id="bulkColorForm" class="hidden-bulk-form">
                     <input type="hidden" name="crud_action" value="bulk_update_colors">
                     <input type="hidden" name="vehicle_id" value="<?= (int)$vehicleDetail['id'] ?>">
                 </form>
-
                 <div class="bulk-help">여러 색상 값을 바꾼 뒤 <strong>색상 일괄수정</strong>을 누르면 한 번에 저장됩니다.</div>
+                <?php endif; ?>
 
                 <div class="crud-list">
                     <?php foreach ($detailColors as $color): ?>
@@ -2197,8 +2226,8 @@ function adminQuery(array $overrides = []): string {
                         <div><label>정렬</label><input type="number" name="color_sort_order" value="<?= (int)$color['sort_order'] ?>"></div>
                         <div><label>상태</label><select name="color_is_active"><option value="1" <?= (int)$color['is_active']===1?'selected':'' ?>>사용</option><option value="0" <?= (int)$color['is_active']===0?'selected':'' ?>>비활성</option></select></div>
                         <div class="crud-row-actions">
-                            <button class="small-btn" type="submit" name="crud_action" value="update_color">수정</button>
-                            <button class="small-btn delete" type="submit" name="crud_action" value="delete_color" onclick="return confirm('이 색상을 삭제할까요?');">삭제</button>
+                            <?php if (canUpdateVehicleData()): ?><button class="small-btn" type="submit" name="crud_action" value="update_color">수정</button><?php endif; ?>
+                            <?php if (canDeleteVehicleData()): ?><button class="small-btn delete" type="submit" name="crud_action" value="delete_color" onclick="return confirm('이 색상을 삭제할까요?');">삭제</button><?php endif; ?>
                         </div>
                     </form>
                     <?php endforeach; ?>
@@ -2208,11 +2237,12 @@ function adminQuery(array $overrides = []): string {
             <div class="crud-section">
                 <div class="crud-section-head">
                     <h3>트림 관리 (<?= count($detailTrims) ?>)</h3>
-                    <?php if (!empty($detailTrims)): ?>
+                    <?php if (!empty($detailTrims) && canUpdateVehicleData()): ?>
                     <button type="button" class="bulk-save-btn" onclick="submitBulkSection('trim')">트림 일괄수정</button>
                     <?php endif; ?>
                 </div>
 
+                <?php if (canCreateVehicleData()): ?>
                 <form method="post" class="crud-form">
                     <input type="hidden" name="crud_action" value="add_trim">
                     <input type="hidden" name="vehicle_id" value="<?= (int)$vehicleDetail['id'] ?>">
@@ -2223,13 +2253,15 @@ function adminQuery(array $overrides = []): string {
                     <div><label>상태</label><select name="trim_is_active"><option value="1">사용중</option><option value="0">비활성</option></select></div>
                     <div class="crud-actions"><button class="add-btn" type="submit">+ 트림 추가</button></div>
                 </form>
+                <?php endif; ?>
 
+                <?php if (canUpdateVehicleData()): ?>
                 <form method="post" id="bulkTrimForm" class="hidden-bulk-form">
                     <input type="hidden" name="crud_action" value="bulk_update_trims">
                     <input type="hidden" name="vehicle_id" value="<?= (int)$vehicleDetail['id'] ?>">
                 </form>
-
                 <div class="bulk-help">여러 트림 값을 바꾼 뒤 <strong>트림 일괄수정</strong>을 누르면 한 번에 저장됩니다.</div>
+                <?php endif; ?>
 
                 <div class="crud-list">
                     <?php foreach ($detailTrims as $trim): ?>
@@ -2242,8 +2274,8 @@ function adminQuery(array $overrides = []): string {
                         <div><label>정렬</label><input type="number" name="trim_sort_order" value="<?= (int)$trim['sort_order'] ?>"></div>
                         <div><label>상태</label><select name="trim_is_active"><option value="1" <?= (int)$trim['is_active']===1?'selected':'' ?>>사용</option><option value="0" <?= (int)$trim['is_active']===0?'selected':'' ?>>비활성</option></select></div>
                         <div class="crud-row-actions">
-                            <button class="small-btn" type="submit" name="crud_action" value="update_trim">수정</button>
-                            <button class="small-btn delete" type="submit" name="crud_action" value="delete_trim" onclick="return confirm('이 트림과 연결된 가격 데이터도 삭제됩니다. 계속할까요?');">삭제</button>
+                            <?php if (canUpdateVehicleData()): ?><button class="small-btn" type="submit" name="crud_action" value="update_trim">수정</button><?php endif; ?>
+                            <?php if (canDeleteVehicleData()): ?><button class="small-btn delete" type="submit" name="crud_action" value="delete_trim" onclick="return confirm('이 트림과 연결된 가격 데이터도 삭제됩니다. 계속할까요?');">삭제</button><?php endif; ?>
                         </div>
                     </form>
                     <?php endforeach; ?>
@@ -2253,11 +2285,12 @@ function adminQuery(array $overrides = []): string {
             <div class="crud-section">
                 <div class="crud-section-head">
                     <h3>가격 관리 (<?= count($detailPrices) ?>)</h3>
-                    <?php if (!empty($detailPrices)): ?>
+                    <?php if (!empty($detailPrices) && canUpdateVehicleData()): ?>
                     <button type="button" class="bulk-save-btn" onclick="submitBulkSection('price')">가격 일괄수정</button>
                     <?php endif; ?>
                 </div>
 
+                <?php if (canCreateVehicleData()): ?>
                 <form method="post" class="crud-form">
                     <input type="hidden" name="crud_action" value="add_price">
                     <input type="hidden" name="vehicle_id" value="<?= (int)$vehicleDetail['id'] ?>">
@@ -2275,13 +2308,15 @@ function adminQuery(array $overrides = []): string {
                     <div><label>상태</label><select name="price_is_active"><option value="1">사용중</option><option value="0">비활성</option></select></div>
                     <div class="crud-actions"><button class="add-btn" type="submit">+ 가격 추가</button></div>
                 </form>
+                <?php endif; ?>
 
+                <?php if (canUpdateVehicleData()): ?>
                 <form method="post" id="bulkPriceForm" class="hidden-bulk-form">
                     <input type="hidden" name="crud_action" value="bulk_update_prices">
                     <input type="hidden" name="vehicle_id" value="<?= (int)$vehicleDetail['id'] ?>">
                 </form>
-
                 <div class="bulk-help">여러 가격 조건 값을 바꾼 뒤 <strong>가격 일괄수정</strong>을 누르면 한 번에 저장됩니다.</div>
+                <?php endif; ?>
 
                 <div class="crud-list">
                     <?php foreach ($detailPrices as $price): ?>
@@ -2296,8 +2331,8 @@ function adminQuery(array $overrides = []): string {
                         <div><label>월 납입금</label><input type="number" name="monthly_payment" value="<?= (int)$price['monthly_payment'] ?>"></div>
                         <div><label>상태</label><select name="price_is_active"><option value="1" <?= (int)$price['is_active']===1?'selected':'' ?>>사용</option><option value="0" <?= (int)$price['is_active']===0?'selected':'' ?>>비활성</option></select></div>
                         <div class="crud-row-actions">
-                            <button class="small-btn" type="submit" name="crud_action" value="update_price">수정</button>
-                            <button class="small-btn delete" type="submit" name="crud_action" value="delete_price" onclick="return confirm('이 가격 조건을 삭제할까요?');">삭제</button>
+                            <?php if (canUpdateVehicleData()): ?><button class="small-btn" type="submit" name="crud_action" value="update_price">수정</button><?php endif; ?>
+                            <?php if (canDeleteVehicleData()): ?><button class="small-btn delete" type="submit" name="crud_action" value="delete_price" onclick="return confirm('이 가격 조건을 삭제할까요?');">삭제</button><?php endif; ?>
                         </div>
                     </form>
                     <?php endforeach; ?>
@@ -2306,7 +2341,7 @@ function adminQuery(array $overrides = []): string {
         </section>
         <?php endif; ?>
 
-        <?php if (canEditVehicleData()): ?>
+        <?php if (canCreateVehicleData() && canUpdateVehicleData()): ?>
         <section id="bulk-import" class="admin-card import-card">
             <div class="card-title">
                 <div>

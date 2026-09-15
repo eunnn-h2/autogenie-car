@@ -1,18 +1,23 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/auth.php';
+requireAdminCategory('estimates');
+require_once __DIR__ . '/estimate-date-filter.php';
+try { $dates = estimateDateRange($_GET); }
+catch (InvalidArgumentException $e) { http_response_code(400); exit(htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8')); }
 require_once __DIR__ . '/../config/database.php';
 $status=trim((string)($_GET['status']??''));$type=strtoupper(trim((string)($_GET['type']??'')));$q=trim((string)($_GET['q']??''));$source=trim((string)($_GET['source']??''));
 $rows=[];
-function addRows(PDO $pdo,string $table,string $kind,string $type,string $status,string $q,string $source,array &$rows):void{
+function addRows(PDO $pdo,string $table,string $kind,string $type,string $status,string $q,string $source,array &$rows,array $dates):void{
  if($type!==''&&$type!==$kind)return;$where=[];$params=[];
+ applyEstimateDateRange($where,$params,$dates);
  if($status!==''){$where[]='status=?';$params[]=$status;}
  if($source!==''){$where[]="COALESCE(NULLIF(utm_source,''), '직접/기타')=?";$params[]=$source;}
  if($q!==''){$like='%'.$q.'%'; if($kind==='DIRECT'){$where[]='(estimate_no LIKE ? OR customer_name LIKE ? OR customer_phone LIKE ? OR vehicle_name LIKE ?)';}else{$where[]='(estimate_no LIKE ? OR customer_name LIKE ? OR customer_phone LIKE ? OR car_type LIKE ?)';}array_push($params,$like,$like,$like,$like);}
  $sql='SELECT * FROM '.$table.($where?' WHERE '.implode(' AND ',$where):'').' ORDER BY created_at DESC';
  try{$s=$pdo->prepare($sql);$s->execute($params);foreach($s->fetchAll(PDO::FETCH_ASSOC) as $r){$r['_kind']=$kind;$rows[]=$r;}}catch(Throwable $e){}
 }
-addRows($pdo,'estimate_direct','DIRECT',$type,$status,$q,$source,$rows);addRows($pdo,'estimate_quick','QUICK',$type,$status,$q,$source,$rows);
+addRows($pdo,'estimate_direct','DIRECT',$type,$status,$q,$source,$rows,$dates);addRows($pdo,'estimate_quick','QUICK',$type,$status,$q,$source,$rows,$dates);
 usort($rows,fn($a,$b)=>strcmp((string)$b['created_at'],(string)$a['created_at']));
 $filename='autogenie_estimates_'.date('Ymd_His').'.xls';
 header('Content-Type: application/vnd.ms-excel; charset=UTF-8');header('Content-Disposition: attachment; filename="'.$filename.'"');header('Cache-Control: no-store');echo "\xEF\xBB\xBF";
