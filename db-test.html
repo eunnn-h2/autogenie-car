@@ -7186,8 +7186,8 @@ function imageCandidates(v) {
         : [];
 
     const rawCandidates = [
-        ...colorCandidates,
-        v.image_path, v.vehicle_image_path, v.image, v.representative_image, v.thumbnail
+        v.image_path, v.vehicle_image_path, v.image, v.representative_image, v.thumbnail,
+        ...colorCandidates
     ].filter(Boolean);
 
     const urls = [];

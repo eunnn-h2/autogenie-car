@@ -7,6 +7,9 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 require_once __DIR__ . '/../config/database.php';
 
 try {
+    // 모든 화면에서 car_vehicles.image_path를 공통 대표 이미지로 사용합니다.
+    $estimateImageSelect = "v.image_path,";
+
     $vehiclesStmt = $pdo->query("
         SELECT
             v.id,
@@ -16,7 +19,7 @@ try {
             v.model_year,
             v.fuel_type,
             v.base_price,
-            v.image_path,
+            {$estimateImageSelect}
             v.is_best,
             v.is_active,
             v.sort_order

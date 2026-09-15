@@ -985,6 +985,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
     try {
         if ($crudAction === 'update_vehicle') {
             $vehicleIdPost = (int)($_POST['vehicle_id'] ?? 0);
+            $uploadedImage = ag_upload_original_name($_FILES['vehicle_image'] ?? [], 'images/cars', dirname(__DIR__));
+            $imagePath = $uploadedImage ?: (trim((string)($_POST['image_path'] ?? '')) ?: null);
 
             $sets = [
                 'brand_id' => (int)($_POST['brand_id'] ?? 0),
@@ -992,12 +994,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
                 'model_year' => nullableInt($_POST['model_year'] ?? null),
                 'fuel_type' => (string)($_POST['fuel_type'] ?? 'GASOLINE'),
                 'base_price' => (int)($_POST['base_price'] ?? 0),
+                'image_path' => $imagePath,
                 'is_best' => (int)($_POST['is_best'] ?? 0),
                 'sort_order' => (int)($_POST['sort_order'] ?? 0),
                 'is_active' => (int)($_POST['is_active'] ?? 1),
             ];
             if ($hasRecommended) {
                 $sets['is_recommended'] = (int)($_POST['is_recommended'] ?? 0);
+            }
+            if ($hasThumbnailSelectors) {
+                $sets['admin_thumbnail_color_id'] = nullableInt($_POST['admin_thumbnail_color_id'] ?? null);
+                $sets['estimate_thumbnail_color_id'] = nullableInt($_POST['estimate_thumbnail_color_id'] ?? null);
             }
             if ($sets['brand_id'] <= 0 || $sets['name'] === '') {
                 throw new RuntimeException('브랜드와 차량명은 필수입니다.');
@@ -1221,7 +1228,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
             $imagePaths = $_POST['color_image_path'] ?? [];
             $sortOrders = $_POST['color_sort_order'] ?? [];
             $activeStates = $_POST['color_is_active'] ?? [];
-            $representativeColorId = nullableInt($_POST['representative_color_id'] ?? null);
 
             if (!is_array($colorIds) || !$colorIds) {
                 throw new RuntimeException('일괄 수정할 색상이 없습니다.');
@@ -1253,26 +1259,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
                 ]);
             }
 
-            $validColorIds = array_map('intval', $colorIds);
-            $checkColorSelection = static function (?int $colorId) use ($validColorIds): ?int {
-                return ($colorId !== null && in_array($colorId, $validColorIds, true)) ? $colorId : null;
-            };
-            $representativeColorId = $checkColorSelection($representativeColorId);
-
-            if ($representativeColorId !== null) {
-                $imageStmt = $pdo->prepare('SELECT image_path FROM car_colors WHERE id = ? AND vehicle_id = ? LIMIT 1');
-                $imageStmt->execute([$representativeColorId, $vehicleIdPost]);
-                $representativeImagePath = trim((string)($imageStmt->fetchColumn() ?: ''));
-                if ($representativeImagePath === '') {
-                    throw new RuntimeException('대표 이미지로 선택한 색상에 차량 이미지가 없습니다.');
-                }
-                $pdo->prepare('UPDATE car_vehicles SET image_path = ? WHERE id = ?')->execute([$representativeImagePath, $vehicleIdPost]);
-            }
-
-
             $pdo->commit();
 
-            $crudMessage = count($colorIds) . '개 색상과 대표 이미지를 저장했습니다.';
+            $crudMessage = count($colorIds) . '개 색상을 일괄 수정했습니다.';
             $_GET['vehicle_id'] = $vehicleIdPost;
         }
 
@@ -1470,7 +1459,9 @@ try {
     $offset = ($page - 1) * $perPage;
 
     $recommendedSelect = $hasRecommended ? 'v.is_recommended,' : '0 AS is_recommended,';
-    $adminThumbSelect = "v.image_path AS admin_thumbnail_path,";
+    $adminThumbSelect = $hasThumbnailSelectors
+        ? "COALESCE((SELECT c.image_path FROM car_colors c WHERE c.id = v.admin_thumbnail_color_id AND c.vehicle_id = v.id LIMIT 1), v.image_path) AS admin_thumbnail_path,"
+        : "v.image_path AS admin_thumbnail_path,";
 
     $vehicleSql = "
         SELECT
@@ -1588,8 +1579,7 @@ function adminQuery(array $overrides = []): string {
 .upload-template-btn:hover{background:#fff0e9}.alert{margin:15px 0;padding:12px;border-radius:3px}.alert strong,.alert span{display:block}.alert span{margin-top:4px}.alert.success{background:#edf9f2;border:1px solid #bde8ca;color:#16733a}.alert.error{background:#fff2f2;border:1px solid #ffb9b9;color:#b01625}.log{background:#17202b;color:#dce6eb;padding:12px;max-height:300px;overflow:auto}.footer{padding:0 16px 24px;color:#8da0ab}.footer code{background:#e8eef1;padding:2px 5px}@media(max-width:1050px){.admin-layout{grid-template-columns:1fr}.sidebar{position:static;height:auto}.keyword-group{margin-left:0;min-width:100%;width:100%}.detail-top,.detail-columns{grid-template-columns:1fr}}@media(max-width:650px){.filter-group{width:100%}.keyword-row{flex-wrap:wrap}.keyword-row>*{width:100%!important;flex:auto!important}.detail-top{grid-template-columns:1fr}.info-table{grid-template-columns:1fr}.admin-card{margin:14px 8px}}
 
 
-.crud-alert{margin:0 14px 14px;padding:12px 14px;border-radius:4px}.crud-alert.ok{background:#edf9f2;border:1px solid #bde8ca;color:#16733a}.crud-alert.error{background:#fff2f2;border:1px solid #ffb9b9;color:#b01625}.crud-toolbar{display:flex;gap:8px;align-items:center}.danger-btn{padding:8px 12px;border:0;background:#ef3340;color:#fff;cursor:pointer}.edit-btn,.add-btn,.save-btn,.small-btn{border:0;cursor:pointer;font-weight:700}.edit-btn,.add-btn{padding:8px 12px;background:#25bcd0;color:#fff}.save-btn{padding:8px 13px;background:#3924b9;color:#fff}.small-btn{padding:5px 8px;background:#eef2f5;color:#4b6270}.small-btn.delete{background:#fff1f1;color:#d02c38}.crud-section{margin-top:24px;border:1px solid #dfe6ea}.crud-section-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#f5f8fa;border-bottom:1px solid #dfe6ea}.crud-section-head h3{margin:0;font-size:14px}.crud-form{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:10px;padding:12px}.crud-form .wide{grid-column:span 2}.crud-form label{font-size:14px;color:#748792;display:block;margin-bottom:4px}.crud-form input,.crud-form select,.crud-form textarea{width:100%;min-height:35px;border:1px solid #c9d3d9;padding:7px 9px;background:#fff}.crud-form textarea{min-height:68px;resize:vertical}.crud-actions{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end}.crud-list{padding:10px 12px 12px}.crud-row{display:grid;grid-template-columns:minmax(160px,1fr) repeat(4,minmax(90px,.6fr)) auto;gap:8px;align-items:end;padding:10px 0;border-bottom:1px solid #edf1f3}.crud-row.color-row{grid-template-columns:150px 210px 92px 92px minmax(240px,1fr) 68px 82px 92px;align-items:center}.crud-row.price-row{grid-template-columns:minmax(130px,1fr) 100px 90px 90px 110px 120px 90px auto}.crud-row label{font-size:14px;color:#82939e;display:block;margin-bottom:3px}.crud-row input,.crud-row select{width:100%;height:33px;border:1px solid #cbd5db;padding:0 7px;background:#fff}.crud-row-actions{display:flex;gap:5px;align-items:center;justify-content:flex-end;margin-top:18px;white-space:nowrap}
-.color-image-cell>.color-image-label{margin:0 0 5px 27px}.color-image-preview{height:72px;border:1px solid #dfe6ea;background:#fff;display:flex;align-items:center;justify-content:center;padding:4px;border-radius:4px}.color-image-preview img{width:100%;height:62px;object-fit:contain}.color-image-preview span{font-size:11px;color:#a0adb5}.color-image-select-wrap{display:flex;align-items:center;gap:9px}.color-main-radio{display:flex!important;align-items:center;justify-content:center;margin:0!important;cursor:pointer}.color-main-radio input{width:18px!important;height:18px!important;margin:0;accent-color:#3924b9}.color-main-radio input:disabled{opacity:.35;cursor:not-allowed}.color-image-select-wrap .color-image-preview{flex:1;min-width:0}.color-image-roles{display:flex;gap:5px;align-items:center;justify-content:center;padding-bottom:1px}.color-role-option{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:42px;margin:0!important;font-size:11px!important;color:#61737f!important;cursor:pointer}.color-role-option input{width:16px!important;height:16px!important;margin:0;accent-color:#3924b9}.color-role-option input:disabled+span{opacity:.35}.color-role-option:has(input:checked) span{color:#3924b9;font-weight:800}.color-role-help{display:block;margin-top:4px;font-size:11px;color:#8a9aa4;font-weight:400}.crud-section-head>div:first-child h3{display:inline-block}.vehicle-edit-form{margin-top:16px;border:1px solid #dfe6ea;background:#fbfdfe;padding:12px}.vehicle-edit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.vehicle-edit-grid label{display:block;font-size:14px;color:#748792;margin-bottom:4px}.vehicle-edit-grid input,.vehicle-edit-grid select{width:100%;height:36px;border:1px solid #c8d3d9;padding:4px 8px}.vehicle-edit-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}@media(max-width:1100px){.crud-form,.vehicle-edit-grid{grid-template-columns:repeat(2,1fr)}.crud-row,.crud-row.color-row,.crud-row.price-row{grid-template-columns:repeat(2,1fr)}.color-image-roles{justify-content:flex-start}.crud-row-actions{grid-column:1/-1;margin-top:0;justify-content:flex-start}}@media(max-width:650px){.crud-form,.vehicle-edit-grid,.crud-row,.crud-row.color-row,.crud-row.price-row{grid-template-columns:1fr}.crud-form .wide{grid-column:auto}}
+.crud-alert{margin:0 14px 14px;padding:12px 14px;border-radius:4px}.crud-alert.ok{background:#edf9f2;border:1px solid #bde8ca;color:#16733a}.crud-alert.error{background:#fff2f2;border:1px solid #ffb9b9;color:#b01625}.crud-toolbar{display:flex;gap:8px;align-items:center}.danger-btn{padding:8px 12px;border:0;background:#ef3340;color:#fff;cursor:pointer}.edit-btn,.add-btn,.save-btn,.small-btn{border:0;cursor:pointer;font-weight:700}.edit-btn,.add-btn{padding:8px 12px;background:#25bcd0;color:#fff}.save-btn{padding:8px 13px;background:#3924b9;color:#fff}.small-btn{padding:5px 8px;background:#eef2f5;color:#4b6270}.small-btn.delete{background:#fff1f1;color:#d02c38}.crud-section{margin-top:24px;border:1px solid #dfe6ea}.crud-section-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#f5f8fa;border-bottom:1px solid #dfe6ea}.crud-section-head h3{margin:0;font-size:14px}.crud-form{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:10px;padding:12px}.crud-form .wide{grid-column:span 2}.crud-form label{font-size:14px;color:#748792;display:block;margin-bottom:4px}.crud-form input,.crud-form select,.crud-form textarea{width:100%;min-height:35px;border:1px solid #c9d3d9;padding:7px 9px;background:#fff}.crud-form textarea{min-height:68px;resize:vertical}.crud-actions{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end}.crud-list{padding:10px 12px 12px}.crud-row{display:grid;grid-template-columns:minmax(160px,1fr) repeat(4,minmax(90px,.6fr)) auto;gap:8px;align-items:end;padding:10px 0;border-bottom:1px solid #edf1f3}.crud-row.color-row{grid-template-columns:minmax(160px,1fr) 110px 110px minmax(230px,1.4fr) 80px 90px auto}.crud-row.price-row{grid-template-columns:minmax(130px,1fr) 100px 90px 90px 110px 120px 90px auto}.crud-row label{font-size:14px;color:#82939e;display:block;margin-bottom:3px}.crud-row input,.crud-row select{width:100%;height:33px;border:1px solid #cbd5db;padding:0 7px;background:#fff}.crud-row-actions{display:flex;gap:5px;align-items:center}.vehicle-edit-form{margin-top:16px;border:1px solid #dfe6ea;background:#fbfdfe;padding:12px}.vehicle-edit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.vehicle-edit-grid label{display:block;font-size:14px;color:#748792;margin-bottom:4px}.vehicle-edit-grid input,.vehicle-edit-grid select{width:100%;height:36px;border:1px solid #c8d3d9;padding:4px 8px}.vehicle-edit-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}@media(max-width:1100px){.crud-form,.vehicle-edit-grid{grid-template-columns:repeat(2,1fr)}.crud-row,.crud-row.color-row,.crud-row.price-row{grid-template-columns:repeat(2,1fr)}.crud-row-actions{grid-column:1/-1}}@media(max-width:650px){.crud-form,.vehicle-edit-grid,.crud-row,.crud-row.color-row,.crud-row.price-row{grid-template-columns:1fr}.crud-form .wide{grid-column:auto}}
 
 
 .admin-user-area strong,.admin-user-area span,.admin-user-area a{display:block}
@@ -1876,7 +1866,6 @@ function adminQuery(array $overrides = []): string {
 .thumbnail-option-card span{font-size:11px;color:#687b87;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .thumbnail-option input:checked+.thumbnail-option-card{border-color:#3924b9;background:#f4f1ff;box-shadow:0 0 0 2px rgba(57,36,185,.08)}
 .thumbnail-option input:checked+.thumbnail-option-card span{color:#3924b9;font-weight:800}
-.vehicle-edit-empty{padding:14px;border:1px dashed #d8e0e6;background:#f8fafb;color:#62727d;font-size:13px;border-radius:10px}
 .thumbnail-migration-note{padding:12px;border:1px solid #f0c36d;background:#fff9e9;color:#795b1d;font-size:13px}
 @media(max-width:900px){.thumbnail-choice-grid{grid-template-columns:1fr}}
 
@@ -1927,7 +1916,7 @@ function adminQuery(array $overrides = []): string {
         <?php endif; ?>
 
         <?php if (canCreateVehicleData()): ?>
-        <section id="vehicle-create" class="admin-card product-create-card" hidden>
+        <section id="vehicle-create" class="admin-card product-create-card">
             <div class="card-title">
                 <div>
                     <h2>차량 상품 등록</h2>
@@ -1959,7 +1948,7 @@ function adminQuery(array $overrides = []): string {
                     <p>등록된 차량 상품 <strong><?= number_format($totalRows) ?></strong>개를 관리합니다.</p>
                 </div>
                 <div style="display:flex;gap:8px">
-                    <?php if (canCreateVehicleData()): ?><button type="button" class="gray-btn" id="toggleVehicleCreate" aria-controls="vehicle-create" aria-expanded="false">+ 차량등록</button><?php endif; ?>
+                    <?php if (canCreateVehicleData()): ?><a class="gray-btn" href="#vehicle-create">+ 차량등록</a><?php endif; ?>
                     <?php if (canCreateVehicleData() && canUpdateVehicleData()): ?><a class="new-btn" href="#bulk-import">+ 엑셀 일괄등록</a><?php endif; ?>
                 </div>
             </div>
@@ -2280,13 +2269,79 @@ function adminQuery(array $overrides = []): string {
                         </div>
                     </div>
 
+                    <div class="vehicle-edit-group">
+                        <div class="vehicle-edit-group-title">
+                            <strong>메인 썸네일 선택</strong>
+                            <span>등록된 색상 이미지 중 관리자 목록과 견적 사이트 메인에 사용할 사진을 각각 선택합니다.</span>
+                        </div>
+                        <?php if ($hasThumbnailSelectors): ?>
+                        <div class="thumbnail-choice-grid">
+                            <?php foreach ([
+                                ['name'=>'admin_thumbnail_color_id','title'=>'관리자 메인 썸네일','selected'=>$vehicleDetail['admin_thumbnail_color_id'] ?? null],
+                                ['name'=>'estimate_thumbnail_color_id','title'=>'견적서 사이트 메인 썸네일','selected'=>$vehicleDetail['estimate_thumbnail_color_id'] ?? null],
+                            ] as $thumbGroup): ?>
+                            <div class="thumbnail-choice-box">
+                                <strong><?= h($thumbGroup['title']) ?></strong>
+                                <div class="thumbnail-options">
+                                    <label class="thumbnail-option">
+                                        <input type="radio" name="<?= h($thumbGroup['name']) ?>" value="" <?= empty($thumbGroup['selected']) ? 'checked' : '' ?>>
+                                        <span class="thumbnail-option-card">
+                                            <?php if (!empty($vehicleDetail['image_path'])): ?><img src="../<?= h($vehicleDetail['image_path']) ?>" alt="기본 대표 이미지"><?php endif; ?>
+                                            <span>기본 대표 이미지</span>
+                                        </span>
+                                    </label>
+                                    <?php foreach ($detailColors as $thumbColor): ?>
+                                        <?php if (empty($thumbColor['image_path'])) continue; ?>
+                                        <label class="thumbnail-option">
+                                            <input type="radio" name="<?= h($thumbGroup['name']) ?>" value="<?= (int)$thumbColor['id'] ?>" <?= (int)($thumbGroup['selected'] ?? 0) === (int)$thumbColor['id'] ? 'checked' : '' ?>>
+                                            <span class="thumbnail-option-card">
+                                                <img src="../<?= h($thumbColor['image_path']) ?>" alt="<?= h($thumbColor['name']) ?>">
+                                                <span><?= h($thumbColor['name']) ?></span>
+                                            </span>
+                                        </label>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php else: ?>
+                            <div class="thumbnail-migration-note">thumbnail_columns.sql을 DB에 한 번 적용하면 관리자 메인 / 견적서 사이트 메인 썸네일을 각각 선택할 수 있습니다.</div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="vehicle-edit-group">
+                        <div class="vehicle-edit-group-title">
+                            <strong>대표 이미지</strong>
+                            <span>새 파일을 업로드하거나 기존 이미지 경로를 직접 수정할 수 있습니다.</span>
+                        </div>
+                        <div class="vehicle-edit-image-grid">
+                            <div class="vehicle-edit-image-preview">
+                                <?php if (!empty($vehicleDetail['image_path'])): ?>
+                                    <img src="../<?= h($vehicleDetail['image_path']) ?>" alt="<?= h($vehicleDetail['name']) ?>">
+                                <?php else: ?>
+                                    <span>등록된 이미지 없음</span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="vehicle-edit-image-fields">
+                                <div class="vehicle-edit-field">
+                                    <label>새 이미지 업로드</label>
+                                    <input type="file" name="vehicle_image" accept="image/*">
+                                    <small class="vehicle-edit-help">새 파일을 선택하면 현재 대표 이미지가 교체됩니다.</small>
+                                </div>
+                                <div class="vehicle-edit-field">
+                                    <label>이미지 경로</label>
+                                    <input type="text" name="image_path" value="<?= h((string)($vehicleDetail['image_path'] ?? '')) ?>" placeholder="images/cars/.../차량.webp">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </form>
 
             <div class="crud-section">
                 <div class="crud-section-head">
-                    <div><h3>색상 관리 (<?= count($detailColors) ?>)</h3><span class="color-role-help">차량 이미지 왼쪽의 동그란 버튼으로 공통 대표 이미지를 하나 선택한 뒤 전체 변경사항 저장을 눌러주세요.</span></div>
+                    <h3>색상 관리 (<?= count($detailColors) ?>)</h3>
                     <div class="crud-section-head-actions">
                         <?php if (canCreateVehicleData()): ?>
                         <button type="button" class="new-item-btn" data-target="addColorPanel" onclick="toggleAddPanel(this)">색상추가</button>
@@ -2326,25 +2381,10 @@ function adminQuery(array $overrides = []): string {
                     <form method="post" class="crud-row color-row js-bulk-color-row">
                         <input type="hidden" name="vehicle_id" value="<?= (int)$vehicleDetail['id'] ?>">
                         <input type="hidden" name="color_id" value="<?= (int)$color['id'] ?>">
-                        <div class="color-image-cell">
-                            <label class="color-image-label">차량 이미지</label>
-                            <div class="color-image-select-wrap">
-                                <label class="color-main-radio">
-                                    <input type="radio" form="bulkColorForm" name="representative_color_id" value="<?= (int)$color['id'] ?>" <?= !empty($color['image_path']) && (string)($vehicleDetail['image_path'] ?? '') === (string)$color['image_path'] ? 'checked' : '' ?> <?= empty($color['image_path']) ? 'disabled' : '' ?>>
-                                </label>
-                                <div class="color-image-preview">
-                                    <?php if (!empty($color['image_path'])): ?>
-                                        <img src="../<?= h($color['image_path']) ?>" alt="<?= h($color['name']) ?>">
-                                    <?php else: ?>
-                                        <span>이미지 없음</span>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        </div>
                         <div><label>색상명</label><input type="text" name="color_name" value="<?= h($color['name']) ?>"></div>
                         <div><label>HEX</label><input type="text" name="hex_code" value="<?= h((string)($color['hex_code'] ?? '')) ?>"></div>
                         <div><label>테두리</label><input type="text" name="border_color" value="<?= h((string)($color['border_color'] ?? '')) ?>"></div>
-                        <div class="color-path-cell"><label>이미지 경로</label><input type="text" name="color_image_path" value="<?= h((string)($color['image_path'] ?? '')) ?>"></div>
+                        <div><label>이미지 경로</label><input type="text" name="color_image_path" value="<?= h((string)($color['image_path'] ?? '')) ?>"></div>
                         <div><label>정렬</label><input type="number" name="color_sort_order" value="<?= (int)$color['sort_order'] ?>"></div>
                         <div><label>상태</label><select name="color_is_active"><option value="1" <?= (int)$color['is_active']===1?'selected':'' ?>>사용</option><option value="0" <?= (int)$color['is_active']===0?'selected':'' ?>>비활성</option></select></div>
                         <div class="crud-row-actions">
@@ -2803,29 +2843,6 @@ function submitBulkSection(type) {
     form.submit();
 }
 
-
-
-(function setupVehicleCreateToggle() {
-    const button = document.getElementById('toggleVehicleCreate');
-    const panel = document.getElementById('vehicle-create');
-    if (!button || !panel) return;
-
-    button.addEventListener('click', () => {
-        const willOpen = panel.hasAttribute('hidden');
-        if (willOpen) {
-            panel.removeAttribute('hidden');
-            button.setAttribute('aria-expanded', 'true');
-            button.textContent = '등록폼 닫기';
-            requestAnimationFrame(() => {
-                panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        } else {
-            panel.setAttribute('hidden', '');
-            button.setAttribute('aria-expanded', 'false');
-            button.textContent = '+ 차량등록';
-        }
-    });
-})();
 
 // 차량 상세 편집 중 POST 후에도 현재 스크롤 위치를 유지합니다.
 // 색상/트림/가격을 연속 등록할 때 페이지가 위에서 다시 내려오는 현상을 방지합니다.
