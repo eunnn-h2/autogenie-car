@@ -7398,7 +7398,23 @@ function applyTemporaryColorFromImage(img, chipId, colorName) {
     chip.style.background = extractTemporaryCarColor(img, colorName);
 }
 
-function renderColorSelect(colors, vehicleKey) {
+function normalizeImagePathForCompare(value) {
+    let path = String(value || '').trim().replaceAll('\\', '/');
+    if (!path) return '';
+
+    path = path.replace(/^https?:\/\/[^/]+\//i, '/');
+    path = path.replace(/^\.\//, '');
+    path = path.replace(/^\/autogenie\//i, '');
+    path = path.replace(/^\//, '');
+
+    const imageIndex = path.toLowerCase().indexOf('images/');
+    if (imageIndex >= 0) path = path.slice(imageIndex);
+
+    try { path = decodeURIComponent(path); } catch (e) {}
+    return path.toLowerCase();
+}
+
+function renderColorSelect(colors, vehicleKey, representativeImagePath = '') {
     if (!Array.isArray(colors) || !colors.length) {
         return `
             <div class="color-select">
@@ -7412,7 +7428,18 @@ function renderColorSelect(colors, vehicleKey) {
         `;
     }
 
-    const firstColor = colors[0];
+    const representativePath = normalizeImagePathForCompare(representativeImagePath);
+    let selectedColorIndex = 0;
+
+    if (representativePath) {
+        const matchedIndex = colors.findIndex(color => {
+            const colorPath = color.image_path ?? color.color_image_path ?? color.image ?? '';
+            return normalizeImagePathForCompare(colorPath) === representativePath;
+        });
+        if (matchedIndex >= 0) selectedColorIndex = matchedIndex;
+    }
+
+    const firstColor = colors[selectedColorIndex];
     const firstHex = normalizeHex(
         firstColor.hex_code ??
         firstColor.color_hex ??
@@ -7455,7 +7482,7 @@ function renderColorSelect(colors, vehicleKey) {
 
                     return `
                         <button
-                            class="color-option ${index === 0 ? 'active' : ''}"
+                            class="color-option ${index === selectedColorIndex ? 'active' : ''}"
                             type="button"
                             data-color-option="${escapeHtml(vehicleKey)}"
                             data-color-id="${escapeHtml(color.id ?? '')}"
@@ -9368,7 +9395,7 @@ function renderVehicleDetail(vehicle, index = 0) {
                 <button class="info-chip" type="button" onclick="openVehicleInfo('${escapeHtml(vehicleKey)}')">차량 정보</button>
                 <div class="vehicle-image">${vehicleImageHtml(vehicle, vehicleKey)}</div>
             </div>
-            ${renderColorSelect(vehicle.colors ?? [], vehicleKey)}
+            ${renderColorSelect(vehicle.colors ?? [], vehicleKey, getImagePath(vehicle))}
             ${renderQuotePanel(vehicle, vehicleKey)}
         </article>
     `;
