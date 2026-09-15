@@ -86,6 +86,19 @@ try {
     ");
 
 
+    // 제조사 공식 사이트 기반 주요 사양/기능 데이터.
+    // DB(car_vehicle_options)에 데이터가 있으면 DB 값을 우선하고,
+    // 비어 있는 차량/트림만 data/vehicle-options-official.json을 사용합니다.
+    $officialOptionCatalog = [];
+    $officialOptionFile = __DIR__ . '/../data/vehicle-options-official.json';
+    if (is_file($officialOptionFile)) {
+        $officialOptionJson = file_get_contents($officialOptionFile);
+        $officialOptionDecoded = json_decode((string)$officialOptionJson, true);
+        if (is_array($officialOptionDecoded) && isset($officialOptionDecoded['vehicles']) && is_array($officialOptionDecoded['vehicles'])) {
+            $officialOptionCatalog = $officialOptionDecoded['vehicles'];
+        }
+    }
+
     // 트림별 차량 옵션. vehicle_options 테이블이 아직 없는 환경에서도
     // 기존 차량/견적 화면은 정상 동작하도록 선택적으로 연결합니다.
     $optionStmt = null;
@@ -138,6 +151,61 @@ try {
                     $trim['options'] = $optionStmt->fetchAll(PDO::FETCH_ASSOC);
                 } catch (Throwable $optionLoadError) {
                     $trim['options'] = [];
+                }
+            }
+
+            $officialKey = (string)$vehicle['brand_name'] . '::' . (string)$vehicle['vehicle_name'];
+            $officialVehicleOptions = $officialOptionCatalog[$officialKey] ?? null;
+
+            if ($trim['options'] && is_array($officialVehicleOptions) && !empty($officialVehicleOptions['options']) && is_array($officialVehicleOptions['options'])) {
+                // DB 옵션을 우선 사용하되, 이미지/설명이 비어 있으면 공식 옵션 데이터에서 같은 옵션명을 찾아 보완합니다.
+                $officialByName = [];
+                foreach ($officialVehicleOptions['options'] as $officialOption) {
+                    $officialName = trim((string)($officialOption['option_name'] ?? $officialOption['name'] ?? ''));
+                    if ($officialName !== '') {
+                        $officialByName[$officialName] = $officialOption;
+                    }
+                }
+
+                foreach ($trim['options'] as &$dbOption) {
+                    $dbName = trim((string)($dbOption['option_name'] ?? $dbOption['name'] ?? ''));
+                    $matched = $officialByName[$dbName] ?? null;
+
+                    // BMW는 DB 명칭이 '드라이빙 어시스턴트'처럼 짧게 등록된 경우가 있어 유사 이름도 매칭합니다.
+                    if (!$matched && $dbName !== '') {
+                        foreach ($officialByName as $officialName => $officialOption) {
+                            if (mb_strpos($officialName, $dbName) !== false || mb_strpos($dbName, $officialName) !== false) {
+                                $matched = $officialOption;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (is_array($matched)) {
+                        if (empty($dbOption['image_path']) && !empty($matched['image_path'])) {
+                            $dbOption['image_path'] = $matched['image_path'];
+                        }
+                        if (empty($dbOption['description']) && !empty($matched['description'])) {
+                            $dbOption['description'] = $matched['description'];
+                        }
+                        $dbOption['source_url'] = (string)($officialVehicleOptions['source_url'] ?? '');
+                        $dbOption['source_checked_at'] = (string)($officialVehicleOptions['source_checked_at'] ?? '');
+                    }
+                }
+                unset($dbOption);
+            }
+
+            if (!$trim['options']) {
+                if (is_array($officialVehicleOptions) && !empty($officialVehicleOptions['options']) && is_array($officialVehicleOptions['options'])) {
+                    $trim['options'] = array_map(
+                        static function (array $option) use ($officialVehicleOptions): array {
+                            $option['source_url'] = (string)($officialVehicleOptions['source_url'] ?? '');
+                            $option['source_checked_at'] = (string)($officialVehicleOptions['source_checked_at'] ?? '');
+                            $option['is_official_site_summary'] = 1;
+                            return $option;
+                        },
+                        $officialVehicleOptions['options']
+                    );
                 }
             }
         }

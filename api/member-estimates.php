@@ -9,7 +9,7 @@ if ($memberId < 1) {
         'ok' => false,
         'message' => '로그인이 필요합니다.',
         'estimates' => [],
-        'counts' => ['total'=>0,'estimate'=>0,'contacted'=>0,'reviewing'=>0,'approved'=>0,'contracted'=>0,'canceled'=>0],
+        'counts' => ['total'=>0,'new'=>0,'contacted'=>0,'done'=>0,'canceled'=>0],
     ], 401);
 }
 
@@ -32,7 +32,7 @@ try {
     $stmt = $pdo->prepare("
         SELECT id, estimate_no, status, brand_name, vehicle_name, trim_name,
                product_type, contract_months, monthly_payment, created_at
-        FROM estimate_direct
+        FROM estimates
         WHERE member_id = ?
     ");
     $stmt->execute([$memberId]);
@@ -55,7 +55,7 @@ try {
 
     $stmt = $pdo->prepare("
         SELECT id, estimate_no, status, car_type, monthly_budget, product_type, created_at
-        FROM estimate_quick
+        FROM quick_estimates
         WHERE member_id = ?
     ");
     $stmt->execute([$memberId]);
@@ -83,15 +83,13 @@ try {
     $counts = [
         'total'=>count($rows),
         'estimate'=>0,
-        'contacted'=>0,
         'reviewing'=>0,
         'approved'=>0,
         'contracted'=>0,
         'canceled'=>0
     ];
     foreach ($rows as $row) {
-        if ($row['status'] === 'NEW') $counts['estimate']++;
-        elseif ($row['status'] === 'CONTACTED') $counts['contacted']++;
+        if (in_array($row['status'], ['NEW','CONTACTED'], true)) $counts['estimate']++;
         elseif ($row['status'] === 'REVIEWING') $counts['reviewing']++;
         elseif (in_array($row['status'], ['APPROVED','DONE'], true)) $counts['approved']++;
         elseif ($row['status'] === 'CONTRACTED') $counts['contracted']++;

@@ -9443,7 +9443,22 @@ function getOptionDescription(option) {
 }
 
 function getOptionImage(option) {
-    return String(getOptionField(option, ['image_path','image','option_image','image_url','thumbnail'], '') || '');
+    const direct = String(getOptionField(option, ['image_path','image','option_image','image_url','thumbnail'], '') || '');
+    if (direct) return direct;
+
+    const name = String(getOptionField(option, ['option_name','name','title','item_name','option_value','value','label'], '') || '').trim();
+    const bmwFallback = {
+        'BMW 커브드 디스플레이': './images/options/BMW/BMW 커브드 디스플레이.webp',
+        '드라이빙 어시스턴트 프로페셔널': './images/options/BMW/드라이빙 어시스턴트 프로페셔널.webp',
+        '드라이빙 어시스턴트': './images/options/BMW/드라이빙 어시스턴트 프로페셔널.webp',
+        '파킹 어시스턴트 플러스': './images/options/BMW/파킹 어시스턴트 플러스.webp',
+        '파킹 어시스턴트': './images/options/BMW/파킹 어시스턴트 플러스.webp',
+        '하이빔 어시스턴트': './images/options/BMW/하이빔 어시스턴트.webp',
+        'BMW 디지털 키': './images/options/BMW/BMW 디지털 키.webp',
+        'BMW 디지털 키 플러스': './images/options/BMW/BMW 디지털 키.webp',
+        '무선 충전 트레이': './images/options/BMW/무선 충전 트레이.webp'
+    };
+    return bmwFallback[name] || '';
 }
 
 function getOptionPrice(option) {
@@ -9512,15 +9527,15 @@ const TEMP_OPTION_SETS = {
 };
 
 const TEMP_OPTION_IMAGES = {
-    'BMW 커브드 디스플레이': './images/options/BMW 커브드 디스플레이.webp',
-    '드라이빙 어시스턴트 프로페셔널': './images/options/드라이빙 어시스턴트 프로페셔널.webp',
-    '드라이빙 어시스턴트': './images/options/드라이빙 어시스턴트 프로페셔널.webp',
-    '파킹 어시스턴트 플러스': './images/options/파킹 어시스턴트 플러스.webp',
-    '파킹 어시스턴트': './images/options/파킹 어시스턴트 플러스.webp',
-    '하이빔 어시스턴트': './images/options/하이빔 어시스턴트.webp',
-    'BMW 디지털 키': './images/options/BMW 디지털 키.webp',
-    'BMW 디지털 키 플러스': './images/options/BMW 디지털 키.webp',
-    '무선 충전 트레이': './images/options/무선 충전 트레이.webp'
+    'BMW 커브드 디스플레이': './images/options/BMW/BMW 커브드 디스플레이.webp',
+    '드라이빙 어시스턴트 프로페셔널': './images/options/BMW/드라이빙 어시스턴트 프로페셔널.webp',
+    '드라이빙 어시스턴트': './images/options/BMW/드라이빙 어시스턴트 프로페셔널.webp',
+    '파킹 어시스턴트 플러스': './images/options/BMW/파킹 어시스턴트 플러스.webp',
+    '파킹 어시스턴트': './images/options/BMW/파킹 어시스턴트 플러스.webp',
+    '하이빔 어시스턴트': './images/options/BMW/하이빔 어시스턴트.webp',
+    'BMW 디지털 키': './images/options/BMW/BMW 디지털 키.webp',
+    'BMW 디지털 키 플러스': './images/options/BMW/BMW 디지털 키.webp',
+    '무선 충전 트레이': './images/options/BMW/무선 충전 트레이.webp'
 };
 
 function getTemporaryOptions(vehicle, trim) {
@@ -9557,6 +9572,7 @@ function renderVehicleInfo(vehicleKey) {
     }) : [];
     const usingTemporaryOptions = dbOptions.length === 0;
     const options = usingTemporaryOptions ? getTemporaryOptions(vehicle, trim) : dbOptions;
+    const usingOfficialSiteSummary = options.some(option => Number(option?.is_official_site_summary || 0) === 1);
 
     const trimName = trim?.name || '트림 미선택';
     const trimDescription = String(trim?.description || '').trim();
@@ -9571,9 +9587,11 @@ function renderVehicleInfo(vehicleKey) {
         <section class="vehicle-info-card">
             <h3 class="vehicle-info-section-title">${escapeHtml(trimName)}</h3>
             <p class="vehicle-info-section-desc">
-                ${usingTemporaryOptions
-                    ? '임시 옵션 정보입니다. 실제 국내 출고 사양은 연식·트림에 따라 달라질 수 있습니다.'
-                    : '선택한 트림에 포함되거나 등록된 옵션입니다.'}
+                ${usingOfficialSiteSummary
+                    ? '제조사 공식 사이트의 공개 정보를 바탕으로 주요 사양과 기능을 정리했습니다. 실제 적용 여부는 연식·세부 트림·선택 사양에 따라 달라질 수 있습니다.'
+                    : (usingTemporaryOptions
+                        ? '임시 옵션 정보입니다. 실제 국내 출고 사양은 연식·트림에 따라 달라질 수 있습니다.'
+                        : '선택한 트림에 포함되거나 등록된 옵션입니다.')}
             </p>
             ${trimDescription ? `<div class="vehicle-info-trim-description">${escapeHtml(trimDescription)}</div>` : ''}
 

@@ -75,7 +75,7 @@ if (!in_array($productType, ['', 'RENT', 'LEASE'], true)) fail('이용 방식 �
 try {
     $pdo->beginTransaction();
 
-    $insert = $pdo->prepare("INSERT INTO estimate_quick (
+    $insert = $pdo->prepare("INSERT INTO quick_estimates (
         member_id,
         estimate_no,
         customer_name,
@@ -108,7 +108,7 @@ try {
 
     $estimateId = (int)$pdo->lastInsertId();
     $estimateNo = 'Q' . date('Ymd') . '-' . str_pad((string)$estimateId, 6, '0', STR_PAD_LEFT);
-    $pdo->prepare('UPDATE estimate_quick SET estimate_no=? WHERE id=?')->execute([$estimateNo, $estimateId]);
+    $pdo->prepare('UPDATE quick_estimates SET estimate_no=? WHERE id=?')->execute([$estimateNo, $estimateId]);
     $pdo->commit();
 
     echo json_encode([

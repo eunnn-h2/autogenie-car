@@ -31,18 +31,18 @@ if ($password !== $passwordConfirm) {
 }
 
 try {
-    $stmt = $pdo->prepare('SELECT id, email, phone FROM member_accounts WHERE email = ? OR phone = ? LIMIT 1');
+    $stmt = $pdo->prepare('SELECT id, email, phone FROM members WHERE email = ? OR phone = ? LIMIT 1');
     $stmt->execute([$email, $phone]);
     if ($stmt->fetch()) {
         member_response(['ok' => false, 'message' => '이미 가입된 이메일 또는 휴대폰 번호입니다.'], 409);
     }
 
     $hash = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = $pdo->prepare('INSERT INTO member_accounts (name, phone, email, password_hash) VALUES (?, ?, ?, ?)');
+    $stmt = $pdo->prepare('INSERT INTO members (name, phone, email, password_hash) VALUES (?, ?, ?, ?)');
     $stmt->execute([$name, $phone, $email, $hash]);
     $id = (int)$pdo->lastInsertId();
 
-    $stmt = $pdo->prepare('SELECT id, name, phone, email, created_at FROM member_accounts WHERE id = ?');
+    $stmt = $pdo->prepare('SELECT id, name, phone, email, created_at FROM members WHERE id = ?');
     $stmt->execute([$id]);
     $member = $stmt->fetch();
 
