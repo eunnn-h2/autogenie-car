@@ -30,10 +30,19 @@ try {
     $rows = [];
 
     $stmt = $pdo->prepare("
-        SELECT id, estimate_no, status, brand_name, vehicle_name, trim_name,
-               product_type, contract_months, monthly_payment, created_at
-        FROM estimates
-        WHERE member_id = ?
+        SELECT e.id, e.estimate_no, e.status, e.brand_name, e.vehicle_name, e.trim_name,
+               e.product_type, e.contract_months, e.monthly_payment, e.created_at,
+               COALESCE(NULLIF(chosen_color.image_path, ''),
+                        NULLIF(thumbnail_color.image_path, ''),
+                        NULLIF(vehicle.image_path, '')) AS vehicle_image_path
+        FROM estimate_direct AS e
+        LEFT JOIN car_vehicles AS vehicle ON vehicle.id = e.vehicle_id
+        LEFT JOIN car_colors AS chosen_color
+            ON chosen_color.id = e.color_id AND chosen_color.vehicle_id = e.vehicle_id
+        LEFT JOIN car_colors AS thumbnail_color
+            ON thumbnail_color.id = vehicle.estimate_thumbnail_color_id
+            AND thumbnail_color.vehicle_id = e.vehicle_id
+        WHERE e.member_id = ?
     ");
     $stmt->execute([$memberId]);
     foreach ($stmt->fetchAll() as $row) {
@@ -46,6 +55,7 @@ try {
             'status_label' => estimate_status_label((string)$row['status']),
             'title' => trim((string)$row['brand_name'].' '.(string)$row['vehicle_name']),
             'subtitle' => (string)($row['trim_name'] ?? ''),
+            'image_path' => (string)($row['vehicle_image_path'] ?? ''),
             'product_type' => (string)($row['product_type'] ?? ''),
             'contract_months' => $row['contract_months'] !== null ? (int)$row['contract_months'] : null,
             'monthly_payment' => $row['monthly_payment'] !== null ? (int)$row['monthly_payment'] : null,
@@ -55,7 +65,7 @@ try {
 
     $stmt = $pdo->prepare("
         SELECT id, estimate_no, status, car_type, monthly_budget, product_type, created_at
-        FROM quick_estimates
+        FROM estimate_quick
         WHERE member_id = ?
     ");
     $stmt->execute([$memberId]);
@@ -83,13 +93,15 @@ try {
     $counts = [
         'total'=>count($rows),
         'estimate'=>0,
+        'contacted'=>0,
         'reviewing'=>0,
         'approved'=>0,
         'contracted'=>0,
         'canceled'=>0
     ];
     foreach ($rows as $row) {
-        if (in_array($row['status'], ['NEW','CONTACTED'], true)) $counts['estimate']++;
+        if ($row['status'] === 'NEW') $counts['estimate']++;
+        elseif ($row['status'] === 'CONTACTED') $counts['contacted']++;
         elseif ($row['status'] === 'REVIEWING') $counts['reviewing']++;
         elseif (in_array($row['status'], ['APPROVED','DONE'], true)) $counts['approved']++;
         elseif ($row['status'] === 'CONTRACTED') $counts['contracted']++;

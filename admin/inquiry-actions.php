@@ -17,6 +17,18 @@ function return_url(string $suffix = ''): string {
     return './inquiries.php' . ($query ? '?' . http_build_query($query) : '');
 }
 
+function detail_return_url(int $id, string $flag): string {
+    $query = [];
+    parse_str((string)($_POST['return_query'] ?? ''), $query);
+    // Only known list filters are carried back; never accept arbitrary redirect targets.
+    $query = array_intersect_key($query, array_flip(['status','q','from','to','member_type','per_page','page']));
+    return './inquiry-detail.php?' . http_build_query([
+        'id' => $id,
+        'return_query' => http_build_query($query),
+        $flag => 1,
+    ]);
+}
+
 $action = (string)($_POST['action'] ?? 'save_answer');
 
 if ($action === 'bulk') {
@@ -34,7 +46,13 @@ if ($action === 'bulk') {
         $stmt = $pdo->prepare("UPDATE customer_inquiries SET status='ANSWERED', answered_by=?, answered_at=COALESCE(answered_at,NOW()) WHERE id IN ($marks)");
         $stmt->execute(array_merge([(int)($_SESSION['admin_id'] ?? 0)], $ids));
     }
-    header('Location: ' . return_url('bulk')); exit;
+    $detailId = (int)($_POST['detail_id'] ?? 0);
+    if ($bulkAction !== 'delete' && $detailId > 0 && count($ids) === 1 && $ids[0] === $detailId) {
+        header('Location: ' . detail_return_url($detailId, 'updated'));
+    } else {
+        header('Location: ' . return_url('bulk'));
+    }
+    exit;
 }
 
 $id = (int)($_POST['id'] ?? 0);
@@ -42,5 +60,9 @@ $answer = trim((string)($_POST['answer'] ?? ''));
 if ($id <= 0 || $answer === '' || mb_strlen($answer) > 3000) { header('Location: ' . return_url('error')); exit; }
 $stmt = $pdo->prepare("UPDATE customer_inquiries SET answer=?, status='ANSWERED', answered_by=?, answered_at=NOW() WHERE id=?");
 $stmt->execute([$answer, (int)($_SESSION['admin_id'] ?? 0), $id]);
-header('Location: ' . return_url('saved') . '#inquiry-' . $id);
+if ((int)($_POST['detail_id'] ?? 0) === $id) {
+    header('Location: ' . detail_return_url($id, 'saved'));
+} else {
+    header('Location: ' . return_url('saved'));
+}
 exit;

@@ -118,7 +118,7 @@ if (!$quickTableMissing) {
             $globalRows[] = ['key' => 'QUICK:' . (int)$g['id'], 'created_at' => (string)$g['created_at'], 'id' => (int)$g['id'], 'source' => 'QUICK'];
         }
     } catch (PDOException $e) {
-        // quick_estimates가 아직 없더라도 직접견적 목록은 정상 표시한다.
+        // 간편견적 목록 조회 오류가 발생하더라도 직접견적 목록은 표시한다.
     }
 }
 usort($globalRows, static function(array $a, array $b): int {
@@ -140,7 +140,7 @@ foreach ($globalRows as $index => $g) {
 <?php $currentAdminPage = 'estimates'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main"><div class="card"><div class="top"><div><h1>견적문의 관리</h1><div style="margin-top:5px;color:#84949e">차량 선택 견적과 간편견적을 한 곳에서 최신순으로 확인합니다.</div></div><a href="../db-test.html" target="_blank">+ 실제 화면에서 견적 신청</a></div>
 <?php if ($tableMissing): ?><div class="alert"><strong>estimates 테이블이 없습니다.</strong><br>기존 견적 테이블을 먼저 생성해 주세요.</div><?php endif; ?>
-<?php if ($quickTableMissing): ?><div class="notice"><strong>간편견적 테이블이 아직 없습니다.</strong><br>프로젝트 루트의 <code>quick_estimates_table.sql</code>을 phpMyAdmin에서 한 번 실행하면 간편견적도 여기에 표시됩니다.</div><?php endif; ?>
+<?php if ($quickTableMissing): ?><div class="notice"><strong>간편견적 테이블이 아직 없습니다.</strong><br>연결된 DB에 <code>estimate_quick</code> 테이블이 존재하는지 확인해 주세요.</div><?php endif; ?>
 <form class="filter" method="get">
 <div class="estimate-date-range" data-date-range data-label="신청일"><span data-range-separator>신청일</span><input type="date" name="from" aria-label="조회 시작일" value="<?=h($dates['from'])?>"><span data-range-separator>~</span><input type="date" name="to" aria-label="조회 종료일" value="<?=h($dates['to'])?>"></div>
 <select name="type"><option value="">전체 견적</option><option value="DIRECT" <?=$type==='DIRECT'?'selected':''?>>차량견적</option><option value="QUICK" <?=$type==='QUICK'?'selected':''?>>간편견적</option></select>

@@ -36,7 +36,7 @@ try {
 } catch (PDOException $ex) {
     if ($isQuick && str_contains($ex->getMessage(), "doesn't exist")) {
         http_response_code(500);
-        exit('quick_estimates 테이블이 없습니다. quick_estimates_table.sql을 먼저 실행해 주세요.');
+        exit('간편견적 테이블 estimate_quick을 찾을 수 없습니다. DB 연결을 확인해 주세요.');
     }
     throw $ex;
 }

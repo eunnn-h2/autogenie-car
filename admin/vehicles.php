@@ -20,6 +20,14 @@ requireAdminCategory('vehicles');
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/admin_helpers.php';
 
+$isVehicleDetailPage = defined('AUTOGENIE_VEHICLE_DETAIL_PAGE') && AUTOGENIE_VEHICLE_DETAIL_PAGE === true;
+
+// Old bookmarked detail links should open the dedicated page.
+if (!$isVehicleDetailPage && $_SERVER['REQUEST_METHOD'] === 'GET' && (int)($_GET['vehicle_id'] ?? 0) > 0) {
+    header('Location: ./vehicle-detail.php?' . http_build_query($_GET));
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $permissionAction = (string)($_POST['crud_action'] ?? '');
     if ($permissionAction !== '') {
@@ -1403,7 +1411,7 @@ $active = (string)($_GET['active'] ?? '');
 $page = max(1, (int)($_GET['page'] ?? 1));
 $perPage = (int)($_GET['per_page'] ?? 10);
 if (!in_array($perPage, [10, 20, 50, 100], true)) $perPage = 20;
-$vehicleId = (int)($_GET['vehicle_id'] ?? 0);
+$vehicleId = $isVehicleDetailPage ? (int)($_GET['vehicle_id'] ?? 0) : 0;
 
 $totalRows = 0;
 $totalPages = 1;
@@ -1558,6 +1566,14 @@ try {
     $dashboardDbError = $e->getMessage();
 }
 
+if ($isVehicleDetailPage && $vehicleId > 0 && $vehicleDetail === null && $crudMessage !== '' && $crudError === '') {
+    // Deletion succeeded; return to the previously filtered vehicle list.
+    $returnParams = $_GET;
+    unset($returnParams['vehicle_id']);
+    header('Location: ./vehicles.php?' . http_build_query($returnParams) . '#product-list');
+    exit;
+}
+
 function adminQuery(array $overrides = []): string {
     global $q, $brandId, $fuelType, $active, $page, $perPage;
     $base = [
@@ -1580,7 +1596,7 @@ function adminQuery(array $overrides = []): string {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>차량 데이터 관리 - 오토지니 관리자</title>
+<title><?= $isVehicleDetailPage ? '차량 상세관리' : '차량 데이터 관리' ?> - 오토지니 관리자</title>
 <link rel="stylesheet" href="./sidebar.css">
 <style>
 * {
@@ -3363,10 +3379,14 @@ a {
         <section class="card ag-page-card">
             <div class="top">
                 <div>
-                    <h1>차량 데이터 관리</h1>
-                    <p>상품관리 방식으로 차량·이미지·트림·색상·렌트/리스 가격을 통합 관리합니다.</p>
+                    <h1><?= $isVehicleDetailPage ? '차량 상세관리' : '차량 데이터 관리' ?></h1>
+                    <p><?= $isVehicleDetailPage ? '차량 기본정보와 색상·트림·가격을 관리합니다.' : '차량·이미지·트림·색상·렌트/리스 가격을 통합 관리합니다.' ?></p>
                 </div>
-                <div class="top-stats"><span class="stat">등록 차량 <b><?= number_format($totalRows) ?></b></span></div>
+                <?php if ($isVehicleDetailPage): ?>
+                    <a class="gray-btn" href="./vehicles.php?<?= h(adminQuery(['vehicle_id' => null])) ?>#product-list">← 차량 목록</a>
+                <?php else: ?>
+                    <div class="top-stats"><span class="stat">등록 차량 <b><?= number_format($totalRows) ?></b></span></div>
+                <?php endif; ?>
             </div>
         </section>
 
@@ -3377,7 +3397,7 @@ a {
             </div>
         <?php endif; ?>
 
-        <?php if (canCreateVehicleData()): ?>
+        <?php if (!$isVehicleDetailPage && canCreateVehicleData()): ?>
         <section id="vehicle-create" class="admin-card product-create-card" hidden>
             <div class="card-title">
                 <div>
@@ -3403,6 +3423,7 @@ a {
         </section>
         <?php endif; ?>
 
+        <?php if (!$isVehicleDetailPage): ?>
         <section id="product-list" class="admin-card">
             <div class="card-title">
                 <div>
@@ -3547,7 +3568,7 @@ a {
                                 <tr>
                                     <td><input type="checkbox" class="row-check" value="<?= (int)$row['id'] ?>" aria-label="<?= h($row['name']) ?> 선택"></td>
                                     <td class="number"><?= number_format((int)$row['id']) ?></td>
-                                    <td><?php if (!empty($row['admin_thumbnail_path'])): ?><a class="product-thumb-link" href="./vehicles.php?<?= h(adminQuery(['vehicle_id' => (int)$row['id']])) ?>#vehicle-detail" aria-label="<?= h($row['name']) ?> 상세 보기"><img class="product-thumb" src="../<?= h($row['admin_thumbnail_path']) ?>" alt="<?= h($row['name']) ?>"></a><?php else: ?><span class="no-thumb">No image</span><?php endif; ?></td>
+                                    <td><?php if (!empty($row['admin_thumbnail_path'])): ?><a class="product-thumb-link" href="./vehicle-detail.php?<?= h(adminQuery(['vehicle_id' => (int)$row['id']])) ?>" aria-label="<?= h($row['name']) ?> 상세 보기"><img class="product-thumb" src="../<?= h($row['admin_thumbnail_path']) ?>" alt="<?= h($row['name']) ?>"></a><?php else: ?><span class="no-thumb">No image</span><?php endif; ?></td>
                                     <td>
                                         <?= (int)$row['is_active'] === 1
                                             ? '<span class="status status-active">사용중</span>'
@@ -3557,7 +3578,7 @@ a {
                                     <td><?= h($row['brand_name']) ?></td>
                                     <td class="vehicle-name">
                                         <a class="vehicle-name-link"
-                                           href="./vehicles.php?<?= h(adminQuery(['vehicle_id' => (int)$row['id']])) ?>#vehicle-detail">
+                                           href="./vehicle-detail.php?<?= h(adminQuery(['vehicle_id' => (int)$row['id']])) ?>">
                                             <?= h($row['name']) ?>
                                         </a>
                                         <?php if ((int)$row['is_best'] === 1): ?><span class="best">BEST</span><?php endif; ?>
@@ -3571,7 +3592,7 @@ a {
                                     <td><?= number_format((int)$row['trim_count']) ?>개</td>
                                     <td><?= number_format((int)$row['price_count']) ?>건</td>
                                     <td>
-                                        <a class="detail-btn" href="./vehicles.php?<?= h(adminQuery(['vehicle_id' => (int)$row['id']])) ?>#vehicle-detail">보기</a>
+                                        <a class="detail-btn" href="./vehicle-detail.php?<?= h(adminQuery(['vehicle_id' => (int)$row['id']])) ?>">보기</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -3603,8 +3624,13 @@ a {
             </div>
             <?php endif; ?>
         </section>
+        <?php endif; ?>
 
-        <?php if ($vehicleDetail): ?>
+        <?php if ($isVehicleDetailPage && !$vehicleDetail && !$dashboardDbError): ?>
+            <section class="admin-card"><div class="card-title"><div><h2>차량 정보를 찾을 수 없습니다.</h2><p>삭제되었거나 존재하지 않는 차량입니다.</p></div><a class="gray-btn" href="./vehicles.php?<?= h(adminQuery(['vehicle_id' => null])) ?>#product-list">목록으로</a></div></section>
+        <?php endif; ?>
+
+        <?php if ($isVehicleDetailPage && $vehicleDetail): ?>
         <section id="vehicle-detail" class="admin-card detail-card">
             <div class="card-title">
                 <div>
@@ -3928,7 +3954,7 @@ a {
         </section>
         <?php endif; ?>
 
-        <?php if (canCreateVehicleData() && canUpdateVehicleData()): ?>
+        <?php if (!$isVehicleDetailPage && canCreateVehicleData() && canUpdateVehicleData()): ?>
         <section id="bulk-import" class="admin-card import-card">
             <div class="card-title">
                 <div>
