@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/auth.php';
 requireAdminCategory('inquiries');
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/member-provider.php';
 
 function h(mixed $v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 function qstr(array $changes = []): string {
@@ -87,6 +88,7 @@ try {
     $stmt = $pdo->prepare($sql); $stmt->execute($params); $rows = $stmt->fetchAll();
 }
 
+$memberProviders = adminMemberProviders($pdo, $rows);
 $newCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE status='NEW'")->fetchColumn();
 $answeredCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE status='ANSWERED'")->fetchColumn();
 $totalCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries")->fetchColumn();
@@ -124,7 +126,7 @@ $todayCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE cr
 <td><span class="state <?=$r['status']==='ANSWERED'?'answered':'new'?>"><?=$r['status']==='ANSWERED'?'답변완료':'미처리'?></span></td>
 <td><a class="inquiry-no" href="<?=h($detailHref)?>" title="<?=h($r['inquiry_no'])?>"><?=h($r['inquiry_no'])?></a></td>
 <td class="subject"><a href="<?=h($detailHref)?>"><?=h(mb_strimwidth(preg_replace('/\s+/', ' ', (string)$r['message']),0,90,'…','UTF-8'))?></a><small><?=h($r['member_phone'] ?: ($r['member_email'] ?: '연락처 없음'))?></small></td>
-<td><?=h($r['member_name'] ?: '비회원')?></td>
+<td><?=h($r['member_name'] ?: '비회원')?><div class="member-provider-line"><?=adminMemberProviderBadge($r, $memberProviders)?></div></td>
 <td><?=h(date('Y-m-d H:i', strtotime((string)$r['created_at'])))?></td>
 <td><a class="answer-link <?=$r['status']==='ANSWERED'?'done':'pending'?>" href="<?=h($detailHref)?>"><?=$r['status']==='ANSWERED'?'답변 확인·수정':'상세 보기·답변'?></a></td>
 </tr>

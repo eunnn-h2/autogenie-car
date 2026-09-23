@@ -105,6 +105,54 @@ body {
     color: #3924b9;
 }
 
+.customer-views {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.customer-views a,
+.customer-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 0 12px;
+    border: 1px solid #cfd9e4;
+    border-radius: 7px;
+    background: #fff;
+    font: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.customer-views a[aria-current="page"] {
+    color: #3924b9;
+    background: #f0edff;
+    border-color: #d8d0ff;
+    font-weight: 700;
+}
+
+.customer-action.danger,
+.customer-error {
+    color: #bd293d;
+}
+
+.customer-note {
+    margin: 0 0 16px;
+    color: #748590;
+    line-height: 1.6;
+}
+
+.customer-notice {
+    color: #267644;
+}
+
+.table .customer-empty {
+    padding: 36px;
+    text-align: center;
+}
+
 .status {
     display: inline-block;
     padding: 4px 7px;

@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/auth.php';
 requireAdminCategory('inquiries');
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/member-provider.php';
 
 function detailH(mixed $value): string {
     return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
@@ -43,6 +44,7 @@ if (!$inquiry) {
     exit('해당 문의를 찾을 수 없습니다. <a href="./inquiries.php">목록으로</a>');
 }
 $isAnswered = (string)$inquiry['status'] === 'ANSWERED';
+$memberProviders = adminMemberProviders($pdo, [$inquiry]);
 $answeredBy = trim((string)($inquiry['answered_admin_name'] ?: $inquiry['answered_admin_username'] ?: ''));
 ?>
 <!doctype html>
@@ -64,7 +66,7 @@ $answeredBy = trim((string)($inquiry['answered_admin_name'] ?: $inquiry['answere
 <div class="info"><span class="key">문의번호</span><span class="value"><?=detailH($inquiry['inquiry_no'])?></span></div>
 <div class="info"><span class="key">상태</span><span class="value"><span class="state <?=$isAnswered?'done':'new'?>"><?=$isAnswered?'답변완료':'미처리'?></span></span></div>
 <div class="info"><span class="key">작성자</span><span class="value"><?=detailH($inquiry['member_name']?:'비회원')?></span></div>
-<div class="info"><span class="key">작성구분</span><span class="value"><?=$inquiry['member_id']===null?'비회원':'회원'?></span></div>
+<div class="info"><span class="key">가입경로</span><span class="value"><?=adminMemberProviderBadge($inquiry, $memberProviders)?></span></div>
 <div class="info"><span class="key">연락처</span><span class="value"><?=detailH($inquiry['member_phone']?:'미등록')?></span></div>
 <div class="info"><span class="key">이메일</span><span class="value"><?=detailH($inquiry['member_email']?:'미등록')?></span></div>
 <div class="info"><span class="key">접수일</span><span class="value"><?=detailH($inquiry['created_at'])?></span></div>

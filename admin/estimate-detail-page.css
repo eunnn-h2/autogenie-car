@@ -129,6 +129,11 @@ body.estimate-detail>.wrap {
     font-weight: 600;
 }
 
+.item .member-provider-line {
+    padding: 0;
+    background: transparent;
+}
+
 .memo {
     padding: 15px;
     border: 1px solid #dfe6ea;

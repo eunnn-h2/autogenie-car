@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/auth.php';
 requireAdminCategory('estimates');
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/member-provider.php';
 
 $id = (int)($_GET['id'] ?? 0);
 $type = strtolower(trim((string)($_GET['type'] ?? 'direct')));
@@ -41,6 +42,7 @@ try {
     throw $ex;
 }
 if (!$e) { http_response_code(404); exit('견적을 찾을 수 없습니다.'); }
+$memberProviders = adminMemberProviders($pdo, [$e]);
 
 function h(mixed $v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 function val(mixed $v): string { return ($v === null || $v === '') ? '-' : h($v); }
@@ -53,7 +55,7 @@ function productLabel(mixed $v): string {
 }
 ?>
 <!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><?=h($e['estimate_no'])?> - 견적 상세</title><link rel="stylesheet" href="./estimate-detail-page.css"><link rel="stylesheet" href="./admin-ui.css"></head><body class="estimate-detail"><div class="wrap"><a class="back" href="./estimates.php">← 견적목록</a><div class="card"><div class="head"><div><h1><?=h($e['estimate_no'])?></h1><p>신청일 <?=h($e['created_at'])?></p><span class="kind <?= $isQuick ? 'kind--quick' : 'kind--direct' ?>"><?=$isQuick?'간편견적':'직접견적'?></span></div><form class="status-form" method="post"><select name="status"><?php foreach(['NEW'=>'신규','CONTACTED'=>'상담중','REVIEWING'=>'심사중','APPROVED'=>'승인','CONTRACTED'=>'계약완료','CANCELED'=>'취소'] as $k=>$v): ?><option value="<?=$k?>" <?=$e['status']===$k?'selected':''?>><?=$v?></option><?php endforeach; ?></select><button name="action" value="status">상태 저장</button><button class="delete-btn" name="action" value="delete" onclick="return confirm('이 견적을 삭제할까요? 삭제 후 복구할 수 없습니다.')">삭제</button></form></div>
-<div class="section"><h2>고객 정보</h2><div class="info"><div class="item"><span>성함</span><b><?=h($e['customer_name'])?></b></div><div class="item"><span>연락처</span><b><?=h($e['customer_phone'])?></b></div></div></div>
+<div class="section"><h2>고객 정보</h2><div class="info"><div class="item"><span>성함</span><b><?=h($e['customer_name'])?> <span class="member-provider-line"><?=adminMemberProviderBadge($e, $memberProviders)?></span></b></div><div class="item"><span>연락처</span><b><?=h($e['customer_phone'])?></b></div></div></div>
 <?php if ($isQuick): ?>
 <div class="section"><h2>간편견적 요청 조건</h2><div class="info">
 <div class="item"><span>관심 차종</span><b><?=val($e['car_type'])?></b></div>

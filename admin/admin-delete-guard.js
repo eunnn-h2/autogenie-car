@@ -4,6 +4,8 @@
     let approvedClick = false;
 
     function isDeleteForm(form, submitter) {
+        // Customer actions have their own two-step flow and server-side confirmation.
+        if (form.matches('[data-customer-action]')) return false;
         const values = [
             form.querySelector('[name="crud_action"]')?.value,
             form.querySelector('[name="action"]')?.value,
@@ -46,6 +48,7 @@
         if (!button || !DELETE_PATTERN.test(button.className + ' ' + button.textContent + ' ' + button.value)) return;
         const form = button.form;
         if (!form) return;
+        if (form.matches('[data-customer-action]')) return;
         if (!requireTypedConfirmation()) {
             cancelEvent(event);
             return;

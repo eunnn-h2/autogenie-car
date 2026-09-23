@@ -6,6 +6,7 @@ require_once __DIR__ . '/estimate-date-filter.php';
 try { $dates = estimateDateRange($_GET); }
 catch (InvalidArgumentException $e) { http_response_code(400); exit(htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8')); }
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/member-provider.php';
 
 $status = trim((string)($_GET['status'] ?? ''));
 $q = trim((string)($_GET['q'] ?? ''));
@@ -88,6 +89,7 @@ if ($type === '' || $type === 'QUICK') {
     }
 }
 
+$memberProviders = adminMemberProviders($pdo, $rows);
 usort($rows, static function(array $a, array $b): int {
     $ta = strtotime((string)($a['created_at'] ?? '')) ?: 0;
     $tb = strtotime((string)($b['created_at'] ?? '')) ?: 0;
@@ -168,7 +170,7 @@ foreach ($globalRows as $index => $g) {
         <?php foreach(['NEW'=>'신규','CONTACTED'=>'상담중','REVIEWING'=>'심사중','APPROVED'=>'승인','CONTRACTED'=>'계약완료','CANCELED'=>'취소'] as $k=>$v): ?><option value="<?=h($k)?>" <?=$r['status']===$k?'selected':''?>><?=h($v)?></option><?php endforeach; ?>
     </select>
 </td>
-<td><a class="detail-link" href="./estimate-detail.php?type=<?=strtolower(h($r['_source']))?>&id=<?=(int)$r['id']?>"><?=h($r['customer_name'])?></a></td><td><?=h($r['customer_phone'])?></td>
+<td><a class="detail-link" href="./estimate-detail.php?type=<?=strtolower(h($r['_source']))?>&id=<?=(int)$r['id']?>"><?=h($r['customer_name'])?></a><div class="member-provider-line"><?=adminMemberProviderBadge($r, $memberProviders)?></div></td><td><?=h($r['customer_phone'])?></td>
 <td class="name"><?=h($r['_vehicle_display'])?></td><td><?=h($r['created_at'])?></td>
 <td><div class="row-actions"><button class="action-btn primary small" type="button" onclick="saveRowStatus(this, '<?=h($rowKey)?>')">상태저장</button><button class="action-btn danger small" type="button" onclick="deleteRow('<?=h($rowKey)?>', '<?=h($r['estimate_no'])?>')">삭제</button></div></td>
 </tr><?php endforeach; ?>
