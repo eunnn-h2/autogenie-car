@@ -14,6 +14,11 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 190) {
     member_response(['ok' => false, 'message' => '올바른 이메일 주소를 입력해 주세요.'], 422);
 }
 
+// 소셜 로그인용 내부 주소는 이메일 인증 및 비밀번호 재설정 대상이 아닙니다.
+if (str_ends_with($email, '@accounts.invalid')) {
+    member_response(['ok' => true, 'message' => '가입된 이메일이라면 인증번호를 발송했습니다.']);
+}
+
 $stmt = $pdo->prepare('SELECT id, name, email, status, password_reset_requested_at FROM member_accounts WHERE email = ? LIMIT 1');
 $stmt->execute([$email]);
 $member = $stmt->fetch(PDO::FETCH_ASSOC);

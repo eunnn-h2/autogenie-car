@@ -1,0 +1,18 @@
+오토지니_TEST 카카오 우선 로그인 설정 안내
+
+1. config/kakao.local.example.php를 복사해 config/kakao.local.php로 만듭니다.
+2. 본인 카카오 디벨로퍼스 TEST 앱의 REST API 키와 클라이언트 시크릿을 입력합니다.
+   두 값은 대화·스크린샷·Git에 공개하지 마세요. 시크릿이 노출된 적이 있다면 재발급하세요.
+3. 카카오 디벨로퍼스 > 앱 > 플랫폼 키 > REST API 키 > 카카오 로그인 리다이렉트 URI에
+   http://localhost/autogenie-car/api/kakao-callback.php 를 정확히 등록합니다.
+4. 카카오 로그인 사용 설정 ON. 닉네임 동의항목은 선택적으로 사용하며 없어도 로그인됩니다.
+5. XAMPP Apache + MySQL 시작, http://localhost/autogenie-car/db-test.html 접속.
+6. 마이페이지 > 카카오로 시작하기 클릭 후 로그인/동의합니다.
+
+DB: member_kakao_accounts 테이블은 첫 로그인 시 CREATE TABLE IF NOT EXISTS로 생성합니다.
+DB 계정에 테이블 생성 권한이 없으면 api/kakao_accounts_migration.sql을 phpMyAdmin에서 1회 실행하세요.
+기존 회원 이메일과 카카오 계정은 자동 합치지 않으며, 다른 앱으로 전환하면 별개의 계정입니다.
+실제 이메일·전화번호는 수집하지 않습니다. 견적 신청 시 이름/연락처를 직접 입력해야 합니다.
+클라이언트 시크릿 ON 설정을 기준으로 제작했습니다.
+운영 공개 전 실제 서버의 HTTPS 콜백 주소로 카카오 설정과 kakao.local.php를 변경해야 합니다.
+카카오 서버와 연동한 실계정 테스트는 이 환경에서 실행하지 않았습니다.

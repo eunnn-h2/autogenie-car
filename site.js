@@ -3677,7 +3677,8 @@ function fillEstimateMemberFields(mode) {
     const contactNote = document.getElementById(isQuick ? 'quickEstimateContactNote' : 'estimateContactNote');
     if (!name || !phone || !note || !contactNote) return;
 
-    const memberName = String(currentMember?.name || '').trim();
+    // 카카오 닉네임은 실제 상담 신청자 성함으로 간주하지 않습니다.
+    const memberName = currentMember?.provider === 'kakao' ? '' : String(currentMember?.name || '').trim();
     const memberPhone = formatEstimatePhone(currentMember?.phone || '');
     const signedIn = Boolean(currentMember);
     name.value = signedIn ? memberName : '';
@@ -3721,7 +3722,9 @@ function updateMemberUI(member) {
         if (guestArea) guestArea.hidden = true;
         if (signedText) {
             signedText.hidden = false;
-            signedText.textContent = `${currentMember.email}로 로그인 중입니다.`;
+            signedText.textContent = currentMember.provider === 'kakao'
+                ? '카카오 계정으로 로그인 중입니다.'
+                : `${currentMember.email}로 로그인 중입니다.`;
         }
         loadMyEstimates(false);
         updateInquiryCount();
@@ -3754,6 +3757,10 @@ function openMemberModal(mode = 'login') {
     if (!modal) return;
 
     login.hidden = mode !== 'login';
+    if (mode === 'login') {
+        const emailDetails = document.getElementById('memberEmailDetails');
+        if (emailDetails) emailDetails.open = false;
+    }
     register.hidden = mode !== 'register';
     reset.hidden = mode !== 'reset';
     resetSupport.hidden = mode !== 'reset-support';
@@ -3779,7 +3786,7 @@ function openMemberSettings() {
     }
     document.getElementById('memberInfoName').textContent = currentMember.name || '-';
     document.getElementById('memberInfoPhone').textContent = currentMember.phone || '-';
-    document.getElementById('memberInfoEmail').textContent = currentMember.email || '-';
+    document.getElementById('memberInfoEmail').textContent = currentMember.email || '카카오 계정 (이메일 미수집)';
     document.getElementById('memberInfoCreatedAt').textContent = currentMember.created_at || '-';
     openMemberModal('settings');
 }
@@ -4110,6 +4117,20 @@ async function logoutMember() {
 }
 
 loadCurrentMember();
+// 카카오 인증이 취소되거나 실패한 경우 이용자에게 안내합니다.
+const kakaoLoginResult = new URLSearchParams(window.location.search).get('kakao_login');
+if (kakaoLoginResult === 'cancel' || kakaoLoginResult === 'error') {
+    openMemberModal('login');
+    setMemberMessage('memberLoginMessage', kakaoLoginResult === 'cancel'
+        ? '카카오 로그인이 취소되었습니다.'
+        : '카카오 로그인을 완료하지 못했습니다. 설정을 확인한 뒤 다시 시도해 주세요.');
+    document.getElementById('memberEmailDetails')?.removeAttribute('open');
+}
+if (kakaoLoginResult && window.history && window.history.replaceState) {
+    const cleanedUrl = new URL(window.location.href);
+    cleanedUrl.searchParams.delete('kakao_login');
+    window.history.replaceState(null, '', cleanedUrl.pathname + cleanedUrl.search + cleanedUrl.hash);
+}
 
 // ============================================================
 // 간편견적 입력 처리

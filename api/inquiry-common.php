@@ -55,7 +55,11 @@ function inquiry_member(PDO $pdo): ?array
     $stmt = $pdo->prepare('SELECT id, name, phone, email, status FROM member_accounts WHERE id = ? LIMIT 1');
     $stmt->execute([$memberId]);
     $row = $stmt->fetch();
-    return ($row && ($row['status'] ?? '') === 'ACTIVE') ? $row : null;
+    if (!$row || ($row['status'] ?? '') !== 'ACTIVE') return null;
+    // 소셜 가입용 내부 식별값은 실제 고객 연락처가 아닙니다.
+    if (str_starts_with((string)$row['phone'], 'KAKAO-')) $row['phone'] = null;
+    if (str_ends_with((string)$row['email'], '@accounts.invalid')) $row['email'] = null;
+    return $row;
 }
 
 function inquiry_public(array $row): array

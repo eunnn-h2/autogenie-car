@@ -457,10 +457,10 @@
             </div>
 
             <div id="memberGuestArea">
-                <p class="member-status-text">로그인하면 가입한 이름과 내 정보를 확인할 수 있어요.</p>
+                <p class="member-status-text">카카오로 간편하게 로그인하고 견적과 문의 내역을 확인하세요.</p>
                 <div class="member-auth-actions">
-                    <button class="member-auth-btn primary" type="button" onclick="openMemberModal('login')">로그인</button>
-                    <button class="member-auth-btn" type="button" onclick="openMemberModal('register')">회원가입</button>
+                    <a class="member-auth-btn member-kakao-button" href="./api/kakao-login.php">카카오로 시작하기</a>
+                    <button class="member-auth-btn member-email-secondary" type="button" onclick="openMemberModal('login')">이메일 로그인</button>
                 </div>
             </div>
             <p class="member-status-text" id="memberSignedInText" hidden></p>
@@ -624,7 +624,11 @@
 
         <div id="memberLoginPanel">
             <h2 class="member-modal-title" id="memberModalTitle">로그인</h2>
-            <p class="member-modal-desc">가입한 이메일과 비밀번호로 로그인해 주세요.</p>
+            <p class="member-modal-desc">카카오 계정으로 간편하게 로그인하거나 이메일 로그인을 이용하세요.</p>
+            <a class="member-kakao-button member-kakao-primary" href="./api/kakao-login.php">카카오로 시작하기</a>
+            <div class="member-auth-divider"><span>또는 이메일로 로그인</span></div>
+            <details class="member-email-details" id="memberEmailDetails">
+                <summary>이메일 로그인 열기</summary>
             <form id="memberLoginForm" class="member-form">
                 <div class="member-field">
                     <label for="memberLoginEmail">이메일</label>
@@ -638,7 +642,8 @@
                 <div id="memberLoginMessage" class="member-form-message"></div>
                 <button class="member-form-submit" type="submit">로그인</button>
             </form>
-            <p class="member-switch">처음이신가요? <button type="button" onclick="openMemberModal('register')">회원가입</button></p>
+            </details>
+            <p class="member-switch">이메일 계정이 필요하신가요? <button type="button" onclick="openMemberModal('register')">이메일 회원가입</button></p>
         </div>
 
         <div id="memberRegisterPanel" hidden>

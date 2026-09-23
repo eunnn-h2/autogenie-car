@@ -89,14 +89,15 @@ a {
     margin-bottom: 14px;
 }
 
-.panel h2 {
-    margin: 0 0 16px;
+.main .panel > h2 {
+    margin: 0 0 18px !important;
     font-size: 16px;
 }
 
 .info-grid {
     display: grid;
     grid-template-columns: repeat(2,minmax(0,1fr));
+    grid-auto-rows: minmax(54px, 1fr);
     gap: 0;
     border: 1px solid #e2e8ef;
     border-radius: 7px;
@@ -123,6 +124,14 @@ a {
     background: #f8fafd;
     color: #6d8091;
     font-weight: 700;
+}
+
+.info .key,
+.info .value {
+    display: grid;
+    place-items: center;
+    text-align: center;
+    line-height: 1.5;
 }
 
 .info .value {

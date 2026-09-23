@@ -11969,3 +11969,62 @@ body.detail-mode #vehicleDetailView #app {
         height: 132px;
     }
 }
+
+/* 카카오 우선 로그인: 기존 이메일 로그인은 보조 옵션으로 유지 */
+.member-auth-actions .member-kakao-button,
+.member-kakao-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 50px;
+    border: 1px solid #f7e000;
+    border-radius: 12px;
+    background: #fee500;
+    color: #191919;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.4;
+    text-align: center;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+.member-auth-actions .member-kakao-button:hover,
+.member-kakao-primary:hover { background: #f7dc00; }
+.member-auth-actions .member-email-secondary {
+    background: #fff;
+    color: #545b65;
+    border: 1px solid #dfe3e8;
+}
+.member-auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 17px 0;
+    color: #87909a;
+    font-size: 12px;
+    text-align: center;
+}
+.member-auth-divider::before, .member-auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e5e8ec;
+}
+.member-email-details summary {
+    padding: 12px;
+    color: #505863;
+    text-align: center;
+    border: 1px solid #e0e4e9;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.member-email-details[open] summary { margin-bottom: 16px; }
+.member-email-details .member-form { margin-bottom: 3px; }
+
+/* 카카오 시작 버튼은 고객 영역에서 가장 먼저 보이도록 전체 폭 사용 */
+.member-auth-actions { flex-direction: column; align-items: stretch; gap: 9px; }
+.member-auth-actions .member-email-secondary { width: 100%; min-height: 44px; }
+.member-auth-actions .member-kakao-button { flex: auto; }

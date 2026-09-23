@@ -26,6 +26,11 @@ if ($password !== $passwordConfirm) {
     member_response(['ok' => false, 'message' => '비밀번호 확인이 일치하지 않습니다.'], 422);
 }
 
+// 카카오 회원은 비밀번호 로그인으로 전환할 수 없습니다.
+if (str_ends_with($email, '@accounts.invalid')) {
+    member_response(['ok' => false, 'message' => '카카오 계정은 카카오로 로그인해 주세요.'], 422);
+}
+
 $stmt = $pdo->prepare('SELECT id, status, password_reset_code_hash, password_reset_expires_at FROM member_accounts WHERE email = ? LIMIT 1');
 $stmt->execute([$email]);
 $member = $stmt->fetch(PDO::FETCH_ASSOC);

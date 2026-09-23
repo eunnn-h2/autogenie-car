@@ -49,8 +49,9 @@ function member_public(array $row): array
     return [
         'id' => (int)$row['id'],
         'name' => (string)$row['name'],
-        'phone' => (string)$row['phone'],
-        'email' => (string)$row['email'],
+        'phone' => str_starts_with((string)$row['phone'], 'KAKAO-') ? '' : (string)$row['phone'],
+        'email' => str_ends_with((string)$row['email'], '@accounts.invalid') ? '' : (string)$row['email'],
+        'provider' => str_ends_with((string)$row['email'], '@accounts.invalid') ? 'kakao' : 'email',
         'created_at' => isset($row['created_at']) ? (string)$row['created_at'] : '',
     ];
 }
