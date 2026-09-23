@@ -1,0 +1,139 @@
+/* Autogenie · 페이지 전용 스타일. 원래 선언 순서를 유지합니다. */
+
+/* ===== admin/traffic.php · 원본 스타일 2/2 ===== */
+
+/* 유입 내역: 고정 열 너비 + 가로 스크롤로 글자 단위 줄바꿈 방지 */
+
+.traffic-history-scroll {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.traffic-history-table {
+    width: 1750px;
+    min-width: 1750px;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.traffic-history-table th,.traffic-history-table td {
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    padding: 13px 10px;
+    line-height: 1.45;
+}
+
+.traffic-history-table th {
+    font-size: 12px;
+}
+
+.traffic-history-table td {
+    font-size: 12px;
+}
+
+.traffic-history-table th:nth-child(1) {
+    width: 158px;
+}
+
+.traffic-history-table th:nth-child(2) {
+    width: 110px;
+}
+
+.traffic-history-table th:nth-child(3) {
+    width: 110px;
+}
+
+.traffic-history-table th:nth-child(4) {
+    width: 95px;
+}
+
+.traffic-history-table th:nth-child(5) {
+    width: 125px;
+}
+
+.traffic-history-table th:nth-child(6) {
+    width: 85px;
+}
+
+.traffic-history-table th:nth-child(7) {
+    width: 105px;
+}
+
+.traffic-history-table th:nth-child(8) {
+    width: 150px;
+}
+
+.traffic-history-table th:nth-child(9) {
+    width: 75px;
+}
+
+.traffic-history-table th:nth-child(10) {
+    width: 300px;
+}
+
+.traffic-history-table th:nth-child(11) {
+    width: 300px;
+}
+
+.traffic-history-table .url {
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: nowrap;
+}
+
+.traffic-url-cell {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+.traffic-url-text {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.traffic-url-copy {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    padding: 3px 0;
+    border: 0;
+    background: transparent;
+    color: #3924b9;
+    font: inherit;
+    font-size: 12px;
+    line-height: 1.4;
+    cursor: copy;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.traffic-url-copy:hover {
+    color: #25168c;
+    background: #f3f1ff;
+}
+
+.traffic-url-copy:focus-visible {
+    outline: 2px solid #3924b9;
+    outline-offset: 2px;
+}
+
+.traffic-history-table .pill {
+    white-space: nowrap;
+}

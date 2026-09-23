@@ -1,0 +1,163 @@
+/* 견적 상세 전용 스타일: PHP가 출력하던 상태 색을 명시적 클래스로 분리 */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #eef5f8;
+    color: #25384a;
+    font-family: Pretendard,"Noto Sans KR",Arial,sans-serif;
+}
+
+body.estimate-detail>.wrap {
+    width: min(1000px,calc(100% - 28px));
+    margin: 30px auto!important;
+    padding: 0!important;
+}
+
+.back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 0 14px;
+    margin-bottom: 12px;
+    color: #405bd7;
+    font: inherit;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #d8e2e7;
+    border-radius: 8px;
+    padding: 22px;
+}
+
+.head {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: start;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e5eaee;
+}
+
+.head h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.head p {
+    margin: 6px 0 0;
+    color: #85949e;
+}
+
+.kind {
+    display: inline-flex;
+    margin-top: 8px;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.status-form {
+    display: flex;
+    gap: 7px;
+}
+
+.status-form select {
+    height: 38px;
+    border: 1px solid #cbd5dc;
+    padding: 0 10px;
+}
+
+.status-form button {
+    border: 0;
+    background: #3526ba;
+    color: #fff;
+    padding: 0 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.status-form .delete-btn {
+    background: #fff0f0;
+    color: #c23838;
+    border: 1px solid #efc7c7;
+}
+
+.section {
+    margin-top: 22px;
+}
+
+.section h2 {
+    font-size: 15px;
+    margin: 0 0 10px;
+}
+
+.info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid #dfe6ea;
+    border-left: 1px solid #dfe6ea;
+}
+
+.item {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    border-right: 1px solid #dfe6ea;
+    border-bottom: 1px solid #dfe6ea;
+}
+
+.item span,.item b {
+    padding: 12px;
+}
+
+.item span {
+    background: #f6f8fa;
+    color: #6d7d87;
+}
+
+.item b {
+    font-weight: 600;
+}
+
+.memo {
+    padding: 15px;
+    border: 1px solid #dfe6ea;
+    background: #fafcfd;
+    white-space: pre-wrap;
+    min-height: 90px;
+}
+
+@media(max-width:700px) {
+    .head {
+        display: block;
+    }
+    .status-form {
+        margin-top: 14px;
+    }
+    .info {
+        grid-template-columns: 1fr;
+    }
+    .item {
+        grid-template-columns: 105px 1fr;
+    }
+}
+
+.kind--quick {
+    background: #fff0e8;
+    color: #ef6a2c;
+}
+
+.kind--direct {
+    background: #edf1ff;
+    color: #405bd7;
+}

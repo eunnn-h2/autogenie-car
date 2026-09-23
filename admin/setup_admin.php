@@ -56,14 +56,7 @@ if (!$locked && $error === null && $_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>최초 관리자 생성</title>
-<style>
-*{box-sizing:border-box}html,body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#eef5f8;color:#25384a}
-body{min-height:100vh;display:grid;place-items:center;padding:20px}.box{width:min(480px,100%);background:#fff;border:1px solid #d8e2e7;border-radius:9px;padding:30px}
-h1{margin:0 0 6px}.desc{margin:0 0 22px;color:#8a9aa4;font-size:12px}.field{margin:12px 0}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}
-input{width:100%;height:43px;border:1px solid #c8d4da;border-radius:5px;padding:0 11px}.btn{display:block;width:100%;height:45px;border:0;border-radius:5px;background:#3924b9;color:#fff;font-weight:800;margin-top:16px;cursor:pointer}
-.alert{padding:11px;border-radius:5px;margin:14px 0;font-size:12px}.error{background:#fff1f1;border:1px solid #ffc7c7;color:#b4232f}.success{background:#edf9f2;border:1px solid #bae5c9;color:#15703a}
-a{color:#3924b9}.back{margin-top:18px;text-align:center;font-size:12px}
-</style>
+<link rel="stylesheet" href="./setup_admin-page.css">
 </head>
 <body>
 <div class="box">

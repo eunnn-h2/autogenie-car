@@ -1,0 +1,374 @@
+/* Autogenie · 페이지 전용 스타일. 원래 선언 순서를 유지합니다. */
+
+/* ===== admin/dashboard.php · 원본 스타일 1/1 ===== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font: 14px Pretendard,"Noto Sans KR",Arial,sans-serif;
+    background: #f4f6fa;
+    color: #253245;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 228px minmax(0,1fr);
+    min-height: 100vh;
+}
+
+.main {
+    padding: 26px;
+    min-width: 0;
+}
+
+.page-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 20px;
+}
+
+.page-head h1 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: -.7px;
+}
+
+.page-head p {
+    margin: 7px 0 0;
+    color: #8290a0;
+    font-size: 13px;
+}
+
+.today {
+    font-size: 12px;
+    color: #8290a0;
+    white-space: nowrap;
+}
+
+.panel {
+    background: #fff;
+    border: 1px solid #dde5ee;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    min-width: 0;
+}
+
+.panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 17px;
+}
+
+.panel-head h2 {
+    font-size: 17px;
+    letter-spacing: -.3px;
+    margin: 0;
+}
+
+.panel-head a {
+    font-size: 12px;
+    color: #3b2cb6;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.panel-description {
+    margin: 5px 0 0;
+    color: #8c98a6;
+    font-size: 12px;
+}
+
+.status-cards {
+    display: grid;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 10px;
+}
+
+.status-card {
+    display: block;
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+    padding: 15px 16px;
+    text-decoration: none;
+    color: inherit;
+    background: #fff;
+    transition: border-color .15s,background .15s;
+}
+
+.status-card:hover {
+    border-color: #aca3e8;
+    background: #fcfbff;
+}
+
+.status-card .label {
+    display: block;
+    color: #69798c;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.status-card strong {
+    display: block;
+    margin-top: 7px;
+    font-size: 27px;
+    letter-spacing: -.7px;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+}
+
+.status-card small {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: #8995a3;
+}
+
+.status-card.pending {
+    border-color: #f1d9c9;
+    background: #fffaf7;
+}
+
+.status-card.pending strong {
+    color: #d65d24;
+}
+
+.status-card.complete {
+    border-color: #d4e8db;
+    background: #f9fcfa;
+}
+
+.status-card.complete strong {
+    color: #238152;
+}
+
+.status-card.current {
+    border-color: #dad6f5;
+    background: #faf9ff;
+}
+
+.status-card.current strong {
+    color: #3b2cb6;
+}
+
+.summary-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin-top: 15px;
+    padding-top: 13px;
+    border-top: 1px solid #ebeff5;
+    color: #6f7f90;
+    font-size: 12px;
+}
+
+.summary-line b {
+    color: #253245;
+    font-size: 13px;
+}
+
+.summary-line a {
+    color: #3b2cb6;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.section-label {
+    margin: 15px 0 10px;
+    color: #6b7b8c;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.stage-grid {
+    display: grid;
+    grid-template-columns: repeat(6,minmax(0,1fr));
+    gap: 8px;
+}
+
+.stage {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 10px;
+    background: #f7f9fc;
+    border: 1px solid #e6ebf2;
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.stage.is-new {
+    background: #fffaf7;
+    border-color: #f1d9c9;
+}
+
+.stage.is-new strong {
+    color: #d65d24;
+}
+
+.stage.is-done {
+    background: #f9fcfa;
+    border-color: #d4e8db;
+}
+
+.stage.is-done strong {
+    color: #238152;
+}
+
+.stage span {
+    font-size: 12px;
+    color: #748293;
+}
+
+.stage strong {
+    font-size: 21px;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.stage:hover {
+    background: #f1efff;
+    border-color: #c8bff8;
+}
+
+.list-grid {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    gap: 16px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 470px;
+}
+
+.data-table th,.data-table td {
+    padding: 11px 9px;
+    border-bottom: 1px solid #edf0f5;
+    text-align: left;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.data-table th {
+    background: #f8f9fb;
+    color: #8390a0;
+    font-weight: 700;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.data-table a {
+    color: #243849;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.data-table a:hover {
+    color: #3b2cb6;
+    text-decoration: underline;
+}
+
+.truncate {
+    max-width: 155px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: #f1f3f7;
+    color: #607187;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.tag.pending {
+    background: #fff0e8;
+    color: #c95726;
+}
+
+.tag.complete {
+    background: #eaf6ee;
+    color: #238152;
+}
+
+.tag.current {
+    background: #f0edff;
+    color: #4333b5;
+}
+
+.empty {
+    padding: 30px!important;
+    color: #8996a5;
+    text-align: center;
+}
+
+@media(max-width:1250px) {
+    .list-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:1000px) {
+    .stage-grid {
+        grid-template-columns: repeat(3,minmax(0,1fr));
+    }
+}
+
+@media(max-width:900px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+    .admin-sidebar {
+        display: none;
+    }
+    .main {
+        padding: 16px;
+    }
+}
+
+@media(max-width:620px) {
+    .page-head {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    .panel {
+        padding: 15px;
+    }
+    .status-cards {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+    .stage-grid {
+        grid-template-columns: repeat(3,minmax(0,1fr));
+    }
+}
+
+@media(max-width:390px) {
+    .status-cards,.stage-grid {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+}

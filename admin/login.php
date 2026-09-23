@@ -73,25 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>오토지니 관리자 로그인</title>
-<style>
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#eef5f8;color:#25384a}
-body{min-height:100vh;display:grid;place-items:center;padding:20px}
-.login-card{width:min(420px,100%);background:#fff;border:1px solid #d8e2e7;border-radius:10px;padding:34px;box-shadow:0 12px 36px rgba(27,55,70,.08)}
-.logo{width:48px;height:48px;border-radius:8px;background:#3924b9;color:#fff;display:grid;place-items:center;font-weight:900;margin-bottom:20px}
-h1{margin:0;font-size:24px}
-.desc{margin:8px 0 26px;color:#8a9aa4;font-size:13px}
-.field{margin-bottom:15px}
-label{display:block;margin-bottom:6px;font-size:12px;font-weight:700;color:#60737f}
-input{width:100%;height:46px;border:1px solid #c7d3d9;border-radius:6px;padding:0 13px;font-size:14px;outline:none}
-input:focus{border-color:#3924b9;box-shadow:0 0 0 3px rgba(57,36,185,.08)}
-button{width:100%;height:48px;border:0;border-radius:6px;background:#3924b9;color:#fff;font-weight:800;font-size:14px;cursor:pointer;margin-top:6px}
-.alert{padding:11px 12px;border-radius:5px;margin-bottom:15px;font-size:12px}
-.alert.error{background:#fff1f1;color:#b4232f;border:1px solid #ffc5c5}
-.alert.info{background:#eef7ff;color:#2563a6;border:1px solid #cce6fa}
-.setup{margin-top:18px;padding-top:16px;border-top:1px solid #edf1f3;text-align:center;font-size:11px;color:#9aabb4}
-.setup a{color:#3924b9;text-decoration:none}
-</style>
+<link rel="stylesheet" href="./login-page.css">
 </head>
 <body>
 <div class="login-card">

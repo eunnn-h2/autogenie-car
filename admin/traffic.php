@@ -131,35 +131,8 @@ $queryBase = [
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>유입 분석 - 오토지니 관리자</title>
 <link rel="stylesheet" href="./sidebar.css">
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#eef5f8;color:#25384a;font-size:14px}a{text-decoration:none;color:inherit}.main{min-width:0;padding:26px}.head{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:16px}.head h1{margin:0;font-size:23px}.head p{margin:6px 0 0;color:#80919c}.filter-panel{background:#fff;border:1px solid #d8e2e7;border-radius:7px;padding:14px;margin-bottom:14px}.filter{display:grid;grid-template-columns:150px repeat(4,minmax(150px,1fr)) auto auto;gap:8px;align-items:end}.filter label{display:block;font-size:14px;color:#748791;margin-bottom:5px}.filter select,.filter button{width:100%;height:38px;border:1px solid #c9d5dc;background:#fff;padding:0 10px}.filter button{border:0;background:#25bcd0;color:#fff;font-weight:700;padding:0 16px;cursor:pointer}.filter .reset{display:flex;align-items:center;justify-content:center;height:38px;border:1px solid #c9d5dc;background:#fff;color:#647985;padding:0 14px;white-space:nowrap}.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:14px}.metric,.panel{background:#fff;border:1px solid #d8e2e7;border-radius:7px}.metric{padding:17px}.metric span{color:#7d8e99;font-size:14px}.metric strong{display:block;margin-top:7px;font-size:25px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel{padding:17px;margin-bottom:14px}.panel h2{margin:0 0 13px;font-size:16px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}.panel-head h2{margin:0}.summary-table{width:100%;border-collapse:collapse}.summary-table th,.summary-table td{padding:10px 8px;border-bottom:1px solid #e4eaee;text-align:right}.summary-table th{font-size:14px;color:#647985;background:#fafbfc}.summary-table th:first-child,.summary-table td:first-child{text-align:left}.summary-table tbody tr:hover{background:#fafbff}.summary-table .name{font-weight:700;color:#3924b9}.rate{font-weight:700;color:#16713a}.muted{color:#84959f}.generator{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.generator label{display:block;font-size:14px;color:#748791;margin-bottom:5px}.generator input{width:100%;height:38px;border:1px solid #c8d4db;padding:0 10px}.generator .wide{grid-column:1/-1}.generator-output{display:flex;gap:8px}.generator-output input{flex:1;background:#f7f9fb}.copy-btn{border:0;background:#3924b9;color:#fff;padding:0 16px;font-weight:700;cursor:pointer;white-space:nowrap}.table-wrap{overflow:auto}.table{width:100%;min-width:1250px;border-collapse:collapse}.table th,.table td{padding:10px 8px;border-bottom:1px solid #e4eaee;text-align:left;vertical-align:top}.table th{font-size:14px;color:#647985;background:#fafbfc}.pill{display:inline-flex;padding:3px 7px;border-radius:999px;background:#eef2ff;color:#405bd7;font-size:14px;font-weight:700}.done{background:#eaf8ef;color:#16713a}.url{max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.empty{padding:28px;color:#8b9aa3;text-align:center}.error{padding:12px;background:#fff1f1;border:1px solid #ffcaca;color:#b4232f;margin-bottom:14px}.filter-summary{margin-top:9px;font-size:14px;color:#84959f}.filter-summary strong{color:#3924b9}@media(max-width:1300px){.filter{grid-template-columns:repeat(3,1fr)}.filter .reset{width:100%}.cards{grid-template-columns:repeat(3,1fr)}}@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.generator{grid-template-columns:1fr 1fr}}@media(max-width:900px){.main{padding:14px}.head{align-items:flex-start;flex-direction:column}.filter{grid-template-columns:1fr 1fr}}@media(max-width:600px){.cards{grid-template-columns:1fr 1fr}.generator{grid-template-columns:1fr}.generator .wide{grid-column:auto}.generator-output{display:block}.copy-btn{width:100%;height:38px;margin-top:7px}.filter{grid-template-columns:1fr}}
-</style><link rel="stylesheet" href="./admin-ui.css"><link rel="stylesheet" href="./date-range-picker.css"><script src="./date-range-picker.js" defer></script>
-<style>
-/* 유입 내역: 고정 열 너비 + 가로 스크롤로 글자 단위 줄바꿈 방지 */
-.traffic-history-scroll{width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
-.traffic-history-table{width:1750px;min-width:1750px;table-layout:fixed;border-collapse:collapse}
-.traffic-history-table th,.traffic-history-table td{white-space:nowrap;word-break:keep-all;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;padding:13px 10px;line-height:1.45}
-.traffic-history-table th{font-size:12px}
-.traffic-history-table td{font-size:12px}
-.traffic-history-table th:nth-child(1){width:158px}
-.traffic-history-table th:nth-child(2){width:110px}
-.traffic-history-table th:nth-child(3){width:110px}
-.traffic-history-table th:nth-child(4){width:95px}
-.traffic-history-table th:nth-child(5){width:125px}
-.traffic-history-table th:nth-child(6){width:85px}
-.traffic-history-table th:nth-child(7){width:105px}
-.traffic-history-table th:nth-child(8){width:150px}
-.traffic-history-table th:nth-child(9){width:75px}
-.traffic-history-table th:nth-child(10){width:300px}
-.traffic-history-table th:nth-child(11){width:300px}
-.traffic-history-table .url{max-width:none;overflow:visible;text-overflow:clip;white-space:nowrap}
-.traffic-url-cell{display:flex;align-items:center;gap:7px;min-width:0}
-.traffic-url-text{display:block;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.traffic-url-copy{display:block;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;padding:3px 0;border:0;background:transparent;color:#3924b9;font:inherit;font-size:12px;line-height:1.4;cursor:copy;text-decoration:underline;text-underline-offset:2px}
-.traffic-url-copy:hover{color:#25168c;background:#f3f1ff}
-.traffic-url-copy:focus-visible{outline:2px solid #3924b9;outline-offset:2px}
-.traffic-history-table .pill{white-space:nowrap}
-</style></head>
+<link rel="stylesheet" href="./traffic-page.css"><link rel="stylesheet" href="./admin-ui.css"><link rel="stylesheet" href="./date-range-picker.css"><script src="./date-range-picker.js" defer></script>
+<link rel="stylesheet" href="./traffic-table.css"></head>
 <body><div class="admin-shell">
 <?php $currentAdminPage='traffic'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main">
