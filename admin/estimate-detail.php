@@ -66,4 +66,4 @@ function productLabel(mixed $v): string {
 <div class="section"><h2>이용 조건</h2><div class="info"><div class="item"><span>상품</span><b><?=productLabel($e['product_type'])?></b></div><div class="item"><span>계약기간</span><b><?=val($e['contract_months'])?>개월</b></div><div class="item"><span>선납률</span><b><?=val($e['prepayment_rate'])?>%</b></div><div class="item"><span>연 주행거리</span><b><?=isset($e['annual_mileage'])?number_format((int)$e['annual_mileage']).'km':'-'?></b></div><div class="item"><span>월 납입금</span><b><?=isset($e['monthly_payment'])?number_format((int)$e['monthly_payment']).'원':'-'?></b></div></div></div>
 <div class="section"><h2>고객 메모</h2><div class="memo"><?=val($e['customer_memo'])?></div></div>
 <?php endif; ?>
-</div></div></body></html>
+</div></div><script src="./admin-delete-guard.js" defer></script></body></html>

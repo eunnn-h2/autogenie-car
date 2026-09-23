@@ -22,3 +22,4 @@
     <div class="admin-sidebar__section admin-sidebar__section--system"><p>바로가기</p><a href="../db-test.html" target="_blank" rel="noopener">사용자 견적 화면</a><?php if (!isSalesAdmin()): ?><a href="http://localhost/phpmyadmin/" target="_blank" rel="noopener">phpMyAdmin</a><?php endif; ?></div>
   </nav>
 </aside>
+<script src="./admin-delete-guard.js" defer></script>

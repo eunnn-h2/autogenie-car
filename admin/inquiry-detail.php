@@ -84,4 +84,4 @@ $answeredBy = trim((string)($inquiry['answered_admin_name'] ?: $inquiry['answere
 <?php endif;?>
 <form class="inline" method="post" action="./inquiry-actions.php" onsubmit="return confirm('이 문의를 삭제할까요? 삭제 후 복구할 수 없습니다.');"><input type="hidden" name="action" value="bulk"><input type="hidden" name="bulk_action" value="delete"><input type="hidden" name="ids[]" value="<?=$id?>"><input type="hidden" name="return_query" value="<?=detailH($returnQuery)?>"><button type="submit" class="btn danger">문의 삭제</button></form>
 </div><p class="delete-note">원본 문의 내용과 작성자 정보는 이 화면에서 변경하지 않습니다.</p></section>
-</main></div></body></html>
+</main></div><script src="./admin-delete-guard.js" defer></script></body></html>
