@@ -108,6 +108,10 @@ a {
     min-width: 300px;
 }
 
+.filter > select[name="type"] {
+    margin-left: auto;
+}
+
 .filter button {
     border: 0;
     background: #24bfd1;

@@ -100,6 +100,17 @@ a {
     gap: 10px;
 }
 
+/* Keep the filter borders continuous despite shared control spacing. */
+.filter-box .filter-grid {
+    gap: 0 !important;
+    column-gap: 0 !important;
+    row-gap: 0 !important;
+}
+
+.filter-box .filter-grid > .filter-item.search {
+    border-bottom: 0 !important;
+}
+
 .filter-item {
     min-width: 0;
 }
@@ -143,7 +154,7 @@ a {
     display: flex;
     gap: 10px;
     align-items: center;
-    height: 36px;
+    min-height: 38px;
     flex-wrap: wrap;
 }
 
@@ -152,6 +163,10 @@ a {
     align-items: center;
     gap: 4px;
     white-space: nowrap;
+}
+
+.radio input[type="radio"] {
+    margin: 0;
 }
 
 .search-actions {
@@ -205,6 +220,7 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 14px;
     margin-bottom: 10px;
     padding: 10px 12px;
     background: #f7f9fb;
@@ -241,6 +257,14 @@ a {
 .table-wrap {
     overflow-x: auto;
     border: 1px solid #e0e6ea;
+}
+
+.card > .table-wrap {
+    border-radius: 9px 9px 0 0 !important;
+}
+
+.inquiry-table tbody tr:last-child td {
+    border-bottom: 0;
 }
 
 .inquiry-table {
@@ -387,8 +411,9 @@ a {
     justify-content: space-between;
     align-items: center;
     padding: 11px 12px;
-    border: 1px solid #e0e6ea;
+    border: 1px solid #e2e8f0;
     border-top: 0;
+    border-radius: 0 0 9px 9px;
     background: #f7f9fb;
 }
 
