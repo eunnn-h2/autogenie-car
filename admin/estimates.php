@@ -138,7 +138,7 @@ foreach ($globalRows as $index => $g) {
 <!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>견적 관리 - 오토지니</title><link rel="stylesheet" href="./sidebar.css">
 <link rel="stylesheet" href="./estimates-page.css"><link rel="stylesheet" href="./admin-ui.css"><link rel="stylesheet" href="./date-range-picker.css"><script src="./date-range-picker.js" defer></script></head><body><div class="layout">
 <?php $currentAdminPage = 'estimates'; require __DIR__ . '/sidebar.php'; ?>
-<main class="main"><div class="card"><div class="top"><div><h1>견적문의 관리</h1><div style="margin-top:5px;color:#84949e">차량 선택 견적과 간편견적을 한 곳에서 최신순으로 확인합니다.</div></div><a href="../db-test.html" target="_blank">+ 실제 화면에서 견적 신청</a></div>
+<main class="main"><div class="card"><div class="top"><h1>견적문의 관리</h1><a href="../db-test.html" target="_blank">+ 실제 화면에서 견적 신청</a></div>
 <?php if ($tableMissing): ?><div class="alert"><strong>estimates 테이블이 없습니다.</strong><br>기존 견적 테이블을 먼저 생성해 주세요.</div><?php endif; ?>
 <?php if ($quickTableMissing): ?><div class="notice"><strong>간편견적 테이블이 아직 없습니다.</strong><br>연결된 DB에 <code>estimate_quick</code> 테이블이 존재하는지 확인해 주세요.</div><?php endif; ?>
 <form class="filter" method="get">

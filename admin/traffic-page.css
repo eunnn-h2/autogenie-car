@@ -107,6 +107,9 @@ a {
 }
 
 .metric {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 17px;
 }
 
@@ -152,6 +155,11 @@ a {
 .summary-table {
     width: 100%;
     border-collapse: collapse;
+}
+
+main.main .summary-table th,
+main.main .summary-table td {
+    text-align: center !important;
 }
 
 .summary-table th,.summary-table td {

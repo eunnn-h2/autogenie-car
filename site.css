@@ -12287,3 +12287,344 @@ body.home-main-active .home-primary-action {
     border-color: rgba(225, 71, 24, .12) !important;
     box-shadow: 0 10px 24px rgba(222, 72, 28, .24) !important;
 }
+
+
+/* HOME BRAND SELECT 2026-09-28
+   기존 홈 디자인은 유지하고 브랜드 선택 영역만 추가
+   ============================================================ */
+.home-brand-section {
+    margin-top: 30px;
+}
+
+.home-brand-section .home-section-head {
+    margin-bottom: 14px;
+}
+
+.home-brand-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.home-brand-card {
+    appearance: none;
+    min-width: 0;
+    height: 82px;
+    padding: 9px 5px 8px;
+    border: 1px solid #eceef0;
+    border-radius: 16px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    font: inherit;
+    cursor: pointer;
+    box-shadow: 0 5px 14px rgba(22, 28, 36, 0.035);
+    transition:
+        transform .15s ease,
+        border-color .15s ease,
+        background-color .15s ease,
+        box-shadow .15s ease;
+}
+
+.home-brand-card:active {
+    transform: scale(.97);
+    border-color: rgba(255, 90, 36, .35);
+    background: #fff8f4;
+    box-shadow: 0 2px 8px rgba(255, 90, 36, .08);
+}
+
+.home-brand-logo {
+    width: 43px;
+    height: 29px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-brand-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.home-brand-name {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    color: #343941;
+    font-size: 10.5px;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .home-brand-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(255, 90, 36, .30);
+        box-shadow: 0 8px 18px rgba(255, 90, 36, .09);
+    }
+}
+
+@media (max-width: 390px) {
+    .home-brand-section {
+        margin-top: 28px;
+    }
+
+    .home-brand-grid {
+        gap: 7px;
+    }
+
+    .home-brand-card {
+        height: 77px;
+        border-radius: 15px;
+    }
+
+    .home-brand-logo {
+        width: 38px;
+        height: 26px;
+    }
+
+    .home-brand-name {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 350px) {
+    .home-brand-grid {
+        gap: 6px;
+    }
+
+    .home-brand-card {
+        height: 73px;
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+
+    .home-brand-logo {
+        width: 34px;
+        height: 23px;
+    }
+
+    .home-brand-name {
+        font-size: 9.5px;
+    }
+}
+
+
+/* HOME POPULAR DESIGN OPTION 3 2026-09-28
+   3번째 시안: 장식 최소화 + 이미지/차명/가격 위계 중심
+   ============================================================ */
+#homeView [aria-labelledby="homePopularTitle"] {
+    margin-top: 30px !important;
+}
+
+#homeView [aria-labelledby="homePopularTitle"] .home-section-head {
+    align-items: center !important;
+    margin-bottom: 15px !important;
+}
+
+#homeView #homePopularTitle {
+    margin: 0 !important;
+    color: #111827 !important;
+    font-size: 20px !important;
+    line-height: 1.25 !important;
+    font-weight: 950 !important;
+    letter-spacing: -0.045em !important;
+}
+
+#homeView [aria-labelledby="homePopularTitle"] .home-section-link {
+    margin: 0 !important;
+    padding: 3px 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #6f7780 !important;
+    font-size: 10.5px !important;
+    line-height: 1.2 !important;
+    font-weight: 800 !important;
+    box-shadow: none !important;
+}
+
+#homeView [aria-labelledby="homePopularTitle"] .home-section-link::after {
+    color: var(--accent) !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+}
+
+#homeView .home-popular-marquee {
+    margin-left: -16px !important;
+    margin-right: -16px !important;
+    padding: 0 16px 3px !important;
+}
+
+#homeView .home-popular-grid {
+    gap: 11px !important;
+}
+
+#homeView .home-popular-card {
+    position: relative !important;
+    flex: 0 0 clamp(160px, calc((100vw - 54px) / 2), 214px) !important;
+    overflow: hidden !important;
+    min-height: 0 !important;
+    padding: 0 0 14px !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 18px !important;
+    background: #ffffff !important;
+    text-align: left !important;
+    box-shadow: none !important;
+    transition:
+        transform .16s ease,
+        border-color .16s ease,
+        box-shadow .16s ease !important;
+}
+
+#homeView .home-popular-card:active {
+    transform: scale(.985) !important;
+    border-color: #d8dce1 !important;
+    box-shadow: 0 4px 12px rgba(17, 24, 39, .05) !important;
+}
+
+#homeView .home-popular-image {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 125px !important;
+    margin: 0 0 14px !important;
+    overflow: hidden !important;
+    border-radius: 17px 17px 0 0 !important;
+    background:
+        radial-gradient(circle at 50% 72%, rgba(217, 220, 224, .45) 0%, rgba(240, 242, 244, .35) 36%, rgba(247, 248, 249, 0) 70%),
+        #f7f8f9 !important;
+}
+
+#homeView .home-popular-image::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 21% !important;
+    right: 21% !important;
+    bottom: 16px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: rgba(21, 26, 34, .075) !important;
+    filter: blur(5px) !important;
+    z-index: 0 !important;
+}
+
+#homeView .home-popular-image img {
+    position: relative !important;
+    z-index: 1 !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: 112% !important;
+    max-height: 108% !important;
+    object-fit: contain !important;
+    filter: none !important;
+}
+
+/* 3번째 시안은 랭킹/뱃지 장식을 사용하지 않음 */
+#homeView .home-popular-best {
+    display: none !important;
+}
+
+#homeView .home-popular-name {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 13px !important;
+    color: #111827 !important;
+    font-size: 16px !important;
+    line-height: 1.25 !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.04em !important;
+}
+
+#homeView .home-popular-price {
+    display: flex !important;
+    align-items: baseline !important;
+    margin: 8px 0 0 !important;
+    padding: 0 13px !important;
+    color: #767d86 !important;
+    font-size: 10.5px !important;
+    line-height: 1 !important;
+    font-weight: 750 !important;
+    white-space: nowrap !important;
+}
+
+#homeView .home-popular-price strong {
+    margin: 0 3px 0 4px !important;
+    color: var(--accent) !important;
+    font-size: 23px !important;
+    line-height: 1 !important;
+    font-weight: 950 !important;
+    letter-spacing: -0.045em !important;
+}
+
+@media (hover:hover) and (pointer:fine) {
+    #homeView .home-popular-card:hover {
+        transform: translateY(-2px) !important;
+        border-color: #dadde1 !important;
+        box-shadow: 0 8px 20px rgba(17, 24, 39, .055) !important;
+    }
+}
+
+@media (max-width: 390px) {
+    #homeView .home-popular-card {
+        flex-basis: calc((100vw - 52px) / 2) !important;
+        padding-bottom: 13px !important;
+    }
+
+    #homeView .home-popular-image {
+        height: 116px !important;
+        margin-bottom: 13px !important;
+    }
+
+    #homeView .home-popular-name {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+        font-size: 15px !important;
+    }
+
+    #homeView .home-popular-price {
+        margin-top: 7px !important;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+        font-size: 10px !important;
+    }
+
+    #homeView .home-popular-price strong {
+        font-size: 21px !important;
+    }
+}
+
+@media (max-width: 350px) {
+    #homeView #homePopularTitle {
+        font-size: 18px !important;
+    }
+
+    #homeView .home-popular-card {
+        flex-basis: calc((100vw - 48px) / 2) !important;
+    }
+
+    #homeView .home-popular-image {
+        height: 108px !important;
+    }
+
+    #homeView .home-popular-name {
+        font-size: 14px !important;
+    }
+
+    #homeView .home-popular-price {
+        font-size: 9.5px !important;
+    }
+
+    #homeView .home-popular-price strong {
+        font-size: 19px !important;
+    }
+}

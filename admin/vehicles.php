@@ -1632,7 +1632,6 @@ function adminQuery(array $overrides = []): string {
             <div class="top">
                 <div>
                     <h1><?= $isVehicleDetailPage ? '차량 상세관리' : '차량 데이터 관리' ?></h1>
-                    <p><?= $isVehicleDetailPage ? '차량 기본정보와 색상·트림·가격을 관리합니다.' : '차량·이미지·트림·색상·렌트/리스 가격을 통합 관리합니다.' ?></p>
                 </div>
                 <?php if ($isVehicleDetailPage): ?>
                     <a class="gray-btn" href="./vehicles.php?<?= h(adminQuery(['vehicle_id' => null])) ?>#product-list">← 차량 목록</a>
@@ -1654,7 +1653,6 @@ function adminQuery(array $overrides = []): string {
             <div class="card-title">
                 <div>
                     <h2>차량 상품 등록</h2>
-                    <p>기본 상품정보를 먼저 등록한 뒤, 아래 상세관리에서 색상·트림·가격을 연결할 수 있습니다.</p>
                 </div>
             </div>
             <form method="post" enctype="multipart/form-data" class="vehicle-create-grid">
@@ -1680,7 +1678,6 @@ function adminQuery(array $overrides = []): string {
             <div class="card-title">
                 <div>
                     <h2>차량 상품 목록</h2>
-                    <p>등록된 차량 상품 <strong><?= number_format($totalRows) ?></strong>개를 관리합니다.</p>
                 </div>
                 <div style="display:flex;gap:8px">
                     <?php if (canCreateVehicleData()): ?><button type="button" class="gray-btn" id="toggleVehicleCreate" aria-controls="vehicle-create" aria-expanded="false">+ 차량등록</button><?php endif; ?>
@@ -1887,7 +1884,6 @@ function adminQuery(array $overrides = []): string {
             <div class="card-title">
                 <div>
                     <h2><?= h($vehicleDetail['brand_name']) ?> <?= h($vehicleDetail['name']) ?></h2>
-                    <p>차량 기본정보와 연결된 색상·트림·가격을 직접 수정·추가·삭제할 수 있습니다.</p>
                 </div>
                 <div class="crud-toolbar">
                     <a class="gray-btn" href="./vehicles.php?<?= h(adminQuery(['vehicle_id' => null])) ?>#product-list">목록으로</a>
@@ -2015,7 +2011,7 @@ function adminQuery(array $overrides = []): string {
 
             <div class="crud-section">
                 <div class="crud-section-head">
-                    <div><h3>색상 관리 (<?= count($detailColors) ?>)</h3><span class="color-role-help">차량 이미지 왼쪽의 동그란 버튼으로 공통 대표 이미지를 하나 선택한 뒤 전체 변경사항 저장을 눌러주세요.</span></div>
+                    <div><h3>색상 관리 (<?= count($detailColors) ?>)</h3></div>
                     <div class="crud-section-head-actions">
                         <?php if (canCreateVehicleData()): ?>
                         <button type="button" class="new-item-btn" data-target="addColorPanel" onclick="toggleAddPanel(this)">색상추가</button>
@@ -2211,7 +2207,6 @@ function adminQuery(array $overrides = []): string {
             <div class="card-title">
                 <div>
                     <h2>엑셀 일괄등록</h2>
-                    <p>한 장의 엑셀에 차량 정보를 입력하면 브랜드 → 차량 → 색상 → 트림 → 가격 순서로 자동 저장합니다.</p>
                 </div>
                 <a class="upload-template-btn" href="./download-vehicle-template.php">엑셀 양식 다운로드</a>
             </div>

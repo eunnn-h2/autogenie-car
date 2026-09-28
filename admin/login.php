@@ -79,7 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="login-card">
     <div class="logo">AG</div>
     <h1>관리자 로그인</h1>
-    <p class="desc">관리자 계정으로 로그인해야 차량 DB를 관리할 수 있습니다.</p>
 
     <?php if ($expired): ?>
         <div class="alert info">로그인 시간이 만료되었습니다. 다시 로그인해주세요.</div>

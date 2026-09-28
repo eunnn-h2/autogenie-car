@@ -59,7 +59,7 @@ $answeredBy = trim((string)($inquiry['answered_admin_name'] ?: $inquiry['answere
 <body><div class="layout">
 <?php $currentAdminPage='inquiries'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main">
-<header class="page-header"><div><h1>고객문의 상세</h1><p>문의 내용을 확인하고 답변을 등록하거나 수정합니다.</p></div><a class="btn" href="<?=detailH($backUrl)?>">목록으로</a></header>
+<header class="page-header"><h1>고객문의 상세</h1><a class="btn" href="<?=detailH($backUrl)?>">목록으로</a></header>
 <?php if(isset($_GET['saved'])):?><div class="notice">답변이 저장되었습니다. 고객 문의내역에도 반영됩니다.</div><?php endif;?>
 <?php if(isset($_GET['updated'])):?><div class="notice">문의 처리상태가 변경되었습니다.</div><?php endif;?>
 <section class="panel"><h2>문의 정보</h2><div class="info-grid">

@@ -137,7 +137,7 @@ $queryBase = [
 <?php $currentAdminPage='traffic'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main">
     <section class="card ag-page-card">
-        <div class="top"><div><h1>유입 분석</h1><p>유입경로별 방문 수, 평균 체류시간과 견적 전환을 필터로 비교합니다.</p></div><div class="top-stats"><span class="stat">조회 유입 <b><?=number_format($sessionCount)?></b></span><span class="stat">전환율 <b><?=h($conversion)?>%</b></span></div></div>
+        <div class="top"><h1>유입 분석</h1><div class="top-stats"><span class="stat">조회 유입 <b><?=number_format($sessionCount)?></b></span><span class="stat">전환율 <b><?=h($conversion)?>%</b></span></div></div>
     <section class="filter-box">
         <form class="filter" method="get">
             <div><label>기간</label><select name="period"><option value="7" <?=$period==='7'?'selected':''?>>최근 7일</option><option value="30" <?=$period==='30'?'selected':''?>>최근 30일</option><option value="90" <?=$period==='90'?'selected':''?>>최근 90일</option><option value="all" <?=$period==='all'?'selected':''?>>전체 기간</option></select></div>

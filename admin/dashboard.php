@@ -68,11 +68,11 @@ try {
 <div class="layout">
 <?php $currentAdminPage='dashboard'; require __DIR__.'/sidebar.php'; ?>
 <main class="main">
-<header class="page-head"><div><h1>운영 대시보드</h1><p>견적 진행상황과 고객문의 처리상태를 확인합니다.</p></div><span class="today">기준일 <?=date('Y.m.d')?></span></header>
+<header class="page-head"><div><h1>운영 대시보드</h1></div><span class="today">기준일 <?=date('Y.m.d')?></span></header>
 
 <?php if (canAccessAdminCategory('estimates')): ?>
 <section class="panel" aria-labelledby="estimate-heading">
-  <div class="panel-head"><div><h2 id="estimate-heading">견적 진행 현황</h2><p class="panel-description">차량견적과 간편견적을 합산한 현재 상태입니다.</p></div><a href="./estimates.php">견적관리 바로가기 ›</a></div>
+  <div class="panel-head"><h2 id="estimate-heading">견적 진행 현황</h2><a href="./estimates.php">견적관리 바로가기 ›</a></div>
   <p class="section-label">단계별 접수 건수</p>
   <div class="stage-grid">
     <?php foreach ($statusOrder as $statusCode): ?>
@@ -85,11 +85,11 @@ try {
 
 <?php if (canAccessAdminCategory('inquiries')): ?>
 <section class="panel" aria-labelledby="inquiry-heading">
-  <div class="panel-head"><div><h2 id="inquiry-heading">고객문의 처리 현황</h2><p class="panel-description">일반 고객문의만 집계하며 견적문의는 포함하지 않습니다.</p></div><a href="./inquiries.php">고객문의 바로가기 ›</a></div>
+  <div class="panel-head"><h2 id="inquiry-heading">고객문의 처리 현황</h2><a href="./inquiries.php">고객문의 바로가기 ›</a></div>
   <div class="status-cards">
-    <a class="status-card pending" href="./inquiries.php?status=NEW"><span class="label">미처리 문의</span><strong><?=number_format($inquiryPending)?></strong><small>답변이 필요한 문의</small></a>
-    <a class="status-card complete" href="./inquiries.php?status=ANSWERED"><span class="label">답변 완료</span><strong><?=number_format($inquiryAnswered)?></strong><small>답변 등록된 문의</small></a>
-    <a class="status-card" href="./inquiries.php"><span class="label">전체 고객문의</span><strong><?=number_format($inquiryTotal)?></strong><small>누적 접수 건수</small></a>
+    <a class="status-card pending" href="./inquiries.php?status=NEW"><span class="label">미처리 문의</span><strong><?=number_format($inquiryPending)?></strong></a>
+    <a class="status-card complete" href="./inquiries.php?status=ANSWERED"><span class="label">답변 완료</span><strong><?=number_format($inquiryAnswered)?></strong></a>
+    <a class="status-card" href="./inquiries.php"><span class="label">전체 고객문의</span><strong><?=number_format($inquiryTotal)?></strong></a>
   </div>
 </section>
 <?php endif; ?>

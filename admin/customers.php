@@ -175,7 +175,6 @@ $labels = ag_status_labels();
             <div class="top">
                 <div>
                     <h1>고객 관리</h1>
-                    <p>가입 회원과 견적·문의 고객을 함께 확인합니다.</p>
                 </div>
                 <div class="top-stats"><span class="stat"><?= $showDeleted ? '삭제된 고객' : '통합 고객' ?> <b><?= number_format(count($rows)) ?></b></span></div>
             </div>

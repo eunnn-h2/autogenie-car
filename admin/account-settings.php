@@ -77,7 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main class="main"><div class="wrap">
     <section class="card head ag-page-card">
         <h1>내 계정</h1>
-        <p>현재 비밀번호를 확인한 뒤 새 비밀번호로 변경할 수 있습니다.</p>
     </section>
 
     <?php if ($message): ?><div class="alert ok"><?= esc($message) ?></div><?php endif; ?>

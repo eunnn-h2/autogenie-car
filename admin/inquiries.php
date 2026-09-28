@@ -46,7 +46,6 @@ $status = strtoupper(trim((string)($_GET['status'] ?? '')));
 $q = trim((string)($_GET['q'] ?? ''));
 $from = trim((string)($_GET['from'] ?? ''));
 $to = trim((string)($_GET['to'] ?? ''));
-$memberType = trim((string)($_GET['member_type'] ?? ''));
 $perPage = (int)($_GET['per_page'] ?? 20);
 if (!in_array($perPage, [20,50,100], true)) $perPage = 20;
 $page = max(1, (int)($_GET['page'] ?? 1));
@@ -60,8 +59,6 @@ if ($openId > 0) {
 $params = [];
 $where = [];
 if (in_array($status, ['NEW','ANSWERED'], true)) { $where[] = 'i.status = ?'; $params[] = $status; }
-if ($memberType === 'member') $where[] = 'i.member_id IS NOT NULL';
-if ($memberType === 'guest') $where[] = 'i.member_id IS NULL';
 if ($from !== '' && preg_match('/^\d{4}-\d{2}-\d{2}$/', $from)) { $where[] = 'i.created_at >= ?'; $params[] = $from . ' 00:00:00'; }
 if ($to !== '' && preg_match('/^\d{4}-\d{2}-\d{2}$/', $to)) { $where[] = 'i.created_at <= ?'; $params[] = $to . ' 23:59:59'; }
 if ($q !== '') {
@@ -105,14 +102,13 @@ $todayCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE cr
 <body><div class="layout">
 <?php $currentAdminPage = 'inquiries'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main"><section class="card">
-<div class="top"><div><h1>고객문의 관리</h1><p>문의 목록에서 항목을 누르면 상세 페이지에서 답변을 등록하거나 수정할 수 있습니다.</p></div><div class="top-stats"><span class="stat">전체 <b><?=number_format($totalCount)?></b></span><span class="stat">오늘 <b><?=number_format($todayCount)?></b></span><span class="stat alert">미처리 <b><?=number_format($newCount)?></b></span><span class="stat">답변완료 <b><?=number_format($answeredCount)?></b></span></div></div>
+<div class="top"><h1>고객문의 관리</h1><div class="top-stats"><span class="stat">전체 <b><?=number_format($totalCount)?></b></span><span class="stat">오늘 <b><?=number_format($todayCount)?></b></span><span class="stat alert">미처리 <b><?=number_format($newCount)?></b></span><span class="stat">답변완료 <b><?=number_format($answeredCount)?></b></span></div></div>
 <?php if(isset($_GET['saved'])):?><div class="notice">답변이 저장되었습니다.</div><?php endif;?>
 <?php if(isset($_GET['bulk'])):?><div class="notice">선택한 문의의 처리가 완료되었습니다.</div><?php endif;?>
 <?php if(isset($_GET['error'])):?><div class="notice error">요청을 처리하지 못했습니다. 다시 확인해 주세요.</div><?php endif;?>
 <form class="filter-box" method="get"><div class="filter-grid">
     <div class="filter-item date-range"><span class="filter-label">조회기간</span><div class="filter-control" data-date-range data-label="조회기간"><input type="date" name="from" value="<?=h($from)?>"><span data-range-separator>~</span><input type="date" name="to" value="<?=h($to)?>"></div></div>
     <div class="filter-item"><span class="filter-label">처리상태</span><div class="radio-group"><label class="radio"><input type="radio" name="status" value="" <?=$status===''?'checked':''?>> 전체</label><label class="radio"><input type="radio" name="status" value="NEW" <?=$status==='NEW'?'checked':''?>> 미처리</label><label class="radio"><input type="radio" name="status" value="ANSWERED" <?=$status==='ANSWERED'?'checked':''?>> 답변완료</label></div></div>
-    <div class="filter-item"><span class="filter-label">작성구분</span><div class="radio-group"><label class="radio"><input type="radio" name="member_type" value="" <?=$memberType===''?'checked':''?>> 전체</label><label class="radio"><input type="radio" name="member_type" value="member" <?=$memberType==='member'?'checked':''?>> 회원</label><label class="radio"><input type="radio" name="member_type" value="guest" <?=$memberType==='guest'?'checked':''?>> 비회원</label></div></div>
     <div class="filter-item search"><span class="filter-label">검색어</span><div class="filter-control"><input type="search" name="q" value="<?=h($q)?>" placeholder="문의번호 / 고객명 / 연락처 / 이메일 / 문의내용"><div class="search-actions"><button class="btn primary" type="submit">검색</button><a class="btn" href="./inquiries.php">초기화</a></div></div></div>
     <input type="hidden" name="per_page" value="<?=$perPage?>">
 </div></form>

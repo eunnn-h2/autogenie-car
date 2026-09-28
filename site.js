@@ -2318,6 +2318,23 @@ function selectHomeRecommend(type) {
     closeHomeRecommendModal();
 }
 
+function openHomeBrand(brand) {
+    const keyword = String(brand || '').trim();
+
+    activeListCategory = 'ALL';
+    vehicleSearchKeyword = keyword;
+
+    document.querySelectorAll('.vehicle-category-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.category === 'ALL');
+    });
+
+    const input = document.getElementById('vehicleSearchInput');
+    if (input) input.value = keyword;
+
+    openMainView('vehicle');
+    renderVehicleList();
+}
+
 function renderVehicleList() {
     const list = document.getElementById('vehicleList');
     const status = document.getElementById('status');
