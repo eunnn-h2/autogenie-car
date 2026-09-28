@@ -61,7 +61,7 @@ try {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>운영 대시보드 - 오토지니</title>
 <link rel="stylesheet" href="./sidebar.css">
-<link rel="stylesheet" href="./dashboard-page.css">
+<link rel="stylesheet" href="./dashboard-page.css?v=<?=filemtime(__DIR__.'/dashboard-page.css')?>">
 <link rel="stylesheet" href="./admin-ui.css">
 </head>
 <body>
@@ -96,17 +96,17 @@ try {
 
 <div class="list-grid">
 <?php if (canAccessAdminCategory('estimates')): ?>
-<section class="panel"><div class="panel-head"><h2>최근 견적 접수</h2><a href="./estimates.php">전체보기 ›</a></div><div class="table-wrap"><table class="data-table"><thead><tr><th>구분</th><th>고객</th><th>차량/관심차종</th><th>상태</th><th>신청일</th></tr></thead><tbody>
+<section class="panel"><div class="panel-head"><h2>최근 견적 접수</h2><a href="./estimates.php">전체보기 ›</a></div><div class="table-wrap"><table class="data-table recent-table"><thead><tr><th>신청일</th><th>구분</th><th>고객</th><th>차량/관심차종</th><th>상태</th></tr></thead><tbody>
 <?php foreach ($recentEstimates as $record): ?>
-<tr><td><span class="tag"><?=$record['src']==='QUICK'?'간편':'차량'?></span></td><td><a href="./estimate-detail.php?type=<?=strtolower($record['src'])?>&amp;id=<?=(int)$record['id']?>"><?=ag_h($record['customer_name'])?></a></td><td class="truncate" title="<?=ag_h(trim((string)$record['item'])?:'-')?>"><?=ag_h(trim((string)$record['item'])?:'-')?></td><td><span class="tag <?= $record['status']==='NEW'?'pending':($record['status']==='CONTRACTED'?'complete':'current') ?>"><?=ag_h($statusLabels[$record['status']]??(string)$record['status'])?></span></td><td><?=date('m/d H:i',strtotime((string)$record['created_at']))?></td></tr>
+<tr><td><?=date('m/d H:i',strtotime((string)$record['created_at']))?></td><td><span class="tag"><?=$record['src']==='QUICK'?'간편':'차량'?></span></td><td><a href="./estimate-detail.php?type=<?=strtolower($record['src'])?>&amp;id=<?=(int)$record['id']?>"><?=ag_h($record['customer_name'])?></a></td><td class="truncate" title="<?=ag_h(trim((string)$record['item'])?:'-')?>"><?=ag_h(trim((string)$record['item'])?:'-')?></td><td><span class="tag <?= $record['status']==='NEW'?'pending':($record['status']==='CONTRACTED'?'complete':'current') ?>"><?=ag_h($statusLabels[$record['status']]??(string)$record['status'])?></span></td></tr>
 <?php endforeach; ?>
 <?php if (!$recentEstimates): ?><tr><td colspan="5" class="empty">접수된 견적이 없습니다.</td></tr><?php endif; ?>
 </tbody></table></div></section>
 <?php endif; ?>
 <?php if (canAccessAdminCategory('inquiries')): ?>
-<section class="panel"><div class="panel-head"><h2>최근 고객문의</h2><a href="./inquiries.php">전체보기 ›</a></div><div class="table-wrap"><table class="data-table"><thead><tr><th>고객</th><th>문의내용</th><th>상태</th><th>접수일</th></tr></thead><tbody>
+<section class="panel"><div class="panel-head"><h2>최근 고객문의</h2><a href="./inquiries.php">전체보기 ›</a></div><div class="table-wrap"><table class="data-table recent-table"><thead><tr><th>접수일</th><th>고객</th><th>문의내용</th><th>상태</th></tr></thead><tbody>
 <?php foreach ($recentInquiries as $record): ?>
-<tr><td><?=ag_h($record['member_name']?:'비회원')?></td><td class="truncate"><a title="<?=ag_h((string)$record['message'])?>" href="./inquiries.php?open=<?=(int)$record['id']?>"><?=ag_h(mb_strimwidth(preg_replace('/\s+/u',' ',(string)$record['message'])??'',0,55,'…','UTF-8'))?></a></td><td><span class="tag <?=$record['status']==='ANSWERED'?'complete':'pending'?>"><?=$record['status']==='ANSWERED'?'답변완료':'미처리'?></span></td><td><?=date('m/d H:i',strtotime((string)$record['created_at']))?></td></tr>
+<tr><td><?=date('m/d H:i',strtotime((string)$record['created_at']))?></td><td><?=ag_h($record['member_name']?:'비회원')?></td><td class="truncate"><a title="<?=ag_h((string)$record['message'])?>" href="./inquiries.php?open=<?=(int)$record['id']?>"><?=ag_h(mb_strimwidth(preg_replace('/\s+/u',' ',(string)$record['message'])??'',0,55,'…','UTF-8'))?></a></td><td><span class="tag <?=$record['status']==='ANSWERED'?'complete':'pending'?>"><?=$record['status']==='ANSWERED'?'답변완료':'미처리'?></span></td></tr>
 <?php endforeach; ?>
 <?php if (!$recentInquiries): ?><tr><td colspan="4" class="empty">접수된 고객문의가 없습니다.</td></tr><?php endif; ?>
 </tbody></table></div></section>

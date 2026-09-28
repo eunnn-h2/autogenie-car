@@ -116,7 +116,7 @@ if (ag_table_exists($pdo, 'member_accounts')) {
             $row = &$map[$key];
             $row['name'] = (string)$member['name'];
             $row['phone'] = $realPhone; // 로그인 내부 식별용 KAKAO- 가상 연락처는 표시하지 않습니다.
-            $row['provider'] = isset($kakaoMemberIds[$id]) ? '카카오' : '이메일';
+            $row['provider'] = isset($kakaoMemberIds[$id]) ? '카카오' : '사이트';
             $activityAt = max((string)$member['created_at'], (string)($member['last_login_at'] ?? ''));
             if ($activityAt > $row['latest_at']) $row['latest_at'] = $activityAt;
             unset($row);
@@ -210,7 +210,16 @@ $labels = ag_status_labels();
                         <tr>
                             <td><b><?= ag_h($row['name'] ?: '비회원') ?></b></td>
                             <td><?= ag_h($row['phone'] ?: '-') ?></td>
-                            <td><?= ag_h($row['provider']) ?></td>
+                            <?php
+                            // Older archived snapshots may still use the previous label.
+                            $providerLabel = $row['provider'] === '이메일' ? '사이트' : $row['provider'];
+                            $providerKind = match ($providerLabel) {
+                                '카카오' => 'kakao',
+                                '사이트' => 'site',
+                                default => 'guest',
+                            };
+                            ?>
+                            <td><span class="member-provider member-provider--<?= $providerKind ?>"><?= ag_h($providerLabel) ?></span></td>
                             <td class="count"><?= (int)$row['estimates'] ?></td>
                             <td class="count"><?= (int)$row['inquiries'] ?></td>
                             <td><?= ag_h(trim($row['latest_estimate']) ?: '-') ?></td>

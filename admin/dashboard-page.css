@@ -265,6 +265,11 @@ body {
     vertical-align: middle;
 }
 
+.data-table.recent-table th,
+.data-table.recent-table td {
+    text-align: center !important;
+}
+
 .data-table th {
     background: #f8f9fb;
     color: #8390a0;
