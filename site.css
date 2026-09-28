@@ -12225,3 +12225,65 @@ body.detail-mode #vehicleDetailView #app {
 .member-auth-actions .member-kakao-button {
     flex: auto;
 }
+
+/* ============================================================
+   HOME HERO VISUAL UPDATE 2026-09-28
+   Generated premium automotive hero visual
+   ============================================================ */
+.home-hero,
+body.home-main-active .home-hero {
+    background-image:
+        linear-gradient(180deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,0) 58%, rgba(15,30,48,.04) 100%),
+        url('./images/home/home-hero-premium.webp') !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    border-color: rgba(223, 229, 236, .9) !important;
+}
+
+.home-hero::before,
+body.home-main-active .home-hero::before {
+    background: linear-gradient(
+        180deg,
+        rgba(246, 250, 255, .82) 0%,
+        rgba(246, 250, 255, .56) 26%,
+        rgba(246, 250, 255, .06) 47%,
+        rgba(246, 250, 255, 0) 100%
+    ) !important;
+}
+
+.home-hero::after,
+body.home-main-active .home-hero::after {
+    display: none !important;
+}
+
+.home-hero-image,
+body.home-main-active .home-hero-image {
+    display: none !important;
+}
+
+.home-hero-copy,
+body.home-main-active .home-hero-copy {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.home-title,
+body.home-main-active .home-title {
+    color: #0f1b2d !important;
+    text-shadow: 0 1px 0 rgba(255,255,255,.35) !important;
+}
+
+.home-desc,
+body.home-main-active .home-desc {
+    color: #5f6a78 !important;
+    text-shadow: 0 1px 0 rgba(255,255,255,.45) !important;
+}
+
+.home-primary-action,
+body.home-main-active .home-primary-action {
+    z-index: 3 !important;
+    background: linear-gradient(135deg, #ff6b2c 0%, #ff5426 100%) !important;
+    border-color: rgba(225, 71, 24, .12) !important;
+    box-shadow: 0 10px 24px rgba(222, 72, 28, .24) !important;
+}
