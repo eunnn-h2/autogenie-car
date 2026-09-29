@@ -215,6 +215,7 @@ function groupFlatRows(rows) {
                 vehicle_name: row.vehicle_name ?? row.name ?? row.vehicle,
                 model_year: row.model_year,
                 fuel_type: row.fuel_type,
+                price_basis_product: row.price_basis_product ?? 'RENT',
                 origin_type: row.origin_type ?? row.brand_origin_type ?? row.origin,
                 category: row.category,
                 category_slug: row.category_slug,
@@ -1032,7 +1033,7 @@ function animateMonthlyPrice(panel, nextValue) {
     // 중앙 사이클 재정렬은 레일 끝에 가까워졌을 때 '다음 롤링 직전'에만 수행한다.
 }
 
-function initQuotePanel(vehicle, vehicleKey) {
+function initQuotePanel(vehicle, vehicleKey, initialQuote = null) {
     const trims = Array.isArray(vehicle.trims) ? vehicle.trims : [];
     const trimSelect = document.querySelector(`[data-quote="${CSS.escape(String(vehicleKey))}-trim"]`);
     const panel = document.querySelector(`[data-quote-panel="${CSS.escape(String(vehicleKey))}"]`);
@@ -1253,6 +1254,16 @@ function initQuotePanel(vehicle, vehicleKey) {
     });
 
     chooseDefaultTrim();
+    if (initialQuote) {
+        const { trim, price } = initialQuote;
+        state.trimId = String(trim.id ?? '');
+        state.product = String(price.product_type);
+        state.months = String(price.contract_months);
+        state.prepayment = String(price.prepayment_rate ?? 0);
+        state.mileage = String(price.annual_mileage ?? 0);
+        trimSelect.value = state.trimId;
+        syncTrimSelectDisplay(vehicleKey, state.trimId);
+    }
     render();
 }
 
@@ -1447,7 +1458,16 @@ function getVehicleId(vehicle, index = 0) {
 }
 
 function getMinMonthlyPrice(vehicle, productFilter = vehicleProductFilter) {
-    let min = Infinity;
+    return getMinMonthlyQuote(vehicle, productFilter)?.monthlyPayment || 0;
+}
+
+function getMinMonthlyQuote(vehicle, productFilter = vehicleProductFilter) {
+    if (productFilter === 'ALL') {
+        const preferred = vehicle.price_basis_product === 'LEASE' ? 'LEASE' : 'RENT';
+        return getMinMonthlyQuote(vehicle, preferred)
+            || getMinMonthlyQuote(vehicle, preferred === 'RENT' ? 'LEASE' : 'RENT');
+    }
+    let best = null;
     const trims = Array.isArray(vehicle.trims) ? vehicle.trims : [];
     trims.forEach(trim => {
         (Array.isArray(trim.prices) ? trim.prices : []).forEach(price => {
@@ -1455,10 +1475,12 @@ function getMinMonthlyPrice(vehicle, productFilter = vehicleProductFilter) {
             if (productFilter !== 'ALL' && product !== productFilter) return;
 
             const value = Number(price.monthly_payment ?? price.monthly_price ?? 0);
-            if (value > 0 && value < min) min = value;
+            if (Number.isFinite(value) && value > 0 && (!best || value < best.monthlyPayment)) {
+                best = { trim, price, monthlyPayment: value };
+            }
         });
     });
-    return Number.isFinite(min) ? min : 0;
+    return best;
 }
 
 function vehicleHasProduct(vehicle, productFilter = vehicleProductFilter) {
@@ -1471,20 +1493,11 @@ function vehicleHasProduct(vehicle, productFilter = vehicleProductFilter) {
 }
 
 function getListProductLabel(vehicle) {
-    if (vehicleProductFilter === 'RENT') return '장기렌트';
-    if (vehicleProductFilter === 'LEASE') return '리스';
-
-    const products = new Set();
-    (Array.isArray(vehicle.trims) ? vehicle.trims : []).forEach(trim => {
-        (Array.isArray(trim.prices) ? trim.prices : []).forEach(price => {
-            const product = String(price.product_type ?? '').toUpperCase();
-            if (product) products.add(product);
-        });
-    });
-
-    if (products.has('RENT')) return '장기렌트';
-    if (products.has('LEASE')) return '리스';
-    return '견적';
+    const quote = getMinMonthlyQuote(vehicle);
+    const product = String(quote?.price.product_type ?? '').toUpperCase();
+    if (product === 'RENT') return '장기렌트 기준가';
+    if (product === 'LEASE') return '리스 기준가';
+    return '가격 문의';
 }
 
 function getVehicleFuelText(vehicle) {
@@ -2353,7 +2366,7 @@ function renderVehicleList() {
         const minMonthly = getMinMonthlyPrice(vehicle, vehicleProductFilter);
         const productBadge = getListProductLabel(vehicle);
         return `
-            <button class="vehicle-list-card" type="button" onclick="openVehicleDetail('${escapeHtml(vehicleKey)}')">
+            <button class="vehicle-list-card" type="button" onclick="openVehicleDetail('${escapeHtml(vehicleKey)}', true)">
                 <div class="vehicle-list-copy">
                     <div class="vehicle-list-name">
                         <span>${escapeHtml(getVehicleName(vehicle))}</span>
@@ -2374,7 +2387,7 @@ function renderVehicleList() {
     requestAnimationFrame(() => normalizeVehicleListThumbnails(list));
 }
 
-function renderVehicleDetail(vehicle, index = 0) {
+function renderVehicleDetail(vehicle, index = 0, initialQuote = null) {
     const app = document.getElementById('app');
     const vehicleKey = getVehicleId(vehicle, index);
 
@@ -2394,7 +2407,7 @@ function renderVehicleDetail(vehicle, index = 0) {
     const firstColor = colorList?.querySelector('.color-item');
     if (firstColor) firstColor.classList.add('active');
 
-    initQuotePanel(vehicle, vehicleKey);
+    initQuotePanel(vehicle, vehicleKey, initialQuote);
 }
 
 function getCurrentVehicleByKey(vehicleKey) {
@@ -2635,7 +2648,7 @@ function closeVehicleInfo() {
     resetPageScroll();
 }
 
-function openVehicleDetail(vehicleKey) {
+function openVehicleDetail(vehicleKey, useListPrice = false) {
     const trackedVehicle = allVehicles.find((v, i) => getVehicleId(v, i) === String(vehicleKey));
     trackEstimateProgress('VEHICLE_DETAIL', trackedVehicle ? {vehicle_id:Number((trackedVehicle.vehicle_id ?? trackedVehicle.id) || 0), vehicle_name:getVehicleName(trackedVehicle)} : {});
     const homeView = document.getElementById('homeView');
@@ -2644,7 +2657,8 @@ function openVehicleDetail(vehicleKey) {
     const index = allVehicles.findIndex((vehicle, i) => getVehicleId(vehicle, i) === String(vehicleKey));
     if (index < 0) return;
 
-    renderVehicleDetail(allVehicles[index], index);
+    const initialQuote = getMinMonthlyQuote(allVehicles[index], useListPrice ? vehicleProductFilter : 'ALL');
+    renderVehicleDetail(allVehicles[index], index, initialQuote);
 
     // 홈 전용 배경/하단 여백 규칙이 차량 상세에 남지 않도록 먼저 해제
     document.body.classList.remove('home-main-active');

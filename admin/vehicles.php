@@ -19,6 +19,7 @@ require_once __DIR__ . '/auth.php';
 requireAdminCategory('vehicles');
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/admin_helpers.php';
+require_once __DIR__ . '/../config/vehicle-price-basis.php';
 
 $isVehicleDetailPage = defined('AUTOGENIE_VEHICLE_DETAIL_PAGE') && AUTOGENIE_VEHICLE_DETAIL_PAGE === true;
 
@@ -791,6 +792,9 @@ if (
             throw new RuntimeException('브랜드와 차량명을 입력해주세요.');
         }
 
+        $priceBasis = ag_validate_vehicle_price_basis($_POST['price_basis_product'] ?? 'RENT');
+        ag_ensure_vehicle_price_basis($pdo);
+
         $uploadedImage = ag_upload_original_name($_FILES['vehicle_image'] ?? [], 'images/cars', dirname(__DIR__));
         $imagePath = $uploadedImage ?: (trim((string)($_POST['image_path'] ?? '')) ?: null);
 
@@ -810,6 +814,8 @@ if (
             $columns[] = 'is_recommended';
             $values[] = (int)($_POST['is_recommended'] ?? 0);
         }
+        $columns[] = 'price_basis_product';
+        $values[] = $priceBasis;
         $ph = implode(',', array_fill(0, count($columns), '?'));
         $sql = 'INSERT INTO car_vehicles (`'.implode('`,`', $columns).'`) VALUES ('.$ph.')';
         $pdo->prepare($sql)->execute($values);
@@ -993,12 +999,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
     try {
         if ($crudAction === 'update_vehicle') {
             $vehicleIdPost = (int)($_POST['vehicle_id'] ?? 0);
+            $priceBasis = ag_validate_vehicle_price_basis($_POST['price_basis_product'] ?? 'RENT');
+            ag_ensure_vehicle_price_basis($pdo);
 
             $sets = [
                 'brand_id' => (int)($_POST['brand_id'] ?? 0),
                 'name' => trim((string)($_POST['name'] ?? '')),
                 'model_year' => nullableInt($_POST['model_year'] ?? null),
                 'fuel_type' => (string)($_POST['fuel_type'] ?? 'GASOLINE'),
+                'price_basis_product' => $priceBasis,
                 'base_price' => (int)($_POST['base_price'] ?? 0),
                 'is_best' => (int)($_POST['is_best'] ?? 0),
                 'sort_order' => (int)($_POST['sort_order'] ?? 0),
@@ -1662,6 +1671,7 @@ function adminQuery(array $overrides = []): string {
                 <div><label>연식</label><input type="number" name="model_year" placeholder="2027"></div>
                 <div><label>연료</label><select name="fuel_type"><?php foreach (['GASOLINE','DIESEL','HYBRID','PHEV','EV','LPG','OTHER'] as $fuel): ?><option value="<?= h($fuel) ?>"><?= h($fuel) ?></option><?php endforeach; ?></select></div>
                 <div><label>차량가</label><input type="number" name="base_price" value="0"></div>
+                <div><label>기준가 상품</label><select name="price_basis_product"><option value="RENT">장기렌트 기준가</option><option value="LEASE">리스 기준가</option></select></div>
                 <div><label>정렬순서</label><input type="number" name="sort_order" value="0"></div>
                 <div><label>BEST</label><select name="is_best"><option value="0">일반</option><option value="1">BEST</option></select></div>
                 <?php if ($hasRecommended): ?><div><label>추천차량</label><select name="is_recommended"><option value="0">일반</option><option value="1">추천</option></select></div><?php endif; ?>
@@ -1975,6 +1985,13 @@ function adminQuery(array $overrides = []): string {
                             <span>목록 노출 여부와 표시 순서를 설정합니다.</span>
                         </div>
                         <div class="vehicle-edit-grid setting-grid">
+                            <div class="vehicle-edit-field">
+                                <label>기준가 상품</label>
+                                <select name="price_basis_product">
+                                    <option value="RENT" <?= ($vehicleDetail['price_basis_product'] ?? 'RENT') === 'RENT' ? 'selected' : '' ?>>장기렌트 기준가</option>
+                                    <option value="LEASE" <?= ($vehicleDetail['price_basis_product'] ?? 'RENT') === 'LEASE' ? 'selected' : '' ?>>리스 기준가</option>
+                                </select>
+                            </div>
                             <div class="vehicle-edit-field">
                                 <label>BEST</label>
                                 <select name="is_best">

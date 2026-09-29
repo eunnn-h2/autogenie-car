@@ -6258,30 +6258,45 @@ body.home-main-active .page {
 
 .home-logo {
     gap: 6px;
-    font-size: 24px;
+    font-size: 22px;
     line-height: 1;
-    font-weight: 950;
+    font-weight: 800;
+    font-style: normal;
+    letter-spacing: -0.045em;
 }
 
 .home-search-button {
     width: 44px;
     height: 44px;
-    margin-right: -5px;
+    margin-right: 0;
+    display: grid;
+    place-items: center;
+    border: 1px solid #eceef0;
+    border-radius: 14px;
+    background: #f7f8f9;
+    color: #343941;
+    transition: background-color .15s ease, border-color .15s ease;
 }
 
-.home-search-button:before {
-    left: 8px;
-    top: 7px;
-    width: 19px;
-    height: 19px;
-    border-width: 2.5px;
+.home-search-button svg {
+    width: 22px;
+    height: 22px;
 }
 
+.home-search-button:before,
 .home-search-button:after {
-    left: 26px;
-    top: 26px;
-    width: 12px;
-    height: 2.5px;
+    content: none;
+}
+
+.home-search-button:hover,
+.home-search-button:active {
+    background: #fff3ed;
+    border-color: #ffd5c5;
+}
+
+.home-search-button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
 }
 
 /* 메인 배너: 모든 화면에서 제목 → 설명 → 큰 차량 이미지 → CTA 순서로 보이도록 기본 구조 자체를 변경 */
@@ -7933,8 +7948,8 @@ body.home-main-active .home-hero-image img {
 /* 추천 목록: 스캔하기 쉬운 카드형 리스트 */
 
 .home-recommend-title-row {
-    align-items: center;
-    justify-content: flex-start !important;
+    align-items: flex-end;
+    justify-content: space-between !important;
 }
 
 .home-recommend-head {
@@ -8004,7 +8019,7 @@ body.home-main-active .home-hero-image img {
 
 .home-recommend-thumb {
     width: 100% !important;
-    height: 78px !important;
+    height: 85px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -12233,21 +12248,26 @@ body.detail-mode #vehicleDetailView #app {
 .home-hero,
 body.home-main-active .home-hero {
     background-image:
-        linear-gradient(180deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,0) 58%, rgba(15,30,48,.04) 100%),
-        url('./images/home/home-hero-premium.webp') !important;
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.04) 0%,
+            rgba(255, 255, 255, 0) 58%,
+            rgba(15, 30, 48, 0.04) 100%
+        ),
+        url("./images/home/home-hero-premium.webp") !important;
     background-size: cover !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
-    border-color: rgba(223, 229, 236, .9) !important;
+    border-color: rgba(223, 229, 236, 0.9) !important;
 }
 
 .home-hero::before,
 body.home-main-active .home-hero::before {
     background: linear-gradient(
         180deg,
-        rgba(246, 250, 255, .82) 0%,
-        rgba(246, 250, 255, .56) 26%,
-        rgba(246, 250, 255, .06) 47%,
+        rgba(246, 250, 255, 0.82) 0%,
+        rgba(246, 250, 255, 0.56) 26%,
+        rgba(246, 250, 255, 0.06) 47%,
         rgba(246, 250, 255, 0) 100%
     ) !important;
 }
@@ -12271,23 +12291,22 @@ body.home-main-active .home-hero-copy {
 .home-title,
 body.home-main-active .home-title {
     color: #0f1b2d !important;
-    text-shadow: 0 1px 0 rgba(255,255,255,.35) !important;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) !important;
 }
 
 .home-desc,
 body.home-main-active .home-desc {
     color: #5f6a78 !important;
-    text-shadow: 0 1px 0 rgba(255,255,255,.45) !important;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45) !important;
 }
 
 .home-primary-action,
 body.home-main-active .home-primary-action {
     z-index: 3 !important;
     background: linear-gradient(135deg, #ff6b2c 0%, #ff5426 100%) !important;
-    border-color: rgba(225, 71, 24, .12) !important;
-    box-shadow: 0 10px 24px rgba(222, 72, 28, .24) !important;
+    border-color: rgba(225, 71, 24, 0.12) !important;
+    box-shadow: 0 10px 24px rgba(222, 72, 28, 0.24) !important;
 }
-
 
 /* HOME BRAND SELECT 2026-09-28
    기존 홈 디자인은 유지하고 브랜드 선택 영역만 추가
@@ -12323,22 +12342,22 @@ body.home-main-active .home-primary-action {
     cursor: pointer;
     box-shadow: 0 5px 14px rgba(22, 28, 36, 0.035);
     transition:
-        transform .15s ease,
-        border-color .15s ease,
-        background-color .15s ease,
-        box-shadow .15s ease;
+        transform 0.15s ease,
+        border-color 0.15s ease,
+        background-color 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
 .home-brand-card:active {
-    transform: scale(.97);
-    border-color: rgba(255, 90, 36, .35);
+    transform: scale(0.97);
+    border-color: rgba(255, 90, 36, 0.35);
     background: #fff8f4;
-    box-shadow: 0 2px 8px rgba(255, 90, 36, .08);
+    box-shadow: 0 2px 8px rgba(255, 90, 36, 0.08);
 }
 
 .home-brand-logo {
-    width: 43px;
-    height: 29px;
+    width: 51px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -12356,7 +12375,7 @@ body.home-main-active .home-primary-action {
     max-width: 100%;
     overflow: hidden;
     color: #343941;
-    font-size: 10.5px;
+    font-size: 12px;
     line-height: 1.15;
     font-weight: 800;
     letter-spacing: -0.025em;
@@ -12367,8 +12386,8 @@ body.home-main-active .home-primary-action {
 @media (hover: hover) and (pointer: fine) {
     .home-brand-card:hover {
         transform: translateY(-2px);
-        border-color: rgba(255, 90, 36, .30);
-        box-shadow: 0 8px 18px rgba(255, 90, 36, .09);
+        border-color: rgba(255, 90, 36, 0.3);
+        box-shadow: 0 8px 18px rgba(255, 90, 36, 0.09);
     }
 }
 
@@ -12387,12 +12406,12 @@ body.home-main-active .home-primary-action {
     }
 
     .home-brand-logo {
-        width: 38px;
-        height: 26px;
+        width: 46px;
+        height: 31px;
     }
 
     .home-brand-name {
-        font-size: 10px;
+        font-size: 11.5px;
     }
 }
 
@@ -12408,15 +12427,14 @@ body.home-main-active .home-primary-action {
     }
 
     .home-brand-logo {
-        width: 34px;
-        height: 23px;
+        width: 41px;
+        height: 28px;
     }
 
     .home-brand-name {
-        font-size: 9.5px;
+        font-size: 11px;
     }
 }
-
 
 /* HOME POPULAR DESIGN OPTION 3 2026-09-28
    3번째 시안: 장식 최소화 + 이미지/차명/가격 위계 중심
@@ -12439,19 +12457,28 @@ body.home-main-active .home-primary-action {
     letter-spacing: -0.045em !important;
 }
 
-#homeView [aria-labelledby="homePopularTitle"] .home-section-link {
+#homeView [aria-labelledby="homeBrandTitle"] .home-section-link,
+#homeView [aria-labelledby="homePopularTitle"] .home-section-link,
+#homeView [aria-labelledby="homeRecommendLabel"] .home-section-link {
     margin: 0 !important;
     padding: 3px 0 !important;
     border: 0 !important;
     background: transparent !important;
     color: #6f7780 !important;
-    font-size: 10.5px !important;
     line-height: 1.2 !important;
-    font-weight: 800 !important;
     box-shadow: none !important;
 }
 
-#homeView [aria-labelledby="homePopularTitle"] .home-section-link::after {
+#homeView [aria-labelledby="homeBrandTitle"] .home-section-link,
+#homeView [aria-labelledby="homePopularTitle"] .home-section-link,
+#homeView [aria-labelledby="homeRecommendLabel"] .home-section-link {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+}
+
+#homeView [aria-labelledby="homeBrandTitle"] .home-section-link::after,
+#homeView [aria-labelledby="homePopularTitle"] .home-section-link::after,
+#homeView [aria-labelledby="homeRecommendLabel"] .home-section-link::after {
     color: var(--accent) !important;
     font-size: 14px !important;
     font-weight: 900 !important;
@@ -12479,15 +12506,15 @@ body.home-main-active .home-primary-action {
     text-align: left !important;
     box-shadow: none !important;
     transition:
-        transform .16s ease,
-        border-color .16s ease,
-        box-shadow .16s ease !important;
+        transform 0.16s ease,
+        border-color 0.16s ease,
+        box-shadow 0.16s ease !important;
 }
 
 #homeView .home-popular-card:active {
-    transform: scale(.985) !important;
+    transform: scale(0.985) !important;
     border-color: #d8dce1 !important;
-    box-shadow: 0 4px 12px rgba(17, 24, 39, .05) !important;
+    box-shadow: 0 4px 12px rgba(17, 24, 39, 0.05) !important;
 }
 
 #homeView .home-popular-image {
@@ -12496,12 +12523,17 @@ body.home-main-active .home-primary-action {
     align-items: center !important;
     justify-content: center !important;
     width: 100% !important;
-    height: 125px !important;
+    height: 155px !important;
     margin: 0 0 14px !important;
     overflow: hidden !important;
     border-radius: 17px 17px 0 0 !important;
     background:
-        radial-gradient(circle at 50% 72%, rgba(217, 220, 224, .45) 0%, rgba(240, 242, 244, .35) 36%, rgba(247, 248, 249, 0) 70%),
+        radial-gradient(
+            circle at 50% 72%,
+            rgba(217, 220, 224, 0.45) 0%,
+            rgba(240, 242, 244, 0.35) 36%,
+            rgba(247, 248, 249, 0) 70%
+        ),
         #f7f8f9 !important;
 }
 
@@ -12513,7 +12545,7 @@ body.home-main-active .home-primary-action {
     bottom: 16px !important;
     height: 8px !important;
     border-radius: 50% !important;
-    background: rgba(21, 26, 34, .075) !important;
+    background: rgba(21, 26, 34, 0.075) !important;
     filter: blur(5px) !important;
     z-index: 0 !important;
 }
@@ -12566,11 +12598,11 @@ body.home-main-active .home-primary-action {
     letter-spacing: -0.045em !important;
 }
 
-@media (hover:hover) and (pointer:fine) {
+@media (hover: hover) and (pointer: fine) {
     #homeView .home-popular-card:hover {
         transform: translateY(-2px) !important;
         border-color: #dadde1 !important;
-        box-shadow: 0 8px 20px rgba(17, 24, 39, .055) !important;
+        box-shadow: 0 8px 20px rgba(17, 24, 39, 0.055) !important;
     }
 }
 

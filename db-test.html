@@ -71,7 +71,9 @@
     <section id="homeView" class="view-section home-view">
         <header class="home-topbar">
             <div class="home-logo" aria-label="AUTO GENIE">AUTO <span>GENIE</span></div>
-            <button class="home-search-button" type="button" aria-label="차량 검색" onclick="openMainView('vehicle'); setTimeout(() => document.getElementById('vehicleSearchInput')?.focus(), 0)"></button>
+            <button class="home-search-button" type="button" aria-label="차량 검색" onclick="openMainView('vehicle'); setTimeout(() => document.getElementById('vehicleSearchInput')?.focus(), 0)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg>
+            </button>
         </header>
 
         <div class="home-hero">
@@ -164,9 +166,9 @@
                     </button>
                     <p class="home-section-desc home-recommend-desc">추천 기준을 눌러 원하는 차량군으로 바꿔보세요.</p>
                 </div>
+                <button class="home-section-link" type="button" onclick="openMainView('vehicle')">전체보기</button>
             </div>
             <div class="home-recommend-list" id="homeRecommendList"></div>
-            <button class="home-all-vehicles" type="button" onclick="openMainView('vehicle')">전체 차량 보기&nbsp;&nbsp;›</button>
         </section>
 
         <div class="home-guide">
