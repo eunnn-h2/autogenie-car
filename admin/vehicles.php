@@ -1840,7 +1840,6 @@ function adminQuery(array $overrides = []): string {
                                            href="./vehicle-detail.php?<?= h(adminQuery(['vehicle_id' => (int)$row['id']])) ?>">
                                             <?= h($row['name']) ?>
                                         </a>
-                                        <?php if ((int)$row['is_best'] === 1): ?><span class="best">BEST</span><?php endif; ?>
                                     </td>
                                     <td><?= $row['model_year'] ? h((string)$row['model_year']) : '-' ?></td>
                                     <td><?= h($row['fuel_type']) ?></td>
