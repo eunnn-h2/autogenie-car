@@ -9,6 +9,7 @@ function adminCategoryLabels(): array {
         'inquiries' => '고객문의',
         'customers' => '고객관리',
         'traffic' => '유입 분석',
+        'contracts' => '계약 실적',
     ];
 }
 

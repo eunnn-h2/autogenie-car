@@ -29,6 +29,13 @@ $inquiryTotal = dashCount($pdo, 'customer_inquiries');
 $inquiryPending = dashCount($pdo, 'customer_inquiries', 'status=?', ['NEW']);
 $inquiryAnswered = dashCount($pdo, 'customer_inquiries', 'status=?', ['ANSWERED']);
 
+$monthStart = date('Y-m-01 00:00:00');
+$nextMonthStart = date('Y-m-01 00:00:00', strtotime('+1 month'));
+$monthlyContracted = dashCount($pdo, 'estimate_direct', 'status=? AND created_at>=? AND created_at<?', ['CONTRACTED', $monthStart, $nextMonthStart])
+    + dashCount($pdo, 'estimate_quick', 'status=? AND created_at>=? AND created_at<?', ['CONTRACTED', $monthStart, $nextMonthStart]);
+$monthlyEstimateTotal = dashCount($pdo, 'estimate_direct', 'created_at>=? AND created_at<?', [$monthStart, $nextMonthStart])
+    + dashCount($pdo, 'estimate_quick', 'created_at>=? AND created_at<?', [$monthStart, $nextMonthStart]);
+
 $recentEstimates = [];
 try {
     if ($hasDirect) {
@@ -60,7 +67,7 @@ try {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>운영 대시보드 - 오토지니</title>
-<link rel="stylesheet" href="./sidebar.css">
+<link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
 <link rel="stylesheet" href="./dashboard-page.css?v=<?=filemtime(__DIR__.'/dashboard-page.css')?>">
 <link rel="stylesheet" href="./admin-ui.css">
 </head>
@@ -68,7 +75,31 @@ try {
 <div class="layout">
 <?php $currentAdminPage='dashboard'; require __DIR__.'/sidebar.php'; ?>
 <main class="main">
-<header class="page-head"><div><h1>운영 대시보드</h1></div><span class="today">기준일 <?=date('Y.m.d')?></span></header>
+<header class="page-head">
+  <div><h1>운영 대시보드</h1><p>오늘 처리할 상담과 이번달 계약 현황을 한눈에 확인하세요.</p></div>
+  <span class="today">기준일 <?=date('Y.m.d')?></span>
+</header>
+
+<section class="dashboard-kpi-grid" aria-label="핵심 업무 현황">
+  <a class="dashboard-kpi dashboard-kpi--orange" href="./estimates.php">
+    <span class="dashboard-kpi__label">이번달 견적 접수</span>
+    <strong><?=number_format($monthlyEstimateTotal)?><em>건</em></strong>
+  </a>
+  <a class="dashboard-kpi dashboard-kpi--contract" href="./estimates.php?status=CONTRACTED">
+    <span class="dashboard-kpi__label">이번달 계약건수</span>
+    <strong><?=number_format($monthlyContracted)?><em>건</em></strong>
+  </a>
+  <a class="dashboard-kpi" href="./estimates.php?status=NEW">
+    <span class="dashboard-kpi__label">신규 견적 대기</span>
+    <strong><?=number_format($estimateStatusCounts['NEW'] ?? 0)?><em>건</em></strong>
+  </a>
+  <?php if (canAccessAdminCategory('inquiries')): ?>
+  <a class="dashboard-kpi" href="./inquiries.php?status=NEW">
+    <span class="dashboard-kpi__label">미처리 고객문의</span>
+    <strong><?=number_format($inquiryPending)?><em>건</em></strong>
+  </a>
+  <?php endif; ?>
+</section>
 
 <?php if (canAccessAdminCategory('estimates')): ?>
 <section class="panel" aria-labelledby="estimate-heading">

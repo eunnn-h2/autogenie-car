@@ -53,9 +53,9 @@ function isSalesAdmin(): bool {
 }
 
 /**
- * SALES 계정의 데이터 작업 권한.
- * SUPER_ADMIN / ADMIN은 기존처럼 전체 CRUD 허용.
- * VIEWER는 모두 차단.
+ * SALES 계정의 차량 데이터 작업 권한.
+ * can_create / can_update / can_delete 컬럼은 차량 데이터 메뉴의 등록·수정·삭제에만 사용한다.
+ * SUPER_ADMIN / ADMIN은 차량 데이터 전체 CRUD 허용. VIEWER는 모두 차단.
  */
 function adminCrudPermissions(): array {
     static $permissions = null;
@@ -77,8 +77,10 @@ function adminCrudPermissions(): array {
     $permissions = ['create' => false, 'update' => false, 'delete' => false];
 
     try {
-        require_once __DIR__ . '/../config/database.php';
         global $pdo;
+        if (!isset($pdo) || !($pdo instanceof PDO)) {
+            require_once __DIR__ . '/../config/database.php';
+        }
 
         if (!isset($pdo) || !($pdo instanceof PDO)) {
             return $permissions;
@@ -133,6 +135,14 @@ function canDeleteData(): bool {
     return adminCrudPermissions()['delete'];
 }
 
+function requireDataPermission(string $operation): void {
+    $labels = ['create' => '등록', 'update' => '수정', 'delete' => '삭제'];
+    if (!(adminCrudPermissions()[$operation] ?? false)) {
+        http_response_code(403);
+        exit('차량 ' . ($labels[$operation] ?? '작업') . ' 권한이 없습니다.');
+    }
+}
+
 function canViewVehicleData(): bool {
     return canAccessAdminCategory('vehicles');
 }
@@ -158,6 +168,7 @@ require_once __DIR__ . '/category-permissions.php';
 function canAccessAdminCategory(string $category): bool {
     if ($category === 'admins') return isSuperAdmin();
     if ($category === 'customers' && !isSalesAdmin()) return isSuperAdmin();
+    if ($category === 'contracts' && !isSalesAdmin()) return isSuperAdmin();
     if (!array_key_exists($category, adminCategoryLabels())) return false;
     if (!isSalesAdmin()) return true;
 
@@ -204,28 +215,28 @@ function requireSuperAdmin(): void {
 function requireVehicleEditor(): void {
     if (!canEditVehicleData()) {
         http_response_code(403);
-        exit('등록·수정·삭제 권한이 없습니다.');
+        exit('차량 등록·수정·삭제 권한이 없습니다.');
     }
 }
 
 function requireVehicleCreate(): void {
     if (!canCreateVehicleData()) {
         http_response_code(403);
-        exit('등록 권한이 없습니다.');
+        exit('차량 등록 권한이 없습니다.');
     }
 }
 
 function requireVehicleUpdate(): void {
     if (!canUpdateVehicleData()) {
         http_response_code(403);
-        exit('수정 권한이 없습니다.');
+        exit('차량 수정 권한이 없습니다.');
     }
 }
 
 function requireVehicleDelete(): void {
     if (!canDeleteVehicleData()) {
         http_response_code(403);
-        exit('삭제 권한이 없습니다.');
+        exit('차량 삭제 권한이 없습니다.');
     }
 }
 
@@ -237,7 +248,7 @@ function requireVehicleImport(): void {
 }
 
 function requireVehicleCrudAction(string $action): void {
-    $createActions = ['add_vehicle_manual','add_color','add_trim','add_price'];
+    $createActions = ['add_vehicle_manual','copy_vehicle','add_color','add_trim','add_price'];
     $updateActions = ['bulk_update_vehicles','update_vehicle','update_color','update_trim','update_price','bulk_update_colors','bulk_update_trims','bulk_update_prices'];
     $deleteActions = ['bulk_delete_vehicles','delete_vehicle','delete_color','delete_trim','delete_price'];
 

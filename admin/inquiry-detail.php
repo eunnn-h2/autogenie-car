@@ -52,7 +52,7 @@ $answeredBy = trim((string)($inquiry['answered_admin_name'] ?: $inquiry['answere
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>고객문의 상세 - 오토지니</title>
-<link rel="stylesheet" href="./sidebar.css">
+<link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
 <link rel="stylesheet" href="./inquiry-detail-page.css">
 <link rel="stylesheet" href="./admin-ui.css">
 </head>
@@ -76,14 +76,14 @@ $answeredBy = trim((string)($inquiry['answered_admin_name'] ?: $inquiry['answere
 <section class="panel"><h2>관리자 답변</h2>
 <form method="post" action="./inquiry-actions.php" id="replyForm">
 <input type="hidden" name="action" value="save_answer"><input type="hidden" name="id" value="<?=$id?>"><input type="hidden" name="detail_id" value="<?=$id?>"><input type="hidden" name="return_query" value="<?=detailH($returnQuery)?>">
-<label class="field-label" for="answer">답변 내용</label><textarea class="answer" id="answer" name="answer" maxlength="3000" required placeholder="고객에게 전달할 답변을 작성해 주세요."><?=detailH($inquiry['answer']??'')?></textarea>
-<div class="form-foot"><span class="hint">답변을 저장하면 답변완료 상태로 변경되며 고객의 문의내역에 반영됩니다.</span><div class="buttons"><a href="<?=detailH($backUrl)?>" class="btn">취소</a><button type="submit" class="btn primary"><?=$inquiry['answer']?'답변 수정·저장':'답변 등록'?></button></div></div>
+<label class="field-label" for="answer">답변 내용</label><textarea <?=canUpdateData() ? '' : 'readonly'?> class="answer" id="answer" name="answer" maxlength="3000" required placeholder="고객에게 전달할 답변을 작성해 주세요."><?=detailH($inquiry['answer']??'')?></textarea>
+<div class="form-foot"><span class="hint">답변을 저장하면 답변완료 상태로 변경되며 고객의 문의내역에 반영됩니다.</span><div class="buttons"><a href="<?=detailH($backUrl)?>" class="btn">취소</a><?php if (canUpdateData()): ?><button type="submit" class="btn primary"><?=$inquiry['answer']?'답변 수정·저장':'답변 등록'?></button><?php endif; ?></div></div>
 <?php if($inquiry['answered_at']):?><div class="meta">마지막 답변: <?=detailH($inquiry['answered_at'])?><?=$answeredBy!==''?' · '.detailH($answeredBy):''?></div><?php endif;?>
 </form>
 <div class="status-tools">
-<?php if($isAnswered):?>
+<?php if($isAnswered && canUpdateData()):?>
 <form class="inline" method="post" action="./inquiry-actions.php" onsubmit="return confirm('이 문의를 미처리 상태로 변경할까요?');"><input type="hidden" name="action" value="bulk"><input type="hidden" name="bulk_action" value="mark_new"><input type="hidden" name="ids[]" value="<?=$id?>"><input type="hidden" name="detail_id" value="<?=$id?>"><input type="hidden" name="return_query" value="<?=detailH($returnQuery)?>"><button type="submit" class="btn">미처리로 변경</button></form>
 <?php endif;?>
-<form class="inline" method="post" action="./inquiry-actions.php" onsubmit="return confirm('이 문의를 삭제할까요? 삭제 후 복구할 수 없습니다.');"><input type="hidden" name="action" value="bulk"><input type="hidden" name="bulk_action" value="delete"><input type="hidden" name="ids[]" value="<?=$id?>"><input type="hidden" name="return_query" value="<?=detailH($returnQuery)?>"><button type="submit" class="btn danger">문의 삭제</button></form>
+<?php if (canDeleteData()): ?><form class="inline" method="post" action="./inquiry-actions.php" onsubmit="return confirm('이 문의를 삭제할까요? 삭제 후 복구할 수 없습니다.');"><input type="hidden" name="action" value="bulk"><input type="hidden" name="bulk_action" value="delete"><input type="hidden" name="ids[]" value="<?=$id?>"><input type="hidden" name="return_query" value="<?=detailH($returnQuery)?>"><button type="submit" class="btn danger">문의 삭제</button></form><?php endif; ?>
 </div><p class="delete-note">원본 문의 내용과 작성자 정보는 이 화면에서 변경하지 않습니다.</p></section>
 </main></div><script src="./admin-delete-guard.js" defer></script></body></html>

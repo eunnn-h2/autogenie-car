@@ -572,3 +572,223 @@ a {
         justify-content: flex-start;
     }
 }
+
+
+/* 2026-10-01: 고객문의 처리상태를 견적관리형 빠른 필터로 변경 */
+.today-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #7a8a96;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.today-count b {
+    color: #315cff;
+    font-size: 13px;
+}
+
+.inquiry-quick-filters {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 0 0 12px;
+    padding: 10px 12px;
+    border: 1px solid #e0e6ea;
+    background: #f8fafb;
+    border-radius: 7px;
+}
+
+.inquiry-quick-filters .quick-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 30px;
+    padding: 0 9px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    color: #5f6f7b;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    transition: .15s ease;
+}
+
+.inquiry-quick-filters .quick-filter span {
+    color: #315cff;
+    font-weight: 700;
+}
+
+.inquiry-quick-filters .quick-filter:hover {
+    border-color: #d5dcff;
+    background: #f1f4ff;
+    color: #26374a;
+}
+
+.inquiry-quick-filters .quick-filter.active {
+    border-color: #3924b9;
+    background: #3924b9;
+    color: #fff;
+}
+
+.inquiry-quick-filters .quick-filter.active span {
+    color: #fff;
+}
+
+/* 처리상태 라디오가 빠져서 조회기간 + 검색을 한 줄에 자연스럽게 배치 */
+@media (min-width: 1351px) {
+    .filter-box .filter-grid {
+        grid-template-columns: minmax(300px, .9fr) minmax(520px, 1.7fr);
+    }
+
+    .filter-box .filter-grid > .filter-item.date-range,
+    .filter-box .filter-grid > .filter-item.search {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 850px) {
+    .inquiry-quick-filters {
+        padding: 8px;
+        gap: 5px;
+    }
+
+    .inquiry-quick-filters .quick-filter {
+        min-height: 28px;
+        padding: 0 8px;
+        font-size: 12px;
+    }
+}
+
+/* ===== 고객문의 처리상태 탭 / 검색영역 정리 ===== */
+.inquiry-quick-filters {
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+    margin: 0 0 12px;
+    padding: 9px 12px;
+    background: #f7f9fb;
+    border: 1px solid #dbe4ea;
+    border-radius: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.inquiry-quick-filters .quick-filter {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 32px;
+    padding: 0 12px;
+    color: #4e6472;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 5px;
+    flex: 0 0 auto;
+}
+
+.inquiry-quick-filters .quick-filter + .quick-filter {
+    margin-left: 8px;
+}
+
+.inquiry-quick-filters .quick-filter + .quick-filter::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: 8px;
+    width: 1px;
+    height: 16px;
+    background: #dbe3e8;
+}
+
+.inquiry-quick-filters .quick-filter span {
+    color: #1857df;
+    font-weight: 800;
+}
+
+.inquiry-quick-filters .quick-filter:hover {
+    color: #2f1f9f;
+    background: #f1efff;
+}
+
+.inquiry-quick-filters .quick-filter.active {
+    background: #3924b9;
+    color: #fff;
+}
+
+.inquiry-quick-filters .quick-filter.active span {
+    color: #fff;
+}
+
+.inquiry-quick-filters .quick-filter.active::before,
+.inquiry-quick-filters .quick-filter.active + .quick-filter::before {
+    display: none;
+}
+
+.filter-box {
+    margin-bottom: 14px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+.filter-box .filter-grid {
+    display: grid;
+    grid-template-columns: 300px minmax(420px, 1fr);
+    align-items: center;
+    gap: 12px !important;
+}
+
+.filter-box .filter-item.date-range {
+    grid-column: auto;
+}
+
+.filter-box .filter-item.search {
+    grid-column: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.filter-box .filter-item.search .filter-control {
+    width: min(100%, 445px);
+    margin-left: auto;
+}
+
+.filter-box .filter-control input[type="search"] {
+    height: 38px;
+}
+
+@media (max-width: 1000px) {
+    .filter-box .filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-box .filter-item.search,
+    .filter-box .filter-item.search .filter-control {
+        width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .inquiry-quick-filters {
+        padding: 8px;
+    }
+
+    .inquiry-quick-filters .quick-filter {
+        padding: 0 10px;
+    }
+
+    .filter-box .filter-item.search .filter-control {
+        align-items: stretch;
+        flex-wrap: wrap;
+    }
+
+    .filter-box .filter-item.search input[type="search"] {
+        flex-basis: 100%;
+    }
+}

@@ -93,6 +93,22 @@ body.estimate-detail>.wrap {
     border: 1px solid #efc7c7;
 }
 
+.consultation-note-form button {
+    appearance: none;
+    padding: 8px 14px;
+    border: 1px solid #ddd8f1;
+    border-radius: 5px;
+    background: #f5f3fc;
+    color: #51458b;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+}
+.consultation-note-form button:hover:not(:disabled) { background: #ede9f8; }
+.consultation-note-form button:focus-visible { outline: 2px solid #7565b7; outline-offset: 2px; }
+.consultation-note-form button:disabled { opacity: .5; cursor: not-allowed; }
+
 .section {
     margin-top: 22px;
 }
@@ -120,6 +136,12 @@ body.estimate-detail>.wrap {
     padding: 12px;
 }
 
+.item > span,
+.item > b {
+    display: flex;
+    align-items: center;
+}
+
 .item span {
     background: #f6f8fa;
     color: #6d7d87;
@@ -130,6 +152,9 @@ body.estimate-detail>.wrap {
 }
 
 .item .member-provider-line {
+    display: inline-flex;
+    vertical-align: middle;
+    margin: 0 0 0 6px;
     padding: 0;
     background: transparent;
 }
@@ -166,3 +191,83 @@ body.estimate-detail>.wrap {
     background: #edf1ff;
     color: #405bd7;
 }
+
+
+/* 담당자 배정 */
+.detail-notice,.detail-error{margin-bottom:14px;padding:11px 13px;border-radius:5px;font-size:14px}
+.detail-notice{background:#f2f7ff;border:1px solid #d5e3ff;color:#284f9d}
+.detail-error{background:#fff2f2;border:1px solid #f0caca;color:#b23232}
+.section-title-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}
+.section-title-row h2{margin:0}
+.assignment-current{color:#74828d;font-size:13px}
+.assignment-current strong{color:#111;font-weight:700}
+.assignment-form{display:flex;align-items:center;gap:8px;padding:14px;border:1px solid #dfe6ea;background:#fafbfd}
+.assignment-form select{min-width:260px;height:40px;padding:0 10px;border:1px solid #cbd5dc;border-radius:5px;background:#fff;color:#25384a;font:inherit}
+.assignment-form button{height:40px;padding:0 16px;border:0;border-radius:5px;background:#3526ba;color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.assignment-form button:disabled{background:#c8cbd4;cursor:not-allowed}
+.assignment-help{margin:0;padding:14px;border:1px solid #dfe6ea;background:#fafbfd;color:#8995a3}
+@media(max-width:700px){
+    .section-title-row{align-items:flex-start;flex-direction:column;gap:5px}
+    .assignment-form{align-items:stretch;flex-direction:column}
+    .assignment-form select,.assignment-form button{width:100%;min-width:0}
+}
+
+/* 담당자 배정 상태/이관 */
+.assignment-current strong em{
+    margin-left:4px;
+    color:#b24b4b;
+    font-size:12px;
+    font-style:normal;
+    font-weight:700;
+}
+.assignment-control{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.assignment-note{
+    margin:10px 0 0;
+    color:#6f7d88;
+    font-size:13px;
+    line-height:1.5;
+}
+.assignment-state{
+    display:flex;
+    align-items:center;
+    min-height:54px;
+    padding:0 14px;
+    border:1px solid #dfe6ea;
+    background:#fafbfd;
+    color:#4f5d68;
+    font-size:14px;
+    font-weight:600;
+}
+.assignment-state--mine{
+    color:#25384a;
+}
+.assignment-form--self{
+    padding:14px;
+}
+@media(max-width:700px){
+    .assignment-control{align-items:stretch;flex-direction:column}
+    .assignment-control select,.assignment-control button{width:100%;min-width:0}
+}
+
+/* 2026-09-30: 상담 구분 */
+.contact-tag-help{color:#8a97a3;font-size:12px}
+.contact-tag-form{padding:14px;border:1px solid #dfe6ea;background:#fafbfd}
+.contact-tag-options{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.contact-tag-option{position:relative;cursor:pointer}
+.contact-tag-option input{position:absolute;opacity:0;pointer-events:none}
+.contact-tag-option span{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:0 12px;border:1px solid #d9e0e6;border-radius:6px;background:#fff;color:#667582;font-size:13px;font-weight:700;transition:.15s ease}
+.contact-tag-option input:checked + span{box-shadow:0 0 0 2px rgba(57,36,185,.08);font-weight:800}
+.contact-tag-option input:disabled + span{opacity:.6;cursor:not-allowed}
+.contact-tag-option--none input:checked + span{border-color:#b8c2cb;background:#f3f5f7;color:#596875}
+.contact-tag-option--consulting input:checked + span{border-color:#bbc6d0;background:#eef2f5;color:#445766}
+.contact-tag-option--no_answer input:checked + span{border-color:#cfd9ff;background:#eef2ff;color:#5269bf}
+.contact-tag-option--managed input:checked + span{border-color:#e2b9ee;background:#f8ecfc;color:#9b42b2}
+.contact-tag-option--special input:checked + span{border-color:#c9c9c9;background:#f0f0f0;color:#3f454b}
+.contact-tag-option--simple input:checked + span{border-color:#f1a7ad;background:#fff0f1;color:#d93644}
+.contact-tag-save{margin-top:12px;height:36px;padding:0 14px;border:0;border-radius:5px;background:#3526ba;color:#fff;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.contact-tag-save:hover{background:#2f1c9f}
+@media(max-width:700px){.contact-tag-options{align-items:stretch}.contact-tag-option span{min-height:36px;padding:0 10px}}

@@ -416,6 +416,72 @@ a {
     font-weight: 700;
 }
 
+.admin-table .vehicle-management-heading {
+    text-align: left;
+    padding-left: 14px;
+    background: #f1f5f9;
+}
+
+.admin-table .vehicle-management-heading,
+.admin-table .vehicle-management-cell {
+    width: 1%;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    white-space: nowrap;
+}
+
+.vehicle-management-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.admin-table .vehicle-management-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 28px;
+    min-height: 28px !important;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 0 10px;
+    border: 1px solid #dce2e9;
+    border-radius: 7px;
+    background: #fff;
+    color: #647184;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    box-shadow: 0 1px 2px rgba(31, 41, 55, .05);
+    cursor: pointer;
+}
+
+.vehicle-copy-form {
+    margin: 0;
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.vehicle-management-btn svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+}
+
+.vehicle-management-btn:hover {
+    background: #f8fafc;
+    border-color: #aebbc9;
+}
+
+.vehicle-management-btn:focus-visible {
+    outline: 2px solid #3924b9;
+    outline-offset: 2px;
+}
+
 .empty {
     height: 90px!important;
     color: #99a9b2;
@@ -493,6 +559,13 @@ a {
     grid-template-columns: 110px 1fr;
     border-right: 1px solid #dfe5e8;
     border-bottom: 1px solid #dfe5e8;
+}
+
+.info-table span,
+.info-table b {
+    display: flex;
+    align-items: center;
+    min-width: 0;
 }
 
 .info-table span {
@@ -850,7 +923,7 @@ a {
 }
 
 .crud-row.price-row {
-    grid-template-columns: minmax(130px,1fr) 100px 90px 90px 110px 120px 90px auto;
+    grid-template-columns: minmax(130px,240px) minmax(100px,1fr) minmax(90px,1fr) minmax(90px,1fr) minmax(110px,1fr) minmax(120px,1.2fr) 90px auto;
 }
 
 .crud-row label {
@@ -1474,6 +1547,33 @@ a {
     border-top: 3px solid #3924b9;
 }
 
+.vehicle-create-photo-grid { display: grid; grid-template-columns: minmax(220px, 320px) 1fr; gap: 24px; align-items: center; }
+.vehicle-create-preview { min-height: 210px; padding: 16px; border: 1px dashed #cbd5e1; background: #f8fafc; display: grid; place-items: center; color: #62727d; border-radius: 8px; }
+.vehicle-create-preview img { max-width: 100%; height: 190px; object-fit: contain; }
+.vehicle-create-photo-grid .vehicle-form-help { margin: 10px 0 18px; }
+.vehicle-create-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.vehicle-create-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; padding: 16px 0; border-bottom: 1px solid #e2e8f0; align-items: start; }
+.vehicle-create-row .vehicle-edit-field > span { display: block; margin-bottom: 6px; font-size: 13px; color: #62727d; }
+.vehicle-create-row-actions { display: flex; gap: 8px; align-self: end; }
+.vehicle-create-color-preview { max-width: 140px; height: 80px; object-fit: contain; margin-top: 8px; }
+[data-create-group] .vehicle-edit-group-title { display: flex; justify-content: space-between; gap: 12px; }
+@media (max-width: 750px) { .vehicle-create-photo-grid { grid-template-columns: 1fr; } }
+
+.vehicle-form-heading {
+    grid-column: 1 / -1;
+    padding: 16px 0 8px;
+    border-bottom: 1px solid #e2e8f0;
+}
+.vehicle-form-heading h3 { margin: 0 0 6px; font-size: 16px; }
+.vehicle-form-heading p, .vehicle-form-help { margin: 0; color: #62727d; font-size: 13px; line-height: 1.6; }
+.vehicle-create-grid .create-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 16px; }
+#checkAll, .row-check { width: 18px; height: 18px; accent-color: #3924b9; cursor: pointer; }
+.vehicle-page-summary { text-align: center; margin-top: 18px; color: #62727d; font-size: 13px; }
+.pagination { flex-wrap: wrap; }
+.vehicle-section-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
+.vehicle-section-nav a { padding: 10px 16px; border: 1px solid #d8e0e6; border-radius: 8px; color: #3924b9; background: #f8f7ff; font-weight: 700; text-decoration: none; }
+#vehicle-basic, #vehicle-colors, #vehicle-trims, #vehicle-prices { scroll-margin-top: 20px; }
+
 .vehicle-create-grid {
     display: grid;
     grid-template-columns: repeat(5,minmax(120px,1fr));
@@ -1568,12 +1668,14 @@ a {
     color: #fff;
 }
 
-.admin-table td {
+.admin-table tbody td {
     vertical-align: middle;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
 }
 
 .admin-table tbody tr {
-    height: 68px;
+    height: 64px;
 }
 
 .admin-table .vehicle-name {
@@ -2021,4 +2123,37 @@ a {
         gap: 4px;
         flex-direction: column;
     }
+}
+
+/* Registration uses the same section hierarchy as vehicle detail. */
+#vehicle-create .create-summary-preview { position: relative; min-height: 200px; padding-bottom: 48px; }
+#vehicle-create .create-photo-button { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); cursor: pointer; }
+#vehicle-create .create-summary-preview img[hidden] { display: none; }
+#vehicle-create .crud-section { background: #fff; }
+#vehicle-create [data-create-rows] { padding: 0 12px; overflow-x: auto; }
+#vehicle-create .vehicle-create-row { gap: 8px; padding: 18px 0; align-items: end; }
+#vehicle-create .vehicle-create-row--colors { grid-template-columns: 20px 118px minmax(130px,1.3fr) 78px 78px minmax(180px,2fr) 60px 76px 116px; min-width: 990px; }
+#vehicle-create .vehicle-create-row input.create-representative-radio { width: 18px; height: 18px; padding: 0; margin-top: 22px; accent-color: #3924b9; cursor: pointer; }
+#vehicle-create .vehicle-create-row--trims { grid-template-columns: minmax(160px,2fr) minmax(130px,1fr) minmax(180px,2fr) 64px 90px 116px; min-width: 800px; }
+#vehicle-create .vehicle-create-row--prices { grid-template-columns: minmax(180px,240px) minmax(80px,1fr) minmax(80px,1fr) minmax(86px,1fr) minmax(100px,1fr) minmax(110px,1.2fr) 80px 116px; min-width: 960px; }
+#vehicle-create .vehicle-create-row input, #vehicle-create .vehicle-create-row select { width: 100%; min-width: 0; height: 34px; border: 1px solid #d8e1eb; border-radius: 6px; padding: 5px 8px; background: #fff; }
+#vehicle-create .vehicle-create-row .vehicle-edit-field { min-width: 0; margin: 0; }
+#vehicle-create .vehicle-create-row .vehicle-edit-field > span { font-size: 12px; white-space: nowrap; }
+#vehicle-create .vehicle-create-row--colors { align-items: center; }
+#vehicle-create .vehicle-create-row--colors .vehicle-create-row-actions { align-self: center; padding-top: 22px; }
+#vehicle-create .create-color-photo input[hidden] { display: none; }
+#vehicle-create .create-color-photo-button { position: relative; display: grid; place-items: center; width: 110px; height: 70px; padding: 0; overflow: hidden; border: 1px dashed #cbd5e1; border-radius: 5px; background: #f8fafc; cursor: pointer; color: #62727d; font-size: 12px; }
+#vehicle-create .create-color-photo-button:focus-visible { outline: 2px solid #3924b9; outline-offset: 2px; }
+#vehicle-create .create-color-photo-button.has-photo { border-style: solid; background: #fff; }
+#vehicle-create .create-color-photo-button.has-photo > span { position: absolute; bottom: 0; left: 0; right: 0; padding: 2px 0; background: #ffffffdf; font-size: 10px; }
+#vehicle-create .create-color-photo-button .vehicle-create-color-preview { width: 100%; height: 100%; max-height: 70px; margin: 0; border: 0; border-radius: 0; object-fit: contain; }
+#vehicle-create .create-color-photo-button img[hidden] { display: none; }
+#vehicle-create .vehicle-create-row-actions { gap: 5px; }
+#vehicle-create .vehicle-create-row-actions button { min-width: 0; padding: 0 7px; height: 34px; font-size: 12px; white-space: nowrap; color: #3924b9; background: #f4f1ff; }
+#vehicle-create .vehicle-create-row-actions button:last-child { color: #ef4054; background: #fff1f3; }
+#vehicle-create [data-empty-rows] { padding: 18px; margin: 0; }
+#vehicle-create .vehicle-create-footer { margin-top: 20px; }
+#create-basic, #create-colors, #create-trims, #create-prices { scroll-margin-top: 16px; }
+@media(max-width:750px) {
+    #vehicle-create .card-title { flex-wrap: wrap; gap: 12px; }
 }

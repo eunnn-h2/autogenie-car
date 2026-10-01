@@ -35,8 +35,10 @@ if (($argv[1] ?? '') === '--case') {
         $access[$category] = canAccessAdminCategory($category);
     }
     ob_start();
+    $page = 2;
     require __DIR__ . '/../admin/sidebar.php';
     $sidebar = ob_get_clean();
+    if ($page !== 2) throw new RuntimeException('Sidebar must preserve the parent page number');
     echo json_encode(['access' => $access, 'landing' => adminLandingPage(), 'sidebar' => $sidebar]);
     exit;
 }
@@ -71,9 +73,10 @@ check(adminCategoriesForAccount(array_replace($legacy, ['category_permissions' =
 foreach (['SUPER_ADMIN', 'ADMIN', 'VIEWER'] as $role) {
     $result = json_decode(runCase(['role' => $role]), true);
     foreach (array_keys(adminCategoryLabels()) as $key) {
-        if ($key !== 'customers') check($result['access'][$key], "$role retains $key");
+        if (!in_array($key, ['customers', 'contracts'], true)) check($result['access'][$key], "$role retains $key");
     }
     check($result['access']['customers'] === ($role === 'SUPER_ADMIN'), 'Customers remain super admin only');
+    check($result['access']['contracts'] === ($role === 'SUPER_ADMIN'), 'Only main admin can view all sales performance');
     check($result['access']['admins'] === ($role === 'SUPER_ADMIN'), 'Accounts remain super admin only');
     check(!$result['access']['unknown'], 'Unknown category denied');
 }
@@ -98,9 +101,9 @@ $result = json_decode(runCase(['role' => 'SALES', 'account' => false]), true);
 check(!in_array(true, $result['access'], true), 'Missing or inactive account denied');
 
 // Execute real entry points: denials must happen before DB queries, rendering, or actions.
-foreach (['dashboard.php', 'vehicles.php', 'index.php', 'download-vehicle-template.php',
+foreach (['dashboard.php', 'vehicles.php', 'vehicle-create.php', 'index.php', 'download-vehicle-template.php',
     'estimates.php', 'estimate-detail.php', 'estimate-actions.php', 'export-estimates.php',
-    'inquiries.php', 'inquiry-actions.php', 'traffic.php', 'customers.php', 'admins.php'] as $page) {
+    'inquiries.php', 'inquiry-actions.php', 'traffic.php', 'customers.php', 'admins.php', 'contracts.php'] as $page) {
     $output = runCase(['role' => 'SALES', 'account' => $allCrudNoCategories, 'page' => $page]);
     check(str_contains($output, 'STATUS:403'), 'Direct endpoint must deny: ' . $page);
 }

@@ -162,7 +162,7 @@ $labels = ag_status_labels();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>고객 관리 - 오토지니</title>
-    <link rel="stylesheet" href="./sidebar.css">
+    <link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
     <link rel="stylesheet" href="./customers-page.css">
     <link rel="stylesheet" href="./admin-ui.css">
     <script src="./customers.js" defer></script>

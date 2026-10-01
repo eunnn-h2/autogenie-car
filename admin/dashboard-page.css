@@ -377,3 +377,98 @@ body {
         grid-template-columns: repeat(2,minmax(0,1fr));
     }
 }
+
+
+/* ============================================================
+   SALES DASHBOARD REFRESH 2026-09-29
+   ============================================================ */
+body{background:#f5f6f8 !important;color:#1d2938 !important}
+.layout{grid-template-columns:228px minmax(0,1fr) !important}
+.main{padding:30px 30px 48px !important;max-width:1500px;width:100%}
+.page-head{margin-bottom:18px !important}
+.page-head h1{font-size:27px !important;font-weight:900;letter-spacing:-.05em;color:#172033}
+.page-head p{margin:6px 0 0 !important;color:#7a8796 !important;font-size:13px !important}
+.today{
+    padding:8px 12px;
+    border:1px solid #e4e9ef;
+    border-radius:10px;
+    background:#fff;
+    color:#7d8997 !important;
+}
+.dashboard-kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:12px;
+    margin-bottom:16px;
+}
+.dashboard-kpi{
+    position:relative;
+    min-width:0;
+    padding:16px 18px;
+    border:1px solid #e3e8ef;
+    border-radius:14px;
+    background:#fff;
+    color:inherit;
+    text-decoration:none;
+    box-shadow:0 5px 16px rgba(17,24,39,.035);
+    transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;
+}
+.dashboard-kpi:hover{
+    transform:translateY(-2px);
+    border-color:#ffd1bf;
+    box-shadow:0 10px 24px rgba(44,54,70,.08);
+}
+.dashboard-kpi__label{
+    display:block;
+    color:#697689;
+    font-size:12px;
+    font-weight:800;
+}
+.dashboard-kpi strong{
+    display:block;
+    margin-top:10px;
+    color:#182231;
+    font-size:31px;
+    line-height:1;
+    font-weight:900;
+    letter-spacing:-.04em;
+}
+.dashboard-kpi strong em{
+    margin-left:3px;
+    font-size:13px;
+    font-style:normal;
+    font-weight:800;
+    color:#788494;
+}
+.dashboard-kpi--orange{
+    background:linear-gradient(145deg,#fff9f6,#fff);
+    border-color:#f5dfd5;
+}
+.dashboard-kpi--orange strong{color:#e75a20}
+.dashboard-kpi--contract{
+    border:1px solid #e3e8ef;
+    background:linear-gradient(145deg,#fff5ef,#fff);
+    box-shadow:0 8px 20px rgba(255,90,36,.10);
+}
+.dashboard-kpi--contract strong{color:#ff5a24}
+.panel{
+    border:1px solid #e3e8ee !important;
+    border-radius:14px !important;
+    padding:20px !important;
+    box-shadow:0 5px 16px rgba(17,24,39,.025);
+}
+.panel-head h2{font-size:18px !important;font-weight:900;color:#1b2533}
+.panel-head a,.summary-line a{color:#e85a21 !important}
+.stage{border-radius:10px !important;background:#f8f9fb !important}
+.stage.is-new{background:#fff7f3 !important;border-color:#f3d5c6 !important}
+.stage.is-new strong{color:#e75a20 !important}
+.stage:hover{background:#fff5f0 !important;border-color:#f2c2ad !important}
+.list-grid{gap:16px !important}
+.data-table th{background:#f7f8fa !important}
+.tag.current{background:#fff0e9 !important;color:#d85821 !important}
+@media(max-width:1180px){
+    .dashboard-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+    .dashboard-kpi-grid{grid-template-columns:1fr}
+}

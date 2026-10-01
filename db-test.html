@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>오토지니 차량 견적서</title>
-<link rel="stylesheet" href="./site.css">
+<link rel="stylesheet" href="./site.css?v=20260930-region-2">
 
 </head>
 <body>
@@ -879,6 +879,15 @@
                 <div class="estimate-field">
                     <label for="estimateMemo">요청사항 <span style="font-weight:400;color:#9aa1aa">(선택)</span></label>
                     <textarea id="estimateMemo" name="customer_memo" maxlength="1000" placeholder="상담 시 전달할 내용이 있다면 입력해 주세요."></textarea>
+                </div>
+                <div class="estimate-region-fields" id="estimateRegionField" hidden>
+                    <div class="estimate-field">
+                    <label for="estimateProvince">차량 등록 지역 (전기차 보조금 확인용)</label>
+                    <select id="estimateProvince" name="registration_province" disabled>
+                        <option value="">시·도 선택</option>
+                        <option>서울</option><option>부산</option><option>대구</option><option>인천</option><option>광주</option><option>대전</option><option>울산</option><option>세종</option><option>경기</option><option>강원</option><option>충북</option><option>충남</option><option>전북</option><option>전남</option><option>경북</option><option>경남</option><option>제주</option>
+                    </select>
+                    </div>
                 </div>
             </div>
             <button class="estimate-submit" type="submit">이 견적으로 신청하기</button>

@@ -14,7 +14,11 @@ function esc(string $value): string {
     return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 }
 
-$stmt = $pdo->prepare("SELECT id, username, name, role, is_active, password_hash, last_login_at, created_at FROM admin_accounts WHERE id = ? LIMIT 1");
+$teamColumnStmt = $pdo->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'admin_accounts' AND COLUMN_NAME = 'team_name'");
+$teamColumnStmt->execute();
+$hasTeamColumn = (int)$teamColumnStmt->fetchColumn() > 0;
+$teamSelect = $hasTeamColumn ? ', team_name' : ", NULL AS team_name";
+$stmt = $pdo->prepare("SELECT id, username, name, role, is_active, password_hash, last_login_at, created_at{$teamSelect} FROM admin_accounts WHERE id = ? LIMIT 1");
 $stmt->execute([$currentAdminId]);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -53,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             session_regenerate_id(true);
             $message = '비밀번호가 변경되었습니다.';
 
-            $stmt = $pdo->prepare("SELECT id, username, name, role, is_active, password_hash, last_login_at, created_at FROM admin_accounts WHERE id = ? LIMIT 1");
+            $stmt = $pdo->prepare("SELECT id, username, name, role, is_active, password_hash, last_login_at, created_at{$teamSelect} FROM admin_accounts WHERE id = ? LIMIT 1");
             $stmt->execute([$currentAdminId]);
             $account = $stmt->fetch(PDO::FETCH_ASSOC);
         }
@@ -68,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>내 계정</title>
-<link rel="stylesheet" href="./sidebar.css">
+<link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
 <link rel="stylesheet" href="./account-settings-page.css">
 <link rel="stylesheet" href="./admin-ui.css">
 </head>
@@ -87,6 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div><span>아이디</span><strong><?= esc((string)$account['username']) ?></strong></div>
             <div><span>이름</span><strong><?= esc((string)$account['name']) ?></strong></div>
             <div><span>권한</span><strong><?= esc((string)$account['role']) ?></strong></div>
+            <?php if ((string)$account['role'] === 'SALES'): ?><div><span>소속 팀</span><strong><?= esc(trim((string)($account['team_name'] ?? '')) ?: '미지정') ?></strong></div><?php endif; ?>
             <div><span>마지막 로그인</span><strong><?= esc((string)($account['last_login_at'] ?? '-')) ?></strong></div>
         </div>
 

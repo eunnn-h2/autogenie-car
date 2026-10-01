@@ -13,6 +13,11 @@ function qstr(array $changes = []): string {
     }
     return http_build_query($q);
 }
+function inquiryQuickFilterUrl(string $status = ''): string {
+    $params = [];
+    if ($status !== '') $params['status'] = $status;
+    return './inquiries.php' . ($params ? '?' . http_build_query($params) : '');
+}
 
 $pdo->exec("CREATE TABLE IF NOT EXISTS customer_inquiries (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -96,20 +101,25 @@ $todayCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE cr
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>고객 문의 - 오토지니</title>
-<link rel="stylesheet" href="./sidebar.css">
+<link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
 <link rel="stylesheet" href="./inquiries-page.css">
 <link rel="stylesheet" href="./admin-ui.css"><link rel="stylesheet" href="./date-range-picker.css"><script src="./date-range-picker.js" defer></script></head>
 <body><div class="layout">
 <?php $currentAdminPage = 'inquiries'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main"><section class="card">
-<div class="top"><h1>고객문의 관리</h1><div class="top-stats"><span class="stat">전체 <b><?=number_format($totalCount)?></b></span><span class="stat">오늘 <b><?=number_format($todayCount)?></b></span><span class="stat alert">미처리 <b><?=number_format($newCount)?></b></span><span class="stat">답변완료 <b><?=number_format($answeredCount)?></b></span></div></div>
+<div class="top"><h1>고객문의 관리</h1><div class="today-count">오늘 접수 <b><?=number_format($todayCount)?></b></div></div>
 <?php if(isset($_GET['saved'])):?><div class="notice">답변이 저장되었습니다.</div><?php endif;?>
 <?php if(isset($_GET['bulk'])):?><div class="notice">선택한 문의의 처리가 완료되었습니다.</div><?php endif;?>
 <?php if(isset($_GET['error'])):?><div class="notice error">요청을 처리하지 못했습니다. 다시 확인해 주세요.</div><?php endif;?>
+<nav class="inquiry-quick-filters" aria-label="고객문의 처리상태 빠른 필터">
+    <a class="quick-filter <?=$status===''?'active':''?>" href="<?=h(inquiryQuickFilterUrl())?>">전체 <span><?=number_format($totalCount)?></span></a>
+    <a class="quick-filter <?=$status==='NEW'?'active':''?>" href="<?=h(inquiryQuickFilterUrl('NEW'))?>">미처리 <span><?=number_format($newCount)?></span></a>
+    <a class="quick-filter <?=$status==='ANSWERED'?'active':''?>" href="<?=h(inquiryQuickFilterUrl('ANSWERED'))?>">답변완료 <span><?=number_format($answeredCount)?></span></a>
+</nav>
 <form class="filter-box" method="get"><div class="filter-grid">
-    <div class="filter-item date-range"><span class="filter-label">조회기간</span><div class="filter-control" data-date-range data-label="조회기간"><input type="date" name="from" value="<?=h($from)?>"><span data-range-separator>~</span><input type="date" name="to" value="<?=h($to)?>"></div></div>
-    <div class="filter-item"><span class="filter-label">처리상태</span><div class="radio-group"><label class="radio"><input type="radio" name="status" value="" <?=$status===''?'checked':''?>> 전체</label><label class="radio"><input type="radio" name="status" value="NEW" <?=$status==='NEW'?'checked':''?>> 미처리</label><label class="radio"><input type="radio" name="status" value="ANSWERED" <?=$status==='ANSWERED'?'checked':''?>> 답변완료</label></div></div>
-    <div class="filter-item search"><span class="filter-label">검색어</span><div class="filter-control"><input type="search" name="q" value="<?=h($q)?>" placeholder="문의번호 / 고객명 / 연락처 / 이메일 / 문의내용"><div class="search-actions"><button class="btn primary" type="submit">검색</button><a class="btn" href="./inquiries.php">초기화</a></div></div></div>
+    <div class="filter-item date-range"><div class="filter-control" data-date-range data-label="전체 기간"><input type="date" name="from" value="<?=h($from)?>"><span data-range-separator>~</span><input type="date" name="to" value="<?=h($to)?>"></div></div>
+    <div class="filter-item search"><div class="filter-control"><input type="search" name="q" value="<?=h($q)?>" placeholder="문의번호 / 고객명 / 연락처 / 이메일 / 문의내용"><div class="search-actions"><button class="btn primary" type="submit">검색</button><a class="btn" href="./inquiries.php">초기화</a></div></div></div>
+    <?php if ($status !== ''): ?><input type="hidden" name="status" value="<?=h($status)?>"><?php endif; ?>
     <input type="hidden" name="per_page" value="<?=$perPage?>">
 </div></form>
 <div class="result-bar"><div class="result-count">미처리 건수 : <span class="pending"><?=number_format($newCount)?>개</span> &nbsp; 검색 건수 : <span class="searched"><?=number_format($searchCount)?>개</span></div><div class="result-tools"><span>목록 수</span><select onchange="location.href='?<?=h(qstr(['per_page'=>null,'page'=>null]))?>'+(this.value?'&per_page='+this.value:'')"><option value="20" <?=$perPage===20?'selected':''?>>20개</option><option value="50" <?=$perPage===50?'selected':''?>>50개</option><option value="100" <?=$perPage===100?'selected':''?>>100개</option></select></div></div>
@@ -127,7 +137,7 @@ $todayCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE cr
 <td><a class="answer-link <?=$r['status']==='ANSWERED'?'done':'pending'?>" href="<?=h($detailHref)?>"><?=$r['status']==='ANSWERED'?'답변 확인·수정':'상세 보기·답변'?></a></td>
 </tr>
 <?php endforeach;?></tbody></table></div>
-<div class="bulk-bar"><div class="bulk-left"><select name="bulk_action" form="bulkForm"><option value="">선택 문의 처리</option><option value="mark_answered">답변완료 처리</option><option value="mark_new">미처리로 변경</option><option value="delete">삭제</option></select><button class="btn small" type="submit" form="bulkForm" onclick="return confirmBulk()">적용</button></div><span style="color:#8696a0">체크한 문의를 일괄 처리할 수 있습니다.</span></div>
+<?php if (canUpdateData() || canDeleteData()): ?><div class="bulk-bar"><div class="bulk-left"><select name="bulk_action" form="bulkForm"><option value="">선택 문의 처리</option><?php if (canUpdateData()): ?><option value="mark_answered">답변완료 처리</option><option value="mark_new">미처리로 변경</option><?php endif; ?><?php if (canDeleteData()): ?><option value="delete">삭제</option><?php endif; ?></select><button class="btn small" type="submit" form="bulkForm" onclick="return confirmBulk()">적용</button></div><span style="color:#8696a0">체크한 문의를 일괄 처리할 수 있습니다.</span></div><?php endif; ?>
 <?php if($totalPages>1):?><nav class="pagination"><?php if($page>1):?><a class="page-link" href="?<?=h(qstr(['page'=>$page-1,'open'=>null]))?>">‹</a><?php endif;?><?php $s=max(1,$page-3);$e=min($totalPages,$page+3);for($p=$s;$p<=$e;$p++):?><a class="page-link <?=$p===$page?'active':''?>" href="?<?=h(qstr(['page'=>$p,'open'=>null]))?>"><?=$p?></a><?php endfor;?><?php if($page<$totalPages):?><a class="page-link" href="?<?=h(qstr(['page'=>$page+1,'open'=>null]))?>">›</a><?php endif;?></nav><?php endif;?>
 </section>
 </main></div>

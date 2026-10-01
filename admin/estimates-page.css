@@ -21,7 +21,7 @@ a {
 
 .layout {
     display: grid;
-    grid-template-columns: 228px 1fr;
+    grid-template-columns: 228px minmax(0,1fr);
     min-height: 100vh;
 }
 
@@ -63,6 +63,7 @@ a {
 }
 
 .main {
+    min-width: 0;
     padding: 28px;
 }
 
@@ -108,7 +109,7 @@ a {
     min-width: 300px;
 }
 
-.filter > select[name="type"] {
+.filter > input[name="q"] {
     margin-left: auto;
 }
 
@@ -305,4 +306,420 @@ a {
     font-size: 14px;
     font-weight: 700;
     white-space: nowrap;
+}
+
+.table.estimates-table{min-width:1320px;font-size:14px}
+.table.estimates-table th,.table.estimates-table td{border-right:1px solid #e5eaed;vertical-align:middle}
+.table.estimates-table th:last-child,.table.estimates-table td:last-child{border-right:0}
+.table.estimates-table tbody td{padding-top:5px!important;padding-bottom:5px!important;height:64px}
+.table.estimates-table tbody tr:nth-child(odd){background:#f2f4f7}
+.table.estimates-table tbody tr:nth-child(even){background:#fff}
+.estimate-thumb-link{display:inline-block;line-height:0;border-radius:4px}
+.estimate-thumb,.estimate-no-image{width:88px;height:54px;border:1px solid #e3e8eb;border-radius:4px;background:#f5f7f8}
+.estimate-thumb{display:block;object-fit:contain}
+.estimate-no-image{display:inline-flex;align-items:center;justify-content:center;background:#fff;color:#8995a3;font-size:12px;line-height:1.4}
+.estimate-thumb[hidden],.estimate-no-image[hidden]{display:none}
+.estimate-thumb-link:hover .estimate-thumb,
+.estimate-thumb-link:hover .estimate-no-image,
+.estimate-thumb-link:focus-visible .estimate-thumb,
+.estimate-thumb-link:focus-visible .estimate-no-image{border-color:#3924b9;box-shadow:0 0 0 2px rgba(57,36,185,.12)}
+.estimate-trim{display:block;margin-top:5px;color:#7c899a;font-size:12px;font-weight:400}
+.estimate-status{display:inline;color:#111!important;background:transparent!important;border:0!important;padding:0!important;border-radius:0!important;font:inherit;font-weight:400!important}
+.estimate-owner-cell{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:0}
+.estimate-owner-info{display:flex;align-items:center;justify-content:center;gap:5px;min-height:20px}
+.estimate-assignee{font-weight:700;color:#1f2937}
+.estimate-mine{display:inline-flex;align-items:center;justify-content:center;padding:2px 6px;border-radius:999px;background:#f1efff;color:#3924b9;font-size:11px;font-weight:700;line-height:1.4}
+.estimate-unassigned{color:#8995a3}
+.estimate-inactive{display:inline-flex;align-items:center;justify-content:center;padding:2px 6px;border:1px solid #ead4d4;border-radius:999px;background:#fff5f5;color:#b45454;font-size:11px;font-weight:700;line-height:1.4}
+.estimate-claim-btn{min-width:72px;border-radius:6px!important;box-shadow:0 1px 2px rgba(57,36,185,.18)}
+.estimate-claim-btn:hover{background:#2f1c9f}
+
+/* 견적 관리: 상세 버튼을 삭제 버튼과 같은 박스형 액션으로 통일 */
+.row-actions .detail-link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    height:29px;
+    padding:0 8px;
+    border:1px solid #c8d1ff;
+    border-radius:4px;
+    background:#f3f5ff;
+    color:#315cff;
+    font-size:14px;
+    font-weight:700;
+    line-height:1;
+}
+.row-actions .detail-link:hover{
+    background:#e9edff;
+    border-color:#aebaff;
+    text-decoration:none;
+}
+
+/* 견적 관리: 수정 버튼을 기존 삭제 버튼 크기에 맞춤 */
+.row-actions .detail-link{
+    width:auto;
+    min-width:0;
+    height:29px;
+    padding:0 8px;
+    box-sizing:border-box;
+    font-family:inherit;
+}
+
+/* 2026-09-30: 견적 목록 '수정' 버튼을 삭제 버튼 실측 크기에 맞춤 */
+.row-actions .detail-link{
+    width:46px;
+    min-width:46px;
+    height:29px;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+/* 2026-09-30: 견적 목록 관리 버튼 최종 통일 - admin-ui.css의 button min-height:36px !important 무효화 */
+.row-actions .action-btn.small {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 46px !important;
+    min-width: 46px !important;
+    max-width: 46px !important;
+    height: 29px !important;
+    min-height: 29px !important;
+    max-height: 29px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    vertical-align: middle !important;
+    border-radius: 6px !important;
+}
+.row-actions .action-btn.edit {
+    border: 1px solid #c8d1ff;
+    border-radius: 6px !important;
+    background: #f3f5ff;
+    color: #315cff;
+}
+.row-actions .action-btn.edit:hover {
+    background: #e9edff;
+    border-color: #aebaff;
+    text-decoration: none;
+}
+
+
+/* 2026-09-30: 견적관리 상단 빠른 필터 */
+.estimate-quick-filters{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+    margin:0 0 12px;
+    padding:10px 12px;
+    border:1px solid #e0e6ea;
+    background:#f8fafb;
+    border-radius:7px;
+}
+.estimate-quick-filters .quick-filter{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    min-height:30px;
+    padding:0 9px;
+    border:1px solid transparent;
+    border-radius:5px;
+    color:#5f6f7b;
+    background:transparent;
+    font-size:13px;
+    font-weight:600;
+    line-height:1;
+    transition:.15s ease;
+}
+.estimate-quick-filters .quick-filter span{
+    color:#315cff;
+    font-weight:700;
+}
+.estimate-quick-filters .quick-filter:hover{
+    border-color:#d5dcff;
+    background:#f1f4ff;
+    color:#26374a;
+}
+.estimate-quick-filters .quick-filter.active{
+    border-color:#3924b9;
+    background:#3924b9;
+    color:#fff;
+}
+.estimate-quick-filters .quick-filter.active span{color:#fff}
+.quick-filter-divider{
+    width:1px;
+    height:18px;
+    margin:0 2px;
+    background:#dce3e8;
+}
+@media(max-width:850px){
+    .estimate-quick-filters{padding:8px;gap:5px}
+    .estimate-quick-filters .quick-filter{min-height:28px;padding:0 8px;font-size:12px}
+    .quick-filter-divider{display:none}
+}
+
+/* 2026-09-30: 견적번호 목록 컬럼 제거 + 상담메모 공간 확대 */
+.table.estimates-table{
+    min-width:1080px;
+    table-layout:auto;
+}
+.table.estimates-table th,
+.table.estimates-table td{
+    padding-left:6px;
+    padding-right:6px;
+}
+.table.estimates-table th:nth-child(1),
+.table.estimates-table td:nth-child(1){width:42px}
+.table.estimates-table th:nth-child(2),
+.table.estimates-table td:nth-child(2){width:86px}
+.table.estimates-table th:nth-child(3),
+.table.estimates-table td:nth-child(3){width:102px}
+.table.estimates-table th:nth-child(4),
+.table.estimates-table td:nth-child(4){width:112px}
+.table.estimates-table th:nth-child(5),
+.table.estimates-table td:nth-child(5){width:88px}
+.table.estimates-table th:nth-child(6),
+.table.estimates-table td:nth-child(6){width:76px}
+.table.estimates-table th:nth-child(7),
+.table.estimates-table td:nth-child(7){width:76px}
+.table.estimates-table th:nth-child(8),
+.table.estimates-table td:nth-child(8){width:118px}
+.table.estimates-table th:nth-child(9),
+.table.estimates-table td:nth-child(9){width:66px}
+.table.estimates-table th:nth-child(10),
+.table.estimates-table td:nth-child(10){min-width:250px;width:auto}
+.table.estimates-table th:nth-child(11),
+.table.estimates-table td:nth-child(11){width:106px}
+.estimate-created-at{
+    line-height:1.25;
+    color:#435466;
+    font-size:12px;
+}
+.estimate-created-at span{
+    display:block;
+    margin-top:2px;
+    color:#8593a0;
+    font-size:11px;
+}
+.estimate-note-cell{
+    text-align:left!important;
+    white-space:normal!important;
+}
+.estimate-note-preview{
+    display:block;
+    max-width:240px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:#4f6070;
+    font-size:13px;
+    line-height:1.4;
+    cursor:default;
+}
+.estimate-note-empty{color:#a1abb4}
+
+/* 2026-09-30: 상담 구분 목록 표시 */
+.table.estimates-table{min-width:1160px}
+.table.estimates-table th:nth-child(6),.table.estimates-table td:nth-child(6){width:70px}
+.table.estimates-table th:nth-child(7),.table.estimates-table td:nth-child(7){width:82px}
+.table.estimates-table th:nth-child(8),.table.estimates-table td:nth-child(8){width:76px}
+.table.estimates-table th:nth-child(9),.table.estimates-table td:nth-child(9){width:118px}
+.table.estimates-table th:nth-child(10),.table.estimates-table td:nth-child(10){width:66px}
+.table.estimates-table th:nth-child(11),.table.estimates-table td:nth-child(11){min-width:220px;width:auto}
+.table.estimates-table th:nth-child(12),.table.estimates-table td:nth-child(12){width:106px}
+.estimate-contact-tag-cell{white-space:nowrap}
+.estimate-contact-tag{display:inline-flex;align-items:center;justify-content:center;min-width:56px;padding:4px 7px;border-radius:5px;font-size:12px;font-weight:800;line-height:1.2}
+.estimate-contact-tag--consulting{background:#eef2f5;color:#445766}
+.estimate-contact-tag--no_answer{background:#eef2ff;color:#5269bf}
+.estimate-contact-tag--managed{background:#f8ecfc;color:#9b42b2}
+.estimate-contact-tag--special{background:#f0f0f0;color:#3f454b}
+.estimate-contact-tag--simple{background:#fff0f1;color:#d93644}
+.estimate-contact-tag-empty{color:#a1abb4}
+
+/* 2026-09-30: 견적 목록 컬럼 간격 최종 조정 */
+.table.estimates-table{
+    min-width:1240px;
+    table-layout:fixed;
+}
+.table.estimates-table th,
+.table.estimates-table td{
+    padding-left:7px;
+    padding-right:7px;
+}
+.table.estimates-table th:nth-child(1),
+.table.estimates-table td:nth-child(1){width:42px}
+.table.estimates-table th:nth-child(2),
+.table.estimates-table td:nth-child(2){width:96px}
+.table.estimates-table th:nth-child(3),
+.table.estimates-table td:nth-child(3){width:110px}
+.table.estimates-table th:nth-child(4),
+.table.estimates-table td:nth-child(4){width:112px}
+.table.estimates-table th:nth-child(5),
+.table.estimates-table td:nth-child(5){width:88px}
+.table.estimates-table th:nth-child(6),
+.table.estimates-table td:nth-child(6){width:72px}
+.table.estimates-table th:nth-child(7),
+.table.estimates-table td:nth-child(7){width:90px}
+.table.estimates-table th:nth-child(8),
+.table.estimates-table td:nth-child(8){width:76px}
+.table.estimates-table th:nth-child(9),
+.table.estimates-table td:nth-child(9){width:122px}
+.table.estimates-table th:nth-child(10),
+.table.estimates-table td:nth-child(10){width:78px}
+.table.estimates-table th:nth-child(11),
+.table.estimates-table td:nth-child(11){width:auto;min-width:0}
+.table.estimates-table th:nth-child(12),
+.table.estimates-table td:nth-child(12){width:108px}
+.estimate-note-preview{
+    width:100%;
+    max-width:none;
+}
+
+/* 2026-09-30: 신청일 날짜 + 시간을 한 줄로 표시 */
+.table.estimates-table th:nth-child(2),
+.table.estimates-table td:nth-child(2){width:138px}
+.estimate-created-at{
+    white-space:nowrap;
+    line-height:1.3;
+}
+.estimate-created-at span{
+    display:inline;
+    margin-top:0;
+    margin-left:5px;
+    color:inherit;
+    font-size:inherit;
+    font-weight:inherit;
+    line-height:inherit;
+}
+
+
+/* 2026-10-01: 견적 구분 단순화 + 상담구분별 행 강조 */
+.estimate-kind{
+    display:inline;
+    padding:0;
+    border:0;
+    border-radius:0;
+    background:transparent!important;
+    color:#111827!important;
+    font-size:13px;
+    font-weight:600;
+    line-height:1.4;
+}
+
+/* 상담구분을 지정하면 해당 견적 행 전체를 같은 계열의 연한 배경으로 표시 */
+.table.estimates-table tbody tr.estimate-row > td{
+    transition:background-color .15s ease;
+}
+.table.estimates-table tbody tr.estimate-row--consulting > td{background:#e9eef2;}
+.table.estimates-table tbody tr.estimate-row--no_answer > td{background:#e7ebff;}
+.table.estimates-table tbody tr.estimate-row--managed > td{background:#f4e3f8;}
+.table.estimates-table tbody tr.estimate-row--special > td{background:#e3e5e8;}
+.table.estimates-table tbody tr.estimate-row--simple > td{background:#ffe7e9;}
+
+/* 행 강조 상태에서도 링크/텍스트 가독성 유지 */
+.table.estimates-table tbody tr.estimate-row:hover > td{
+    filter:brightness(.985);
+}
+
+/* 2026-10-01: 상담구분 색상은 배지가 아니라 행 전체에 적용 */
+.table.estimates-table tbody tr.estimate-row--consulting{background:#e9eef2;}
+.table.estimates-table tbody tr.estimate-row--no_answer{background:#e7ebff;}
+.table.estimates-table tbody tr.estimate-row--managed{background:#f4e3f8;}
+.table.estimates-table tbody tr.estimate-row--special{background:#e3e5e8;}
+.table.estimates-table tbody tr.estimate-row--simple{background:#ffe7e9;}
+
+.table.estimates-table tbody tr.estimate-row--consulting > td,
+.table.estimates-table tbody tr.estimate-row--no_answer > td,
+.table.estimates-table tbody tr.estimate-row--managed > td,
+.table.estimates-table tbody tr.estimate-row--special > td,
+.table.estimates-table tbody tr.estimate-row--simple > td{
+    background:inherit !important;
+}
+
+/* 상담구분 행을 더 빠르게 구분할 수 있도록 첫 칸에 포인트 라인 */
+.table.estimates-table tbody tr.estimate-row--consulting > td:first-child{box-shadow:inset 3px 0 0 #8796a3;}
+.table.estimates-table tbody tr.estimate-row--no_answer > td:first-child{box-shadow:inset 3px 0 0 #6f7ee8;}
+.table.estimates-table tbody tr.estimate-row--managed > td:first-child{box-shadow:inset 3px 0 0 #b35ac6;}
+.table.estimates-table tbody tr.estimate-row--special > td:first-child{box-shadow:inset 3px 0 0 #666d75;}
+.table.estimates-table tbody tr.estimate-row--simple > td:first-child{box-shadow:inset 3px 0 0 #e15b67;}
+
+/* 상담구분 배지는 별도 색상 박스 대신 행 색상 안에서 텍스트만 강조 */
+.table.estimates-table tbody tr.estimate-row .estimate-contact-tag{
+    background:transparent !important;
+    padding-left:0;
+    padding-right:0;
+}
+
+/* 2026-10-01: 상담구분 빠른필터 - 한 줄 구분선 방식 */
+.estimate-quick-filters{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    scrollbar-width:thin;
+}
+.quick-filter-group-label{
+    display:inline-flex;
+    align-items:center;
+    flex:0 0 auto;
+    min-height:30px;
+    padding:0 3px;
+    color:#334155;
+    font-size:12px;
+    font-weight:800;
+    line-height:1;
+    white-space:nowrap;
+}
+@media(max-width:850px){
+    .estimate-quick-filters{overflow-x:auto; flex-wrap:nowrap;}
+    .quick-filter-divider{display:block;}
+    .quick-filter-group-label{
+    display:inline-flex;
+    align-items:center;
+    flex:0 0 auto;
+    min-height:30px;
+    padding:0 3px;
+    color:#334155;
+    font-size:12px;
+    font-weight:800;
+    line-height:1;
+    white-space:nowrap;
+}
+}
+
+
+/* 2026-10-01: 견적 목록 셀 구분선 선명도 보강 */
+.table.estimates-table th,
+.table.estimates-table td{
+    border-right-color:#cfd7df !important;
+    border-bottom-color:#cfd7df !important;
+}
+.table.estimates-table thead th{
+    border-bottom:1px solid #c7d0d9 !important;
+}
+.table.estimates-table th:last-child,
+.table.estimates-table td:last-child{
+    border-right:0 !important;
+}
+
+/* 담당자 컬럼: 담당하기/인계받기 버튼이 셀 안에 안정적으로 들어가도록 폭 확보 */
+.table.estimates-table th:nth-child(10),
+.table.estimates-table td:nth-child(10){
+    width:104px;
+    min-width:104px;
+}
+.table.estimates-table td:nth-child(10){
+    padding-left:8px!important;
+    padding-right:8px!important;
+}
+.estimate-claim-btn{
+    min-width:72px;
+    max-width:100%;
+    padding-left:9px!important;
+    padding-right:9px!important;
+    white-space:nowrap;
 }

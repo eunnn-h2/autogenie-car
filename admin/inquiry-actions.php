@@ -2,7 +2,6 @@
 declare(strict_types=1);
 require_once __DIR__ . '/auth.php';
 requireAdminCategory('inquiries');
-require_once __DIR__ . '/../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') { header('Location: ./inquiries.php'); exit; }
 
@@ -30,6 +29,12 @@ function detail_return_url(int $id, string $flag): string {
 }
 
 $action = (string)($_POST['action'] ?? 'save_answer');
+if (!in_array($action, ['bulk', 'save_answer'], true)) {
+    http_response_code(400);
+    exit('잘못된 작업입니다.');
+}
+requireDataPermission($action === 'bulk' && ($_POST['bulk_action'] ?? '') === 'delete' ? 'delete' : 'update');
+require_once __DIR__ . '/../config/database.php';
 
 if ($action === 'bulk') {
     $ids = array_values(array_unique(array_filter(array_map('intval', (array)($_POST['ids'] ?? [])), fn($id) => $id > 0)));

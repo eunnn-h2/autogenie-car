@@ -1298,6 +1298,7 @@ function openEstimateModal(vehicleKey) {
         price_id: Number(quote.price.id)
     };
 
+    configureEstimateRegion(quote.vehicle.fuel_type);
     const summary = document.getElementById('estimateSummary');
     summary.innerHTML = `
         <strong>${escapeHtml(getBrandName(quote.vehicle))} ${escapeHtml(getVehicleName(quote.vehicle))}</strong>
@@ -1320,6 +1321,18 @@ function openEstimateModal(vehicleKey) {
         if (!name?.value.trim()) name?.focus();
         else if (!phone?.value.trim()) phone?.focus();
     }, 50);
+}
+
+function configureEstimateRegion(fuelType) {
+    const field = document.getElementById('estimateRegionField');
+    const province = document.getElementById('estimateProvince');
+    if (!field || !province) return;
+    const electric = String(fuelType || '').toUpperCase() === 'EV';
+    field.hidden = !electric;
+    field.style.display = electric ? '' : 'none';
+    province.disabled = !electric;
+    province.required = electric;
+    if (!electric) province.value = '';
 }
 
 function closeEstimateModal() {
@@ -1391,6 +1404,7 @@ document.getElementById('estimateForm')?.addEventListener('submit', async event 
         customer_name: String(formData.get('customer_name') || '').trim().replace(/\s{2,}/g, ' '),
         customer_phone: formatEstimatePhone(formData.get('customer_phone')),
         customer_memo: String(formData.get('customer_memo') || '').trim(),
+        registration_province: String(formData.get('registration_province') || ''),
         ...getAcquisitionData()
     };
 

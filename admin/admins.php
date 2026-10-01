@@ -9,6 +9,9 @@ require_once __DIR__ . '/../config/database.php';
 
 $message = null;
 $error = null;
+if (empty($_SESSION['admin_accounts_csrf'])) {
+    $_SESSION['admin_accounts_csrf'] = bin2hex(random_bytes(32));
+}
 
 function h2(string $value): string {
     return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
@@ -40,6 +43,12 @@ function adminColumnExists(PDO $pdo, string $column): bool {
     return (int)$stmt->fetchColumn() > 0;
 }
 
+function salesTeamExists(PDO $pdo, string $teamName): bool {
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM sales_teams WHERE team_name = :team_name AND is_active = 1");
+    $stmt->execute([':team_name' => $teamName]);
+    return (int)$stmt->fetchColumn() > 0;
+}
+
 /*
  * 기존 DB를 그대로 사용해도 페이지에 들어오면 필요한 스키마를 자동 보완합니다.
  * DB 계정에 ALTER 권한이 없는 환경에서는 admin_subaccounts_migration.sql을 1회 실행하면 됩니다.
@@ -55,6 +64,30 @@ try {
         $pdo->exec("ALTER TABLE admin_accounts ADD COLUMN parent_admin_id INT UNSIGNED NULL AFTER role");
         $pdo->exec("ALTER TABLE admin_accounts ADD INDEX idx_admins_parent (parent_admin_id)");
     }
+    if (!adminColumnExists($pdo, 'team_name')) {
+        $pdo->exec("ALTER TABLE admin_accounts ADD COLUMN team_name VARCHAR(50) NULL AFTER parent_admin_id");
+        $pdo->exec("ALTER TABLE admin_accounts ADD INDEX idx_admin_accounts_team_name (team_name)");
+    }
+
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS sales_teams (
+            id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            team_name VARCHAR(50) NOT NULL,
+            is_active TINYINT(1) NOT NULL DEFAULT 1,
+            sort_order INT NOT NULL DEFAULT 0,
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY uq_sales_teams_name (team_name),
+            KEY idx_sales_teams_active_sort (is_active, sort_order, id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    ");
+    // 기존 계정에 직접 입력되어 있던 팀명은 최초 1회 팀 목록으로 자동 이관합니다.
+    $pdo->exec("
+        INSERT IGNORE INTO sales_teams (team_name, is_active, sort_order)
+        SELECT DISTINCT TRIM(team_name), 1, 0
+        FROM admin_accounts
+        WHERE role = 'SALES' AND team_name IS NOT NULL AND TRIM(team_name) <> ''
+    ");
 
     if (!adminColumnExists($pdo, 'can_create')) {
         $pdo->exec("ALTER TABLE admin_accounts ADD COLUMN can_create TINYINT(1) NOT NULL DEFAULT 0 AFTER parent_admin_id");
@@ -79,9 +112,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
     $categoryPermissions = json_encode(normalizeAdminCategories($_POST['categories'] ?? []), JSON_THROW_ON_ERROR);
 
     try {
+        if ($action === 'create_team') {
+            $token = $_POST['csrf_token'] ?? '';
+            if (!is_string($token) || !hash_equals($_SESSION['admin_accounts_csrf'], $token)) {
+                throw new RuntimeException('요청을 확인할 수 없습니다. 새로고침 후 다시 시도해주세요.');
+            }
+            $teamName = trim((string)($_POST['team_name'] ?? ''));
+            if ($teamName === '') throw new RuntimeException('추가할 팀명을 입력해주세요.');
+            if (mb_strlen($teamName, 'UTF-8') > 50) throw new RuntimeException('팀명은 50자 이하로 입력해주세요.');
+            $stmt = $pdo->prepare("INSERT INTO sales_teams (team_name, is_active) VALUES (:team_name, 1)");
+            $stmt->execute([':team_name' => $teamName]);
+            $message = $teamName . '을(를) 추가했습니다.';
+        }
+
+        if ($action === 'delete_team') {
+            $token = $_POST['csrf_token'] ?? '';
+            if (!is_string($token) || !hash_equals($_SESSION['admin_accounts_csrf'], $token)) {
+                throw new RuntimeException('요청을 확인할 수 없습니다. 새로고침 후 다시 시도해주세요.');
+            }
+            $teamId = (int)($_POST['team_id'] ?? 0);
+            $stmt = $pdo->prepare("SELECT id, team_name FROM sales_teams WHERE id = ? LIMIT 1");
+            $stmt->execute([$teamId]);
+            $team = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$team) throw new RuntimeException('팀을 찾을 수 없습니다.');
+            $useStmt = $pdo->prepare("SELECT COUNT(*) FROM admin_accounts WHERE role = 'SALES' AND team_name = ?");
+            $useStmt->execute([(string)$team['team_name']]);
+            if ((int)$useStmt->fetchColumn() > 0) {
+                throw new RuntimeException('소속 영업사원이 있는 팀은 삭제할 수 없습니다. 먼저 영업사원의 팀을 변경해주세요.');
+            }
+            $pdo->prepare("DELETE FROM sales_teams WHERE id = ?")->execute([$teamId]);
+            $message = '팀을 삭제했습니다.';
+        }
+
+        if ($action === 'save_permission_table') {
+            $token = $_POST['csrf_token'] ?? '';
+            if (!is_string($token) || !hash_equals($_SESSION['admin_accounts_csrf'], $token)) {
+                throw new RuntimeException('요청을 확인할 수 없습니다. 새로고침 후 다시 시도해주세요.');
+            }
+            require_once __DIR__ . '/account-permission-settings.php';
+            $payload = $_POST['permission_changes'] ?? '';
+            if (!is_string($payload)) throw new RuntimeException('잘못된 권한 설정입니다.');
+            $changed = saveAccountPermissionChanges($pdo, parseAccountPermissionChanges($payload), $currentAdminId);
+            $message = number_format($changed) . '개 계정의 권한 설정을 저장했습니다.';
+        }
         if ($action === 'create_sales') {
             $username = trim((string)($_POST['new_username'] ?? ''));
             $name = trim((string)($_POST['new_name'] ?? ''));
+            $teamName = trim((string)($_POST['new_team_name'] ?? ''));
             $password = (string)($_POST['new_account_password'] ?? '');
             $password2 = (string)($_POST['new_account_password2'] ?? '');
             $canCreate = isset($_POST['can_create']) ? 1 : 0;
@@ -94,6 +171,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
             if ($name === '') {
                 throw new RuntimeException('영업사원 이름을 입력해주세요.');
             }
+            if ($teamName === '') {
+                throw new RuntimeException('소속 팀을 선택해주세요.');
+            }
+            if (!salesTeamExists($pdo, $teamName)) {
+                throw new RuntimeException('등록된 팀 목록에서 소속 팀을 선택해주세요.');
+            }
             if (strlen($password) < 8) {
                 throw new RuntimeException('비밀번호는 8자 이상으로 입력해주세요.');
             }
@@ -103,10 +186,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
 
             $stmt = $pdo->prepare("
                 INSERT INTO admin_accounts (
-                    username, password_hash, name, role, parent_admin_id,
+                    username, password_hash, name, role, parent_admin_id, team_name,
                     can_create, can_update, can_delete, category_permissions, is_active
                 ) VALUES (
-                    :username, :password_hash, :name, 'SALES', :parent_admin_id,
+                    :username, :password_hash, :name, 'SALES', :parent_admin_id, :team_name,
                     :can_create, :can_update, :can_delete, :category_permissions, 1
                 )
             ");
@@ -115,6 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
                 ':password_hash' => password_hash($password, PASSWORD_DEFAULT),
                 ':name' => $name,
                 ':parent_admin_id' => $currentAdminId,
+                ':team_name' => $teamName,
                 ':category_permissions' => $categoryPermissions,
                 ':can_create' => $canCreate,
                 ':can_update' => $canUpdate,
@@ -124,59 +208,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
             $message = '영업사원 부계정을 추가했습니다.';
         }
 
-        if ($action === 'bulk_permissions') {
+        if ($action === 'bulk_settings') {
+            $token = $_POST['csrf_token'] ?? '';
+            if (!is_string($token) || !hash_equals($_SESSION['admin_accounts_csrf'], $token)) {
+                throw new RuntimeException('요청을 확인할 수 없습니다. 새로고침 후 다시 시도해주세요.');
+            }
             $selectedIds = $_POST['selected_admin_ids'] ?? [];
-            if (!is_array($selectedIds)) {
-                $selectedIds = [];
-            }
-
-            $selectedIds = array_values(array_unique(array_filter(
-                array_map('intval', $selectedIds),
-                static fn(int $id): bool => $id > 0
+            if (!is_array($selectedIds)) $selectedIds = [];
+            $selectedIds = array_values(array_unique(array_filter($selectedIds,
+                static fn($id): bool => is_scalar($id) && filter_var($id, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) !== false
             )));
-
-            if (!$selectedIds) {
-                throw new RuntimeException('권한을 적용할 영업사원 계정을 선택해주세요.');
+            if (!$selectedIds) throw new RuntimeException('설정을 적용할 영업사원 계정을 선택해주세요.');
+            $statusChoice = $_POST['bulk_status'] ?? '';
+            if (!in_array($statusChoice, ['', 'bulk_activate', 'bulk_deactivate'], true)) {
+                throw new RuntimeException('잘못된 계정 상태입니다.');
             }
-
-            $bulkCreate = isset($_POST['bulk_can_create']) ? 1 : 0;
-            $bulkUpdate = isset($_POST['bulk_can_update']) ? 1 : 0;
-            $bulkDelete = isset($_POST['bulk_can_delete']) ? 1 : 0;
-
+            $changes = [];
+            foreach (['bulk_work_choice' => ['can_create', 'can_update', 'can_delete'], 'bulk_category_choice' => array_keys(adminCategoryLabels())] as $field => $allowed) {
+                $choice = $_POST[$field] ?? '';
+                if ($choice === '') continue;
+                $parts = is_string($choice) ? explode(':', $choice) : [];
+                if (count($parts) !== 2 || !in_array($parts[0], $allowed, true) || !in_array($parts[1], ['0', '1'], true)) {
+                    throw new RuntimeException('잘못된 권한 설정입니다.');
+                }
+                $changes[$field] = $parts;
+            }
+            if ($statusChoice === '' && !$changes) throw new RuntimeException('변경할 설정을 하나 이상 선택해주세요.');
             $placeholders = implode(',', array_fill(0, count($selectedIds), '?'));
-            $check = $pdo->prepare("
-                SELECT id
-                FROM admin_accounts
-                WHERE id IN ($placeholders)
-                  AND role = 'SALES'
-            ");
-            $check->execute($selectedIds);
-            $validIds = array_map('intval', $check->fetchAll(PDO::FETCH_COLUMN));
-
-            if (!$validIds) {
-                throw new RuntimeException('선택한 영업사원 계정을 찾을 수 없습니다.');
+            $changed = 0;
+            $pdo->beginTransaction();
+            try {
+                $stmt = $pdo->prepare("SELECT * FROM admin_accounts WHERE id IN ($placeholders) AND role = 'SALES' AND id <> ? FOR UPDATE");
+                $stmt->execute(array_merge($selectedIds, [$currentAdminId]));
+                foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $account) {
+                    $assignments = [];
+                    $values = [];
+                    if ($statusChoice !== '') {
+                        $assignments[] = 'is_active = ?';
+                        $values[] = $statusChoice === 'bulk_activate' ? 1 : 0;
+                    }
+                    if (isset($changes['bulk_work_choice'])) {
+                        [$permission, $enabled] = $changes['bulk_work_choice'];
+                        $assignments[] = "$permission = ?";
+                        $values[] = (int)$enabled;
+                    }
+                    if ($changes) {
+                        // Resolve legacy defaults before changing work permissions.
+                        $categories = adminCategoriesForAccount($account);
+                        if (isset($changes['bulk_category_choice'])) {
+                            [$category, $enabled] = $changes['bulk_category_choice'];
+                            $categories = array_values(array_diff($categories, [$category]));
+                            if ($enabled === '1') $categories[] = $category;
+                        }
+                        $assignments[] = 'category_permissions = ?';
+                        $values[] = json_encode(normalizeAdminCategories($categories), JSON_THROW_ON_ERROR);
+                    }
+                    $values[] = $account['id'];
+                    $update = $pdo->prepare('UPDATE admin_accounts SET ' . implode(', ', $assignments) . " WHERE id = ? AND role = 'SALES'");
+                    $update->execute($values);
+                    $changed += $update->rowCount();
+                }
+                $pdo->commit();
+            } catch (Throwable $e) {
+                if ($pdo->inTransaction()) $pdo->rollBack();
+                throw $e;
             }
-
-            $updatePlaceholders = implode(',', array_fill(0, count($validIds), '?'));
-            $stmt = $pdo->prepare("
-                UPDATE admin_accounts
-                SET can_create = ?,
-                    can_update = ?,
-                    can_delete = ?,
-                    category_permissions = ?
-                WHERE id IN ($updatePlaceholders)
-                  AND role = 'SALES'
-            ");
-            $stmt->execute(array_merge(
-                [$bulkCreate, $bulkUpdate, $bulkDelete, $categoryPermissions],
-                $validIds
-            ));
-
-            $message = number_format(count($validIds)) . '개 영업사원 계정의 작업 및 카테고리 권한을 일괄 변경했습니다.';
+            $message = '선택한 설정을 적용했습니다. 변경된 계정: ' . number_format($changed) . '개';
         }
 
         if ($action === 'update') {
             $name = trim((string)($_POST['name'] ?? ''));
+            $teamName = trim((string)($_POST['team_name'] ?? ''));
             $isActive = (int)($_POST['is_active'] ?? 1);
             $canCreate = isset($_POST['can_create']) ? 1 : 0;
             $canUpdate = isset($_POST['can_update']) ? 1 : 0;
@@ -208,9 +310,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
             }
 
             if ((string)$target['role'] === 'SALES') {
+                if ($teamName === '') {
+                    throw new RuntimeException('영업사원의 소속 팀을 선택해주세요.');
+                }
+                if (!salesTeamExists($pdo, $teamName)) {
+                    throw new RuntimeException('등록된 팀 목록에서 소속 팀을 선택해주세요.');
+                }
                 $stmt = $pdo->prepare("
                     UPDATE admin_accounts
                     SET name = :name,
+                        team_name = :team_name,
                         is_active = :is_active,
                         can_create = :can_create,
                         can_update = :can_update,
@@ -220,6 +329,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
                 ");
                 $stmt->execute([
                     ':name' => $name,
+                    ':team_name' => $teamName,
                     ':is_active' => $isActive,
                     ':can_create' => $canCreate,
                     ':can_update' => $canUpdate,
@@ -309,7 +419,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
         }
     } catch (PDOException $e) {
         if ((string)$e->getCode() === '23000') {
-            $error = '이미 사용 중인 아이디입니다.';
+            $error = $action === 'create_team' ? '이미 등록된 팀명입니다.' : '이미 사용 중인 아이디입니다.';
         } else {
             $error = 'DB 처리 중 오류가 발생했습니다: ' . $e->getMessage();
         }
@@ -319,7 +429,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
 }
 
 $admins = [];
-if (adminColumnExists($pdo, 'category_permissions') && adminColumnExists($pdo, 'can_delete')) {
+if (adminColumnExists($pdo, 'category_permissions') && adminColumnExists($pdo, 'can_delete') && adminColumnExists($pdo, 'team_name')) {
     $admins = $pdo->query("
         SELECT
             a.id,
@@ -327,6 +437,7 @@ if (adminColumnExists($pdo, 'category_permissions') && adminColumnExists($pdo, '
             a.name,
             a.role,
             a.parent_admin_id,
+            a.team_name,
             a.can_create,
             a.can_update,
             a.can_delete,
@@ -348,6 +459,17 @@ $salesCount = 0;
 foreach ($admins as $row) {
     if ((string)$row['role'] === 'SALES') $salesCount++;
 }
+$teams = [];
+if ($error === null) {
+    $teams = $pdo->query("
+        SELECT t.id, t.team_name, t.is_active, t.sort_order, t.created_at,
+               (SELECT COUNT(*) FROM admin_accounts a WHERE a.role = 'SALES' AND a.team_name = t.team_name) AS member_count
+        FROM sales_teams t
+        WHERE t.is_active = 1
+        ORDER BY t.sort_order ASC, t.id ASC
+    ")->fetchAll(PDO::FETCH_ASSOC);
+}
+$teamNames = array_map(static fn(array $team): string => (string)$team['team_name'], $teams);
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -355,7 +477,7 @@ foreach ($admins as $row) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 계정 관리</title>
-<link rel="stylesheet" href="./sidebar.css">
+<link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
 <link rel="stylesheet" href="./admin-ui.css">
 <link rel="stylesheet" href="./admin-accounts.css">
 </head>
@@ -368,7 +490,10 @@ foreach ($admins as $row) {
                 <h1>관리자 계정 관리</h1>
                 <div class="sub">본 관리자 계정에서 영업사원용 부계정을 생성하고 관리합니다.</div>
             </div>
-            <a class="primary add-account-link" href="#createAccount" id="openCreateAccount">+ 영업사원 추가</a>
+            <div class="top-actions">
+                <button type="button" class="btn team-open-btn" id="openTeamManager" aria-haspopup="dialog" aria-controls="teamManager" <?= $error !== null ? 'disabled' : '' ?>>+ 팀 추가</button>
+                <button type="button" class="primary add-account-link" id="openCreateAccount" aria-haspopup="dialog" aria-controls="createAccount" <?= ($error !== null || !$teams) ? 'disabled' : '' ?> title="<?= !$teams ? '영업팀을 먼저 추가해주세요.' : '영업사원 계정 추가' ?>">+ 영업사원 추가</button>
+            </div>
         </div>
     </section>
 
@@ -376,8 +501,46 @@ foreach ($admins as $row) {
     <?php if ($error): ?><div class="alert err"><?= h2($error) ?></div><?php endif; ?>
 
     <?php if ($error === null): ?>
-    <details class="card create-account" id="createAccount">
-        <summary class="section-head"><strong>새 영업사원 계정</strong><span>계정 정보와 초기 권한 설정</span></summary>
+    <dialog class="team-manager-dialog" id="teamManager" aria-labelledby="teamManagerTitle" <?= in_array((string)($_POST['action'] ?? ''), ['create_team', 'delete_team'], true) ? 'data-reopen="1"' : '' ?>>
+        <div class="section-head team-dialog-head">
+            <div>
+                <h2 id="teamManagerTitle">영업팀 관리</h2>
+                <span>영업팀을 추가한 뒤 영업사원 계정에서 소속 팀을 선택할 수 있습니다.</span>
+            </div>
+            <button type="button" class="btn" id="closeTeamManager" aria-label="영업팀 관리 팝업 닫기">닫기</button>
+        </div>
+        <form method="post" class="team-add-form" autocomplete="off">
+            <input type="hidden" name="action" value="create_team">
+            <input type="hidden" name="csrf_token" value="<?= h2($_SESSION['admin_accounts_csrf']) ?>">
+            <label class="team-name-field">
+                <span>팀명</span>
+                <input type="text" name="team_name" placeholder="예: 1팀" maxlength="50" required aria-label="추가할 팀명">
+            </label>
+            <button type="submit" class="primary">+ 팀 추가</button>
+        </form>
+        <div class="team-dialog-divider"></div>
+        <div class="team-list-title">등록된 팀 <strong><?= number_format(count($teams)) ?></strong></div>
+        <div class="team-list">
+            <?php if (!$teams): ?>
+                <div class="team-empty">등록된 팀이 없습니다. 위에서 팀을 먼저 추가해주세요.</div>
+            <?php else: foreach ($teams as $team): ?>
+                <div class="team-item">
+                    <div class="team-item-info"><strong><?= h2((string)$team['team_name']) ?></strong><span>영업사원 <?= number_format((int)$team['member_count']) ?>명</span></div>
+                    <?php if ((int)$team['member_count'] === 0): ?>
+                    <form method="post" onsubmit="return confirm('<?= h2((string)$team['team_name']) ?>을(를) 삭제할까요?');">
+                        <input type="hidden" name="action" value="delete_team">
+                        <input type="hidden" name="csrf_token" value="<?= h2($_SESSION['admin_accounts_csrf']) ?>">
+                        <input type="hidden" name="team_id" value="<?= (int)$team['id'] ?>">
+                        <button type="submit" class="btn team-delete">삭제</button>
+                    </form>
+                    <?php else: ?><span class="team-in-use">사용 중</span><?php endif; ?>
+                </div>
+            <?php endforeach; endif; ?>
+        </div>
+    </dialog>
+
+    <dialog class="create-account" id="createAccount" aria-labelledby="createAccountTitle">
+        <div class="section-head"><h2 id="createAccountTitle">새 계정 추가</h2><button type="button" class="btn" id="closeCreateAccount" aria-label="새 계정 추가 팝업 닫기">닫기</button></div>
         <form method="post" class="create-grid" autocomplete="off">
             <input type="hidden" name="action" value="create_sales">
             <div class="field">
@@ -389,6 +552,14 @@ foreach ($admins as $row) {
                 <input type="text" name="new_name" value="" required autocomplete="off" data-lpignore="true" data-1p-ignore>
             </div>
             <div class="field">
+                <label>소속 팀</label>
+                <select name="new_team_name" required <?= !$teams ? 'disabled' : '' ?>>
+                    <option value="">팀 선택</option>
+                    <?php foreach ($teams as $team): ?><option value="<?= h2((string)$team['team_name']) ?>"><?= h2((string)$team['team_name']) ?></option><?php endforeach; ?>
+                </select>
+                <?php if (!$teams): ?><small class="field-help">먼저 영업팀을 추가해주세요.</small><?php endif; ?>
+            </div>
+            <div class="field">
                 <label>비밀번호</label>
                 <input type="password" name="new_account_password" value="" required autocomplete="new-password" data-lpignore="true" data-1p-ignore>
             </div>
@@ -397,21 +568,20 @@ foreach ($admins as $row) {
                 <input type="password" name="new_account_password2" value="" required autocomplete="new-password" data-lpignore="true" data-1p-ignore>
             </div>
             <div class="permission-create">
-                <label>데이터 작업 권한</label>
+                <label>차량 관리 권한</label>
                 <div class="permission-checks" data-permission-group>
-                    <label class="permission-check all"><input type="checkbox" data-permission-all> 전체 권한</label>
-                    <label class="permission-check create"><input type="checkbox" name="can_create" value="1" data-permission-item> 등록 허용</label>
-                    <label class="permission-check update"><input type="checkbox" name="can_update" value="1" data-permission-item> 수정 허용</label>
-                    <label class="permission-check delete"><input type="checkbox" name="can_delete" value="1" data-permission-item> 삭제 허용</label>
+                    <label class="permission-check all"><input type="checkbox" data-permission-all> 전체 선택</label>
+                    <label class="permission-check create"><input type="checkbox" name="can_create" value="1" data-permission-item> 차량 등록</label>
+                    <label class="permission-check update"><input type="checkbox" name="can_update" value="1" data-permission-item> 차량 수정</label>
+                    <label class="permission-check delete"><input type="checkbox" name="can_delete" value="1" data-permission-item> 차량 삭제</label>
                 </div>
             </div>
             <div class="permission-create"><?php renderCategoryPermissions(['dashboard', 'estimates', 'inquiries']); ?></div>
             <div class="submit-cell"><button class="primary" type="submit">+ 부계정 추가</button></div>
         </form>
-    </details>
-
+    </dialog>
     <div class="note">
-        <strong>권한 설정 안내</strong><span>카테고리는 들어갈 수 있는 화면, 작업 권한은 허용할 작업입니다. 고객관리는 기본 미선택입니다.</span>
+        <strong>권한 설정 안내</strong><span>카테고리는 접근 가능한 화면입니다. 차량 등록·수정·삭제 권한은 차량 데이터 메뉴에서만 적용되며, 견적문의·고객문의 처리는 각 메뉴 접근 권한으로 이용합니다.</span>
     </div>
 
     <section class="card">
@@ -431,7 +601,7 @@ foreach ($admins as $row) {
         <?php else: ?>
         <?php if ($salesCount > 0): ?>
         <form method="post" id="bulkPermissionForm" class="bulk-permission-bar">
-            <input type="hidden" name="action" value="bulk_permissions">
+            <input type="hidden" name="csrf_token" value="<?= h2($_SESSION['admin_accounts_csrf']) ?>">
 
             <div class="bulk-permission-left">
                 <label class="bulk-select-all">
@@ -441,32 +611,48 @@ foreach ($admins as $row) {
                 <span class="bulk-selected-count">선택 <strong id="bulkSelectedCount">0</strong>명</span>
             </div>
 
-            <details class="bulk-editor">
-            <summary>선택 계정 권한 일괄 설정</summary>
-            <div class="bulk-permission-form">
-                <div class="bulk-work"><span class="account-permissions-title">작업 권한</span>
-                <label class="permission-check create">
-                    <input type="checkbox" name="bulk_can_create" value="1">
-                    등록
-                </label>
-                <label class="permission-check update">
-                    <input type="checkbox" name="bulk_can_update" value="1">
-                    수정
-                </label>
-                <label class="permission-check delete">
-                    <input type="checkbox" name="bulk_can_delete" value="1">
-                    삭제
-                </label>
+            <div class="bulk-settings">
+            <div class="bulk-setting">
+                <h3>계정 상태</h3>
+                <div class="bulk-action-controls">
+                <select name="bulk_status" id="bulkAction" aria-label="변경할 계정 상태">
+                    <option value="">상태 선택</option>
+                    <option value="bulk_activate">활성화</option>
+                    <option value="bulk_deactivate">비활성화</option>
+                </select>
                 </div>
-                <?php renderCategoryPermissions([]); ?>
-                <span>체크한 작업·카테고리 권한으로 모두 변경됩니다.</span>
-                <button type="submit" class="bulk-apply-btn" id="bulkPermissionApply" disabled>선택 계정에 적용</button>
             </div>
-            </details>
+            <div class="bulk-setting">
+                <h3>차량 관리 권한</h3>
+                <div class="bulk-action-controls">
+                <select name="bulk_work_choice" aria-label="변경할 작업 권한" data-bulk-choice>
+                    <option value="">차량 권한 선택</option>
+                    <?php foreach (['can_create' => '등록', 'can_update' => '수정', 'can_delete' => '삭제'] as $key => $label): ?>
+                    <option value="<?= h2($key) ?>:1">차량 <?= h2($label) ?> 허용</option>
+                    <option value="<?= h2($key) ?>:0">차량 <?= h2($label) ?> 차단</option>
+                    <?php endforeach; ?>
+                </select>
+                </div>
+            </div>
+            <div class="bulk-setting">
+                <h3>카테고리 접근 권한</h3>
+                <div class="bulk-action-controls">
+                <select name="bulk_category_choice" aria-label="변경할 카테고리 접근 권한" data-bulk-choice>
+                    <option value="">카테고리 선택</option>
+                    <?php foreach (adminCategoryLabels() as $key => $label): ?>
+                    <option value="<?= h2($key) ?>:1">차량 <?= h2($label) ?> 허용</option>
+                    <option value="<?= h2($key) ?>:0">차량 <?= h2($label) ?> 차단</option>
+                    <?php endforeach; ?>
+                </select>
+                </div>
+            </div>
+            <button type="submit" name="action" value="bulk_settings" class="bulk-apply-btn" id="bulkPermissionApply" disabled>적용</button>
+            </div>
         </form>
         <?php endif; ?>
 
-        <div class="account-list">
+        <?php require __DIR__ . '/account-permissions-table.php'; ?>
+        <div class="account-dialogs">
             <?php foreach ($admins as $admin):
                 $role = (string)$admin['role'];
                 $isSales = $role === 'SALES';
@@ -474,19 +660,15 @@ foreach ($admins as $row) {
                 $displayName = trim((string)($admin['name'] ?? '')) ?: (string)$admin['username'];
                 $initial = function_exists('mb_substr') ? mb_substr($displayName, 0, 1, 'UTF-8') : substr($displayName, 0, 1);
             ?>
-            <article class="account-card" data-account-name="<?= h2($displayName . ' ' . (string)$admin['username']) ?>" data-role="<?= h2($role) ?>" data-active="<?= (int)$admin['is_active'] ?>">
+            <dialog class="account-card account-detail-dialog" id="accountDialog<?= (int)$admin['id'] ?>" aria-label="<?= h2($displayName) ?> 계정 설정">
+                <div class="account-dialog-close"><button type="button" class="btn" data-close-account>닫기</button></div>
                 <div class="account-summary <?= $isSales ? 'with-select' : '' ?>">
-                    <?php if ($isSales): ?>
-                    <label class="account-select" aria-label="<?= h2($displayName) ?> 선택">
-                        <input type="checkbox" class="sales-account-check" value="<?= (int)$admin['id'] ?>">
-                    </label>
-                    <?php endif; ?>
                     <div class="account-identity">
                         <div class="avatar <?= $isSales ? 'sales' : '' ?>"><?= h2($initial) ?></div>
                         <div class="account-name">
                             <div class="account-name-line">
                                 <strong><?= h2($displayName) ?></strong>
-                                <?php if ($isMain): ?><span class="badge owner">본 관리자</span><?php elseif ($isSales): ?><span class="badge sales">영업사원</span><?php else: ?><span class="badge owner"><?= h2($role) ?></span><?php endif; ?>
+                                <?php if ($isMain): ?><span class="badge owner">본 관리자</span><?php elseif ($isSales): ?><span class="badge sales">영업사원</span><span class="badge team"><?= h2(trim((string)($admin['team_name'] ?? '')) ?: '팀 미지정') ?></span><?php else: ?><span class="badge owner"><?= h2($role) ?></span><?php endif; ?>
                                 <?= (int)$admin['is_active'] === 1 ? '<span class="status on">활성</span>' : '<span class="status off">비활성</span>' ?>
                             </div>
                             <div class="account-username"><?= h2((string)$admin['username']) ?></div>
@@ -501,6 +683,7 @@ foreach ($admins as $row) {
                 <div class="account-info" hidden>
                     <div class="info-item"><span class="info-label">아이디</span><span class="info-value"><?= h2((string)$admin['username']) ?></span></div>
                     <div class="info-item"><span class="info-label">권한</span><span class="info-value"><?= $isSales ? 'SALES · 영업사원' : h2($role) ?></span></div>
+                    <?php if ($isSales): ?><div class="info-item"><span class="info-label">소속 팀</span><span class="info-value"><?= h2(trim((string)($admin['team_name'] ?? '')) ?: '미지정') ?></span></div><?php endif; ?>
                     <div class="info-item"><span class="info-label">소속 관리자</span><span class="info-value"><?= $isSales ? h2((string)($admin['parent_name'] ?: $admin['parent_username'] ?: '-')) : '본 관리자' ?></span></div>
                     <div class="info-item"><span class="info-label">생성일</span><span class="info-value"><?= h2((string)$admin['created_at']) ?></span></div>
                 </div>
@@ -511,7 +694,7 @@ foreach ($admins as $row) {
                     <span class="category-chip"><?= h2(adminCategoryLabels()[$category]) ?></span>
                     <?php endforeach; ?>
                     <?php if (!$selectedCategories): ?><span class="muted">허용된 카테고리 없음</span><?php endif; ?>
-                    <span class="summary-label work-label">작업</span>
+                    <span class="summary-label work-label">차량 관리</span>
                     <span class="permission-chip <?= (int)$admin['can_create']===1?'on':'' ?>">등록 <?= (int)$admin['can_create']===1?'허용':'차단' ?></span>
                     <span class="permission-chip <?= (int)$admin['can_update']===1?'on':'' ?>">수정 <?= (int)$admin['can_update']===1?'허용':'차단' ?></span>
                     <span class="permission-chip <?= (int)$admin['can_delete']===1?'on':'' ?>">삭제 <?= (int)$admin['can_delete']===1?'허용':'차단' ?></span>
@@ -522,12 +705,16 @@ foreach ($admins as $row) {
                     <div class="manage-title">계정 정보와 권한 수정 <span class="dirty-indicator" hidden>저장하지 않은 변경</span></div>
                     <div class="manage-grid">
                         <div class="manage-box">
-                            <label>이름 / 상태</label>
+                            <label>이름 / 소속 팀 / 상태</label>
                             <form method="post" class="account-update-form">
                                 <input type="hidden" name="action" value="update">
                                 <input type="hidden" name="admin_id" value="<?= (int)$admin['id'] ?>">
-                                <div class="manage-row">
+                                <div class="manage-row <?= $isSales ? 'with-team' : '' ?>">
                                     <input type="text" name="name" aria-label="이름" value="<?= h2($displayName) ?>" required autocomplete="off">
+                                    <?php if ($isSales): ?><select name="team_name" aria-label="소속 팀" required>
+                                        <option value="">팀 선택</option>
+                                        <?php foreach ($teams as $team): $teamName = (string)$team['team_name']; ?><option value="<?= h2($teamName) ?>" <?= $teamName === (string)($admin['team_name'] ?? '') ? 'selected' : '' ?>><?= h2($teamName) ?></option><?php endforeach; ?>
+                                    </select><?php endif; ?>
                                     <select name="is_active" aria-label="계정 상태">
                                         <option value="1" <?= (int)$admin['is_active']===1?'selected':'' ?>>활성</option>
                                         <option value="0" <?= (int)$admin['is_active']===0?'selected':'' ?>>비활성</option>
@@ -535,11 +722,11 @@ foreach ($admins as $row) {
                                 </div>
                                 <?php if ($isSales): ?>
                                 <div class="account-permissions" data-permission-group>
-                                    <span class="account-permissions-title">작업 권한</span>
+                                    <span class="account-permissions-title">차량 관리 권한</span>
                                     <label class="permission-check all"><input type="checkbox" data-permission-all> 전체</label>
-                                    <label class="permission-check create"><input type="checkbox" name="can_create" value="1" data-permission-item <?= (int)$admin['can_create']===1?'checked':'' ?>> 등록</label>
-                                    <label class="permission-check update"><input type="checkbox" name="can_update" value="1" data-permission-item <?= (int)$admin['can_update']===1?'checked':'' ?>> 수정</label>
-                                    <label class="permission-check delete"><input type="checkbox" name="can_delete" value="1" data-permission-item <?= (int)$admin['can_delete']===1?'checked':'' ?>> 삭제</label>
+                                    <label class="permission-check create"><input type="checkbox" name="can_create" value="1" data-permission-item <?= (int)$admin['can_create']===1?'checked':'' ?>> 차량 등록</label>
+                                    <label class="permission-check update"><input type="checkbox" name="can_update" value="1" data-permission-item <?= (int)$admin['can_update']===1?'checked':'' ?>> 차량 수정</label>
+                                    <label class="permission-check delete"><input type="checkbox" name="can_delete" value="1" data-permission-item <?= (int)$admin['can_delete']===1?'checked':'' ?>> 차량 삭제</label>
                                 </div>
                                 <?php renderCategoryPermissions(adminCategoriesForAccount($admin)); ?>
                                 <?php endif; ?>
@@ -573,7 +760,7 @@ foreach ($admins as $row) {
                         <?php endif; ?>
                     </div>
                 </div>
-            </article>
+            </dialog>
             <?php endforeach; ?>
         </div>
         <p id="accountNoResults" class="empty" hidden>검색 조건에 맞는 계정이 없습니다.</p>

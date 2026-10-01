@@ -2,17 +2,20 @@
 declare(strict_types=1);
 require_once __DIR__ . '/auth.php';
 requireAdminCategory('estimates');
-require_once __DIR__ . '/../config/database.php';
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') { http_response_code(405); exit('POST 요청만 허용됩니다.'); }
 
-requireVehicleEditor();
 
-$allowedStatuses = ['NEW', 'CONTACTED', 'REVIEWING', 'APPROVED', 'CONTRACTED', 'CANCELED'];
-$allowedActions = ['single_status', 'single_delete', 'bulk_status', 'bulk_delete'];
+
+$allowedActions = ['claim', 'single_delete', 'bulk_delete'];
 $action = (string)($_POST['action'] ?? '');
 if (!in_array($action, $allowedActions, true)) {
     http_response_code(400);
     exit('잘못된 작업입니다.');
 }
+if ($action !== 'claim') {
+    requireDataPermission('delete');
+}
+require_once __DIR__ . '/../config/database.php';
 
 function parseRowKey(string $key): ?array {
     if (!preg_match('/^(DIRECT|QUICK):(\d+)$/', $key, $m)) return null;
@@ -34,16 +37,22 @@ function returnToList(): never {
 }
 
 try {
-    if ($action === 'single_status') {
-        $row = parseRowKey((string)($_POST['row_key'] ?? ''));
-        $status = (string)($_POST['status'] ?? '');
-        if (!$row || !in_array($status, $allowedStatuses, true)) {
-            http_response_code(400); exit('견적 또는 상태 값이 올바르지 않습니다.');
+    if ($action === 'claim') {
+        if (!isSalesAdmin()) { http_response_code(403); exit('영업사원 계정만 담당 등록할 수 있습니다.'); }
+        $token = $_POST['csrf_token'] ?? '';
+        if (!is_string($token) || empty($_SESSION['estimate_action_csrf']) || !hash_equals($_SESSION['estimate_action_csrf'], $token)) {
+            http_response_code(403); exit('요청을 확인할 수 없습니다. 새로고침 후 다시 시도해주세요.');
         }
-        $stmt = $pdo->prepare("UPDATE {$row['table']} SET status=? WHERE id=?");
-        $stmt->execute([$status, $row['id']]);
+        $row = parseRowKey((string)($_POST['row_key'] ?? ''));
+        if (!$row) { http_response_code(400); exit('잘못된 견적 정보입니다.'); }
+        require_once __DIR__ . '/estimate-assignment.php';
+        $claimed = claimEstimate($pdo, $row['table'], $row['id'], (int)$_SESSION['admin_id']);
+        $_SESSION['estimate_assignment_notice'] = $claimed
+            ? '고객의 담당자로 등록했습니다.'
+            : '이미 담당자가 배정되었거나 등록할 수 없는 견적입니다. 담당자 정보를 확인해주세요.';
         returnToList();
     }
+
 
     if ($action === 'single_delete') {
         $row = parseRowKey((string)($_POST['row_key'] ?? ''));
@@ -66,22 +75,10 @@ try {
     if (!$parsed) { http_response_code(400); exit('유효한 견적이 없습니다.'); }
 
     $pdo->beginTransaction();
-    if ($action === 'bulk_status') {
-        $status = (string)($_POST['bulk_status'] ?? '');
-        if (!in_array($status, $allowedStatuses, true)) {
-            throw new RuntimeException('상태 값이 올바르지 않습니다.');
-        }
-        $direct = $pdo->prepare('UPDATE estimate_direct SET status=? WHERE id=?');
-        $quick = $pdo->prepare('UPDATE estimate_quick SET status=? WHERE id=?');
-        foreach ($parsed as $row) {
-            ($row['source'] === 'QUICK' ? $quick : $direct)->execute([$status, $row['id']]);
-        }
-    } else {
-        $direct = $pdo->prepare('DELETE FROM estimate_direct WHERE id=?');
-        $quick = $pdo->prepare('DELETE FROM estimate_quick WHERE id=?');
-        foreach ($parsed as $row) {
-            ($row['source'] === 'QUICK' ? $quick : $direct)->execute([$row['id']]);
-        }
+    $direct = $pdo->prepare('DELETE FROM estimate_direct WHERE id=?');
+    $quick = $pdo->prepare('DELETE FROM estimate_quick WHERE id=?');
+    foreach ($parsed as $row) {
+        ($row['source'] === 'QUICK' ? $quick : $direct)->execute([$row['id']]);
     }
     $pdo->commit();
     returnToList();

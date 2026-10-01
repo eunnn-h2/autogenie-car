@@ -1,0 +1,39 @@
+*{box-sizing:border-box}
+body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;color:#25384a;background:#f4f7fb}
+.admin-shell{display:grid;grid-template-columns:228px minmax(0,1fr);min-height:100vh}
+.main{padding:28px;min-width:0}
+.card{padding:24px;background:#fff;border:1px solid #dce4ee;border-radius:12px}
+.contract-head,.section-title-row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+h1{margin:0;font-size:22px}.section-title-row h2{margin:0;font-size:17px;color:#26394e}
+.description{font-size:13px;color:#738398;line-height:1.7}.contract-head .description{margin-bottom:0}
+.account-link,.section-title-row a{font-size:13px;font-weight:700;color:#3924b9;text-decoration:none}.account-link{height:36px;padding:0 13px;display:inline-flex;align-items:center;border:1px solid #d8d2f4;border-radius:7px;background:#f8f6ff;white-space:nowrap}
+.performance-view-tabs{display:flex;gap:8px;margin-top:24px;padding-bottom:16px;border-bottom:1px solid #e6ebf1}
+.performance-view-tabs a{height:38px;padding:0 18px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #d9e1eb;border-radius:7px;background:#fff;color:#596c80;text-decoration:none;font-size:14px;font-weight:800}
+.performance-view-tabs a.is-active{border-color:#3b2bbd;background:#3b2bbd;color:#fff}
+.team-tabs{display:flex;align-items:center;gap:4px;margin:16px 0 0;padding:10px;border:1px solid #dde5ef;border-radius:9px;background:#f7f9fc;overflow-x:auto}
+.team-tabs a{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 13px;border-radius:6px;text-decoration:none;color:#52657a;font-size:13px;font-weight:700;white-space:nowrap}.team-tabs a b{color:#315df6}.team-tabs a.is-active{background:#3b2bbd;color:#fff}.team-tabs a.is-active b{color:#fff}
+.contract-totals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 26px}.contract-totals>div{padding:18px;border:1px solid #e2e8f0;border-radius:10px;background:#fff}.contract-totals span{font-size:14px;color:#738398}.contract-totals strong{display:block;margin-top:10px;font-size:30px;color:#3924b9}.contract-totals small{font-size:14px;margin-left:4px;color:#738398}
+.performance-panel{padding-top:22px;border-top:1px solid #edf1f5}.section-title-row>span{font-size:13px;color:#8a98a9}
+.chart-key{display:flex;align-items:center;gap:14px}.chart-key span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#718296}.key-box{width:10px;height:10px;border-radius:2px}.key-box.is-direct{background:#315df6}.key-box.is-quick{background:#8b5cf6}
+.vertical-chart{position:relative;margin-top:18px;padding:28px 24px 20px;border:1px solid #e1e7ef;border-radius:10px;background:#fff;overflow:hidden}
+.vertical-chart:before{content:"";position:absolute;inset:28px 24px 92px 24px;background:repeating-linear-gradient(to top,#edf1f5 0,#edf1f5 1px,transparent 1px,transparent 25%);pointer-events:none}
+.chart-y-label{position:absolute;left:12px;top:28px;font-size:11px;color:#8a98a9;white-space:nowrap}
+.vertical-chart-grid{position:relative;z-index:1;min-height:330px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));align-items:end;gap:24px;padding:0 18px;border-bottom:1px solid #cfd8e4}
+.vertical-chart-grid.is-members{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.column-group{position:relative;height:330px;min-width:0;display:grid;grid-template-rows:258px 42px 30px;justify-items:center;align-items:end;color:inherit;text-decoration:none}
+.column-group:hover .column-stack{box-shadow:0 0 0 1px rgba(59,43,189,.1) inset,0 6px 16px rgba(59,43,189,.08)}
+.column-group.is-static:hover .column-stack{box-shadow:none}
+.column-value{position:absolute;left:50%;top:6px;bottom:auto;transform:translateX(-50%);z-index:2;display:inline-flex;align-items:center;justify-content:center;min-width:52px;height:28px;padding:0 11px;border:1px solid #dfe6ef;border-radius:999px;background:#fff;font-size:12px;font-weight:800;color:#26394e;box-shadow:0 4px 10px rgba(32,45,67,.10);white-space:nowrap}
+.columns-wrap{position:static;height:205px;width:100%;align-self:end;display:flex;align-items:flex-end;justify-content:center;padding:0 14px}
+.column-stack{height:205px;width:34px;display:flex;flex-direction:column-reverse;justify-content:flex-start;border-radius:8px 8px 0 0;overflow:hidden;background:rgba(237,242,248,.65);transition:box-shadow .15s,transform .15s}
+.column-group:hover .column-stack{transform:translateY(-1px)}
+.column-segment{width:100%}.column-segment.is-direct{background:linear-gradient(180deg,#6681ff 0%,#315df6 100%)}.column-segment.is-quick{background:linear-gradient(180deg,#b08cff 0%,#7c4dff 100%)}
+.column-label{width:100%;text-align:center;align-self:start;padding-top:10px;overflow:hidden}.column-label strong{display:block;font-size:14px;color:#25384a;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.column-label small{display:block;margin-top:4px;font-size:11px;color:#8593a4;line-height:1.2}
+.column-meta{display:flex;align-items:center;justify-content:center;gap:10px;align-self:start;min-height:26px}.column-meta span{font-size:11px;color:#708096;white-space:nowrap}.column-meta span:first-child:before,.column-meta span:last-child:before{content:"";display:inline-block;width:7px;height:7px;margin-right:5px;border-radius:2px;vertical-align:1px}.column-meta span:first-child:before{background:#315df6}.column-meta span:last-child:before{background:#8b5cf6}
+.contract-table-wrap{overflow:auto;margin-top:18px;border:1px solid #e0e7ef;border-radius:9px}table{width:100%;border-collapse:collapse;white-space:nowrap}th,td{padding:14px;text-align:center;border-bottom:1px solid #e2e8f0;font-size:14px}thead th{background:#f7f9fc;color:#66778b}tbody tr:last-child>*{border-bottom:0}tbody th{text-align:center}.team-name{display:inline-flex;padding:5px 8px;border-radius:5px;background:#eef5ff;color:#426d9f;font-size:12px;font-weight:700}.account-status{display:inline-flex;padding:5px 8px;border-radius:12px;font-size:12px;font-weight:700}.account-status.is-active{background:#eaf7ef;color:#287947}.account-status.is-inactive{background:#f2f4f7;color:#7f8b99}.total-cell strong{color:#3924b9}.empty{padding:32px;color:#738398;text-align:center}.chart-empty{align-self:center;border:1px dashed #dce4ee;border-radius:9px;background:#fbfcfe}.error{padding:16px;background:#fff1f1;color:#b4232f;border-radius:8px}.foot-note{margin:18px 0 0}
+@media(max-width:1150px){.vertical-chart{overflow-x:auto}.vertical-chart-grid{display:flex;align-items:flex-end;min-width:max-content;padding-right:18px}.column-group{min-width:160px;flex:0 0 160px}}
+@media(max-width:850px){.admin-shell{grid-template-columns:1fr}.admin-sidebar{display:none}.main{padding:12px}.card{padding:16px}.contract-head{align-items:flex-start}.contract-totals{grid-template-columns:1fr}.vertical-chart{padding-left:16px;padding-right:16px}.vertical-chart:before{left:16px;right:16px}}
+@media(max-width:560px){.contract-head{flex-direction:column}.section-title-row{align-items:flex-start;flex-direction:column;gap:8px}.performance-view-tabs a{flex:1}.column-group{min-width:132px;flex-basis:132px;grid-template-rows:253px 42px 30px}.column-stack{width:30px}.column-meta{gap:8px;flex-wrap:wrap}.columns-wrap{padding:0 10px}}
+
+.contract-table-wrap th,.contract-table-wrap td{text-align:center;vertical-align:middle}
+.contract-table-wrap tbody th{text-align:center}

@@ -5,6 +5,7 @@ header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 
 require_once __DIR__ . '/member-auth-common.php';
+require_once __DIR__ . '/../config/estimate-region.php';
 
 function fail(string $message, int $status = 400): never
 {
@@ -77,10 +78,13 @@ $middleLength = strlen($phoneDigits) === 10 ? 3 : 4;
 $customerPhone = substr($phoneDigits, 0, 3) . '-' . substr($phoneDigits, 3, $middleLength) . '-' . substr($phoneDigits, 3 + $middleLength);
 
 try {
-    $vehicleStmt = $pdo->prepare("SELECT v.id, v.name AS vehicle_name, b.name AS brand_name FROM car_vehicles v INNER JOIN car_brands b ON b.id=v.brand_id WHERE v.id=? AND v.is_active=1 LIMIT 1");
+    $vehicleStmt = $pdo->prepare("SELECT v.id, v.fuel_type, v.name AS vehicle_name, b.name AS brand_name FROM car_vehicles v INNER JOIN car_brands b ON b.id=v.brand_id WHERE v.id=? AND v.is_active=1 LIMIT 1");
     $vehicleStmt->execute([$vehicleId]);
     $vehicle = $vehicleStmt->fetch();
     if (!$vehicle) fail('선택한 차량을 찾을 수 없습니다.');
+    try {
+        $registrationRegion = validateEstimateRegion((string)$vehicle['fuel_type'], $data);
+    } catch (InvalidArgumentException $e) { fail($e->getMessage()); }
 
     $trimStmt = $pdo->prepare("SELECT id, name FROM car_trims WHERE id=? AND vehicle_id=? AND is_active=1 LIMIT 1");
     $trimStmt->execute([$trimId, $vehicleId]);
@@ -97,6 +101,7 @@ try {
     $price = $priceStmt->fetch();
     if (!$price) fail('선택한 이용조건이 해당 차량/트림과 일치하지 않습니다.');
 
+    ensureEstimateRegionColumn($pdo);
     $pdo->beginTransaction();
 
     $insert = $pdo->prepare("INSERT INTO estimate_direct (
@@ -105,7 +110,7 @@ try {
         vehicle_id, trim_id, color_id, price_id,
         brand_name, vehicle_name, trim_name, color_name,
         product_type, contract_months, prepayment_rate, annual_mileage, monthly_payment,
-        customer_name, customer_phone, customer_memo,
+        customer_name, customer_phone, customer_memo, registration_region,
         status
     ) VALUES (
         :member_id,
@@ -113,7 +118,7 @@ try {
         :vehicle_id, :trim_id, :color_id, :price_id,
         :brand_name, :vehicle_name, :trim_name, :color_name,
         :product_type, :contract_months, :prepayment_rate, :annual_mileage, :monthly_payment,
-        :customer_name, :customer_phone, :customer_memo,
+        :customer_name, :customer_phone, :customer_memo, :registration_region,
         'NEW'
     )");
 
@@ -138,6 +143,7 @@ try {
         ':customer_name' => $customerName,
         ':customer_phone' => $customerPhone,
         ':customer_memo' => $customerMemo !== '' ? $customerMemo : null,
+        ':registration_region' => $registrationRegion,
     ]);
 
     $estimateId = (int)$pdo->lastInsertId();
