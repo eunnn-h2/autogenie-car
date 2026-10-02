@@ -793,3 +793,79 @@ body > .wrap {
     column-gap: 6px !important;
     row-gap: 6px !important;
 }
+
+/* ===== 관리자 전체 모바일 반응형 보강 ===== */
+@media (max-width:900px){
+    html,body{width:100%;max-width:100%;overflow-x:hidden!important}
+    .admin-shell,.admin-layout,.layout{display:block!important;width:100%!important;max-width:100%!important;min-width:0!important}
+    .main,.admin-main,body>.wrap{width:100%!important;max-width:100%!important;min-width:0!important;padding:14px!important;overflow:visible!important}
+    .card,.panel,.admin-card,.ag-page-card,.filter-panel,.filter-box,.note{width:100%!important;max-width:100%!important;min-width:0!important}
+    .head,.top,.page-header,.contract-head,.section-title-row{max-width:100%!important;min-width:0!important;flex-wrap:wrap!important}
+    .head>* ,.top>* ,.page-header>* ,.contract-head>* ,.section-title-row>*{min-width:0!important;max-width:100%!important}
+    .cards,.contract-totals,.chart-grid,.team-card-grid{grid-template-columns:1fr!important}
+    .filter,.filter-top,.filter-grid,.ag-inline-filter,.filter-control,.filter-actions{max-width:100%!important;min-width:0!important}
+    .filter,.filter-top,.filter-control,.filter-actions{flex-wrap:wrap!important}
+    .filter-item,.filter-group,.ag-inline-filter .filter-control>*{min-width:0!important;max-width:100%!important}
+    .ag-inline-filter input{min-width:0!important;max-width:none!important;width:100%!important}
+    input[type="text"],input[type="search"],input[type="password"],input[type="date"],input[type="number"],select,textarea{max-width:100%!important}
+    .table-wrap,.contract-table-wrap,.inquiry-table-wrap,.admin-table-wrap,.traffic-table-wrap,.list-wrap{width:100%!important;max-width:100%!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important}
+    .card,.panel,.admin-card,.ag-page-card{overflow-x:auto!important}
+    table{max-width:none!important}
+    .performance-view-tabs,.team-tabs,.quick-filter-tabs,.status-tabs{max-width:100%!important;overflow-x:auto!important;white-space:nowrap!important;-webkit-overflow-scrolling:touch!important}
+    .performance-view-tabs::-webkit-scrollbar,.team-tabs::-webkit-scrollbar,.quick-filter-tabs::-webkit-scrollbar,.status-tabs::-webkit-scrollbar{height:4px}
+}
+@media (max-width:560px){
+    body{font-size:13px!important}
+    .main,.admin-main,body>.wrap{padding:10px!important}
+    .card,.panel,.admin-card,.ag-page-card{padding:14px!important;border-radius:10px!important}
+    .head h1,.top h1,.page-header h1,.wrap h1,.ag-page-card>.top h1{font-size:20px!important}
+    .head p,.top p,.page-header p,.page-header .description,.sub,.ag-page-card>.top p,.ag-page-card>.top .sub{font-size:12px!important}
+    .metric{min-height:88px!important;padding:14px!important}
+    .metric strong{font-size:23px!important}
+    button,.btn,.primary,.back,.reset,.copy-btn{min-height:38px!important}
+    .filter-grid{display:block!important}
+    .filter-grid>.filter-item{width:100%!important}
+    .top-stats{width:100%!important;overflow-x:auto!important;flex-wrap:nowrap!important;padding-bottom:2px}
+    .top-stats .stat{flex:0 0 auto!important}
+}
+
+/* ===== Mobile admin common layout hardening ===== */
+@media (max-width: 900px) {
+    html, body { max-width: 100%; overflow-x: hidden !important; }
+    .main, .admin-main, .wrap {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        padding: 12px !important;
+    }
+    .card, .panel, .admin-card, .filter-panel, .filter-box {
+        width: 100% !important;
+        min-width: 0 !important;
+        padding: 14px !important;
+        border-radius: 10px !important;
+    }
+    .head, .top, .page-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+    }
+    .head h1, .top h1, .page-header h1, .wrap h1 {
+        font-size: 20px !important;
+    }
+    .filter, .filter-grid, .filter-top {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+    .filter input, .filter select, .filter button,
+    .filter .btn, .filter .reset {
+        max-width: 100% !important;
+    }
+    .table-wrap, .contract-table-wrap {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior-inline: contain !important;
+    }
+}

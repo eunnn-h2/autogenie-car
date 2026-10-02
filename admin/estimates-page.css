@@ -426,6 +426,9 @@ a {
     display:inline-flex;
     align-items:center;
     gap:4px;
+    flex:0 0 auto;
+    width:auto;
+    min-width:max-content;
     min-height:30px;
     padding:0 9px;
     border:1px solid transparent;
@@ -435,6 +438,8 @@ a {
     font-size:13px;
     font-weight:600;
     line-height:1;
+    white-space:nowrap;
+    word-break:keep-all;
     transition:.15s ease;
 }
 .estimate-quick-filters .quick-filter span{
@@ -660,7 +665,11 @@ a {
 .estimate-quick-filters{
     flex-wrap:nowrap;
     overflow-x:auto;
+    overflow-y:hidden;
     scrollbar-width:thin;
+}
+.estimate-quick-filters > *{
+    flex-shrink:0;
 }
 .quick-filter-group-label{
     display:inline-flex;
@@ -722,4 +731,110 @@ a {
     padding-left:9px!important;
     padding-right:9px!important;
     white-space:nowrap;
+}
+
+/* ===== 견적문의 모바일 전용 정리 ===== */
+@media (max-width: 850px) {
+    .layout { display:block !important; width:100% !important; min-width:0 !important; }
+    .main { width:100% !important; min-width:0 !important; padding:10px !important; }
+    .card { width:100% !important; min-width:0 !important; padding:12px !important; overflow:hidden !important; }
+
+    .top { align-items:flex-start !important; }
+    .top h1 { font-size:20px !important; }
+
+    .estimate-quick-filters {
+        display:flex !important;
+        flex-wrap:nowrap !important;
+        gap:4px !important;
+        width:100% !important;
+        padding:8px !important;
+        overflow-x:auto !important;
+        overflow-y:hidden !important;
+        -webkit-overflow-scrolling:touch !important;
+        scrollbar-width:thin !important;
+    }
+    .estimate-quick-filters .quick-filter,
+    .quick-filter-group-label,
+    .quick-filter-divider {
+        flex:0 0 auto !important;
+    }
+    .estimate-quick-filters .quick-filter {
+        min-width:max-content !important;
+        width:auto !important;
+        min-height:30px !important;
+        padding:0 9px !important;
+        font-size:12px !important;
+        white-space:nowrap !important;
+        word-break:keep-all !important;
+    }
+    .quick-filter-divider { display:block !important; }
+
+    .filter {
+        display:grid !important;
+        grid-template-columns:1fr auto auto !important;
+        gap:8px !important;
+        width:100% !important;
+        margin-bottom:12px !important;
+    }
+    .filter .estimate-date-range {
+        grid-column:1 / -1 !important;
+        width:100% !important;
+    }
+    .filter .estimate-date-range input[type=date],
+    .filter .estimate-date-range select {
+        width:100% !important;
+        min-width:0 !important;
+        flex:1 1 auto !important;
+    }
+    .filter > input[name="q"] {
+        grid-column:1 !important;
+        width:100% !important;
+        min-width:0 !important;
+        margin-left:0 !important;
+    }
+    .filter button { padding:0 14px !important; white-space:nowrap !important; }
+    .estimate-reset { padding:0 12px !important; }
+
+    .bulkbar {
+        width:100% !important;
+        min-width:0 !important;
+        padding:9px 10px !important;
+        flex-wrap:wrap !important;
+    }
+    .bulkbar .selected-count {
+        flex:1 1 auto !important;
+        min-width:150px !important;
+    }
+
+    .table-wrap {
+        width:100% !important;
+        max-width:100% !important;
+        overflow-x:auto !important;
+        overflow-y:hidden !important;
+        border-radius:8px !important;
+        -webkit-overflow-scrolling:touch !important;
+        overscroll-behavior-inline:contain !important;
+        scrollbar-width:auto !important;
+    }
+    .table.estimates-table {
+        width:1240px !important;
+        min-width:1240px !important;
+        table-layout:fixed !important;
+    }
+    .table.estimates-table th,
+    .table.estimates-table td {
+        white-space:nowrap !important;
+        word-break:keep-all !important;
+        font-size:13px !important;
+    }
+    .table.estimates-table tbody td { height:62px !important; }
+}
+
+@media (max-width: 480px) {
+    .main { padding:8px !important; }
+    .card { padding:10px !important; }
+    .filter { grid-template-columns:1fr auto !important; }
+    .filter > input[name="q"] { grid-column:1 / -1 !important; }
+    .filter button[type="submit"] { grid-column:1 !important; }
+    .filter .estimate-reset { grid-column:2 !important; }
 }

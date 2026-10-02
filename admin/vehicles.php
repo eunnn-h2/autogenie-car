@@ -1527,6 +1527,21 @@ $q = trim((string)($_GET['q'] ?? ''));
 $brandId = (int)($_GET['brand_id'] ?? 0);
 $fuelType = trim((string)($_GET['fuel_type'] ?? ''));
 $active = (string)($_GET['active'] ?? '');
+$dateBasis = (string)($_GET['date_basis'] ?? 'created');
+if (!in_array($dateBasis, ['created', 'updated'], true)) $dateBasis = 'created';
+
+$normalizeFilterDate = static function (mixed $value): string {
+    $value = trim((string)$value);
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) return '';
+    [$y, $m, $d] = array_map('intval', explode('-', $value));
+    return checkdate($m, $d, $y) ? $value : '';
+};
+$dateFrom = $normalizeFilterDate($_GET['from'] ?? '');
+$dateTo = $normalizeFilterDate($_GET['to'] ?? '');
+if ($dateFrom !== '' && $dateTo !== '' && $dateFrom > $dateTo) {
+    [$dateFrom, $dateTo] = [$dateTo, $dateFrom];
+}
+
 $vehiclePage = max(1, (int)($_GET['page'] ?? 1));
 $perPage = (int)($_GET['per_page'] ?? 10);
 if (!in_array($perPage, [10, 20, 50, 100], true)) $perPage = 20;
@@ -1578,6 +1593,16 @@ try {
     if ($active === '1' || $active === '0') {
         $where[] = "v.is_active = :active";
         $params[':active'] = (int)$active;
+    }
+
+    $dateColumn = $dateBasis === 'updated' ? 'v.updated_at' : 'v.created_at';
+    if ($dateFrom !== '') {
+        $where[] = "{$dateColumn} >= :date_from";
+        $params[':date_from'] = $dateFrom . ' 00:00:00';
+    }
+    if ($dateTo !== '') {
+        $where[] = "{$dateColumn} < DATE_ADD(:date_to, INTERVAL 1 DAY)";
+        $params[':date_to'] = $dateTo . ' 00:00:00';
     }
 
     $whereSql = $where ? " WHERE " . implode(" AND ", $where) : "";
@@ -1694,12 +1719,15 @@ if ($isVehicleDetailPage && $vehicleId > 0 && $vehicleDetail === null && $crudMe
 }
 
 function adminQuery(array $overrides = []): string {
-    global $q, $brandId, $fuelType, $active, $vehiclePage, $perPage;
+    global $q, $brandId, $fuelType, $active, $dateBasis, $dateFrom, $dateTo, $vehiclePage, $perPage;
     $base = [
         'q' => $q !== '' ? $q : null,
         'brand_id' => $brandId > 0 ? $brandId : null,
         'fuel_type' => $fuelType !== '' ? $fuelType : null,
         'active' => $active !== '' ? $active : null,
+        'date_basis' => $dateBasis !== 'created' ? $dateBasis : null,
+        'from' => $dateFrom !== '' ? $dateFrom : null,
+        'to' => $dateTo !== '' ? $dateTo : null,
         'page' => $vehiclePage,
         'per_page' => $perPage,
     ];
@@ -1718,9 +1746,8 @@ function adminQuery(array $overrides = []): string {
 <title><?= $isVehicleCreatePage ? '차량 등록' : ($isVehicleDetailPage ? '차량 상세관리' : '차량 데이터 관리') ?> - 오토지니 관리자</title>
 <link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
 <link rel="stylesheet" href="./vehicles-page.css?v=<?= filemtime(__DIR__ . '/vehicles-page.css') ?>">
-
-
-
+<link rel="stylesheet" href="./date-range-picker.css?v=<?= filemtime(__DIR__ . '/date-range-picker.css') ?>">
+<script src="./date-range-picker.js?v=<?= filemtime(__DIR__ . '/date-range-picker.js') ?>" defer></script>
 
 <link rel="stylesheet" href="./admin-ui.css"></head>
 <body>
@@ -1783,55 +1810,86 @@ function adminQuery(array $overrides = []): string {
 
             <form method="get" action="./vehicles.php" class="filter-panel" id="searchForm">
                 <input type="hidden" name="page" value="1">
-                <div class="filter-top">
-                    <div class="filter-left-group">
-                        <div class="filter-group">
-                            <label>브랜드</label>
-                            <select name="brand_id">
-                                <option value="0">전체</option>
-                                <?php foreach ($brandOptions as $brand): ?>
-                                    <option value="<?= (int)$brand['id'] ?>" <?= $brandId === (int)$brand['id'] ? 'selected' : '' ?>>
-                                        <?= h($brand['name']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
+                <div class="filter-top vehicle-filter-grid">
+                    <div class="vehicle-basic-filters">
+                    <div class="filter-group brand-filter-group">
+                        <label>브랜드</label>
+                        <select name="brand_id">
+                            <option value="0">전체</option>
+                            <?php foreach ($brandOptions as $brand): ?>
+                                <option value="<?= (int)$brand['id'] ?>" <?= $brandId === (int)$brand['id'] ? 'selected' : '' ?>>
+                                    <?= h($brand['name']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                        <div class="filter-group">
-                            <label>연료</label>
-                            <select name="fuel_type">
-                                <option value="">전체</option>
-                                <?php foreach (['GASOLINE','DIESEL','HYBRID','PHEV','EV','LPG','OTHER'] as $fuel): ?>
-                                    <option value="<?= h($fuel) ?>" <?= $fuelType === $fuel ? 'selected' : '' ?>><?= h($fuel) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
+                    <div class="filter-group fuel-filter-group">
+                        <label>연료</label>
+                        <select name="fuel_type">
+                            <option value="">전체</option>
+                            <?php foreach (['GASOLINE','DIESEL','HYBRID','PHEV','EV','LPG','OTHER'] as $fuel): ?>
+                                <option value="<?= h($fuel) ?>" <?= $fuelType === $fuel ? 'selected' : '' ?>><?= h($fuel) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                        <div class="filter-group">
-                            <label>상태</label>
-                            <select name="active">
-                                <option value="">전체</option>
-                                <option value="1" <?= $active === '1' ? 'selected' : '' ?>>판매중</option>
-                                <option value="0" <?= $active === '0' ? 'selected' : '' ?>>판매중지</option>
-                            </select>
+                    <div class="filter-group status-filter-group">
+                        <label>상태</label>
+                        <select name="active">
+                            <option value="">전체</option>
+                            <option value="1" <?= $active === '1' ? 'selected' : '' ?>>판매중</option>
+                            <option value="0" <?= $active === '0' ? 'selected' : '' ?>>판매중지</option>
+                        </select>
+                    </div>
+
+                    </div>
+                    <div class="vehicle-date-filters">
+                    <div class="filter-group date-basis-group">
+                        <label>날짜 기준</label>
+                        <select name="date_basis">
+                            <option value="created" <?= $dateBasis === 'created' ? 'selected' : '' ?>>등록일</option>
+                            <option value="updated" <?= $dateBasis === 'updated' ? 'selected' : '' ?>>수정일</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group date-range-group">
+                        <label>기간</label>
+                        <div class="vehicle-date-range" data-date-range data-label="<?= $dateBasis === 'updated' ? '수정일' : '등록일' ?>">
+                            <input type="date" name="from" value="<?= h($dateFrom) ?>" aria-label="조회 시작일" hidden>
+                            <span data-range-separator hidden>~</span>
+                            <input type="date" name="to" value="<?= h($dateTo) ?>" aria-label="조회 종료일" hidden>
                         </div>
                     </div>
 
-                    <div class="keyword-group">
+                    </div>
+                    <div class="vehicle-search-filters">
+                    <div class="filter-group search-type-group">
                         <label>검색</label>
-                        <div class="keyword-row">
-                            <select class="search-type" aria-label="검색 방식">
-                                <option>통합</option>
-                            </select>
-                            <input id="adminSearchInput" type="search" name="q" value="<?= h($q) ?>"
-                                   placeholder="브랜드 또는 차량명 검색" autocomplete="off">
-                            <select name="per_page" class="per-page" onchange="this.form.submit()">
-                                <?php foreach ([10,20,50,100] as $n): ?>
-                                    <option value="<?= $n ?>" <?= $perPage === $n ? 'selected' : '' ?>><?= $n ?>개씩</option>
-                                <?php endforeach; ?>
-                            </select>
-                            <button type="submit" class="search-btn">검색</button>
-                        </div>
+                        <select class="search-type" aria-label="검색 방식">
+                            <option>통합</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group keyword-input-group">
+                        <label class="filter-control-spacer" aria-hidden="true">&nbsp;</label>
+                        <input id="adminSearchInput" type="search" name="q" value="<?= h($q) ?>"
+                               placeholder="브랜드 또는 차량명 검색" autocomplete="off">
+                    </div>
+
+                    <div class="filter-group per-page-group">
+                        <label class="filter-control-spacer" aria-hidden="true">&nbsp;</label>
+                        <select name="per_page" class="per-page" onchange="this.form.submit()" aria-label="페이지당 표시 개수">
+                            <?php foreach ([10,20,50,100] as $n): ?>
+                                <option value="<?= $n ?>" <?= $perPage === $n ? 'selected' : '' ?>><?= $n ?>개씩</option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="filter-group search-button-group">
+                        <label class="filter-control-spacer" aria-hidden="true">&nbsp;</label>
+                        <button type="submit" class="search-btn">검색</button>
+                    </div>
                     </div>
                 </div>
 
@@ -1883,8 +1941,8 @@ function adminQuery(array $overrides = []): string {
                 <?php endif; ?>
             </div>
 
-            <div class="table-wrap">
-                <table class="admin-table">
+            <div class="table-wrap vehicle-list-wrap">
+                <table class="admin-table vehicle-list-table">
                     <thead>
                         <tr>
                             <th class="check"><input type="checkbox" id="checkAll" aria-label="현재 페이지 전체 선택"></th>
@@ -1908,7 +1966,7 @@ function adminQuery(array $overrides = []): string {
                         <?php else: ?>
                             <?php foreach ($vehicleRows as $row): ?>
                                 <tr>
-                                    <td><input type="checkbox" class="row-check" value="<?= (int)$row['id'] ?>" aria-label="<?= h($row['name']) ?> 선택"></td>
+                                    <td class="vehicle-select-cell"><input type="checkbox" class="row-check" value="<?= (int)$row['id'] ?>" aria-label="<?= h($row['name']) ?> 선택"></td>
                                     <td class="number"><?= number_format((int)$row['id']) ?></td>
                                     <td><?php if (!empty($row['admin_thumbnail_path'])): ?><a class="product-thumb-link" href="./vehicle-detail.php?<?= h(adminQuery(['vehicle_id' => (int)$row['id']])) ?>" aria-label="<?= h($row['name']) ?> 상세 보기"><img class="product-thumb" src="../<?= h($row['admin_thumbnail_path']) ?>" alt="<?= h($row['name']) ?>"></a><?php else: ?><span class="no-thumb">No image</span><?php endif; ?></td>
                                     <td class="vehicle-name">
@@ -1916,19 +1974,20 @@ function adminQuery(array $overrides = []): string {
                                            href="./vehicle-detail.php?<?= h(adminQuery(['vehicle_id' => (int)$row['id']])) ?>">
                                             <?= h($row['name']) ?>
                                         </a>
+                                        <?php if ((int)$row['is_best'] === 1): ?><span class="mini-flag best-flag vehicle-name-best">BEST</span><?php endif; ?>
                                     </td>
-                                    <td><?= (int)$row['is_best'] === 1 ? '<span class="mini-flag best-flag">BEST</span>' : '-' ?></td>
-                                    <td><?= h($row['brand_name']) ?></td>
-                                    <td><?= h($row['fuel_type']) ?></td>
-                                    <td><?= $row['model_year'] ? h((string)$row['model_year']) : '-' ?></td>
-                                    <td><?= (int)$row['base_price'] > 0 ? number_format((int)$row['base_price']).'원' : '-' ?></td>
-                                    <td>
+                                    <td class="vehicle-best-cell <?= (int)$row['is_best'] === 1 ? '' : 'vehicle-badge-empty' ?>"><?= (int)$row['is_best'] === 1 ? '<span class="mini-flag best-flag">BEST</span>' : '-' ?></td>
+                                    <td class="vehicle-brand-cell" data-label="브랜드"><?= h($row['brand_name']) ?></td>
+                                    <td class="vehicle-fuel-cell" data-label="연료"><?= h($row['fuel_type']) ?></td>
+                                    <td class="vehicle-year-cell" data-label="연식"><?= $row['model_year'] ? h((string)$row['model_year']) : '-' ?></td>
+                                    <td class="vehicle-price-cell" data-label="차량가"><?= (int)$row['base_price'] > 0 ? number_format((int)$row['base_price']).'원' : '-' ?></td>
+                                    <td class="vehicle-status-cell">
                                         <?= (int)$row['is_active'] === 1
                                             ? '<span class="status status-active">판매중</span>'
                                             : '<span class="status status-off">판매중지</span>' ?>
                                     </td>
-                                    <td><?= !empty($row['created_at']) ? h(date('y-m-d H:i', strtotime($row['created_at']))) : '-' ?></td>
-                                    <?php if ($hasRecommended): ?><td><?= (int)$row['is_recommended'] === 1 ? '<span class="mini-flag rec-flag">추천</span>' : '-' ?></td><?php endif; ?>
+                                    <td class="vehicle-created-cell" data-label="등록"><?= !empty($row['created_at']) ? h(date('y-m-d H:i', strtotime($row['created_at']))) : '-' ?></td>
+                                    <?php if ($hasRecommended): ?><td class="vehicle-recommended-cell <?= (int)$row['is_recommended'] === 1 ? '' : 'vehicle-badge-empty' ?>"><?= (int)$row['is_recommended'] === 1 ? '<span class="mini-flag rec-flag">추천</span>' : '-' ?></td><?php endif; ?>
                                     <td class="vehicle-management-cell">
                                         <div class="vehicle-management-actions">
                                             <a class="vehicle-management-btn" href="./vehicle-detail.php?<?= h(adminQuery(['vehicle_id' => (int)$row['id']])) ?>" aria-label="<?= h($row['name']) ?> 수정">
@@ -1958,22 +2017,34 @@ function adminQuery(array $overrides = []): string {
             <div class="vehicle-page-summary">전체 <?= number_format($totalRows) ?>대 · <?= $vehiclePage ?> / <?= $totalPages ?> 페이지</div>
             <div class="pagination" aria-label="차량 목록 페이지">
                 <?php if ($vehiclePage > 1): ?>
-                    <a href="./vehicles.php?<?= h(adminQuery(['page' => 1, 'vehicle_id' => null])) ?>#product-list">처음</a>
-                    <a href="./vehicles.php?<?= h(adminQuery(['page' => $vehiclePage-1, 'vehicle_id' => null])) ?>#product-list">‹</a>
+                    <a href="./vehicles.php?<?= h(adminQuery(['page' => 1, 'vehicle_id' => null])) ?>#product-list" aria-label="첫 페이지">«</a>
+                <?php else: ?>
+                    <span class="page-link is-disabled" aria-disabled="true" aria-label="첫 페이지">«</span>
+                <?php endif; ?>
+                <?php if ($vehiclePage > 1): ?>
+                    <a href="./vehicles.php?<?= h(adminQuery(['page' => $vehiclePage-1, 'vehicle_id' => null])) ?>#product-list" aria-label="이전 페이지">‹</a>
+                <?php else: ?>
+                    <span class="page-link is-disabled" aria-disabled="true" aria-label="이전 페이지">‹</span>
                 <?php endif; ?>
 
                 <?php
-                    $start = max(1, $vehiclePage - 4);
-                    $end = min($totalPages, $start + 8);
-                    $start = max(1, $end - 8);
+                    $start = max(1, $vehiclePage - 2);
+                    $end = min($totalPages, $start + 4);
+                    $start = max(1, $end - 4);
                     for ($p = $start; $p <= $end; $p++):
                 ?>
                     <a <?= $p === $vehiclePage ? 'aria-current="page"' : '' ?> class="<?= $p === $vehiclePage ? 'active' : '' ?>" href="./vehicles.php?<?= h(adminQuery(['page' => $p, 'vehicle_id' => null])) ?>#product-list"><?= $p ?></a>
                 <?php endfor; ?>
 
                 <?php if ($vehiclePage < $totalPages): ?>
-                    <a href="./vehicles.php?<?= h(adminQuery(['page' => $vehiclePage+1, 'vehicle_id' => null])) ?>#product-list">›</a>
-                    <a href="./vehicles.php?<?= h(adminQuery(['page' => $totalPages, 'vehicle_id' => null])) ?>#product-list">마지막</a>
+                    <a href="./vehicles.php?<?= h(adminQuery(['page' => $vehiclePage+1, 'vehicle_id' => null])) ?>#product-list" aria-label="다음 페이지">›</a>
+                <?php else: ?>
+                    <span class="page-link is-disabled" aria-disabled="true" aria-label="다음 페이지">›</span>
+                <?php endif; ?>
+                <?php if ($vehiclePage < $totalPages): ?>
+                    <a href="./vehicles.php?<?= h(adminQuery(['page' => $totalPages, 'vehicle_id' => null])) ?>#product-list" aria-label="마지막 페이지">»</a>
+                <?php else: ?>
+                    <span class="page-link is-disabled" aria-disabled="true" aria-label="마지막 페이지">»</span>
                 <?php endif; ?>
             </div>
             <?php endif; ?>

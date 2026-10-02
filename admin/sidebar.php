@@ -1,5 +1,29 @@
 <?php
 $currentAdminPage = $currentAdminPage ?? '';
+
+// 현재 페이지 값이 누락되거나 오래된 키를 사용하는 화면에서도
+// 모바일 상단 메뉴에 실제 페이지명이 표시되도록 파일명 기준으로 보정합니다.
+$currentScript = basename((string)($_SERVER['SCRIPT_NAME'] ?? ''));
+$pageAliases = [
+    'dashboard.php' => 'dashboard',
+    'index.php' => 'dashboard',
+    'vehicles.php' => 'vehicles',
+    'vehicle-detail.php' => 'vehicles',
+    'vehicle-edit.php' => 'vehicles',
+    'estimates.php' => 'estimates',
+    'estimate-detail.php' => 'estimates',
+    'inquiries.php' => 'inquiries',
+    'inquiry-detail.php' => 'inquiries',
+    'customers.php' => 'customers',
+    'customer-detail.php' => 'customers',
+    'traffic.php' => 'traffic',
+    'account-settings.php' => 'account-settings',
+    'contracts.php' => 'contracts',
+    'admins.php' => 'admins',
+];
+if ($currentAdminPage === '' || !in_array($currentAdminPage, array_values($pageAliases), true)) {
+    $currentAdminPage = $pageAliases[$currentScript] ?? $currentAdminPage;
+}
 $sidebarItems = [
     ['dashboard', '운영 현황', './dashboard.php', canAccessAdminCategory('dashboard'), '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>'],
     ['vehicles', '차량관리', './vehicles.php', canViewVehicleData(), '<path d="m5 6-2 7v7h3v-3h12v3h3v-7l-2-7zM3 13h18M7 6h10M7 16h.01M17 16h.01"/>'],
@@ -18,10 +42,24 @@ if (isSuperAdmin()) {
     $sidebarSubItems = array_filter($sidebarItems, static fn(array $item): bool => in_array($item[0], ['admins', 'contracts', 'estimate-screen', 'database'], true) && $item[3]);
     $sidebarItems = array_filter($sidebarItems, static fn(array $item): bool => !in_array($item[0], ['admins', 'contracts', 'estimate-screen', 'database'], true));
 }
+$currentSidebarLabel = '관리자 메뉴';
+foreach (array_merge(array_values($sidebarItems), array_values($sidebarSubItems)) as $item) {
+    if (($item[0] ?? '') === $currentAdminPage) {
+        $currentSidebarLabel = (string)($item[1] ?? '관리자 메뉴');
+        break;
+    }
+}
 ?>
-<aside class="admin-sidebar">
-  <div class="admin-sidebar__brand" aria-label="오토지니 관리자 센터"><strong><span>AUTO</span> GENIE</strong><small>관리자 센터</small></div>
-  <nav class="admin-sidebar__nav" aria-label="관리자 메뉴">
+<aside class="admin-sidebar" id="adminSidebar">
+  <div class="admin-sidebar__mobile-head">
+    <div class="admin-sidebar__brand" aria-label="오토지니 관리자 센터"><strong><span>AUTO</span> GENIE</strong><small>관리자 센터</small></div>
+    <button class="admin-sidebar__toggle" type="button" aria-label="관리자 메뉴 열기" aria-controls="adminSidebarMenu" aria-expanded="false">
+      <span class="admin-sidebar__current"><?= htmlspecialchars($currentSidebarLabel, ENT_QUOTES, 'UTF-8') ?></span>
+      <svg class="admin-sidebar__mobile-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+  </div>
+  <div class="admin-sidebar__dropdown">
+  <nav class="admin-sidebar__nav" id="adminSidebarMenu" aria-label="관리자 메뉴">
     <?php foreach ($sidebarItems as $sidebarItem): ?>
       <?php [$sidebarPage, $label, $href, $allowed, $icon] = $sidebarItem; if (!$allowed) continue; ?>
       <a class="admin-sidebar__link<?= $currentAdminPage === $sidebarPage ? ' active' : '' ?>" href="<?= htmlspecialchars($href, ENT_QUOTES, 'UTF-8') ?>"<?= $currentAdminPage === $sidebarPage ? ' aria-current="page"' : '' ?><?= !empty($sidebarItem[5]) ? ' target="_blank" rel="noopener"' : '' ?>>
@@ -49,5 +87,7 @@ if (isSuperAdmin()) {
     <div class="admin-sidebar__user"><strong><?= htmlspecialchars((string)($_SESSION['admin_name'] ?? $_SESSION['admin_username'] ?? '관리자'), ENT_QUOTES, 'UTF-8') ?></strong><small><?= htmlspecialchars(['SUPER_ADMIN'=>'메인관리자','ADMIN'=>'관리자','SALES'=>'영업사원','VIEWER'=>'조회 전용'][adminRole()] ?? adminRole(), ENT_QUOTES, 'UTF-8') ?></small></div>
     <a class="admin-sidebar__logout" href="./logout.php">로그아웃 <span aria-hidden="true">↗</span></a>
   </div>
+  </div>
 </aside>
 <script src="./admin-delete-guard.js" defer></script>
+<script src="./admin-mobile.js" defer></script>

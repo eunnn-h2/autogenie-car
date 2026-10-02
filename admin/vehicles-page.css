@@ -1569,6 +1569,10 @@ a {
 .vehicle-create-grid .create-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 16px; }
 #checkAll, .row-check { width: 18px; height: 18px; accent-color: #3924b9; cursor: pointer; }
 .vehicle-page-summary { text-align: center; margin-top: 18px; color: #62727d; font-size: 13px; }
+#product-list .pagination { flex-wrap: nowrap; gap: 4px !important; }
+#product-list .pagination .is-disabled { opacity: .4; cursor: default; }
+#product-list .pagination a,
+#product-list .pagination .page-link { padding: 0 6px; }
 .pagination { flex-wrap: wrap; }
 .vehicle-section-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
 .vehicle-section-nav a { padding: 10px 16px; border: 1px solid #d8e0e6; border-radius: 8px; color: #3924b9; background: #f8f7ff; font-weight: 700; text-decoration: none; }
@@ -2156,4 +2160,613 @@ a {
 #create-basic, #create-colors, #create-trims, #create-prices { scroll-margin-top: 16px; }
 @media(max-width:750px) {
     #vehicle-create .card-title { flex-wrap: wrap; gap: 12px; }
+}
+
+/* 차량관리 날짜 검색 */
+.filter-left-group .date-basis-group {
+    width: 104px;
+    flex: 0 0 104px;
+}
+
+.filter-left-group .date-range-group {
+    width: 250px;
+    flex: 0 0 250px;
+}
+
+/* Reuse the table controls in mobile cards so selection and forms stay in sync. */
+.vehicle-name-best {
+    display: none;
+}
+
+@media (max-width: 650px) {
+    #product-list .bulk-selection,
+    #product-list .bulk-tools button,
+    #product-list .vehicle-list-table thead .check::after {
+        white-space: nowrap;
+        word-break: keep-all;
+        writing-mode: horizontal-tb;
+        flex-shrink: 0;
+    }
+
+    #product-list .bulk-tools {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: center;
+        min-width: 0;
+        gap: 8px !important;
+    }
+
+    #product-list .bulk-update-form,
+    #product-list #bulkDeleteForm {
+        display: contents;
+    }
+
+    #product-list #bulkField {
+        grid-area: 1 / 1 / 2 / 2;
+    }
+
+    #product-list #bulkValue {
+        grid-area: 1 / 2 / 2 / 3;
+    }
+
+    #product-list #bulkChangeBtn {
+        grid-area: 2 / 1 / 3 / 2;
+    }
+
+    #product-list #bulkDeleteBtn {
+        grid-area: 2 / 2 / 3 / 3;
+    }
+
+    #product-list #bulkDeleteForm:only-child #bulkDeleteBtn {
+        grid-area: 1 / 1 / 2 / 2;
+    }
+
+    #product-list .bulk-update-form select {
+        flex: 1 1 118px;
+        min-width: 0;
+        width: 100%;
+    }
+
+    #product-list .bulk-tools button {
+        flex: 0 0 auto;
+        width: 100%;
+        min-height: 38px;
+    }
+
+    #product-list .vehicle-list-wrap {
+        overflow: visible !important;
+        border: 0 !important;
+        background: transparent !important;
+    }
+
+    #product-list .vehicle-list-table {
+        display: block;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        border: 0;
+    }
+
+    #product-list .vehicle-list-table thead,
+    #product-list .vehicle-list-table thead tr {
+        display: block;
+    }
+
+    #product-list .vehicle-list-table thead th {
+        display: none;
+    }
+
+    #product-list .vehicle-list-table thead .check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        height: auto;
+        border: 0 !important;
+        background: transparent !important;
+        padding: 8px 0 12px !important;
+    }
+
+    #product-list .vehicle-list-table thead .check::after {
+        content: "현재 페이지 전체 선택";
+        font-size: 13px;
+    }
+
+    #product-list .vehicle-list-table tbody {
+        display: grid;
+        gap: 12px;
+    }
+
+    #product-list .vehicle-list-table tbody tr {
+        display: grid;
+        grid-template-columns: 24px 76px minmax(0, 1fr) auto;
+        gap: 8px;
+        align-items: center;
+        height: auto;
+        min-width: 0;
+        padding: 14px;
+        border: 1px solid #dce4ee;
+        border-radius: 12px;
+        background: #fff;
+    }
+
+    #product-list .vehicle-list-table tbody td {
+        display: block;
+        width: auto;
+        min-width: 0;
+        height: auto !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        text-align: left !important;
+    }
+
+    #product-list .vehicle-select-cell { grid-area: 1 / 1 / 2 / 2; }
+    #product-list .vehicle-list-table .vehicle-name {
+        grid-area: 1 / 2 / 2 / 4;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        font-size: 16px !important;
+        line-height: 1.4;
+    }
+    #product-list .vehicle-name-best {
+        display: inline-flex;
+        flex: 0 0 auto;
+        white-space: nowrap;
+        font-size: 11px;
+        line-height: 1.3;
+    }
+    #product-list .vehicle-status-cell { grid-area: 1 / 4 / 2 / 5; }
+    #product-list .vehicle-list-table .vehicle-best-cell { display: none; }
+    #product-list .vehicle-recommended-cell { grid-area: 2 / 4 / 3 / 5; }
+    #product-list .vehicle-list-table .vehicle-badge-empty { display: none; }
+
+    #product-list .vehicle-list-table tbody td:nth-child(3) {
+        grid-area: 3 / 1 / 6 / 3;
+        align-self: stretch;
+        display: grid;
+        place-items: center;
+        border: 1px solid #edf1f5 !important;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #f8fafc !important;
+    }
+    #product-list .vehicle-list-table .product-thumb-link {
+        display: block;
+        width: 100%;
+    }
+    #product-list .vehicle-list-table .product-thumb,
+    #product-list .vehicle-list-table .no-thumb {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: 80px;
+        object-fit: contain;
+        border: 0;
+    }
+    #product-list .vehicle-list-table .no-thumb {
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+    }
+
+    #product-list .vehicle-brand-cell { grid-area: 3 / 3 / 4 / 5; }
+    #product-list .vehicle-fuel-cell { grid-area: 4 / 3 / 5 / 5; }
+    #product-list .vehicle-year-cell { grid-area: 5 / 3 / 6 / 5; }
+    #product-list .vehicle-list-table td[data-label]::before {
+        content: attr(data-label);
+        display: inline-block;
+        margin-right: 8px;
+        color: #8290a2;
+        font-size: 12px;
+        font-weight: 400;
+    }
+    #product-list .vehicle-list-table .vehicle-price-cell {
+        grid-area: 6 / 1 / 7 / 5;
+        padding-top: 8px !important;
+        font-size: 18px !important;
+        font-weight: 800;
+        text-align: right !important;
+    }
+    #product-list .vehicle-list-table .number {
+        grid-area: 7 / 1 / 8 / 3;
+        color: #8290a2 !important;
+        font-size: 12px !important;
+    }
+    #product-list .vehicle-list-table .number::before { content: "No. "; }
+    #product-list .vehicle-list-table .vehicle-created-cell {
+        grid-area: 7 / 3 / 8 / 5;
+        color: #8290a2 !important;
+        font-size: 12px !important;
+        text-align: right !important;
+    }
+    #product-list .vehicle-list-table .vehicle-management-cell {
+        grid-area: 8 / 1 / 9 / 5;
+        padding-top: 10px !important;
+        border-top: 1px solid #edf1f5 !important;
+    }
+    #product-list .vehicle-management-actions { justify-content: flex-end; }
+    #product-list .vehicle-list-table .vehicle-management-btn {
+        min-height: 40px !important;
+        padding: 0 16px;
+        font-size: 13px;
+    }
+    #product-list .vehicle-list-table input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin: 0;
+    }
+    #product-list .vehicle-list-table .empty {
+        grid-column: 1 / -1;
+        padding: 24px 0 !important;
+        text-align: center !important;
+    }
+    #product-list .pagination { flex-wrap: nowrap; }
+    #product-list .pagination a,
+    #product-list .pagination .page-link {
+        flex: 0 1 34px;
+        min-width: 0 !important;
+        padding: 0 3px;
+    }
+}
+
+/* Arrange filter groups using the panel's available width. */
+#searchForm.filter-panel {
+    container-type: inline-size;
+    container-name: vehicle-filters;
+}
+
+#searchForm .vehicle-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: end;
+    justify-content: normal;
+    gap: 18px 12px;
+    width: 100%;
+}
+
+#searchForm .vehicle-basic-filters,
+#searchForm .vehicle-date-filters,
+#searchForm .vehicle-search-filters {
+    display: contents;
+}
+
+#searchForm .vehicle-filter-grid .filter-group {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+}
+
+#searchForm .vehicle-filter-grid .date-range-group {
+    grid-column: span 2;
+}
+
+#searchForm .vehicle-filter-grid .keyword-input-group {
+    grid-column: span 3;
+}
+
+#searchForm .vehicle-filter-grid select,
+#searchForm .vehicle-filter-grid input[type="search"],
+#searchForm .vehicle-filter-grid .search-btn {
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+}
+
+#searchForm .vehicle-filter-grid .search-btn {
+    white-space: nowrap;
+}
+
+@container vehicle-filters (min-width: 761px) {
+    #searchForm .vehicle-filter-grid {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    #searchForm .vehicle-basic-filters,
+    #searchForm .vehicle-date-filters,
+    #searchForm .vehicle-search-filters {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        min-width: 0;
+    }
+
+    #searchForm .vehicle-basic-filters {
+        flex: 0 0 100%;
+    }
+
+    #searchForm .vehicle-date-filters {
+        flex: 0 0 auto;
+    }
+
+    #searchForm .vehicle-search-filters {
+        flex: 0 0 auto;
+        margin-left: auto;
+        justify-content: flex-end;
+    }
+
+    #searchForm .vehicle-basic-filters .filter-group {
+        width: 110px;
+        flex: 0 0 110px;
+    }
+
+    #searchForm .vehicle-filter-grid .date-basis-group {
+        width: 96px;
+    }
+
+    #searchForm .vehicle-filter-grid .date-range-group {
+        width: 250px;
+    }
+
+    #searchForm .vehicle-filter-grid .search-type-group {
+        width: 76px;
+    }
+
+    #searchForm .vehicle-filter-grid .keyword-input-group {
+        width: 280px;
+    }
+
+    #searchForm .vehicle-filter-grid .per-page-group {
+        width: 88px;
+    }
+
+    #searchForm .vehicle-filter-grid .search-button-group {
+        width: 72px;
+    }
+
+    #searchForm .vehicle-filter-grid .filter-control-spacer {
+        display: none;
+    }
+}
+
+@container vehicle-filters (max-width: 760px) {
+    #searchForm .vehicle-filter-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    #searchForm .vehicle-filter-grid .date-range-group {
+        grid-column: 1 / -1;
+    }
+
+    #searchForm .vehicle-filter-grid .per-page-group,
+    #searchForm .vehicle-filter-grid .search-button-group {
+        grid-column: span 2;
+    }
+
+    #searchForm .vehicle-filter-grid .per-page-group .filter-control-spacer,
+    #searchForm .vehicle-filter-grid .search-button-group .filter-control-spacer {
+        display: none;
+    }
+}
+
+@container vehicle-filters (max-width: 480px) {
+    #searchForm .vehicle-filter-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    #searchForm .vehicle-filter-grid .keyword-input-group,
+    #searchForm .vehicle-filter-grid .per-page-group,
+    #searchForm .vehicle-filter-grid .search-button-group {
+        grid-column: auto;
+    }
+}
+
+.vehicle-date-range[data-date-range] {
+    width: 100%;
+    min-width: 0;
+}
+
+.vehicle-date-range .dr-field {
+    max-width: none;
+    height: 36px;
+    border-color: #bfcbd2;
+    border-radius: 4px;
+}
+
+.vehicle-date-range .dr-field .dr-trigger {
+    height: 34px;
+}
+
+@media(max-width:1200px) {
+    .filter-left-group {
+        flex-wrap: wrap;
+    }
+
+    .filter-left-group .date-range-group {
+        width: 250px;
+        flex-basis: 250px;
+    }
+}
+
+@media(max-width:900px) {
+    .filter-left-group {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        gap: 7px;
+    }
+
+    .filter-left-group .filter-group,
+    .filter-left-group .date-basis-group,
+    .filter-left-group .date-range-group {
+        width: 100%;
+        min-width: 0;
+        flex: none;
+    }
+
+    .filter-left-group .date-range-group {
+        grid-column: 1 / -1;
+    }
+}
+
+@media(max-width:500px) {
+    .filter-left-group {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-left-group .date-range-group {
+        grid-column: auto;
+    }
+}
+
+/* 차량관리 검색필터 - 중간 폭 반응형 보정
+   PC 한 줄 배치를 최대한 유지하고, 공간이 부족할 때만 검색영역의 뒤쪽 항목부터 자연스럽게 줄바꿈한다. */
+@media (max-width: 1350px) and (min-width: 901px) {
+    .filter-top {
+        gap: 10px;
+        flex-wrap: nowrap;
+        align-items: flex-end;
+    }
+
+    .filter-left-group {
+        width: auto;
+        flex: 0 1 auto;
+        flex-wrap: nowrap;
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .filter-left-group .filter-group {
+        width: 102px;
+        flex: 0 1 102px;
+        min-width: 92px;
+    }
+
+    .filter-left-group .date-basis-group {
+        width: 96px;
+        flex: 0 1 96px;
+        min-width: 90px;
+    }
+
+    .filter-left-group .date-range-group {
+        width: 220px;
+        flex: 0 1 220px;
+        min-width: 190px;
+    }
+
+    .keyword-group {
+        width: auto;
+        min-width: 230px;
+        flex: 1 1 420px;
+        margin-left: auto;
+    }
+
+    .keyword-row {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 6px !important;
+    }
+
+    .keyword-row .search-type {
+        flex: 0 0 76px;
+    }
+
+    .keyword-row input {
+        flex: 1 1 180px;
+        min-width: 150px;
+    }
+
+    .keyword-row .per-page {
+        flex: 0 0 88px;
+    }
+
+    .keyword-row .search-btn {
+        flex: 0 0 auto;
+    }
+}
+
+/* ===== 차량관리 검색필터 · 반응형 최종 보정 =====
+   900px 이하에서 좌측 필터와 검색영역이 같은 grid 행에 끼어들지 않도록
+   각각 100% 폭의 독립 행으로 분리한다. */
+@media (max-width: 900px) {
+    .filter-top {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .filter-left-group {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        width: 100%;
+        gap: 7px;
+    }
+
+    .filter-left-group .filter-group,
+    .filter-left-group .date-basis-group,
+    .filter-left-group .date-range-group {
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        flex: none;
+    }
+
+    .filter-left-group .date-range-group {
+        grid-column: 1 / -1;
+    }
+
+    .keyword-group {
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+    }
+
+    .keyword-row {
+        display: grid;
+        grid-template-columns: 90px minmax(0, 1fr) 90px 64px;
+        gap: 6px !important;
+        width: 100%;
+    }
+
+    .keyword-row .search-type,
+    .keyword-row input,
+    .keyword-row .per-page,
+    .keyword-row .search-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 40px;
+    }
+}
+
+@media (max-width: 650px) {
+    .filter-left-group {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .filter-left-group .date-range-group {
+        grid-column: 1 / -1;
+    }
+
+    .keyword-row {
+        grid-template-columns: 92px minmax(0, 1fr);
+    }
+
+    .keyword-row .per-page {
+        grid-column: 1;
+    }
+
+    .keyword-row .search-btn {
+        grid-column: 2;
+    }
+}
+
+@media (max-width: 500px) {
+    .filter-left-group {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-left-group .date-range-group {
+        grid-column: auto;
+    }
 }

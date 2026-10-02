@@ -242,7 +242,7 @@ function quickFilterUrl(array $set = []): string {
 }
 ?>
 <!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>견적 관리 - 오토지니</title><link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
-<link rel="stylesheet" href="./estimates-page.css?v=<?= filemtime(__DIR__ . '/estimates-page.css') ?>"><link rel="stylesheet" href="./admin-ui.css?v=<?= filemtime(__DIR__ . '/admin-ui.css') ?>"><link rel="stylesheet" href="./date-range-picker.css"><script src="./date-range-picker.js" defer></script></head><body><div class="layout">
+<link rel="stylesheet" href="./estimates-page.css?v=<?= filemtime(__DIR__ . '/estimates-page.css') ?>"><link rel="stylesheet" href="./admin-ui.css?v=<?= filemtime(__DIR__ . '/admin-ui.css') ?>"><link rel="stylesheet" href="./date-range-picker.css?v=<?= filemtime(__DIR__ . '/date-range-picker.css') ?>"><script src="./date-range-picker.js?v=<?= filemtime(__DIR__ . '/date-range-picker.js') ?>" defer></script></head><body><div class="layout">
 <?php $currentAdminPage = 'estimates'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main"><div class="card"><div class="top"><h1>견적문의 관리</h1><a href="../db-test.html" target="_blank">+ 실제 화면에서 견적 신청</a></div>
 <?php if (is_string($assignmentNotice)): ?><div class="notice" role="status"><?=h($assignmentNotice)?></div><?php endif; ?>
@@ -261,7 +261,6 @@ function quickFilterUrl(array $set = []): string {
 <a class="quick-filter <?=$owner==='unassigned'?'active':''?>" href="<?=h(quickFilterUrl(['owner'=>'unassigned']))?>">미배정 <span><?=number_format($quickCounts['unassigned'])?></span></a>
 <a class="quick-filter <?=$owner==='handoff'?'active':''?>" href="<?=h(quickFilterUrl(['owner'=>'handoff']))?>">인계필요 <span><?=number_format($quickCounts['handoff'])?></span></a>
 <span class="quick-filter-divider" aria-hidden="true"></span>
-<span class="quick-filter-group-label">상담구분</span>
 <a class="quick-filter <?=$contactTag==='NONE'?'active':''?>" href="<?=h(quickFilterUrl(['contact_tag'=>'NONE']))?>">미지정 <span><?=number_format($quickCounts['TAG_NONE'])?></span></a>
 <a class="quick-filter <?=$contactTag==='CONSULTING'?'active':''?>" href="<?=h(quickFilterUrl(['contact_tag'=>'CONSULTING']))?>">상담중 <span><?=number_format($quickCounts['TAG_CONSULTING'])?></span></a>
 <a class="quick-filter <?=$contactTag==='NO_ANSWER'?'active':''?>" href="<?=h(quickFilterUrl(['contact_tag'=>'NO_ANSWER']))?>">부재중 <span><?=number_format($quickCounts['TAG_NO_ANSWER'])?></span></a>
@@ -270,7 +269,7 @@ function quickFilterUrl(array $set = []): string {
 <a class="quick-filter <?=$contactTag==='SIMPLE'?'active':''?>" href="<?=h(quickFilterUrl(['contact_tag'=>'SIMPLE']))?>">단순문의 <span><?=number_format($quickCounts['TAG_SIMPLE'])?></span></a>
 </nav>
 <form class="filter" method="get">
-<div class="estimate-date-range" data-date-range data-label="신청일"><span data-range-separator>신청일</span><input type="date" name="from" aria-label="조회 시작일" value="<?=h($dates['from'])?>"><span data-range-separator>~</span><input type="date" name="to" aria-label="조회 종료일" value="<?=h($dates['to'])?>"></div>
+<div class="estimate-date-range" data-date-range data-label="신청일"><span data-range-separator hidden>신청일</span><input type="date" name="from" aria-label="조회 시작일" value="<?=h($dates['from'])?>" hidden><span data-range-separator hidden>~</span><input type="date" name="to" aria-label="조회 종료일" value="<?=h($dates['to'])?>" hidden></div>
 <?php if ($type !== ''): ?><input type="hidden" name="type" value="<?=h($type)?>"><?php endif; ?>
 <?php if ($status !== ''): ?><input type="hidden" name="status" value="<?=h($status)?>"><?php endif; ?>
 <?php if ($owner !== ''): ?><input type="hidden" name="owner" value="<?=h($owner)?>"><?php endif; ?>

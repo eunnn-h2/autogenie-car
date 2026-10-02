@@ -10071,12 +10071,12 @@ body.detail-mode #vehicleDetailView #app {
     flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 7px !important;
+    gap: 5px !important;
     min-width: 0 !important;
     width: auto !important;
-    height: 60px !important;
+    height: 50px !important;
     margin: 0 !important;
-    padding: 9px 4px !important;
+    padding: 6px 4px !important;
     border: 0 !important;
     border-right: 1px solid #e6eaf0 !important;
     border-bottom: 1px solid #e6eaf0 !important;
@@ -10112,8 +10112,8 @@ body.detail-mode #vehicleDetailView #app {
 #faqView:not(.mypage-qna-mode) .ag-faq-category svg {
     flex: none !important;
     display: block !important;
-    width: 23px !important;
-    height: 23px !important;
+    width: 20px !important;
+    height: 20px !important;
     stroke: #172537 !important;
 }
 
@@ -12706,5 +12706,167 @@ body.home-main-active .home-primary-action {
 
     #homeView .home-popular-price strong {
         font-size: 19px !important;
+    }
+}
+
+
+/* ===== Q&A hero car: consistent mobile layout across sizes ===== */
+@media (max-width: 480px) {
+    #faqView:not(.mypage-qna-mode) .qna-hero {
+        padding: 23px 16px 16px !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-intro {
+        max-width: calc(100% - 126px) !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-headline {
+        max-width: none !important;
+        font-size: 23px !important;
+        line-height: 1.3 !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .qna-hero-desc {
+        max-width: none !important;
+        font-size: 11px !important;
+        line-height: 1.5 !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-hero-visual {
+        top: 16px !important;
+        right: -6px !important;
+        bottom: auto !important;
+        width: 138px !important;
+        height: 92px !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: flex-end !important;
+        overflow: visible !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-hero-photo {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        object-fit: contain !important;
+        object-position: right top !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .qna-hero .ag-faq-search {
+        margin-top: 34px !important;
+    }
+}
+
+@media (max-width: 390px) {
+    #faqView:not(.mypage-qna-mode) .ag-qna-intro {
+        max-width: calc(100% - 118px) !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-hero-visual {
+        top: 18px !important;
+        right: -4px !important;
+        width: 130px !important;
+        height: 88px !important;
+    }
+}
+
+@media (max-width: 360px) {
+    #faqView:not(.mypage-qna-mode) .ag-qna-intro {
+        max-width: calc(100% - 110px) !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-headline {
+        font-size: 22px !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-hero-visual {
+        width: 122px !important;
+        height: 84px !important;
+        right: -2px !important;
+    }
+}
+
+@media (max-width: 340px) {
+    #faqView:not(.mypage-qna-mode) .ag-qna-intro {
+        max-width: calc(100% - 102px) !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-headline {
+        font-size: 21px !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-hero-visual {
+        width: 114px !important;
+        height: 78px !important;
+        right: 0 !important;
+    }
+}
+
+
+/* ===== Q&A hero car: fixed visible size on all mobile widths ===== */
+@media (max-width: 480px) {
+    #faqView:not(.mypage-qna-mode) .qna-hero {
+        position: relative !important;
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        overflow: hidden !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-intro {
+        position: relative !important;
+        z-index: 2 !important;
+        max-width: calc(100% - 120px) !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-headline {
+        max-width: none !important;
+        font-size: 23px !important;
+        line-height: 1.3 !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .qna-hero-desc {
+        max-width: none !important;
+        font-size: 11px !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-hero-visual {
+        top: auto !important;
+        right: -68px !important;
+        bottom: 70px !important;
+        width: 225px !important;
+        height: 135px !important;
+        display: flex !important;
+        align-items: flex-end !important;
+        justify-content: flex-end !important;
+        overflow: visible !important;
+        transform: none !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-hero-photo {
+        display: block !important;
+        width: 225px !important;
+        height: 135px !important;
+        min-width: 225px !important;
+        max-width: 225px !important;
+        min-height: 135px !important;
+        max-height: 135px !important;
+        object-fit: contain !important;
+        object-position: right bottom !important;
+        transform: none !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .qna-hero .ag-faq-search {
+        margin-top: 40px !important;
+    }
+}
+
+@media (max-width: 360px) {
+    #faqView:not(.mypage-qna-mode) .ag-qna-intro {
+        max-width: calc(100% - 110px) !important;
+    }
+
+    #faqView:not(.mypage-qna-mode) .ag-qna-headline {
+        font-size: 22px !important;
     }
 }
