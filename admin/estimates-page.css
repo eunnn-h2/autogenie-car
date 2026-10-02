@@ -397,6 +397,7 @@ a {
     vertical-align: middle !important;
     border-radius: 6px !important;
 }
+.estimate-edit-icon, .estimate-product-type { display:none; }
 .row-actions .action-btn.edit {
     border: 1px solid #c8d1ff;
     border-radius: 6px !important;
@@ -704,11 +705,11 @@ a {
 /* 2026-10-01: 견적 목록 셀 구분선 선명도 보강 */
 .table.estimates-table th,
 .table.estimates-table td{
-    border-right-color:#cfd7df !important;
-    border-bottom-color:#cfd7df !important;
+    border-right:1px solid #e5eaed !important;
+    border-bottom:1px solid #e5eaed !important;
 }
 .table.estimates-table thead th{
-    border-bottom:1px solid #c7d0d9 !important;
+    border-bottom:1px solid #e5eaed !important;
 }
 .table.estimates-table th:last-child,
 .table.estimates-table td:last-child{
@@ -744,12 +745,11 @@ a {
 
     .estimate-quick-filters {
         display:flex !important;
-        flex-wrap:nowrap !important;
+        flex-wrap:wrap !important;
         gap:4px !important;
         width:100% !important;
         padding:8px !important;
-        overflow-x:auto !important;
-        overflow-y:hidden !important;
+        overflow:visible !important;
         -webkit-overflow-scrolling:touch !important;
         scrollbar-width:thin !important;
     }
@@ -806,28 +806,185 @@ a {
         min-width:150px !important;
     }
 
-    .table-wrap {
+    .card .table-wrap:has(.estimates-table) {
         width:100% !important;
         max-width:100% !important;
-        overflow-x:auto !important;
-        overflow-y:hidden !important;
+        overflow:visible !important;
         border-radius:8px !important;
         -webkit-overflow-scrolling:touch !important;
         overscroll-behavior-inline:contain !important;
         scrollbar-width:auto !important;
+        border:0 !important;
+        box-shadow:none !important;
     }
     .table.estimates-table {
-        width:1240px !important;
-        min-width:1240px !important;
-        table-layout:fixed !important;
+        display:block;
+        width:100% !important;
+        min-width:0 !important;
     }
     .table.estimates-table th,
     .table.estimates-table td {
-        white-space:nowrap !important;
+        white-space:normal !important;
         word-break:keep-all !important;
         font-size:13px !important;
     }
-    .table.estimates-table tbody td { height:62px !important; }
+    .table.estimates-table thead,
+    .table.estimates-table thead tr,
+    .table.estimates-table tbody {
+        display:block;
+        width:100%;
+    }
+    .table.estimates-table thead th:not(:first-child) {
+        position:absolute;
+        width:1px !important;
+        height:1px;
+        padding:0 !important;
+        overflow:hidden;
+        clip-path:inset(50%);
+    }
+    .table.estimates-table thead th:first-child {
+        display:flex;
+        align-items:center;
+        gap:8px;
+        width:100% !important;
+        border:0 !important;
+    }
+    .table.estimates-table thead th:first-child::after { content:"전체 선택"; }
+
+    /* Match the mobile vehicle management cards. */
+    .table.estimates-table thead th:first-child { background:#fff !important; color:#8b95a1 !important; font-size:12px !important; padding:8px 0 14px !important; }
+    .table.estimates-table tbody tr {
+        display:grid;
+        grid-template-columns:24px 76px minmax(0,1fr) auto;
+        column-gap:8px;
+        row-gap:8px;
+        align-items:center;
+        width:100%;
+        margin:0 0 12px;
+        padding:14px;
+        border:1px solid #e5eaed;
+        border-radius:12px;
+        box-shadow:none;
+    }
+    .table.estimates-table tbody tr.estimate-row { background:#fff; }
+    .table.estimates-table tbody tr.estimate-row--consulting { background:#e9eef2; }
+    .table.estimates-table tbody tr.estimate-row--no_answer { background:#e7ebff; }
+    .table.estimates-table tbody tr.estimate-row--managed { background:#f4e3f8; }
+    .table.estimates-table tbody tr.estimate-row--special { background:#e3e5e8; }
+    .table.estimates-table tbody tr.estimate-row--simple { background:#ffe7e9; }
+    .table.estimates-table tbody tr.estimate-row:has(.row-check:checked) { border-color:#3182f6; box-shadow:0 0 0 1px #3182f6; }
+    .table.estimates-table tbody tr.estimate-row > td {
+        display:flex;
+        align-items:center;
+        width:100% !important;
+        min-width:0 !important;
+        height:auto !important;
+        min-height:0;
+        padding:0 !important;
+        border:0 !important;
+        box-shadow:none !important;
+        filter:none !important;
+        background:transparent !important;
+        text-align:left !important;
+        line-height:1.5;
+        overflow-wrap:anywhere;
+    }
+    .table.estimates-table tbody tr.estimate-row > td::before { display:none; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(1) { grid-column:1; grid-row:1; }
+    .table.estimates-table .check { width:20px; height:20px; margin:0; accent-color:#3182f6; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(2) {
+        grid-column:3 / 5;
+        grid-row:5;
+        justify-content:flex-end;
+        color:#8b95a1 !important;
+        font-size:12px !important;
+        margin-top:4px;
+        white-space:nowrap !important;
+    }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(2)::before { display:inline; content:"신청"; color:#8290a2; font-size:12px; margin-right:8px; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(3) {
+        grid-column:1 / 3;
+        grid-row:2 / 5;
+        justify-content:center;
+        align-self:stretch;
+        min-height:82px;
+        border:1px solid #edf1f5 !important;
+        border-radius:8px;
+        background:#f8fafc !important;
+        overflow:hidden;
+    }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(4) { grid-column:2 / 4; grid-row:1; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(4) .detail-link {
+        color:#315cff;
+        font-size:16px;
+        font-weight:700;
+        letter-spacing:-.5px;
+        line-height:1.45;
+    }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(8) { grid-column:3 / 5; grid-row:2; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(8) .detail-link { color:#304257; font-size:14px; font-weight:500; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(5) { grid-column:3 / 5; grid-row:3; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(7) { grid-column:3 / 5; grid-row:4; }
+    .table.estimates-table .estimate-kind { display:none; }
+    .table.estimates-table .estimate-product-type { display:inline; color:#304257; font-size:13px; font-weight:500; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(8)::before,
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(5)::before,
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(7)::before { display:inline; color:#8290a2; font-size:12px; margin-right:8px; white-space:nowrap; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(8)::before { content:"고객"; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(5)::before { content:"이용"; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(7)::before { content:"상담"; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(10) { grid-column:1 / 3; grid-row:5; gap:8px; margin-top:4px; border-top:0 !important; padding-top:0 !important; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(10)::before { display:inline; content:"담당"; color:#8290a2; font-size:12px; white-space:nowrap; }
+    .table.estimates-table .estimate-owner-cell { flex-direction:row; align-items:center; flex-wrap:wrap; justify-content:flex-start; font-size:13px; }
+    .table.estimates-table .estimate-contact-tag { background:transparent; padding:0; min-width:0; font-size:13px; font-weight:500; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(6) {
+        grid-column:4;
+        grid-row:1;
+        justify-self:end;
+        justify-content:flex-start;
+        width:auto !important;
+        font-size:12px !important;
+    }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(8) { padding-right:0 !important; }
+    .table.estimates-table .estimate-status {
+        color:#6b7684 !important;
+        background:#f2f4f6 !important;
+        padding:4px 8px !important;
+        border-radius:999px !important;
+        font-weight:700 !important;
+        white-space:nowrap;
+    }
+    .table.estimates-table .estimate-status--contacted { color:#3182f6 !important; background:#edf3ff !important; }
+    .table.estimates-table .estimate-status--contracted { color:#00875a !important; background:#ebf7ef !important; }
+    .table.estimates-table .estimate-status--canceled { color:#b26b6b !important; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(9),
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(11) { display:none; }
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(12) { grid-column:1 / 5; grid-row:6; justify-content:flex-end; padding-top:10px !important; border-top:1px solid #b4bec9 !important; }
+    .table.estimates-table .estimate-thumb-link { display:block; width:100%; }
+    .table.estimates-table .estimate-thumb,
+    .table.estimates-table .estimate-no-image { width:100%; height:80px; border:0; border-radius:0; background:transparent; font-size:11px; }
+    .table.estimates-table .estimate-trim { display:none; }
+    .table.estimates-table .row-actions .action-btn.small {
+        gap:6px;
+        width:auto !important;
+        min-width:74px !important;
+        max-width:none !important;
+        height:40px !important;
+        min-height:40px !important;
+        max-height:40px !important;
+        padding:0 16px !important;
+        border:1px solid #dce4ee;
+        border-radius:6px !important;
+        background:#fff;
+        color:#607286;
+        font-size:13px !important;
+        font-weight:500 !important;
+    }
+    .table.estimates-table .row-actions .action-btn.edit:hover { background:#f2f4f6; color:#3182f6; }
+    .table.estimates-table .estimate-edit-icon { display:block; flex-shrink:0; }
+    .table.estimates-table a:focus-visible { outline:2px solid #3182f6; outline-offset:3px; }
+    .table.estimates-table tbody tr.estimate-row > td > * { min-width:0; max-width:100%; }
+    .table.estimates-table tbody td[colspan] { display:block; width:100% !important; min-width:0 !important; }
 }
 
 @media (max-width: 480px) {
@@ -837,4 +994,78 @@ a {
     .filter > input[name="q"] { grid-column:1 / -1 !important; }
     .filter button[type="submit"] { grid-column:1 !important; }
     .filter .estimate-reset { grid-column:2 !important; }
+}
+
+/* Keep list separators visible over shared administrator table styles. */
+@media (min-width: 851px) {
+    .table.estimates-table thead tr > th,
+    .table.estimates-table tbody tr > td {
+        border-right: 1px solid #e5eaed !important;
+        border-bottom: 1px solid #e5eaed !important;
+    }
+    .table.estimates-table tr > :last-child {
+        border-right: 0 !important;
+    }
+}
+@media (max-width: 850px) {
+    .table.estimates-table tbody tr.estimate-row > td:nth-child(10) {
+        border-top: 0 !important;
+        padding-top: 0 !important;
+    }
+}
+
+/* Compact dropdown matching the administrator menu selector. */
+.card .estimate-filter-select { appearance:none; -webkit-appearance:none; display:block; width:100%; height:38px; min-height:38px; padding:0 36px 0 12px; border:1px solid #dbe4ef; border-radius:8px; background:#f7f9fc; color:#344357; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+.card .estimate-filter-select:focus-visible { outline:2px solid #607083; outline-offset:2px; }
+.estimate-filter-menu { margin-bottom:14px; width:100%; }
+.estimate-filter-menu summary { position:relative; list-style:none; display:flex !important; align-items:center; }
+.estimate-filter-menu summary::-webkit-details-marker { display:none; }
+.estimate-filter-menu summary::after { content:""; position:absolute; right:16px; width:6px; height:6px; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:rotate(45deg); }
+.estimate-filter-menu[open] summary::after { transform:rotate(225deg); }
+.estimate-filter-options { max-height: min(440px, 60vh); overflow-y:auto; overscroll-behavior:contain; padding:8px; border:1px solid #dbe4ef; border-top:0; border-radius:0 0 8px 8px; background:#fff; }
+.estimate-menu-heading { padding:10px 12px 4px; color:#8995a4; font-size:11px; font-weight:700; }
+.estimate-menu-item { display:flex; align-items:center; min-height:44px; margin:4px 0; padding:8px 12px; border-radius:8px; font-weight:600; color:#536b77; }
+.estimate-menu-item:hover { background:#fff3e8; }
+.estimate-menu-item.active { background:#ff6900; color:#fff; box-shadow:0 3px 8px rgba(255,105,0,.15); }
+.estimate-menu-item:focus-visible { outline:2px solid #ff6900; outline-offset:-2px; }
+
+/* Keep search controls aligned as the available panel width changes. */
+.card > form.filter {
+    display:grid !important;
+    grid-template-columns:minmax(220px, 280px) minmax(0, 1fr) auto auto !important;
+    align-items:center;
+    gap:8px !important;
+    padding-bottom:16px;
+    border-bottom:1px solid #e5eaed;
+}
+.card > form.filter .estimate-date-range {
+    grid-column:1 !important;
+    width:100% !important;
+    min-width:0;
+}
+.card > form.filter > input[name="q"] {
+    grid-column:2 !important;
+    width:100% !important;
+    min-width:0 !important;
+    margin-left:0 !important;
+}
+.card > form.filter button[type="submit"] { grid-column:3 !important; white-space:nowrap; }
+.card > form.filter .estimate-reset { grid-column:4 !important; white-space:nowrap; }
+.estimate-menu-group + .estimate-menu-group {
+    margin-top:8px;
+    padding-top:8px;
+    border-top:1px solid #e5eaed;
+}
+@media (max-width:900px) {
+    .card > form.filter { grid-template-columns:minmax(0, 1fr) auto auto !important; }
+    .card > form.filter .estimate-date-range { grid-column:1 / -1 !important; }
+    .card > form.filter > input[name="q"] { grid-column:1 !important; }
+    .card > form.filter button[type="submit"] { grid-column:2 !important; }
+    .card > form.filter .estimate-reset { grid-column:3 !important; }
+}
+@media (max-width:480px) {
+    .card > form.filter { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+    .card > form.filter > input[name="q"] { grid-column:1 / -1 !important; }
+    .card > form.filter button[type="submit"] { grid-column:1 !important; }
+    .card > form.filter .estimate-reset { grid-column:2 !important; }
 }

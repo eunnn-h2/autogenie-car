@@ -248,26 +248,27 @@ function quickFilterUrl(array $set = []): string {
 <?php if (is_string($assignmentNotice)): ?><div class="notice" role="status"><?=h($assignmentNotice)?></div><?php endif; ?>
 <?php if ($tableMissing): ?><div class="alert"><strong>estimates 테이블이 없습니다.</strong><br>기존 견적 테이블을 먼저 생성해 주세요.</div><?php endif; ?>
 <?php if ($quickTableMissing): ?><div class="notice"><strong>간편견적 테이블이 아직 없습니다.</strong><br>연결된 DB에 <code>estimate_quick</code> 테이블이 존재하는지 확인해 주세요.</div><?php endif; ?>
-<nav class="estimate-quick-filters" aria-label="견적 빠른 필터">
-<a class="quick-filter <?=($status==='' && $type==='' && $owner==='' && $contactTag==='')?'active':''?>" href="<?=h(quickFilterUrl())?>">전체 <span><?=number_format($quickCounts['all'])?></span></a>
-<a class="quick-filter <?=$status==='NEW'?'active':''?>" href="<?=h(quickFilterUrl(['status'=>'NEW']))?>">신규 <span><?=number_format($quickCounts['NEW'])?></span></a>
-<a class="quick-filter <?=$status==='CONTACTED'?'active':''?>" href="<?=h(quickFilterUrl(['status'=>'CONTACTED']))?>">상담중 <span><?=number_format($quickCounts['CONTACTED'])?></span></a>
-<a class="quick-filter <?=$status==='REVIEWING'?'active':''?>" href="<?=h(quickFilterUrl(['status'=>'REVIEWING']))?>">심사중 <span><?=number_format($quickCounts['REVIEWING'])?></span></a>
-<a class="quick-filter <?=$status==='APPROVED'?'active':''?>" href="<?=h(quickFilterUrl(['status'=>'APPROVED']))?>">승인 <span><?=number_format($quickCounts['APPROVED'])?></span></a>
-<a class="quick-filter <?=$status==='CONTRACTED'?'active':''?>" href="<?=h(quickFilterUrl(['status'=>'CONTRACTED']))?>">계약완료 <span><?=number_format($quickCounts['CONTRACTED'])?></span></a>
-<a class="quick-filter <?=$status==='CANCELED'?'active':''?>" href="<?=h(quickFilterUrl(['status'=>'CANCELED']))?>">취소 <span><?=number_format($quickCounts['CANCELED'])?></span></a>
-<span class="quick-filter-divider" aria-hidden="true"></span>
-<a class="quick-filter <?=$owner==='mine'?'active':''?>" href="<?=h(quickFilterUrl(['owner'=>'mine']))?>">내 담당 <span><?=number_format($quickCounts['mine'])?></span></a>
-<a class="quick-filter <?=$owner==='unassigned'?'active':''?>" href="<?=h(quickFilterUrl(['owner'=>'unassigned']))?>">미배정 <span><?=number_format($quickCounts['unassigned'])?></span></a>
-<a class="quick-filter <?=$owner==='handoff'?'active':''?>" href="<?=h(quickFilterUrl(['owner'=>'handoff']))?>">인계필요 <span><?=number_format($quickCounts['handoff'])?></span></a>
-<span class="quick-filter-divider" aria-hidden="true"></span>
-<a class="quick-filter <?=$contactTag==='NONE'?'active':''?>" href="<?=h(quickFilterUrl(['contact_tag'=>'NONE']))?>">미지정 <span><?=number_format($quickCounts['TAG_NONE'])?></span></a>
-<a class="quick-filter <?=$contactTag==='CONSULTING'?'active':''?>" href="<?=h(quickFilterUrl(['contact_tag'=>'CONSULTING']))?>">상담중 <span><?=number_format($quickCounts['TAG_CONSULTING'])?></span></a>
-<a class="quick-filter <?=$contactTag==='NO_ANSWER'?'active':''?>" href="<?=h(quickFilterUrl(['contact_tag'=>'NO_ANSWER']))?>">부재중 <span><?=number_format($quickCounts['TAG_NO_ANSWER'])?></span></a>
-<a class="quick-filter <?=$contactTag==='MANAGED'?'active':''?>" href="<?=h(quickFilterUrl(['contact_tag'=>'MANAGED']))?>">관리고객 <span><?=number_format($quickCounts['TAG_MANAGED'])?></span></a>
-<a class="quick-filter <?=$contactTag==='SPECIAL'?'active':''?>" href="<?=h(quickFilterUrl(['contact_tag'=>'SPECIAL']))?>">특별관리 <span><?=number_format($quickCounts['TAG_SPECIAL'])?></span></a>
-<a class="quick-filter <?=$contactTag==='SIMPLE'?'active':''?>" href="<?=h(quickFilterUrl(['contact_tag'=>'SIMPLE']))?>">단순문의 <span><?=number_format($quickCounts['TAG_SIMPLE'])?></span></a>
-</nav>
+<details class="estimate-filter-menu"><summary class="estimate-filter-select"><span id="estimateFilterTitle"></span></summary><nav class="estimate-filter-options" aria-label="견적문의 필터"><div class="estimate-menu-group"><div class="estimate-menu-heading">견적 상태</div>
+<a href="<?=h(quickFilterUrl())?>" class="estimate-menu-item <?=($status==='' && $type==='' && $owner==='' && $contactTag==='')?'active':''?>">전체 (<?=number_format($quickCounts['all'])?>)</a>
+<a href="<?=h(quickFilterUrl(['status'=>'NEW']))?>" class="estimate-menu-item <?=$status==='NEW'?'active':''?>">신규 (<?=number_format($quickCounts['NEW'])?>)</a>
+<a href="<?=h(quickFilterUrl(['status'=>'CONTACTED']))?>" class="estimate-menu-item <?=$status==='CONTACTED'?'active':''?>">상담중 (<?=number_format($quickCounts['CONTACTED'])?>)</a>
+<a href="<?=h(quickFilterUrl(['status'=>'REVIEWING']))?>" class="estimate-menu-item <?=$status==='REVIEWING'?'active':''?>">심사중 (<?=number_format($quickCounts['REVIEWING'])?>)</a>
+<a href="<?=h(quickFilterUrl(['status'=>'APPROVED']))?>" class="estimate-menu-item <?=$status==='APPROVED'?'active':''?>">승인 (<?=number_format($quickCounts['APPROVED'])?>)</a>
+<a href="<?=h(quickFilterUrl(['status'=>'CONTRACTED']))?>" class="estimate-menu-item <?=$status==='CONTRACTED'?'active':''?>">계약완료 (<?=number_format($quickCounts['CONTRACTED'])?>)</a>
+<a href="<?=h(quickFilterUrl(['status'=>'CANCELED']))?>" class="estimate-menu-item <?=$status==='CANCELED'?'active':''?>">취소 (<?=number_format($quickCounts['CANCELED'])?>)</a>
+</div><div class="estimate-menu-group"><div class="estimate-menu-heading">담당자</div>
+<a href="<?=h(quickFilterUrl(['owner'=>'mine']))?>" class="estimate-menu-item <?=$owner==='mine'?'active':''?>">내 담당 (<?=number_format($quickCounts['mine'])?>)</a>
+<a href="<?=h(quickFilterUrl(['owner'=>'unassigned']))?>" class="estimate-menu-item <?=$owner==='unassigned'?'active':''?>">미배정 (<?=number_format($quickCounts['unassigned'])?>)</a>
+<a href="<?=h(quickFilterUrl(['owner'=>'handoff']))?>" class="estimate-menu-item <?=$owner==='handoff'?'active':''?>">인계필요 (<?=number_format($quickCounts['handoff'])?>)</a>
+</div><div class="estimate-menu-group"><div class="estimate-menu-heading">상담구분</div>
+<a href="<?=h(quickFilterUrl(['contact_tag'=>'NONE']))?>" class="estimate-menu-item <?=$contactTag==='NONE'?'active':''?>">미지정 (<?=number_format($quickCounts['TAG_NONE'])?>)</a>
+<a href="<?=h(quickFilterUrl(['contact_tag'=>'CONSULTING']))?>" class="estimate-menu-item <?=$contactTag==='CONSULTING'?'active':''?>">상담중 (<?=number_format($quickCounts['TAG_CONSULTING'])?>)</a>
+<a href="<?=h(quickFilterUrl(['contact_tag'=>'NO_ANSWER']))?>" class="estimate-menu-item <?=$contactTag==='NO_ANSWER'?'active':''?>">부재중 (<?=number_format($quickCounts['TAG_NO_ANSWER'])?>)</a>
+<a href="<?=h(quickFilterUrl(['contact_tag'=>'MANAGED']))?>" class="estimate-menu-item <?=$contactTag==='MANAGED'?'active':''?>">관리고객 (<?=number_format($quickCounts['TAG_MANAGED'])?>)</a>
+<a href="<?=h(quickFilterUrl(['contact_tag'=>'SPECIAL']))?>" class="estimate-menu-item <?=$contactTag==='SPECIAL'?'active':''?>">특별관리 (<?=number_format($quickCounts['TAG_SPECIAL'])?>)</a>
+<a href="<?=h(quickFilterUrl(['contact_tag'=>'SIMPLE']))?>" class="estimate-menu-item <?=$contactTag==='SIMPLE'?'active':''?>">단순문의 (<?=number_format($quickCounts['TAG_SIMPLE'])?>)</a>
+</div></nav></details>
+<script>document.getElementById("estimateFilterTitle").textContent = document.querySelector(".estimate-menu-item.active")?.textContent || document.querySelector(".estimate-menu-item").textContent;</script>
 <form class="filter" method="get">
 <div class="estimate-date-range" data-date-range data-label="신청일"><span data-range-separator hidden>신청일</span><input type="date" name="from" aria-label="조회 시작일" value="<?=h($dates['from'])?>" hidden><span data-range-separator hidden>~</span><input type="date" name="to" aria-label="조회 종료일" value="<?=h($dates['to'])?>" hidden></div>
 <?php if ($type !== ''): ?><input type="hidden" name="type" value="<?=h($type)?>"><?php endif; ?>
@@ -286,7 +287,7 @@ function quickFilterUrl(array $set = []): string {
 <?php if (!$rows): ?><tr><td colspan="12" style="padding:50px;color:#9aabb4">저장된 견적이 없습니다.</td></tr><?php endif; ?>
 <?php foreach($rows as $r): $rowKey = $r['_source'] . ':' . (int)$r['id']; $contactTag = $contactTags[$rowKey] ?? ''; ?><tr class="estimate-row<?= $contactTag !== '' ? ' estimate-row--' . h(strtolower($contactTag)) : '' ?>">
 <td><input class="check row-check" type="checkbox" name="selected[]" value="<?=h($rowKey)?>" aria-label="<?=h($r['estimate_no'])?> 선택"></td>
-<td class="estimate-created-at"><?php $createdTs = strtotime((string)$r['created_at']); ?><?=h($createdTs ? date('Y-m-d', $createdTs) : (string)$r['created_at'])?><?php if ($createdTs): ?><span><?=h(date('H:i', $createdTs))?></span><?php endif; ?></td>
+<td class="estimate-created-at"><div class="estimate-date-content"><?php $createdTs = strtotime((string)$r['created_at']); ?><?=h($createdTs ? date('Y-m-d', $createdTs) : (string)$r['created_at'])?><?php if ($createdTs): ?><span><?=h(date('H:i', $createdTs))?></span><?php endif; ?></div></td>
 <td class="estimate-image-cell">
     <?php if (!empty($r['_vehicle_image'])): ?>
     <a class="estimate-thumb-link" href="./estimate-detail.php?type=<?=strtolower(h($r['_source']))?>&id=<?=(int)$r['id']?>" aria-label="<?=h($r['_vehicle_display'])?> 견적 상세 보기">
@@ -300,14 +301,14 @@ function quickFilterUrl(array $set = []): string {
     <?php endif; ?>
 </td>
 <td class="name"><a class="detail-link" href="./estimate-detail.php?type=<?=strtolower(h($r['_source']))?>&id=<?=(int)$r['id']?>"><?=h($r['_vehicle_display'])?></a></td>
-<td><span class="estimate-kind"><?=h($r['_source_label'])?></span></td>
+<td><span class="estimate-kind"><?=h($r['_source_label'])?></span><span class="estimate-product-type"><?=h(!empty($r['product_type']) ? productLabel($r['product_type']) : '상담 후 결정')?></span></td>
 <td><span class="estimate-status estimate-status--<?=h(strtolower((string)$r['status']))?>"><?=h(statusLabel((string)$r['status']))?></span></td>
 <td class="estimate-contact-tag-cell"><?php if ($contactTag !== '' && isset($contactTagOptions[$contactTag])): ?><span class="estimate-contact-tag estimate-contact-tag--<?=h(strtolower($contactTag))?>"><?=h($contactTagOptions[$contactTag])?></span><?php else: ?><span class="estimate-contact-tag-empty">-</span><?php endif; ?></td>
 <td><a class="detail-link" href="./estimate-detail.php?type=<?=strtolower(h($r['_source']))?>&id=<?=(int)$r['id']?>"><?=h($r['customer_name'])?></a></td><td><?=h($r['customer_phone'])?></td>
 <td>
     <?php $hasActiveSalesOwner = !empty($r['assigned_admin_id']) && (int)($r['_assigned_is_active'] ?? 0) === 1 && strtoupper((string)($r['_assigned_role'] ?? '')) === 'SALES'; ?>
     <div class="estimate-owner-cell">
-        <?php if ($hasActiveSalesOwner): ?>
+        <?php if (!empty($r['assigned_admin_id'])): ?>
             <div class="estimate-owner-info">
                 <span class="estimate-assignee"><?=h($r['_assigned_name'] ?: ($r['_assigned_username'] ?: '담당자'))?></span>
             </div>
@@ -318,7 +319,7 @@ function quickFilterUrl(array $set = []): string {
     </div>
 </td>
 <td class="estimate-note-cell"><?php $latestNote = $latestNotes[$rowKey] ?? ''; ?><?php if ($latestNote !== ''): ?><span class="estimate-note-preview" title="<?=h($latestNote)?>"><?=h($latestNote)?></span><?php else: ?><span class="estimate-note-empty">-</span><?php endif; ?></td>
-<td><div class="row-actions"><a class="action-btn edit small" href="./estimate-detail.php?type=<?=strtolower(h($r['_source']))?>&id=<?=(int)$r['id']?>"><?=canUpdateData() ? '수정' : '상세'?></a></div></td>
+<td><div class="row-actions"><a class="action-btn edit small" href="./estimate-detail.php?type=<?=strtolower(h($r['_source']))?>&id=<?=(int)$r['id']?>"><?php if (canUpdateData()): ?><svg class="estimate-edit-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5 4 4M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15z"/></svg><?php endif; ?><?=canUpdateData() ? '수정' : '상세'?></a></div></td>
 </tr><?php endforeach; ?>
 </tbody></table></div></form></div></main></div><form id="singleActionForm" method="post" action="./estimate-actions.php" hidden>
     <input type="hidden" name="action" id="singleAction">

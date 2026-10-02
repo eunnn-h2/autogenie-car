@@ -2173,6 +2173,17 @@ a {
     flex: 0 0 250px;
 }
 
+@media (min-width: 651px) {
+    #product-list .vehicle-list-table thead tr > th,
+    #product-list .vehicle-list-table tbody tr > td {
+        border-right: 1px solid #e5eaed !important;
+        border-bottom: 1px solid #e5eaed !important;
+    }
+    #product-list .vehicle-list-table tr > :last-child {
+        border-right: 0 !important;
+    }
+}
+
 /* Reuse the table controls in mobile cards so selection and forms stay in sync. */
 .vehicle-name-best {
     display: none;
@@ -2285,7 +2296,7 @@ a {
         height: auto;
         min-width: 0;
         padding: 14px;
-        border: 1px solid #dce4ee;
+        border: 1px solid #e5eaed;
         border-radius: 12px;
         background: #fff;
     }
@@ -2387,7 +2398,7 @@ a {
     #product-list .vehicle-list-table .vehicle-management-cell {
         grid-area: 8 / 1 / 9 / 5;
         padding-top: 10px !important;
-        border-top: 1px solid #edf1f5 !important;
+        border-top: 1px solid #e5eaed !important;
     }
     #product-list .vehicle-management-actions { justify-content: flex-end; }
     #product-list .vehicle-list-table .vehicle-management-btn {
