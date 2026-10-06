@@ -242,33 +242,32 @@ function quickFilterUrl(array $set = []): string {
 }
 ?>
 <!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>견적 관리 - 오토지니</title><link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
-<link rel="stylesheet" href="./estimates-page.css?v=<?= filemtime(__DIR__ . '/estimates-page.css') ?>"><link rel="stylesheet" href="./admin-ui.css?v=<?= filemtime(__DIR__ . '/admin-ui.css') ?>"><link rel="stylesheet" href="./date-range-picker.css?v=<?= filemtime(__DIR__ . '/date-range-picker.css') ?>"><script src="./date-range-picker.js?v=<?= filemtime(__DIR__ . '/date-range-picker.js') ?>" defer></script></head><body><div class="layout">
+<link rel="stylesheet" href="./estimates-page.css?v=<?= filemtime(__DIR__ . '/estimates-page.css') ?>"><link rel="stylesheet" href="./admin-ui.css?v=<?= filemtime(__DIR__ . '/admin-ui.css') ?>"><link rel="stylesheet" href="./date-range-picker.css?v=<?= filemtime(__DIR__ . '/date-range-picker.css') ?>"><script src="./date-range-picker.js?v=<?= filemtime(__DIR__ . '/date-range-picker.js') ?>" defer></script><style><?=estimateContactTagColorCss(getEstimateContactTagColors($pdo))?></style></head><body><div class="layout">
 <?php $currentAdminPage = 'estimates'; require __DIR__ . '/sidebar.php'; ?>
-<main class="main"><div class="card"><div class="top"><h1>견적문의 관리</h1><a href="../db-test.html" target="_blank">+ 실제 화면에서 견적 신청</a></div>
+<main class="main"><div class="card"><div class="top"><h1>견적문의 관리</h1></div>
 <?php if (is_string($assignmentNotice)): ?><div class="notice" role="status"><?=h($assignmentNotice)?></div><?php endif; ?>
 <?php if ($tableMissing): ?><div class="alert"><strong>estimates 테이블이 없습니다.</strong><br>기존 견적 테이블을 먼저 생성해 주세요.</div><?php endif; ?>
 <?php if ($quickTableMissing): ?><div class="notice"><strong>간편견적 테이블이 아직 없습니다.</strong><br>연결된 DB에 <code>estimate_quick</code> 테이블이 존재하는지 확인해 주세요.</div><?php endif; ?>
-<details class="estimate-filter-menu"><summary class="estimate-filter-select"><span id="estimateFilterTitle"></span></summary><nav class="estimate-filter-options" aria-label="견적문의 필터"><div class="estimate-menu-group"><div class="estimate-menu-heading">견적 상태</div>
-<a href="<?=h(quickFilterUrl())?>" class="estimate-menu-item <?=($status==='' && $type==='' && $owner==='' && $contactTag==='')?'active':''?>">전체 (<?=number_format($quickCounts['all'])?>)</a>
-<a href="<?=h(quickFilterUrl(['status'=>'NEW']))?>" class="estimate-menu-item <?=$status==='NEW'?'active':''?>">신규 (<?=number_format($quickCounts['NEW'])?>)</a>
-<a href="<?=h(quickFilterUrl(['status'=>'CONTACTED']))?>" class="estimate-menu-item <?=$status==='CONTACTED'?'active':''?>">상담중 (<?=number_format($quickCounts['CONTACTED'])?>)</a>
-<a href="<?=h(quickFilterUrl(['status'=>'REVIEWING']))?>" class="estimate-menu-item <?=$status==='REVIEWING'?'active':''?>">심사중 (<?=number_format($quickCounts['REVIEWING'])?>)</a>
-<a href="<?=h(quickFilterUrl(['status'=>'APPROVED']))?>" class="estimate-menu-item <?=$status==='APPROVED'?'active':''?>">승인 (<?=number_format($quickCounts['APPROVED'])?>)</a>
-<a href="<?=h(quickFilterUrl(['status'=>'CONTRACTED']))?>" class="estimate-menu-item <?=$status==='CONTRACTED'?'active':''?>">계약완료 (<?=number_format($quickCounts['CONTRACTED'])?>)</a>
-<a href="<?=h(quickFilterUrl(['status'=>'CANCELED']))?>" class="estimate-menu-item <?=$status==='CANCELED'?'active':''?>">취소 (<?=number_format($quickCounts['CANCELED'])?>)</a>
+<nav class="estimate-filter-tabs" aria-label="견적문의 필터"><div class="estimate-menu-group"><div class="estimate-menu-heading">견적 상태</div>
+<a href="<?=h(quickFilterUrl())?>" class="estimate-menu-item <?=($status==='' && $type==='' && $owner==='' && $contactTag==='')?'active':''?>">전체 <span class="estimate-filter-count"><?=number_format($quickCounts['all'])?></span></a>
+<a href="<?=h(quickFilterUrl(['status'=>'NEW']))?>" class="estimate-menu-item <?=$status==='NEW'?'active':''?>">신규 <span class="estimate-filter-count"><?=number_format($quickCounts['NEW'])?></span></a>
+<a href="<?=h(quickFilterUrl(['status'=>'CONTACTED']))?>" class="estimate-menu-item <?=$status==='CONTACTED'?'active':''?>">상담중 <span class="estimate-filter-count"><?=number_format($quickCounts['CONTACTED'])?></span></a>
+<a href="<?=h(quickFilterUrl(['status'=>'REVIEWING']))?>" class="estimate-menu-item <?=$status==='REVIEWING'?'active':''?>">심사중 <span class="estimate-filter-count"><?=number_format($quickCounts['REVIEWING'])?></span></a>
+<a href="<?=h(quickFilterUrl(['status'=>'APPROVED']))?>" class="estimate-menu-item <?=$status==='APPROVED'?'active':''?>">승인 <span class="estimate-filter-count"><?=number_format($quickCounts['APPROVED'])?></span></a>
+<a href="<?=h(quickFilterUrl(['status'=>'CONTRACTED']))?>" class="estimate-menu-item <?=$status==='CONTRACTED'?'active':''?>">계약완료 <span class="estimate-filter-count"><?=number_format($quickCounts['CONTRACTED'])?></span></a>
+<a href="<?=h(quickFilterUrl(['status'=>'CANCELED']))?>" class="estimate-menu-item <?=$status==='CANCELED'?'active':''?>">취소 <span class="estimate-filter-count"><?=number_format($quickCounts['CANCELED'])?></span></a>
 </div><div class="estimate-menu-group"><div class="estimate-menu-heading">담당자</div>
-<a href="<?=h(quickFilterUrl(['owner'=>'mine']))?>" class="estimate-menu-item <?=$owner==='mine'?'active':''?>">내 담당 (<?=number_format($quickCounts['mine'])?>)</a>
-<a href="<?=h(quickFilterUrl(['owner'=>'unassigned']))?>" class="estimate-menu-item <?=$owner==='unassigned'?'active':''?>">미배정 (<?=number_format($quickCounts['unassigned'])?>)</a>
-<a href="<?=h(quickFilterUrl(['owner'=>'handoff']))?>" class="estimate-menu-item <?=$owner==='handoff'?'active':''?>">인계필요 (<?=number_format($quickCounts['handoff'])?>)</a>
+<a href="<?=h(quickFilterUrl(['owner'=>'mine']))?>" class="estimate-menu-item <?=$owner==='mine'?'active':''?>">내 담당 <span class="estimate-filter-count"><?=number_format($quickCounts['mine'])?></span></a>
+<a href="<?=h(quickFilterUrl(['owner'=>'unassigned']))?>" class="estimate-menu-item <?=$owner==='unassigned'?'active':''?>">미배정 <span class="estimate-filter-count"><?=number_format($quickCounts['unassigned'])?></span></a>
+<a href="<?=h(quickFilterUrl(['owner'=>'handoff']))?>" class="estimate-menu-item <?=$owner==='handoff'?'active':''?>">인계필요 <span class="estimate-filter-count"><?=number_format($quickCounts['handoff'])?></span></a>
 </div><div class="estimate-menu-group"><div class="estimate-menu-heading">상담구분</div>
-<a href="<?=h(quickFilterUrl(['contact_tag'=>'NONE']))?>" class="estimate-menu-item <?=$contactTag==='NONE'?'active':''?>">미지정 (<?=number_format($quickCounts['TAG_NONE'])?>)</a>
-<a href="<?=h(quickFilterUrl(['contact_tag'=>'CONSULTING']))?>" class="estimate-menu-item <?=$contactTag==='CONSULTING'?'active':''?>">상담중 (<?=number_format($quickCounts['TAG_CONSULTING'])?>)</a>
-<a href="<?=h(quickFilterUrl(['contact_tag'=>'NO_ANSWER']))?>" class="estimate-menu-item <?=$contactTag==='NO_ANSWER'?'active':''?>">부재중 (<?=number_format($quickCounts['TAG_NO_ANSWER'])?>)</a>
-<a href="<?=h(quickFilterUrl(['contact_tag'=>'MANAGED']))?>" class="estimate-menu-item <?=$contactTag==='MANAGED'?'active':''?>">관리고객 (<?=number_format($quickCounts['TAG_MANAGED'])?>)</a>
-<a href="<?=h(quickFilterUrl(['contact_tag'=>'SPECIAL']))?>" class="estimate-menu-item <?=$contactTag==='SPECIAL'?'active':''?>">특별관리 (<?=number_format($quickCounts['TAG_SPECIAL'])?>)</a>
-<a href="<?=h(quickFilterUrl(['contact_tag'=>'SIMPLE']))?>" class="estimate-menu-item <?=$contactTag==='SIMPLE'?'active':''?>">단순문의 (<?=number_format($quickCounts['TAG_SIMPLE'])?>)</a>
-</div></nav></details>
-<script>document.getElementById("estimateFilterTitle").textContent = document.querySelector(".estimate-menu-item.active")?.textContent || document.querySelector(".estimate-menu-item").textContent;</script>
+<a href="<?=h(quickFilterUrl(['contact_tag'=>'NONE']))?>" class="estimate-menu-item <?=$contactTag==='NONE'?'active':''?>">미지정 <span class="estimate-filter-count"><?=number_format($quickCounts['TAG_NONE'])?></span></a>
+<a href="<?=h(quickFilterUrl(['contact_tag'=>'CONSULTING']))?>" class="estimate-menu-item <?=$contactTag==='CONSULTING'?'active':''?>">상담중 <span class="estimate-filter-count"><?=number_format($quickCounts['TAG_CONSULTING'])?></span></a>
+<a href="<?=h(quickFilterUrl(['contact_tag'=>'NO_ANSWER']))?>" class="estimate-menu-item <?=$contactTag==='NO_ANSWER'?'active':''?>">부재중 <span class="estimate-filter-count"><?=number_format($quickCounts['TAG_NO_ANSWER'])?></span></a>
+<a href="<?=h(quickFilterUrl(['contact_tag'=>'MANAGED']))?>" class="estimate-menu-item <?=$contactTag==='MANAGED'?'active':''?>">관리고객 <span class="estimate-filter-count"><?=number_format($quickCounts['TAG_MANAGED'])?></span></a>
+<a href="<?=h(quickFilterUrl(['contact_tag'=>'SPECIAL']))?>" class="estimate-menu-item <?=$contactTag==='SPECIAL'?'active':''?>">특별관리 <span class="estimate-filter-count"><?=number_format($quickCounts['TAG_SPECIAL'])?></span></a>
+<a href="<?=h(quickFilterUrl(['contact_tag'=>'SIMPLE']))?>" class="estimate-menu-item <?=$contactTag==='SIMPLE'?'active':''?>">단순문의 <span class="estimate-filter-count"><?=number_format($quickCounts['TAG_SIMPLE'])?></span></a>
+</div></nav>
 <form class="filter" method="get">
 <div class="estimate-date-range" data-date-range data-label="신청일"><span data-range-separator hidden>신청일</span><input type="date" name="from" aria-label="조회 시작일" value="<?=h($dates['from'])?>" hidden><span data-range-separator hidden>~</span><input type="date" name="to" aria-label="조회 종료일" value="<?=h($dates['to'])?>" hidden></div>
 <?php if ($type !== ''): ?><input type="hidden" name="type" value="<?=h($type)?>"><?php endif; ?>

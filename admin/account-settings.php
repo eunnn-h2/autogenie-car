@@ -6,6 +6,8 @@ header('Content-Type: text/html; charset=utf-8');
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/../config/database.php';
 
+
+
 $message = null;
 $error = null;
 $currentAdminId = (int)($_SESSION['admin_id'] ?? 0);
@@ -65,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = $e->getMessage();
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -73,20 +76,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>내 계정</title>
 <link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
-<link rel="stylesheet" href="./account-settings-page.css">
 <link rel="stylesheet" href="./admin-ui.css">
+<link rel="stylesheet" href="./account-settings-page.css?v=<?= filemtime(__DIR__ . '/account-settings-page.css') ?>">
 </head>
 <body><div class="admin-shell">
 <?php $currentAdminPage='account-settings'; require __DIR__.'/sidebar.php'; ?>
-<main class="main"><div class="wrap">
+<main class="main"><div class="wrap account-settings">
     <section class="card head ag-page-card">
-        <h1>내 계정</h1>
+        <div><h1>내 계정</h1><p>계정 정보를 확인하고 비밀번호를 안전하게 관리하세요.</p></div>
     </section>
 
     <?php if ($message): ?><div class="alert ok"><?= esc($message) ?></div><?php endif; ?>
     <?php if ($error): ?><div class="alert err"><?= esc($error) ?></div><?php endif; ?>
 
-    <section class="card">
+    <section class="card settings-section" aria-labelledby="profile-title">
+        <div class="section-intro">
+            <span class="section-eyebrow">PROFILE</span>
+            <h2 id="profile-title">계정 정보</h2>
+            <p>현재 로그인한 계정의 기본 정보입니다.</p>
+        </div>
         <div class="profile">
             <div><span>아이디</span><strong><?= esc((string)$account['username']) ?></strong></div>
             <div><span>이름</span><strong><?= esc((string)$account['name']) ?></strong></div>
@@ -94,24 +102,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php if ((string)$account['role'] === 'SALES'): ?><div><span>소속 팀</span><strong><?= esc(trim((string)($account['team_name'] ?? '')) ?: '미지정') ?></strong></div><?php endif; ?>
             <div><span>마지막 로그인</span><strong><?= esc((string)($account['last_login_at'] ?? '-')) ?></strong></div>
         </div>
+    </section>
 
-        <h2 class="form-title">비밀번호 변경</h2>
-        <form method="post" class="pw-grid" autocomplete="off">
+    <section class="card settings-section" aria-labelledby="password-title">
+        <div class="section-intro">
+            <span class="section-eyebrow">SECURITY</span>
+            <h2 id="password-title">비밀번호 변경</h2>
+            <p>계정을 보호하기 위해 다른 서비스에서 사용하지 않는 비밀번호를 설정하세요.</p>
+            <div class="security-note"><strong>비밀번호를 잊으셨나요?</strong><p>영업사원은 본 관리자에게 비밀번호 초기화를 요청해주세요.</p></div>
+        </div>
+        <form method="post" class="pw-grid" autocomplete="off" aria-labelledby="password-title">
             <input type="hidden" name="action" value="change_password">
             <div class="field">
-                <label>현재 비밀번호</label>
-                <input type="password" name="current_password" required autocomplete="current-password">
+                <label for="current-password">현재 비밀번호</label>
+                <input id="current-password" type="password" name="current_password" required autocomplete="current-password" placeholder="현재 비밀번호를 입력하세요">
             </div>
             <div class="field">
-                <label>새 비밀번호</label>
-                <input type="password" name="new_password" minlength="8" maxlength="72" required autocomplete="new-password" placeholder="8자 이상">
+                <label for="new-password">새 비밀번호</label>
+                <input id="new-password" type="password" name="new_password" minlength="8" maxlength="72" required autocomplete="new-password" placeholder="새 비밀번호를 입력하세요" aria-describedby="password-help">
+                <p id="password-help" class="field-help">8자 이상으로, 현재 비밀번호와 다르게 입력해주세요.</p>
             </div>
             <div class="field">
-                <label>새 비밀번호 확인</label>
-                <input type="password" name="new_password2" minlength="8" maxlength="72" required autocomplete="new-password">
+                <label for="confirm-password">새 비밀번호 확인</label>
+                <input id="confirm-password" type="password" name="new_password2" minlength="8" maxlength="72" required autocomplete="new-password" placeholder="새 비밀번호를 한 번 더 입력하세요" aria-describedby="password-match-status">
+                <p id="password-match-status" class="field-help password-match-status" role="status" aria-live="polite" aria-atomic="true" hidden></p>
             </div>
             <div class="submit"><button class="btn" type="submit">비밀번호 변경</button></div>
         </form>
-        <p class="help">본인 계정의 비밀번호는 현재 비밀번호가 일치할 때만 변경됩니다. 비밀번호를 잊은 영업사원은 본 관리자에게 초기화를 요청해야 합니다.</p>
     </section>
-</div></main></div></body></html>
+
+</div></main></div>
+<script src="./account-settings.js?v=<?= filemtime(__DIR__ . '/account-settings.js') ?>" defer></script>
+</body></html>

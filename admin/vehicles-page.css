@@ -250,6 +250,7 @@ a {
     color: #6c8190;
 }
 
+.bulk-tools .vehicle-add-btn { display: inline-flex; align-items: center; justify-content: center; height: 38px; margin-left: 6px; white-space: nowrap; }
 .new-btn {
     background: #2499ef;
     color: #fff;
@@ -658,8 +659,9 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 16px;
+    flex-direction: column;
+    padding: 16px;
     background: #fbfdfe;
 }
 
@@ -671,6 +673,11 @@ a {
 .upload-box span {
     color: #84959f;
 }
+.upload-file-control { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; max-width: 100%; min-width: 0; }
+.upload-file-control input[type=file] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.upload-file-control .upload-file-button { flex-shrink: 0; padding: 6px 12px; border: 1px solid #cfd9e4; border-radius: 7px; background: #fff; color: #243447; font-weight: 400; }
+.upload-file-control:focus-within { outline: 2px solid #8070cc; outline-offset: 3px; border-radius: 7px; }
+#uploadFileName { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 400; }
 
 .upload-btn {
     width: 100%;
@@ -1299,6 +1306,19 @@ a {
     opacity: .4;
     cursor: not-allowed;
 }
+.bulk-copy-btn {
+    height: 34px;
+    border: 1px solid #c8d4da;
+    border-radius: 7px;
+    background: #fff;
+    color: #516772;
+    padding: 0 13px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.bulk-copy-btn:disabled { opacity: .4; cursor: not-allowed; }
 
 @media(max-width:800px) {
     .bulk-action-bar {
@@ -2439,6 +2459,7 @@ a {
     gap: 18px 12px;
     width: 100%;
 }
+#searchForm [data-vehicle-search][hidden] { display: none !important; }
 
 #searchForm .vehicle-basic-filters,
 #searchForm .vehicle-date-filters,
@@ -2517,11 +2538,12 @@ a {
     }
 
     #searchForm .vehicle-filter-grid .search-type-group {
-        width: 76px;
+        width: 100px;
+        flex: 0 0 100px;
     }
 
     #searchForm .vehicle-filter-grid .keyword-input-group {
-        width: 280px;
+        width: 256px;
     }
 
     #searchForm .vehicle-filter-grid .per-page-group {
@@ -2577,13 +2599,16 @@ a {
 
 .vehicle-date-range .dr-field {
     max-width: none;
-    height: 36px;
-    border-color: #bfcbd2;
-    border-radius: 4px;
+    height: 38px;
+    border-color: #cfd9e4;
+    border-radius: 7px;
 }
 
 .vehicle-date-range .dr-field .dr-trigger {
-    height: 34px;
+    height: 36px;
+    padding: 0 11px !important;
+    font-weight: 400 !important;
+    color: #243447 !important;
 }
 
 @media(max-width:1200px) {

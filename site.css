@@ -1118,7 +1118,9 @@ body.detail-mode .page {
     gap: 12px;
 }
 
-.estimate-region-fields[hidden] { display: none; }
+.estimate-region-fields[hidden] {
+    display: none;
+}
 
 #estimateModal .estimate-field input,
 #estimateModal .estimate-field select {
@@ -1146,18 +1148,28 @@ body.detail-mode .page {
     background-position: right 14px center;
     background-size: 16px;
     cursor: pointer;
-    transition: border-color .15s, box-shadow .15s;
+    transition:
+        border-color 0.15s,
+        box-shadow 0.15s;
 }
 
-#estimateModal #estimateProvince:required:invalid { color: #8b939e; }
-#estimateModal #estimateProvince option { color: #20242b; }
-#estimateModal #estimateProvince:hover:not(:focus) { border-color: #bdc5cf; }
+#estimateModal #estimateProvince:required:invalid {
+    color: #8b939e;
+}
+#estimateModal #estimateProvince option {
+    color: #20242b;
+}
+#estimateModal #estimateProvince:hover:not(:focus) {
+    border-color: #bdc5cf;
+}
 #estimateModal #estimateProvince:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-soft);
 }
 @media (max-width: 700px) {
-    #estimateModal #estimateProvince { font-size: 16px; }
+    #estimateModal #estimateProvince {
+        font-size: 16px;
+    }
 }
 
 .estimate-field label {
@@ -6323,7 +6335,9 @@ body.home-main-active .page {
     border-radius: 14px;
     background: #f7f8f9;
     color: #343941;
-    transition: background-color .15s ease, border-color .15s ease;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease;
 }
 
 .home-search-button svg {
@@ -10952,10 +10966,6 @@ body.detail-mode #vehicleDetailView #app {
     letter-spacing: -0.04em !important;
 }
 
-.record-page-intro {
-    padding: 5px 2px 14px;
-}
-
 .record-page-intro p {
     margin: 0;
     color: #687585;
@@ -10967,7 +10977,7 @@ body.detail-mode #vehicleDetailView #app {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
-    margin: 0 0 16px;
+    margin: 15px 0 15px !important;
 }
 
 .record-filter-tab {
@@ -11521,7 +11531,7 @@ body.detail-mode #vehicleDetailView #app {
 /* 내 견적: 좁은 3열 구성을 2열로 정리하고 이미지·본문·상세정보 확대 */
 
 #myEstimatesView .my-estimates-list {
-    gap: 17px !important;
+    gap: 10px !important;
 }
 
 #myEstimatesView .my-estimate-item {
@@ -11710,7 +11720,7 @@ body.detail-mode #vehicleDetailView #app {
 
 #myEstimatesView .record-filter-tabs {
     gap: 9px !important;
-    margin-bottom: 19px !important;
+    margin: 15px 0 15px !important;
 }
 
 #myEstimatesView .record-filter-tab {
@@ -11922,8 +11932,8 @@ body.detail-mode #vehicleDetailView #app {
     grid-template-columns: 132px minmax(0, 1fr) !important;
     align-items: center !important;
     column-gap: 19px !important;
-    min-height: 154px !important;
-    padding: 14px 43px 14px 16px !important;
+    min-height: 150px !important;
+    padding: 10px 43px 10px 16px !important;
 }
 
 #myEstimatesView .estimate-summary-vehicle-image,
@@ -12709,7 +12719,6 @@ body.home-main-active .home-primary-action {
     }
 }
 
-
 /* ===== Q&A hero car: consistent mobile layout across sizes ===== */
 @media (max-width: 480px) {
     #faqView:not(.mypage-qna-mode) .qna-hero {
@@ -12802,7 +12811,6 @@ body.home-main-active .home-primary-action {
         right: 0 !important;
     }
 }
-
 
 /* ===== Q&A hero car: fixed visible size on all mobile widths ===== */
 @media (max-width: 480px) {

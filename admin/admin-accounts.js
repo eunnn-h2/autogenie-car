@@ -21,15 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) create.close();
     });
 
-    document.querySelectorAll('.account-toggle').forEach(button => {
-        button.addEventListener('click', () => {
-            const editor = document.getElementById(button.getAttribute('aria-controls'));
-            editor.hidden = !editor.hidden;
-            button.setAttribute('aria-expanded', String(!editor.hidden));
-            button.textContent = editor.hidden ? '권한 / 계정 설정' : '설정 닫기';
-        });
-    });
-
     document.querySelectorAll('[data-permission-group]').forEach(group => {
         const all = group.querySelector('[data-permission-all]');
         const items = [...group.querySelectorAll('[data-permission-item]')];
@@ -57,12 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-open-account]').forEach(button => {
         button.addEventListener('click', () => {
             const dialog = document.getElementById(button.dataset.openAccount);
-            const editor = dialog.querySelector('.account-manage');
-            const toggle = dialog.querySelector('.account-toggle');
-            editor.hidden = false;
-            toggle.setAttribute('aria-expanded', 'true');
-            toggle.textContent = '설정 닫기';
-            dialog.showModal();
+            if (dialog && !dialog.open) {
+                dialog.querySelectorAll('.account-delete-options').forEach(options => { options.open = false; });
+                dialog.showModal();
+            }
         });
     });
     document.querySelectorAll('[data-close-account]').forEach(button => {

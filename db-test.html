@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>오토지니 차량 견적서</title>
-<link rel="stylesheet" href="./site.css?v=20260930-region-2">
+<link rel="stylesheet" href="./site.css?v=20261006-inquiry-spacing">
 
 </head>
 <body>
@@ -588,9 +588,7 @@
             <button class="mypage-subview-back ag-back-button" type="button" aria-label="마이페이지로 돌아가기" onclick="closeMyEstimates()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
             <h1 class="mypage-subview-title" id="myEstimatesPageTitle">내 견적</h1>
         </div>
-        <div class="record-page-intro">
-            <!-- <p>상담 중이거나 받은 견적서를 한눈에 확인할 수 있습니다.</p> -->
-        </div>
+
         <div class="record-filter-tabs" id="estimateRecordTabs" role="tablist" aria-label="내 견적 필터">
             <button type="button" class="record-filter-tab active" data-estimate-record-filter="ALL">전체 <span id="estimateTabAll">0</span></button>
             <button type="button" class="record-filter-tab" data-estimate-record-filter="ACTIVE">상담중 <span id="estimateTabActive">0</span></button>
@@ -606,9 +604,7 @@
             <button class="mypage-subview-back ag-back-button" type="button" aria-label="마이페이지로 돌아가기" onclick="closeMyInquiries()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
             <h1 class="mypage-subview-title">문의 내역</h1>
         </div>
-        <div class="record-page-intro">
-            <p>궁금하신 점에 대한 답변을 확인할 수 있습니다.</p>
-        </div>
+        <div class="record-page-intro" aria-hidden="true" style="height: 38px; min-height: 38px; padding: 0; flex-shrink: 0;"></div>
         <div class="record-filter-tabs" id="inquiryRecordTabs" role="tablist" aria-label="문의 내역 필터">
             <button type="button" class="record-filter-tab active" data-inquiry-record-filter="ALL">전체 <span id="inquiryTabAll">0</span></button>
             <button type="button" class="record-filter-tab" data-inquiry-record-filter="ANSWERED">답변완료 <span id="inquiryTabAnswered">0</span></button>

@@ -22,6 +22,7 @@ if ($isVehicleCreatePage) requireVehicleCreate();
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/admin_helpers.php';
 require_once __DIR__ . '/../config/vehicle-price-basis.php';
+require_once __DIR__ . '/vehicle-template-example.php';
 
 $isVehicleDetailPage = defined('AUTOGENIE_VEHICLE_DETAIL_PAGE') && AUTOGENIE_VEHICLE_DETAIL_PAGE === true;
 
@@ -590,6 +591,7 @@ function importSingleVehicleSheet(PDO $pdo, array $rows, array &$log): void
 
     foreach ($rows as $r) {
         $rowNo = (int)($r['__row_number'] ?? 0);
+        if (isVehicleTemplateExampleRow($r)) continue;
 
         $brand = trim((string)singleSheetValue($r, ['브랜드','brand_name','brand'], ''));
         $vehicle = trim((string)singleSheetValue($r, ['차량명','vehicle_name','name'], ''));
@@ -785,75 +787,85 @@ $hasThumbnailSelectors = $hasAdminThumbnail && $hasEstimateThumbnail;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['crud_action'] ?? '') === 'copy_vehicle') {
     requireVehicleCreate();
     try {
+        $sourceIds = isset($_POST['selected_ids']) && is_array($_POST['selected_ids'])
+            ? array_values(array_unique(array_filter(array_map('intval', $_POST['selected_ids']), static fn(int $id): bool => $id > 0)))
+            : [(int)($_POST['source_vehicle_id'] ?? 0)];
+        if (!$sourceIds || $sourceIds === [0]) {
+            throw new RuntimeException('복사할 차량을 하나 이상 선택해주세요.');
+        }
         $pdo->beginTransaction();
-        $sourceId = (int)($_POST['source_vehicle_id'] ?? 0);
-        $sourceQuery = $pdo->prepare('SELECT * FROM car_vehicles WHERE id = ? FOR UPDATE');
-        $sourceQuery->execute([$sourceId]);
-        $source = $sourceQuery->fetch(PDO::FETCH_ASSOC);
-        if (!$source) {
-            throw new RuntimeException('복사할 차량을 찾을 수 없습니다.');
-        }
-
-        // Preserve optional schema fields, but let the database assign IDs and timestamps.
-        $insertCopy = static function (string $table, array $record) use ($pdo): int {
-            if (!in_array($table, ['car_vehicles', 'car_colors', 'car_trims', 'car_prices', 'car_vehicle_options'], true)) {
-                throw new RuntimeException('복사 대상 테이블이 올바르지 않습니다.');
+        foreach ($sourceIds as $sourceId) {
+            $sourceQuery = $pdo->prepare('SELECT * FROM car_vehicles WHERE id = ? FOR UPDATE');
+            $sourceQuery->execute([$sourceId]);
+            $source = $sourceQuery->fetch(PDO::FETCH_ASSOC);
+            if (!$source) {
+                throw new RuntimeException('복사할 차량을 찾을 수 없습니다.');
             }
-            unset($record['id'], $record['created_at'], $record['updated_at']);
-            $columns = array_map(static fn(string $column): string => '`' . str_replace('`', '``', $column) . '`', array_keys($record));
-            $placeholders = implode(',', array_fill(0, count($record), '?'));
-            $pdo->prepare('INSERT INTO `' . $table . '` (' . implode(',', $columns) . ') VALUES (' . $placeholders . ')')
-                ->execute(array_values($record));
-            return (int)$pdo->lastInsertId();
-        };
 
-        $vehicle = $source;
-        $vehicle['name'] .= ' (복사)';
-        foreach (['admin_thumbnail_color_id', 'estimate_thumbnail_color_id'] as $field) {
-            if (array_key_exists($field, $vehicle)) $vehicle[$field] = null;
-        }
-        $newVehicleId = $insertCopy('car_vehicles', $vehicle);
-        $idMaps = ['car_colors' => [], 'car_trims' => []];
-        foreach (array_keys($idMaps) as $table) {
-            $query = $pdo->prepare('SELECT * FROM `' . $table . '` WHERE vehicle_id = ? FOR UPDATE');
+            // Preserve optional schema fields, but let the database assign IDs and timestamps.
+            $insertCopy = static function (string $table, array $record) use ($pdo): int {
+                if (!in_array($table, ['car_vehicles', 'car_colors', 'car_trims', 'car_prices', 'car_vehicle_options'], true)) {
+                    throw new RuntimeException('복사 대상 테이블이 올바르지 않습니다.');
+                }
+                unset($record['id'], $record['created_at'], $record['updated_at']);
+                $columns = array_map(static fn(string $column): string => '`' . str_replace('`', '``', $column) . '`', array_keys($record));
+                $placeholders = implode(',', array_fill(0, count($record), '?'));
+                $pdo->prepare('INSERT INTO `' . $table . '` (' . implode(',', $columns) . ') VALUES (' . $placeholders . ')')
+                    ->execute(array_values($record));
+                return (int)$pdo->lastInsertId();
+            };
+
+            $vehicle = $source;
+            $vehicle['name'] .= ' (복사)';
+            foreach (['admin_thumbnail_color_id', 'estimate_thumbnail_color_id'] as $field) {
+                if (array_key_exists($field, $vehicle)) $vehicle[$field] = null;
+            }
+            $newVehicleId = $insertCopy('car_vehicles', $vehicle);
+            $idMaps = ['car_colors' => [], 'car_trims' => []];
+            foreach (array_keys($idMaps) as $table) {
+                $query = $pdo->prepare('SELECT * FROM `' . $table . '` WHERE vehicle_id = ? FOR UPDATE');
+                $query->execute([$sourceId]);
+                foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $record) {
+                    $oldId = (int)$record['id'];
+                    $record['vehicle_id'] = $newVehicleId;
+                    $idMaps[$table][$oldId] = $insertCopy($table, $record);
+                }
+            }
+
+            foreach ($idMaps['car_trims'] as $oldTrimId => $newTrimId) {
+                $query = $pdo->prepare('SELECT * FROM car_vehicle_options WHERE trim_id = ? FOR UPDATE');
+                $query->execute([$oldTrimId]);
+                foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $record) {
+                    $record['trim_id'] = $newTrimId;
+                    if (array_key_exists('vehicle_id', $record)) $record['vehicle_id'] = $newVehicleId;
+                    $insertCopy('car_vehicle_options', $record);
+                }
+            }
+
+            $query = $pdo->prepare('SELECT * FROM car_prices WHERE vehicle_id = ? FOR UPDATE');
             $query->execute([$sourceId]);
             foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $record) {
-                $oldId = (int)$record['id'];
                 $record['vehicle_id'] = $newVehicleId;
-                $idMaps[$table][$oldId] = $insertCopy($table, $record);
+                if ($record['trim_id'] !== null) {
+                    $record['trim_id'] = $idMaps['car_trims'][(int)$record['trim_id']] ?? null;
+                    if ($record['trim_id'] === null) throw new RuntimeException('가격에 연결된 트림을 찾을 수 없습니다.');
+                }
+                $insertCopy('car_prices', $record);
             }
-        }
-
-        foreach ($idMaps['car_trims'] as $oldTrimId => $newTrimId) {
-            $query = $pdo->prepare('SELECT * FROM car_vehicle_options WHERE trim_id = ? FOR UPDATE');
-            $query->execute([$oldTrimId]);
-            foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $record) {
-                $record['trim_id'] = $newTrimId;
-                if (array_key_exists('vehicle_id', $record)) $record['vehicle_id'] = $newVehicleId;
-                $insertCopy('car_vehicle_options', $record);
-            }
-        }
-
-        $query = $pdo->prepare('SELECT * FROM car_prices WHERE vehicle_id = ? FOR UPDATE');
-        $query->execute([$sourceId]);
-        foreach ($query->fetchAll(PDO::FETCH_ASSOC) as $record) {
-            $record['vehicle_id'] = $newVehicleId;
-            if ($record['trim_id'] !== null) {
-                $record['trim_id'] = $idMaps['car_trims'][(int)$record['trim_id']] ?? null;
-                if ($record['trim_id'] === null) throw new RuntimeException('가격에 연결된 트림을 찾을 수 없습니다.');
-            }
-            $insertCopy('car_prices', $record);
-        }
-        foreach (['admin_thumbnail_color_id', 'estimate_thumbnail_color_id'] as $field) {
-            if (!empty($source[$field])) {
-                $colorId = $idMaps['car_colors'][(int)$source[$field]] ?? null;
-                if ($colorId === null) throw new RuntimeException('대표 이미지 색상을 찾을 수 없습니다.');
-                $pdo->prepare('UPDATE car_vehicles SET `' . $field . '` = ? WHERE id = ?')->execute([$colorId, $newVehicleId]);
+            foreach (['admin_thumbnail_color_id', 'estimate_thumbnail_color_id'] as $field) {
+                if (!empty($source[$field])) {
+                    $colorId = $idMaps['car_colors'][(int)$source[$field]] ?? null;
+                    if ($colorId === null) throw new RuntimeException('대표 이미지 색상을 찾을 수 없습니다.');
+                    $pdo->prepare('UPDATE car_vehicles SET `' . $field . '` = ? WHERE id = ?')->execute([$colorId, $newVehicleId]);
+                }
             }
         }
         $pdo->commit();
-        header('Location: ./vehicle-detail.php?vehicle_id=' . $newVehicleId, true, 303);
-        exit;
+        if (count($sourceIds) === 1) {
+            header('Location: ./vehicle-detail.php?vehicle_id=' . $newVehicleId, true, 303);
+            exit;
+        }
+        $crudMessage = count($sourceIds) . '대의 차량을 복사했습니다.';
     } catch (Throwable $e) {
         if ($pdo->inTransaction()) $pdo->rollBack();
         $crudError = '차량 복사 실패: ' . $e->getMessage();
@@ -1527,6 +1539,12 @@ $q = trim((string)($_GET['q'] ?? ''));
 $brandId = (int)($_GET['brand_id'] ?? 0);
 $fuelType = trim((string)($_GET['fuel_type'] ?? ''));
 $active = (string)($_GET['active'] ?? '');
+$searchType = (string)($_GET['search_type'] ?? ($brandId > 0 ? 'brand' : ($fuelType !== '' ? 'fuel' : ($active !== '' ? 'status' : 'all'))));
+if (!in_array($searchType, ['all', 'brand', 'fuel', 'status'], true)) $searchType = 'all';
+if ($searchType !== 'all') $q = '';
+if ($searchType !== 'brand') $brandId = 0;
+if ($searchType !== 'fuel') $fuelType = '';
+if ($searchType !== 'status') $active = '';
 $dateBasis = (string)($_GET['date_basis'] ?? 'created');
 if (!in_array($dateBasis, ['created', 'updated'], true)) $dateBasis = 'created';
 
@@ -1573,11 +1591,13 @@ try {
             OR b.name LIKE :q_brand
             OR v.fuel_type LIKE :q_fuel
             OR CAST(v.model_year AS CHAR) LIKE :q_year
+            OR (CASE WHEN v.is_active = 1 THEN '판매중' ELSE '판매중지' END) LIKE :q_status
         )";
         $params[':q_vehicle'] = $keyword;
         $params[':q_brand'] = $keyword;
         $params[':q_fuel'] = $keyword;
         $params[':q_year'] = $keyword;
+        $params[':q_status'] = $keyword;
     }
 
     if ($brandId > 0) {
@@ -1719,8 +1739,9 @@ if ($isVehicleDetailPage && $vehicleId > 0 && $vehicleDetail === null && $crudMe
 }
 
 function adminQuery(array $overrides = []): string {
-    global $q, $brandId, $fuelType, $active, $dateBasis, $dateFrom, $dateTo, $vehiclePage, $perPage;
+    global $q, $brandId, $fuelType, $active, $searchType, $dateBasis, $dateFrom, $dateTo, $vehiclePage, $perPage;
     $base = [
+        'search_type' => $searchType !== 'all' ? $searchType : null,
         'q' => $q !== '' ? $q : null,
         'brand_id' => $brandId > 0 ? $brandId : null,
         'fuel_type' => $fuelType !== '' ? $fuelType : null,
@@ -1782,7 +1803,9 @@ function adminQuery(array $overrides = []): string {
                 <?php if ($isVehicleDetailPage || $isVehicleCreatePage): ?>
                     <a class="gray-btn" href="./vehicles.php?<?= h(adminQuery(['vehicle_id' => null])) ?>#product-list">← 차량 목록</a>
                 <?php else: ?>
-                    <div class="top-stats"><span class="stat">등록 차량 <b><?= number_format($totalRows) ?></b></span></div>
+                    <div class="top-stats">
+                        <span class="stat">등록 차량 <b><?= number_format($totalRows) ?></b></span>
+                    </div>
                 <?php endif; ?>
             </div>
         </section>
@@ -1798,52 +1821,9 @@ function adminQuery(array $overrides = []): string {
 
         <?php if (!$isVehicleDetailPage && !$isVehicleCreatePage): ?>
         <section id="product-list" class="admin-card">
-            <div class="card-title">
-                <div>
-                    <h2>차량 상품 목록</h2>
-                </div>
-                <div style="display:flex;gap:8px">
-                    <?php if (canCreateVehicleData()): ?><a class="gray-btn" href="./vehicle-create.php">+ 차량등록</a><?php endif; ?>
-                    <?php if (canCreateVehicleData() && canUpdateVehicleData()): ?><a class="new-btn" href="#bulk-import">+ 엑셀 일괄등록</a><?php endif; ?>
-                </div>
-            </div>
-
             <form method="get" action="./vehicles.php" class="filter-panel" id="searchForm">
                 <input type="hidden" name="page" value="1">
                 <div class="filter-top vehicle-filter-grid">
-                    <div class="vehicle-basic-filters">
-                    <div class="filter-group brand-filter-group">
-                        <label>브랜드</label>
-                        <select name="brand_id">
-                            <option value="0">전체</option>
-                            <?php foreach ($brandOptions as $brand): ?>
-                                <option value="<?= (int)$brand['id'] ?>" <?= $brandId === (int)$brand['id'] ? 'selected' : '' ?>>
-                                    <?= h($brand['name']) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="filter-group fuel-filter-group">
-                        <label>연료</label>
-                        <select name="fuel_type">
-                            <option value="">전체</option>
-                            <?php foreach (['GASOLINE','DIESEL','HYBRID','PHEV','EV','LPG','OTHER'] as $fuel): ?>
-                                <option value="<?= h($fuel) ?>" <?= $fuelType === $fuel ? 'selected' : '' ?>><?= h($fuel) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="filter-group status-filter-group">
-                        <label>상태</label>
-                        <select name="active">
-                            <option value="">전체</option>
-                            <option value="1" <?= $active === '1' ? 'selected' : '' ?>>판매중</option>
-                            <option value="0" <?= $active === '0' ? 'selected' : '' ?>>판매중지</option>
-                        </select>
-                    </div>
-
-                    </div>
                     <div class="vehicle-date-filters">
                     <div class="filter-group date-basis-group">
                         <label>날짜 기준</label>
@@ -1866,15 +1846,37 @@ function adminQuery(array $overrides = []): string {
                     <div class="vehicle-search-filters">
                     <div class="filter-group search-type-group">
                         <label>검색</label>
-                        <select class="search-type" aria-label="검색 방식">
-                            <option>통합</option>
+                        <select class="search-type" id="vehicleSearchType" name="search_type" aria-label="검색 방식">
+                            <option value="all" <?= $searchType === 'all' ? 'selected' : '' ?>>통합</option>
+                            <option value="brand" <?= $searchType === 'brand' ? 'selected' : '' ?>>브랜드</option>
+                            <option value="fuel" <?= $searchType === 'fuel' ? 'selected' : '' ?>>연료</option>
+                            <option value="status" <?= $searchType === 'status' ? 'selected' : '' ?>>상태</option>
                         </select>
                     </div>
 
                     <div class="filter-group keyword-input-group">
                         <label class="filter-control-spacer" aria-hidden="true">&nbsp;</label>
                         <input id="adminSearchInput" type="search" name="q" value="<?= h($q) ?>"
-                               placeholder="브랜드 또는 차량명 검색" autocomplete="off">
+                               placeholder="차량명·브랜드·연료·상태 검색" autocomplete="off" data-vehicle-search="all" <?= $searchType !== 'all' ? 'hidden disabled' : '' ?>>
+                        <select name="brand_id" data-vehicle-search="brand" aria-label="브랜드" <?= $searchType !== 'brand' ? 'hidden disabled' : '' ?>>
+                            <option value="0">전체</option>
+                            <?php foreach ($brandOptions as $brand): ?>
+                                <option value="<?= (int)$brand['id'] ?>" <?= $brandId === (int)$brand['id'] ? 'selected' : '' ?>>
+                                    <?= h($brand['name']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <select name="fuel_type" data-vehicle-search="fuel" aria-label="연료" <?= $searchType !== 'fuel' ? 'hidden disabled' : '' ?>>
+                            <option value="">전체</option>
+                            <?php foreach (['GASOLINE','DIESEL','HYBRID','PHEV','EV','LPG','OTHER'] as $fuel): ?>
+                                <option value="<?= h($fuel) ?>" <?= $fuelType === $fuel ? 'selected' : '' ?>><?= h($fuel) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <select name="active" data-vehicle-search="status" aria-label="상태" <?= $searchType !== 'status' ? 'hidden disabled' : '' ?>>
+                            <option value="">전체</option>
+                            <option value="1" <?= $active === '1' ? 'selected' : '' ?>>판매중</option>
+                            <option value="0" <?= $active === '0' ? 'selected' : '' ?>>판매중지</option>
+                        </select>
                     </div>
 
                     <div class="filter-group per-page-group">
@@ -1903,7 +1905,7 @@ function adminQuery(array $overrides = []): string {
                     선택 <strong id="selectedCount">0</strong>개
                 </div>
 
-                <?php if (canUpdateVehicleData() || canDeleteVehicleData()): ?>
+                <?php if (canCreateVehicleData() || canUpdateVehicleData() || canDeleteVehicleData()): ?>
                 <div class="bulk-tools">
                     <?php if (canUpdateVehicleData()): ?>
                     <form method="post" id="bulkUpdateForm" class="bulk-update-form">
@@ -1928,6 +1930,12 @@ function adminQuery(array $overrides = []): string {
                     </form>
                     <?php endif; ?>
 
+                    <?php if (canCreateVehicleData()): ?>
+                    <form method="post" id="bulkCopyForm">
+                        <input type="hidden" name="crud_action" value="copy_vehicle">
+                        <button type="submit" id="bulkCopyBtn" class="bulk-copy-btn" disabled>선택 복사</button>
+                    </form>
+                    <?php endif; ?>
                     <?php if (canDeleteVehicleData()): ?>
                     <form method="post" id="bulkDeleteForm"
                           onsubmit="return confirm('선택한 차량과 연결된 색상·트림·가격 데이터를 삭제할까요?');">
@@ -1937,6 +1945,7 @@ function adminQuery(array $overrides = []): string {
                         </button>
                     </form>
                     <?php endif; ?>
+                    <?php if (canCreateVehicleData()): ?><a class="new-btn vehicle-add-btn" href="./vehicle-create.php">+ 차량등록</a><?php endif; ?>
                 </div>
                 <?php endif; ?>
             </div>
@@ -1994,16 +2003,6 @@ function adminQuery(array $overrides = []): string {
                                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5 4 4M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15z"/></svg>
                                                 수정
                                             </a>
-                                            <?php if (canCreateVehicleData()): ?>
-                                            <form method="post" class="vehicle-copy-form">
-                                                <input type="hidden" name="crud_action" value="copy_vehicle">
-                                                <input type="hidden" name="source_vehicle_id" value="<?= (int)$row['id'] ?>">
-                                            <button type="submit" class="vehicle-management-btn vehicle-copy-btn" aria-label="<?= h($row['name']) ?> 복사">
-                                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>
-                                                복사
-                                            </button>
-                                            </form>
-                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>
@@ -2405,8 +2404,11 @@ function adminQuery(array $overrides = []): string {
             <form method="post" enctype="multipart/form-data" class="upload-form">
                 <label class="upload-box">
                     <strong>등록할 XLSX 파일 선택</strong>
-                    <input id="xlsxFile" type="file" name="xlsx" accept=".xlsx" required>
-                    <span id="fileName">선택된 파일 없음</span>
+                    <span class="upload-file-control">
+                        <input id="xlsxFile" type="file" name="xlsx" accept=".xlsx" required aria-label="등록할 XLSX 파일 선택">
+                        <span class="upload-file-button" aria-hidden="true">파일 선택</span>
+                        <span id="uploadFileName" aria-live="polite">선택된 파일 없음</span>
+                    </span>
                 </label>
                 <button type="submit" class="upload-btn">엑셀 데이터 일괄등록</button>
             </form>
@@ -2433,11 +2435,11 @@ function adminQuery(array $overrides = []): string {
 </div>
 
 <script>
-const fileInput = document.getElementById('xlsxFile');
-const fileName = document.getElementById('fileName');
-if (fileInput && fileName) {
-    fileInput.addEventListener('change', function () {
-        fileName.textContent = this.files && this.files[0] ? this.files[0].name : '선택된 파일 없음';
+const xlsxInput = document.getElementById('xlsxFile');
+const uploadFileName = document.getElementById('uploadFileName');
+if (xlsxInput && uploadFileName) {
+    xlsxInput.addEventListener('change', () => {
+        uploadFileName.textContent = xlsxInput.files?.[0]?.name || '선택된 파일 없음';
     });
 }
 
@@ -2446,11 +2448,13 @@ const selectAllControls = [checkAll].filter(Boolean);
 const rowChecks = Array.from(document.querySelectorAll('.row-check'));
 const selectedCount = document.getElementById('selectedCount');
 const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+const bulkCopyBtn = document.getElementById('bulkCopyBtn');
 
 function refreshSelection() {
     const count = rowChecks.filter(cb => cb.checked).length;
     if (selectedCount) selectedCount.textContent = String(count);
     if (bulkDeleteBtn) bulkDeleteBtn.disabled = count === 0;
+    if (bulkCopyBtn) bulkCopyBtn.disabled = count === 0;
 
     selectAllControls.forEach(control => {
         control.checked = rowChecks.length > 0 && count === rowChecks.length;
@@ -2471,6 +2475,18 @@ refreshSelection();
 
 const searchInput = document.getElementById('adminSearchInput');
 const searchForm = document.getElementById('searchForm');
+const vehicleSearchType = document.getElementById('vehicleSearchType');
+if (vehicleSearchType && searchForm) {
+    const syncSearchType = () => {
+        searchForm.querySelectorAll('[data-vehicle-search]').forEach(control => {
+            const enabled = control.dataset.vehicleSearch === vehicleSearchType.value;
+            control.hidden = !enabled;
+            control.disabled = !enabled;
+        });
+    };
+    vehicleSearchType.addEventListener('change', syncSearchType);
+    syncSearchType();
+}
 if (searchInput && searchForm) {
     searchInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
@@ -2582,6 +2598,17 @@ if (bulkUpdateForm) {
         if (!confirm(`선택한 ${selectedVehicleIds().length}대의 차량 정보를 일괄 변경할까요?`)) {
             e.preventDefault();
         }
+    });
+}
+
+if (bulkCopyBtn && bulkCopyBtn.form) {
+    bulkCopyBtn.form.addEventListener('submit', (event) => {
+        const ids = selectedVehicleIds();
+        if (!ids.length || !confirm(`선택한 ${ids.length}대의 차량을 복사할까요?`)) {
+            event.preventDefault();
+            return;
+        }
+        syncSelectedIdsToForm(bulkCopyBtn.form);
     });
 }
 

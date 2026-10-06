@@ -18,6 +18,7 @@ $pageAliases = [
     'customer-detail.php' => 'customers',
     'traffic.php' => 'traffic',
     'account-settings.php' => 'account-settings',
+    'contact-tag-colors.php' => 'contact-tag-colors',
     'contracts.php' => 'contracts',
     'admins.php' => 'admins',
 ];
@@ -39,8 +40,9 @@ $sidebarItems = [
 ];
 $sidebarSubItems = [];
 if (isSuperAdmin()) {
-    $sidebarSubItems = array_filter($sidebarItems, static fn(array $item): bool => in_array($item[0], ['admins', 'contracts', 'estimate-screen', 'database'], true) && $item[3]);
-    $sidebarItems = array_filter($sidebarItems, static fn(array $item): bool => !in_array($item[0], ['admins', 'contracts', 'estimate-screen', 'database'], true));
+    $sidebarItems[] = ['contact-tag-colors', '상담 색상', './contact-tag-colors.php', true, ''];
+    $sidebarSubItems = array_filter($sidebarItems, static fn(array $item): bool => in_array($item[0], ['admins', 'contracts', 'estimate-screen', 'database', 'contact-tag-colors'], true) && $item[3]);
+    $sidebarItems = array_filter($sidebarItems, static fn(array $item): bool => !in_array($item[0], ['admins', 'contracts', 'estimate-screen', 'database', 'contact-tag-colors'], true));
 }
 $currentSidebarLabel = '관리자 메뉴';
 foreach (array_merge(array_values($sidebarItems), array_values($sidebarSubItems)) as $item) {
@@ -68,7 +70,7 @@ foreach (array_merge(array_values($sidebarItems), array_values($sidebarSubItems)
       </a>
     <?php endforeach; ?>
     <?php if ($sidebarSubItems): ?>
-      <details class="admin-sidebar__group"<?= in_array($currentAdminPage, ['admins', 'contracts'], true) ? ' open' : '' ?>>
+      <details class="admin-sidebar__group"<?= in_array($currentAdminPage, ['admins', 'contracts', 'contact-tag-colors'], true) ? ' open' : '' ?>>
         <summary class="admin-sidebar__link">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           <span>관리자 설정</span>

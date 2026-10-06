@@ -354,6 +354,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
         }
 
         if ($action === 'reset_password') {
+            $token = $_POST['csrf_token'] ?? '';
+            if (!is_string($token) || !hash_equals($_SESSION['admin_accounts_csrf'], $token)) {
+                throw new RuntimeException('요청을 확인할 수 없습니다. 새로고침 후 다시 시도해주세요.');
+            }
             $password = (string)($_POST['new_password'] ?? '');
             $password2 = (string)($_POST['new_password2'] ?? '');
             $currentPassword = (string)($_POST['current_password'] ?? '');
@@ -363,6 +367,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
             }
             if (strlen($password) < 8) {
                 throw new RuntimeException('새 비밀번호는 8자 이상이어야 합니다.');
+            }
+            if (strlen($password) > 72) {
+                throw new RuntimeException('새 비밀번호는 72바이트 이하여야 합니다.');
             }
             if ($password !== $password2) {
                 throw new RuntimeException('새 비밀번호 확인이 일치하지 않습니다.');
@@ -375,16 +382,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
                 throw new RuntimeException('계정을 찾을 수 없습니다.');
             }
 
-            if ($targetId !== $currentAdminId) {
-                throw new RuntimeException('비밀번호는 각 계정에서 직접 변경해야 합니다.');
+            if ($targetId === $currentAdminId) {
+                if ($currentPassword === '') {
+                    throw new RuntimeException('현재 비밀번호를 입력해주세요.');
+                }
+                if (!password_verify($currentPassword, (string)$target['password_hash'])) {
+                    throw new RuntimeException('현재 비밀번호가 일치하지 않습니다.');
+                }
+            } elseif ((string)$target['role'] !== 'SALES') {
+                throw new RuntimeException('영업사원 계정만 비밀번호를 초기화할 수 있습니다.');
             }
-            if ($currentPassword === '') {
-                throw new RuntimeException('현재 비밀번호를 입력해주세요.');
-            }
-            if (!password_verify($currentPassword, (string)$target['password_hash'])) {
-                throw new RuntimeException('현재 비밀번호가 일치하지 않습니다.');
-            }
-            $successMessage = '비밀번호를 변경했습니다.';
+            $successMessage = $targetId === $currentAdminId
+                ? '비밀번호를 변경했습니다.'
+                : '영업사원 비밀번호를 초기화했습니다. 새 비밀번호를 전달하고 로그인 후 내 계정에서 변경하도록 안내해주세요.';
 
             $stmt = $pdo->prepare("UPDATE admin_accounts SET password_hash = :password_hash WHERE id = :id");
             $stmt->execute([
@@ -676,7 +686,6 @@ $teamNames = array_map(static fn(array $team): string => (string)$team['team_nam
                     </div>
                     <div class="account-summary-meta">
                         <span>마지막 로그인 <b><?= h2((string)($admin['last_login_at'] ?? '-')) ?></b></span>
-                        <button type="button" class="btn account-toggle" aria-expanded="false" aria-controls="accountEditor<?= (int)$admin['id'] ?>">권한 / 계정 설정</button>
                     </div>
                 </div>
 
@@ -687,22 +696,9 @@ $teamNames = array_map(static fn(array $team): string => (string)$team['team_nam
                     <div class="info-item"><span class="info-label">소속 관리자</span><span class="info-value"><?= $isSales ? h2((string)($admin['parent_name'] ?: $admin['parent_username'] ?: '-')) : '본 관리자' ?></span></div>
                     <div class="info-item"><span class="info-label">생성일</span><span class="info-value"><?= h2((string)$admin['created_at']) ?></span></div>
                 </div>
-                <?php if ($isSales): ?>
-                <div class="permission-summary" style="padding:10px 15px 0">
-                    <span class="summary-label">접근 화면</span>
-                    <?php $selectedCategories = adminCategoriesForAccount($admin); foreach ($selectedCategories as $category): ?>
-                    <span class="category-chip"><?= h2(adminCategoryLabels()[$category]) ?></span>
-                    <?php endforeach; ?>
-                    <?php if (!$selectedCategories): ?><span class="muted">허용된 카테고리 없음</span><?php endif; ?>
-                    <span class="summary-label work-label">차량 관리</span>
-                    <span class="permission-chip <?= (int)$admin['can_create']===1?'on':'' ?>">등록 <?= (int)$admin['can_create']===1?'허용':'차단' ?></span>
-                    <span class="permission-chip <?= (int)$admin['can_update']===1?'on':'' ?>">수정 <?= (int)$admin['can_update']===1?'허용':'차단' ?></span>
-                    <span class="permission-chip <?= (int)$admin['can_delete']===1?'on':'' ?>">삭제 <?= (int)$admin['can_delete']===1?'허용':'차단' ?></span>
-                </div>
-                <?php endif; ?>
 
-                <div class="account-manage" id="accountEditor<?= (int)$admin['id'] ?>" hidden>
-                    <div class="manage-title">계정 정보와 권한 수정 <span class="dirty-indicator" hidden>저장하지 않은 변경</span></div>
+                <div class="account-manage" id="accountEditor<?= (int)$admin['id'] ?>">
+                    <div class="manage-title"><span class="dirty-indicator" hidden>저장하지 않은 변경</span></div>
                     <div class="manage-grid">
                         <div class="manage-box">
                             <label>이름 / 소속 팀 / 상태</label>
@@ -733,30 +729,44 @@ $teamNames = array_map(static fn(array $team): string => (string)$team['team_nam
                                 <div class="editor-save"><span>체크한 권한을 확인한 후 저장하세요.</span><button class="btn save" type="submit">변경사항 저장</button></div>
                             </form>
                         </div>
-                        <div class="manage-box">
+                        <div class="manage-box account-password-section">
                             <?php if ((int)$admin['id'] === (int)$_SESSION['admin_id']): ?>
-                                <label>비밀번호 변경</label>
-                                <form method="post" class="password-row self-password" autocomplete="off">
+                                <div class="password-intro"><span class="password-eyebrow">SECURITY</span><h2 id="passwordTitle<?= (int)$admin['id'] ?>">비밀번호 변경</h2><p>계정을 보호하기 위해 다른 서비스에서 사용하지 않는 비밀번호를 설정하세요.</p></div>
+                                <form method="post" class="account-password-form self-password" autocomplete="off" aria-labelledby="passwordTitle<?= (int)$admin['id'] ?>">
                                     <input type="hidden" name="action" value="reset_password">
+                                    <input type="hidden" name="csrf_token" value="<?= h2($_SESSION['admin_accounts_csrf']) ?>">
                                     <input type="hidden" name="admin_id" value="<?= (int)$admin['id'] ?>">
-                                    <input type="password" name="current_password" placeholder="현재 비밀번호" required autocomplete="current-password">
-                                    <input type="password" name="new_password" placeholder="새 비밀번호 (8자 이상)" required autocomplete="new-password">
-                                    <input type="password" name="new_password2" placeholder="새 비밀번호 확인" required autocomplete="new-password">
-                                    <button class="btn pw" type="submit">변경</button>
+                                    <div class="password-field"><label for="currentPassword<?= (int)$admin['id'] ?>">현재 비밀번호</label><input id="currentPassword<?= (int)$admin['id'] ?>" type="password" name="current_password" placeholder="현재 비밀번호를 입력하세요" required autocomplete="current-password"></div>
+                                    <div class="password-field"><label for="newPassword<?= (int)$admin['id'] ?>">새 비밀번호</label><input id="newPassword<?= (int)$admin['id'] ?>" type="password" name="new_password" placeholder="새 비밀번호를 입력하세요" minlength="8" maxlength="72" required autocomplete="new-password" aria-describedby="passwordHelp<?= (int)$admin['id'] ?>"><p id="passwordHelp<?= (int)$admin['id'] ?>" class="password-field-help">8자 이상으로, 현재 비밀번호와 다르게 입력해주세요.</p></div>
+                                    <div class="password-field"><label for="confirmPassword<?= (int)$admin['id'] ?>">새 비밀번호 확인</label><input id="confirmPassword<?= (int)$admin['id'] ?>" type="password" name="new_password2" placeholder="새 비밀번호를 한 번 더 입력하세요" minlength="8" maxlength="72" required autocomplete="new-password"></div>
+                                    <div class="password-submit"><p>현재 비밀번호가 일치할 때만 변경됩니다.</p><button class="btn pw" type="submit">비밀번호 변경</button></div>
+                                </form>
+                            <?php elseif ($isSales): ?>
+                                <div class="password-intro"><span class="password-eyebrow">SECURITY</span><h2 id="passwordTitle<?= (int)$admin['id'] ?>">비밀번호 초기화</h2><p>현재 비밀번호 없이<br><span class="password-reset-description">새 비밀번호로 초기화합니다.</span></p><div class="password-security-note"><strong>초기화 후 안내</strong><p>영업사원에게 전달한 뒤 내 계정에서 변경하도록 안내해주세요.</p></div></div>
+                                <form method="post" class="account-password-form" autocomplete="off" aria-labelledby="passwordTitle<?= (int)$admin['id'] ?>" onsubmit="return confirm('이 영업사원의 비밀번호를 초기화할까요? 기존 비밀번호로는 로그인할 수 없게 됩니다.');">
+                                    <input type="hidden" name="action" value="reset_password">
+                                    <input type="hidden" name="csrf_token" value="<?= h2($_SESSION['admin_accounts_csrf']) ?>">
+                                    <input type="hidden" name="admin_id" value="<?= (int)$admin['id'] ?>">
+                                    <div class="password-field"><label for="newPassword<?= (int)$admin['id'] ?>">새 비밀번호</label><input id="newPassword<?= (int)$admin['id'] ?>" type="password" name="new_password" placeholder="새 비밀번호를 입력하세요" minlength="8" maxlength="72" required autocomplete="new-password" aria-describedby="passwordHelp<?= (int)$admin['id'] ?>"><p id="passwordHelp<?= (int)$admin['id'] ?>" class="password-field-help">8자 이상으로 입력해주세요.</p></div>
+                                    <div class="password-field"><label for="confirmPassword<?= (int)$admin['id'] ?>">새 비밀번호 확인</label><input id="confirmPassword<?= (int)$admin['id'] ?>" type="password" name="new_password2" placeholder="새 비밀번호를 한 번 더 입력하세요" minlength="8" maxlength="72" required autocomplete="new-password"></div>
+                                    <div class="password-submit"><button class="btn pw" type="submit">비밀번호 초기화</button></div>
                                 </form>
                             <?php else: ?>
                                 <label>비밀번호</label>
-                                <div class="self">영업사원 본인이 내 계정에서 변경</div>
+                                <div class="self">본인이 내 계정에서 변경</div>
                             <?php endif; ?>
                         </div>
                         <?php if ((int)$admin['id'] === (int)$_SESSION['admin_id']): ?>
                             <div class="self">현재 로그인 계정</div>
                         <?php elseif ($isSales): ?>
+                            <details class="account-delete-options">
+                                <summary>계정 삭제 옵션</summary>
                             <form method="post" class="delete-form" onsubmit="return confirm('이 영업사원 부계정을 삭제할까요?');">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="admin_id" value="<?= (int)$admin['id'] ?>">
                                 <button class="btn delete" type="submit">부계정 삭제</button>
                             </form>
+                            </details>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -774,6 +784,6 @@ $teamNames = array_map(static fn(array $team): string => (string)$team['team_nam
 
 
 
-<script src="./admin-accounts.js"></script>
+<script src="./admin-accounts.js?v=<?= filemtime(__DIR__ . '/admin-accounts.js') ?>"></script>
 </body>
 </html>

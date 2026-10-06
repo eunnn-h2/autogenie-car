@@ -107,7 +107,7 @@ $todayCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE cr
 <body><div class="layout">
 <?php $currentAdminPage = 'inquiries'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main"><section class="card">
-<div class="top"><h1>고객문의 관리</h1><div class="today-count">오늘 접수 <b><?=number_format($todayCount)?></b></div></div>
+<div class="top"><h1>고객문의 관리</h1><div class="top-stats"><span class="stat">오늘 접수 <b><?=number_format($todayCount)?></b></span></div></div>
 <?php if(isset($_GET['saved'])):?><div class="notice">답변이 저장되었습니다.</div><?php endif;?>
 <?php if(isset($_GET['bulk'])):?><div class="notice">선택한 문의의 처리가 완료되었습니다.</div><?php endif;?>
 <?php if(isset($_GET['error'])):?><div class="notice error">요청을 처리하지 못했습니다. 다시 확인해 주세요.</div><?php endif;?>
@@ -134,7 +134,7 @@ $todayCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE cr
 <td class="subject"><a href="<?=h($detailHref)?>"><?=h(mb_strimwidth(preg_replace('/\s+/', ' ', (string)$r['message']),0,90,'…','UTF-8'))?></a><small><?=h($r['member_phone'] ?: ($r['member_email'] ?: '연락처 없음'))?></small></td>
 <td><?=h($r['member_name'] ?: '비회원')?><div class="member-provider-line"><?=adminMemberProviderBadge($r, $memberProviders)?></div></td>
 <td><?=h(date('Y-m-d H:i', strtotime((string)$r['created_at'])))?></td>
-<td><a class="answer-link <?=$r['status']==='ANSWERED'?'done':'pending'?>" href="<?=h($detailHref)?>"><?=$r['status']==='ANSWERED'?'답변 확인·수정':'상세 보기·답변'?></a></td>
+<td><a class="answer-link <?=$r['status']==='ANSWERED'?'done':'pending'?>" href="<?=h($detailHref)?>"><?=$r['status']==='ANSWERED'?'답변 확인':'문의 확인'?></a></td>
 </tr>
 <?php endforeach;?></tbody></table></div>
 <?php if (canUpdateData() || canDeleteData()): ?><div class="bulk-bar"><div class="bulk-left"><select name="bulk_action" form="bulkForm"><option value="">선택 문의 처리</option><?php if (canUpdateData()): ?><option value="mark_answered">답변완료 처리</option><option value="mark_new">미처리로 변경</option><?php endif; ?><?php if (canDeleteData()): ?><option value="delete">삭제</option><?php endif; ?></select><button class="btn small" type="submit" form="bulkForm" onclick="return confirmBulk()">적용</button></div><span style="color:#8696a0">체크한 문의를 일괄 처리할 수 있습니다.</span></div><?php endif; ?>
