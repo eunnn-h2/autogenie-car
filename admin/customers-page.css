@@ -1,0 +1,186 @@
+/* Autogenie · 페이지 전용 스타일. 원래 선언 순서를 유지합니다. */
+.customer-name-link { color:#25384a; font-weight:800; text-decoration:none; }
+.customer-name-link:hover { color:#ff650c; text-decoration:underline; }
+.customer-info-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+.customer-info-grid dt { color:#7b8796; font-size:12px; margin-bottom:6px; }
+.customer-info-grid dd { margin:0; font-weight:700; overflow-wrap:anywhere; }
+.customer-activity-list { display:grid; gap:12px; }
+.customer-activity { padding:14px; border:1px solid #e2e8f0; border-radius:10px; }
+.customer-activity-head,.customer-activity-foot { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.customer-activity p { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.6; }
+.customer-activity time { color:#7b8796; font-size:12px; }
+@media(max-width:600px) { .customer-info-grid { grid-template-columns:1fr; } }
+
+/* ===== admin/customers.php · 원본 스타일 1/1 ===== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font: 14px Pretendard,"Noto Sans KR",Arial,sans-serif;
+    background: #eef5f8;
+    color: #25384a;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 228px minmax(0,1fr);
+    min-height: 100vh;
+}
+
+.main {
+    padding: 28px;
+}
+
+.head h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.head p {
+    color: #80919c;
+}
+
+.filter {
+    margin: 18px 0;
+    background: #fff;
+    border: 1px solid #d8e2e7;
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    gap: 8px;
+}
+
+.filter input {
+    height: 38px;
+    min-width: 280px;
+    border: 1px solid #cfd9df;
+    border-radius: 6px;
+    padding: 0 11px;
+}
+
+.filter button {
+    border: 0;
+    border-radius: 6px;
+    background: #3924b9;
+    color: #fff;
+    font-weight: 800;
+    padding: 0 16px;
+}
+
+.ag-inline-filter .primary,.ag-inline-filter .reset {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 0 16px;
+    font: inherit;
+    white-space: nowrap;
+    text-decoration: none;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.panel {
+    background: #fff;
+    border: 1px solid #d8e2e7;
+    border-radius: 9px;
+    padding: 18px;
+}
+
+.table-wrap {
+    overflow: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 950px;
+}
+
+.table th,.table td {
+    padding: 11px 9px;
+    border-bottom: 1px solid #edf1f3;
+    text-align: left;
+}
+
+.table th {
+    font-size: 14px;
+    color: #748590;
+}
+
+.count {
+    font-weight: 800;
+    color: #3924b9;
+}
+
+.customer-views {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.customer-views a,
+.customer-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 0 12px;
+    border: 1px solid #cfd9e4;
+    border-radius: 7px;
+    background: #fff;
+    font: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.customer-views a[aria-current="page"] {
+    color: #3924b9;
+    background: #f0edff;
+    border-color: #d8d0ff;
+    font-weight: 700;
+}
+
+.customer-action.danger,
+.customer-error {
+    color: #bd293d;
+}
+
+.customer-note {
+    margin: 0 0 16px;
+    color: #748590;
+    line-height: 1.6;
+}
+
+.customer-notice {
+    color: #267644;
+}
+
+.table .customer-empty {
+    padding: 36px;
+    text-align: center;
+}
+
+.status {
+    display: inline-block;
+    padding: 4px 7px;
+    border-radius: 999px;
+    background: #edf1ff;
+    color: #405bd7;
+    font-weight: 700;
+}
+
+@media(max-width:900px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+    .admin-sidebar {
+        display: none;
+    }
+    .main {
+        padding: 14px;
+    }
+}

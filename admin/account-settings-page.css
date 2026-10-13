@@ -1,0 +1,313 @@
+/* Autogenie · 페이지 전용 스타일. 원래 선언 순서를 유지합니다. */
+
+/* ===== admin/account-settings.php · 원본 스타일 1/1 ===== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Pretendard,"Noto Sans KR",Arial,sans-serif;
+    background: #f3f7fa;
+    color: #223644;
+    font-size: 14px;
+}
+
+.wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px 18px 40px;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #dce4e9;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.head h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.head p {
+    margin: 6px 0 0;
+    color: #83939d;
+}
+
+.alert {
+    padding: 11px 12px;
+    margin-bottom: 15px;
+    border-radius: 7px;
+}
+
+.ok {
+    background: #edf9f2;
+    border: 1px solid #bce5c9;
+    color: #16733a;
+}
+
+.err {
+    background: #fff1f1;
+    border: 1px solid #ffc4c4;
+    color: #b4232f;
+}
+
+.profile {
+    display: grid;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    border: 1px solid #e3e9ed;
+    border-radius: 9px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.profile div {
+    padding: 13px 15px;
+    border-right: 1px solid #edf1f3;
+}
+
+.profile div:last-child {
+    border-right: 0;
+}
+
+.profile span {
+    display: block;
+    color: #8a99a2;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.profile strong {
+    font-size: 14px;
+}
+
+.form-title {
+    margin: 0 0 12px;
+    font-size: 16px;
+}
+
+.pw-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 9px;
+    align-items: end;
+}
+
+.field label {
+    display: block;
+    color: #71838e;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.field input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ccd7dd;
+    border-radius: 7px;
+    padding: 0 10px;
+    background: #fff;
+}
+
+.field input:focus {
+    outline: 0;
+    border-color: #3924b9;
+    box-shadow: 0 0 0 3px rgba(57,36,185,.08);
+}
+
+.btn {
+    height: 40px;
+    border: 0;
+    border-radius: 7px;
+    background: #3924b9;
+    color: #fff;
+    padding: 0 17px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.help {
+    margin: 11px 0 0;
+    color: #8998a1;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+@media(max-width:900px) {
+    .profile {
+        grid-template-columns: 1fr 1fr;
+    }
+    .profile div:nth-child(2) {
+        border-right: 0;
+    }
+    .pw-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .pw-grid .submit {
+        grid-column: 1/-1;
+    }
+    .btn {
+        width: 100%;
+    }
+}
+
+@media(max-width:600px) {
+    .wrap {
+        padding: 16px 10px;
+    }
+    .profile,.pw-grid {
+        grid-template-columns: 1fr;
+    }
+    .profile div {
+        border-right: 0;
+        border-bottom: 1px solid #edf1f3;
+    }
+    .profile div:last-child {
+        border-bottom: 0;
+    }
+}
+
+/* Account settings: scoped rules follow the shared admin theme. */
+.account-settings.wrap {
+    width: 100%;
+    max-width: 920px !important;
+    margin: 0 auto !important;
+    padding: 0;
+}
+.account-settings .settings-section {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 32px;
+    padding: 30px !important;
+    margin-bottom: 24px !important;
+}
+.section-eyebrow {
+    display: block;
+    margin-bottom: 10px;
+    color: #7668bd;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+}
+.account-settings .section-intro h2 {
+    font-size: 18px !important;
+}
+.section-intro > p {
+    margin: 12px 0 0;
+    color: #748297;
+    line-height: 1.75;
+}
+.account-settings .profile {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 32px;
+    align-content: start;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+}
+.account-settings .profile div {
+    padding: 0 0 8px;
+    border: 0;
+    border-bottom: 1px solid #edf1f5;
+    min-width: 0;
+}
+.account-settings .profile span {
+    margin-bottom: 9px;
+    color: #748297;
+}
+.account-settings .profile strong {
+    display: block;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.account-settings .pw-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    max-width: none;
+    width: 100%;
+    padding-top: 6px;
+}
+.account-settings .field label {
+    margin-bottom: 10px;
+    color: #39495e;
+    font-weight: 600;
+}
+.account-settings .field input {
+    height: 46px !important;
+    padding: 0 14px;
+    font: inherit;
+}
+.account-settings .field input::placeholder {
+    color: #97a3b2;
+}
+.field-help {
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: #748297;
+    line-height: 1.6;
+}
+.account-settings .password-match-status.match { color: #16733a; }
+.account-settings .password-match-status.mismatch { color: #b4232f; }
+.account-settings #confirm-password[aria-invalid="true"] { border-color: #b4232f; }
+.account-settings .password-match-status[hidden] { display: none; }
+.security-note {
+    margin-top: 28px;
+    padding: 16px;
+    border-radius: 8px;
+    background: #f6f7fb;
+    color: #607086;
+    font-size: 13px;
+    line-height: 1.7;
+}
+.security-note strong { color: #45546b; }
+.security-note p { margin: 6px 0 0; }
+.account-settings .submit {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-top: 20px;
+    border-top: 1px solid #edf1f5;
+}
+.account-settings .help { margin: 0; font-size: 13px; }
+.account-settings .btn {
+    width: auto;
+    flex-shrink: 0;
+    height: 44px;
+    background: #3b2bbd !important;
+    border-color: #3b2bbd !important;
+    color: #fff !important;
+    padding: 0 20px;
+}
+.account-settings .btn:hover { background: #30229d !important; }
+.account-settings .btn:focus-visible {
+    outline: 3px solid #bcb3ef;
+    outline-offset: 3px;
+}
+@media(max-width:1000px) {
+    .account-settings .settings-section {
+        grid-template-columns: 210px minmax(0, 1fr);
+        gap: 28px;
+    }
+}
+@media(max-width:760px) {
+    .account-settings .settings-section {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+        padding: 24px !important;
+    }
+    .account-settings .pw-grid { max-width: none; padding-top: 0; }
+    .security-note { margin-top: 16px; }
+}
+@media(max-width:480px) {
+    .account-settings .settings-section { padding: 20px !important; }
+    .account-settings .profile { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+    .account-settings .submit { align-items: stretch; flex-direction: column; }
+    .account-settings .btn { width: 100%; }
+}

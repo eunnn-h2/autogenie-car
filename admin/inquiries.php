@@ -1,0 +1,156 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__ . '/auth.php';
+requireAdminCategory('inquiries');
+require_once __DIR__ . '/../config/database.php';
+
+function h(mixed $v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
+function qstr(array $changes = []): string {
+    $q = $_GET;
+    foreach ($changes as $k => $v) {
+        if ($v === null || $v === '') unset($q[$k]); else $q[$k] = $v;
+    }
+    return http_build_query($q);
+}
+function inquiryQuickFilterUrl(string $status = ''): string {
+    $params = [];
+    if ($status !== '') $params['status'] = $status;
+    return './inquiries.php' . ($params ? '?' . http_build_query($params) : '');
+}
+
+$pdo->exec("CREATE TABLE IF NOT EXISTS customer_inquiries (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    inquiry_no VARCHAR(32) NOT NULL,
+    legacy_id VARCHAR(80) NULL,
+    member_id BIGINT UNSIGNED NULL,
+    guest_key VARCHAR(64) NULL,
+    member_name VARCHAR(100) NULL,
+    member_email VARCHAR(190) NULL,
+    member_phone VARCHAR(30) NULL,
+    message TEXT NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'NEW',
+    answer TEXT NULL,
+    answered_by BIGINT UNSIGNED NULL,
+    answered_at DATETIME NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_customer_inquiries_no (inquiry_no),
+    KEY idx_customer_inquiries_member (member_id, created_at),
+    KEY idx_customer_inquiries_guest (guest_key, created_at),
+    KEY idx_customer_inquiries_status (status, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+$legacyColumn = $pdo->query("SHOW COLUMNS FROM customer_inquiries LIKE 'legacy_id'")->fetch();
+if (!$legacyColumn) $pdo->exec("ALTER TABLE customer_inquiries ADD COLUMN legacy_id VARCHAR(80) NULL AFTER inquiry_no");
+$legacyIndex = $pdo->query("SHOW INDEX FROM customer_inquiries WHERE Key_name = 'uq_customer_inquiries_legacy'")->fetch();
+if (!$legacyIndex) $pdo->exec("ALTER TABLE customer_inquiries ADD UNIQUE KEY uq_customer_inquiries_legacy (legacy_id)");
+
+$status = strtoupper(trim((string)($_GET['status'] ?? '')));
+$q = trim((string)($_GET['q'] ?? ''));
+$from = trim((string)($_GET['from'] ?? ''));
+$to = trim((string)($_GET['to'] ?? ''));
+$perPage = (int)($_GET['per_page'] ?? 20);
+if (!in_array($perPage, [20,50,100], true)) $perPage = 20;
+$page = max(1, (int)($_GET['page'] ?? 1));
+$openId = max(0, (int)($_GET['open'] ?? 0));
+if ($openId > 0) {
+    $returnQuery = qstr(['open'=>null, 'saved'=>null, 'bulk'=>null, 'error'=>null]);
+    header('Location: ./inquiry-detail.php?' . http_build_query(['id'=>$openId, 'return_query'=>$returnQuery]));
+    exit;
+}
+
+$params = [];
+$where = [];
+if (in_array($status, ['NEW','ANSWERED'], true)) { $where[] = 'i.status = ?'; $params[] = $status; }
+if ($from !== '' && preg_match('/^\d{4}-\d{2}-\d{2}$/', $from)) { $where[] = 'i.created_at >= ?'; $params[] = $from . ' 00:00:00'; }
+if ($to !== '' && preg_match('/^\d{4}-\d{2}-\d{2}$/', $to)) { $where[] = 'i.created_at <= ?'; $params[] = $to . ' 23:59:59'; }
+if ($q !== '') {
+    $where[] = '(i.inquiry_no LIKE ? OR i.member_name LIKE ? OR i.member_email LIKE ? OR i.member_phone LIKE ? OR i.message LIKE ? OR i.answer LIKE ?)';
+    $like = '%' . $q . '%';
+    array_push($params, $like, $like, $like, $like, $like, $like);
+}
+$whereSql = $where ? ' WHERE ' . implode(' AND ', $where) : '';
+
+$countStmt = $pdo->prepare('SELECT COUNT(*) FROM customer_inquiries i' . $whereSql);
+$countStmt->execute($params);
+$searchCount = (int)$countStmt->fetchColumn();
+$totalPages = max(1, (int)ceil($searchCount / $perPage));
+if ($page > $totalPages) $page = $totalPages;
+$offset = ($page - 1) * $perPage;
+
+$sql = "SELECT i.*, a.name AS answered_admin_name, a.username AS answered_admin_username
+        FROM customer_inquiries i
+        LEFT JOIN admin_accounts a ON a.id = i.answered_by" . $whereSql . " ORDER BY i.id DESC LIMIT {$perPage} OFFSET {$offset}";
+try {
+    $stmt = $pdo->prepare($sql); $stmt->execute($params); $rows = $stmt->fetchAll();
+} catch (PDOException $e) {
+    $sql = "SELECT i.*, NULL AS answered_admin_name, NULL AS answered_admin_username FROM customer_inquiries i" . $whereSql . " ORDER BY i.id DESC LIMIT {$perPage} OFFSET {$offset}";
+    $stmt = $pdo->prepare($sql); $stmt->execute($params); $rows = $stmt->fetchAll();
+}
+
+$newCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE status='NEW'")->fetchColumn();
+$answeredCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE status='ANSWERED'")->fetchColumn();
+$totalCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries")->fetchColumn();
+$todayCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE created_at >= CURDATE() AND created_at < DATE_ADD(CURDATE(), INTERVAL 1 DAY)")->fetchColumn();
+?>
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>고객 문의 - 오토지니</title>
+<link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
+<link rel="stylesheet" href="./inquiries-page.css">
+<link rel="stylesheet" href="./admin-ui.css"><link rel="stylesheet" href="./date-range-picker.css?v=<?=filemtime(__DIR__ . '/date-range-picker.css')?>"><script src="./date-range-picker.js?v=<?=filemtime(__DIR__ . '/date-range-picker.js')?>" defer></script></head>
+<body><div class="layout">
+<?php $currentAdminPage = 'inquiries'; require __DIR__ . '/sidebar.php'; ?>
+<main class="main"><section class="card admin-page-sections">
+<div class="top"><h1>고객문의 관리</h1><div class="top-stats"><span class="stat">오늘 접수 <b><?=number_format($todayCount)?></b></span></div></div>
+<div class="card admin-page-body">
+<?php if(isset($_GET['saved'])):?><div class="notice">답변이 저장되었습니다.</div><?php endif;?>
+<?php if(isset($_GET['bulk'])):?><div class="notice">선택한 문의의 처리가 완료되었습니다.</div><?php endif;?>
+<?php if(isset($_GET['error'])):?><div class="notice error">요청을 처리하지 못했습니다. 다시 확인해 주세요.</div><?php endif;?>
+<nav class="inquiry-quick-filters" aria-label="고객문의 처리상태 빠른 필터">
+    <a class="quick-filter <?=$status===''?'active':''?>" href="<?=h(inquiryQuickFilterUrl())?>">전체 <span><?=number_format($totalCount)?></span></a>
+    <a class="quick-filter <?=$status==='NEW'?'active':''?>" href="<?=h(inquiryQuickFilterUrl('NEW'))?>">미처리 <span><?=number_format($newCount)?></span></a>
+    <a class="quick-filter <?=$status==='ANSWERED'?'active':''?>" href="<?=h(inquiryQuickFilterUrl('ANSWERED'))?>">답변완료 <span><?=number_format($answeredCount)?></span></a>
+</nav>
+<form class="filter-box inquiry-search-filter" method="get"><div class="filter-grid">
+    <?php $dateRangeText = $from !== '' || $to !== '' ? ($from !== '' ? str_replace('-', '.', $from) : '시작일') . ' - ' . ($to !== '' ? str_replace('-', '.', $to) : '종료일') : '전체 기간'; ?>
+    <div class="filter-item date-range"><div class="filter-control" data-date-range data-label="전체 기간">
+        <input type="date" name="from" aria-label="조회 시작일" value="<?=h($from)?>" hidden>
+        <input type="date" name="to" aria-label="조회 종료일" value="<?=h($to)?>" hidden>
+        <div class="dr-field">
+            <button type="button" class="dr-trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="<?=h('전체 기간: ' . $dateRangeText)?>"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18m-14 4h2m3 0h2m3 0h2M7 18h2m3 0h2"/></svg><span><?=h($dateRangeText)?></span></button>
+            <button type="button" class="dr-clear" aria-label="조회기간 초기화" <?=$from === '' && $to === '' ? 'hidden' : ''?>>×</button>
+        </div>
+    </div></div>
+    <div class="filter-item search"><div class="filter-control"><input type="search" name="q" value="<?=h($q)?>" placeholder="문의번호 / 고객명 / 연락처 / 이메일 / 문의내용"><div class="search-actions"><button class="btn primary" type="submit">검색</button><a class="btn" href="./inquiries.php">초기화</a></div></div></div>
+    <?php if ($status !== ''): ?><input type="hidden" name="status" value="<?=h($status)?>"><?php endif; ?>
+    <input type="hidden" name="per_page" value="<?=$perPage?>">
+</div></form>
+<div class="result-bar"><div class="result-tools"><select aria-label="페이지당 목록 수" onchange="location.href='?<?=h(qstr(['per_page'=>null,'page'=>null]))?>'+(this.value?'&per_page='+this.value:'')"><option value="20" <?=$perPage===20?'selected':''?>>20개</option><option value="50" <?=$perPage===50?'selected':''?>>50개</option><option value="100" <?=$perPage===100?'selected':''?>>100개</option></select></div></div>
+<form id="bulkForm" action="./inquiry-actions.php" method="post"><input type="hidden" name="return_query" value="<?=h(qstr(['open'=>null]))?>"><input type="hidden" name="action" value="bulk"></form>
+<div class="table-wrap"><table class="inquiry-table"><thead><tr><th class="col-check"><input type="checkbox" id="checkAll"></th><th class="col-status">처리상태</th><th class="col-no">문의번호</th><th>문의내용</th><th class="col-writer">작성자</th><th class="col-date">등록일</th><th class="col-answer">상세 관리</th></tr></thead><tbody>
+<?php if(!$rows):?><tr><td colspan="7" class="empty">조건에 맞는 문의가 없습니다.</td></tr><?php endif;?>
+<?php foreach($rows as $r): $detailHref = "./inquiry-detail.php?" . http_build_query(["id"=>(int)$r["id"], "return_query"=>qstr(["open"=>null, "saved"=>null, "bulk"=>null, "error"=>null])]); ?>
+<tr class="data-row">
+<td><input type="checkbox" name="ids[]" value="<?= (int)$r['id'] ?>" class="row-check" form="bulkForm"></td>
+<td><span class="state <?=$r['status']==='ANSWERED'?'answered':'new'?>"><?=$r['status']==='ANSWERED'?'답변완료':'미처리'?></span></td>
+<td><a class="inquiry-no" href="<?=h($detailHref)?>" title="<?=h($r['inquiry_no'])?>"><span class="inquiry-card-title">고객 문의</span><span class="inquiry-number-text"><?=h($r['inquiry_no'])?></span></a></td>
+<td class="subject"><a href="<?=h($detailHref)?>"><?=h(mb_strimwidth(preg_replace('/\s+/', ' ', (string)$r['message']),0,90,'…','UTF-8'))?></a><small><?=h($r['member_phone'] ?: ($r['member_email'] ?: '연락처 없음'))?></small></td>
+<td><a class="inquiry-customer-link" href="<?=h($detailHref)?>"><?=h($r['member_name'] ?: '비회원')?></a></td>
+<td><?=h(date('Y-m-d H:i', strtotime((string)$r['created_at'])))?></td>
+<td><a class="answer-link <?=$r['status']==='ANSWERED'?'done':'pending'?>" href="<?=h($detailHref)?>"><?=$r['status']==='ANSWERED'?'답변 확인':'문의 확인'?></a><details class="inquiry-row-menu"><summary aria-label="<?=h($r['member_name'] ?: '비회원')?> 문의 관리"><span aria-hidden="true">⋮</span></summary><div class="inquiry-row-menu-items"><a href="<?=h($detailHref)?>">문의 상세 보기</a><a href="<?=h($detailHref)?>#replyForm"><?=$r['status']==='ANSWERED' || !canUpdateData()?'답변 확인':'답변 등록'?></a></div></details></td>
+</tr>
+<?php endforeach;?></tbody></table></div>
+<?php if (canUpdateData() || canDeleteData()): ?><div class="bulk-bar"><div class="bulk-left"><select name="bulk_action" form="bulkForm"><option value="">선택 문의 처리</option><?php if (canUpdateData()): ?><option value="mark_answered">답변완료 처리</option><option value="mark_new">미처리로 변경</option><?php endif; ?><?php if (canDeleteData()): ?><option value="delete">삭제</option><?php endif; ?></select><button class="btn small" type="submit" form="bulkForm" onclick="return confirmBulk()">적용</button></div><span style="color:#8696a0">체크한 문의를 일괄 처리할 수 있습니다.</span></div><?php endif; ?>
+<?php if($totalPages>1):?><nav class="pagination"><?php if($page>1):?><a class="page-link" href="?<?=h(qstr(['page'=>$page-1,'open'=>null]))?>">‹</a><?php endif;?><?php $s=max(1,$page-3);$e=min($totalPages,$page+3);for($p=$s;$p<=$e;$p++):?><a class="page-link <?=$p===$page?'active':''?>" href="?<?=h(qstr(['page'=>$p,'open'=>null]))?>"><?=$p?></a><?php endfor;?><?php if($page<$totalPages):?><a class="page-link" href="?<?=h(qstr(['page'=>$page+1,'open'=>null]))?>">›</a><?php endif;?></nav><?php endif;?>
+</div></section>
+</main></div>
+<script>
+const checkAll=document.getElementById('checkAll');
+if(checkAll){checkAll.addEventListener('change',()=>document.querySelectorAll('.row-check').forEach(c=>c.checked=checkAll.checked));}
+function confirmBulk(){const checked=[...document.querySelectorAll('.row-check:checked')];if(!checked.length){alert('처리할 문의를 선택해 주세요.');return false;}const action=document.querySelector('[name="bulk_action"]').value;if(!action){alert('처리 방법을 선택해 주세요.');return false;}if(action==='delete') return confirm('선택한 문의를 삭제하시겠습니까? 삭제 후 복구할 수 없습니다.');return true;}
+</script>
+</body></html>

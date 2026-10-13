@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오토지니 | 장기렌트·리스 차량 견적 비교</title>
+<meta name="description" content="오토지니에서 국산차와 수입차의 장기렌트·리스 이용 조건과 등록된 월 이용료를 비교하고 상담을 신청하세요.">
+<link rel="stylesheet" href="./site.css?v=20261013-detail-heart-header-04">
+
+</head>
+<body>
+<div class="page">
+    <section id="vehicleListView" class="view-section vehicle-list-view" hidden>
+        <div class="vehicle-list-search">
+            <span class="vehicle-list-search-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="10.5" cy="10.5" r="6.5"></circle>
+                    <path d="M15.5 15.5 20 20"></path>
+                </svg>
+            </span>
+            <input id="vehicleSearchInput" type="search" placeholder="원하는 차량이 있으신가요?" autocomplete="off">
+        </div>
+
+        <div class="vehicle-category-tabs" id="vehicleCategoryTabs">
+            <button class="vehicle-category-tab active" type="button" data-category="ALL">전체</button>
+            <button class="vehicle-category-tab" type="button" data-category="BEST">BEST</button>
+            <button class="vehicle-category-tab" type="button" data-category="DOMESTIC">국산차</button>
+            <button class="vehicle-category-tab" type="button" data-category="IMPORT">수입차</button>
+            <button class="vehicle-category-tab" type="button" data-category="EV">전기차</button>
+            <button class="vehicle-category-tab" type="button" data-category="HYBRID">HYBRID</button>
+        </div>
+
+        <div class="vehicle-list-tools">
+            <button class="vehicle-list-tool" type="button" id="sortButton" aria-expanded="false">월 이용료 낮은 순</button>
+            <button class="vehicle-list-tool" type="button" id="filterButton" aria-expanded="false">전체 상품</button>
+
+            <div class="vehicle-tool-menu vehicle-sort-menu" id="sortMenu">
+                <button class="vehicle-tool-option active" type="button" data-sort="PRICE_ASC">월 이용료 낮은 순</button>
+                <button class="vehicle-tool-option" type="button" data-sort="PRICE_DESC">월 이용료 높은 순</button>
+                <button class="vehicle-tool-option" type="button" data-sort="NAME_ASC">차량명 가나다순</button>
+            </div>
+
+            <div class="vehicle-tool-menu vehicle-filter-menu" id="filterMenu">
+                <button class="vehicle-tool-option active" type="button" data-product="ALL">전체 상품</button>
+                <button class="vehicle-tool-option" type="button" data-product="RENT">장기렌트</button>
+                <button class="vehicle-tool-option" type="button" data-product="LEASE">리스</button>
+            </div>
+        </div>
+
+        <div id="status" class="status">데이터를 불러오는 중입니다.</div>
+        <div id="vehicleList" class="vehicle-list-grid"></div>
+    </section>
+
+    <section id="vehicleDetailView" class="view-section detail-view" hidden>
+        <div class="detail-topbar">
+            <button id="detailBackButton" class="detail-back ag-back-button" type="button" aria-label="차량 목록으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
+            <div class="detail-topbar-title">차량 선택</div>
+            <div id="detailFavoriteSlot" class="detail-favorite-slot"></div>
+        </div>
+        <div id="app"></div>
+    </section>
+
+    <section id="vehicleInfoView" class="view-section vehicle-info-view" hidden>
+        <div class="vehicle-info-head">
+            <button id="vehicleInfoBackButton" class="vehicle-info-back ag-back-button" type="button" aria-label="견적 화면으로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
+            <div class="vehicle-info-head-title">차량 정보</div>
+        </div>
+        <div id="vehicleInfoContent"></div>
+    </section>
+
+
+
+    <section id="homeView" class="view-section home-view">
+        <header class="home-topbar">
+            <div class="home-logo" aria-label="AUTOGENIE">AUTO<span>GENIE</span></div>
+            <button class="home-search-button" type="button" aria-label="차량 검색" onclick="openMainView('vehicle'); setTimeout(() => document.getElementById('vehicleSearchInput')?.focus(), 0)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg>
+            </button>
+        </header>
+
+        <div class="home-hero">
+            <div class="home-hero-copy">
+                <h1 class="home-title">내 조건에 맞는 차를<br>쉽게 비교해보세요</h1>
+                <p class="home-desc">차량부터 이용 조건까지, 원하는 기준으로 빠르게 비교해보세요.</p>
+            </div>
+            <div class="home-hero-image" id="homeHeroImage" aria-hidden="true"></div>
+            <button class="home-primary-action" type="button" onclick="openMainView('vehicle')">차량 견적 비교하기</button>
+        </div>
+
+        <!-- <div class="home-benefit-strip" aria-label="오토지니 서비스 특징">
+            <div class="home-benefit-item">
+                <strong>국산 · 수입차</strong>
+                <span>한 번에 비교</span>
+            </div>
+            <div class="home-benefit-item">
+                <strong>렌트 · 리스</strong>
+                <span>조건별 확인</span>
+            </div>
+            <div class="home-benefit-item">
+                <strong>무료 상담</strong>
+                <span>간편 신청</span>
+            </div>
+        </div> -->
+
+
+        <section class="home-brand-section" aria-labelledby="homeBrandTitle">
+            <div class="home-section-head">
+                <div>
+                    <h2 class="home-section-title" id="homeBrandTitle">브랜드 선택</h2>
+                    <p class="home-section-desc">원하는 브랜드의 차량을 빠르게 확인해보세요.</p>
+                </div>
+                <button class="home-section-link" type="button" onclick="openMainView('vehicle')">전체보기</button>
+            </div>
+
+            <div class="home-brand-grid">
+                <button class="home-brand-card" type="button" onclick="openHomeBrand('현대')" aria-label="현대 차량 보기">
+                    <span class="home-brand-logo"><img src="./images/brands/hyundai.svg" alt=""></span>
+                    <span class="home-brand-name">현대</span>
+                </button>
+                <button class="home-brand-card" type="button" onclick="openHomeBrand('기아')" aria-label="기아 차량 보기">
+                    <span class="home-brand-logo"><img src="./images/brands/kia.svg" alt=""></span>
+                    <span class="home-brand-name">기아</span>
+                </button>
+                <button class="home-brand-card" type="button" onclick="openHomeBrand('제네시스')" aria-label="제네시스 차량 보기">
+                    <span class="home-brand-logo"><img src="./images/brands/genesis.svg" alt=""></span>
+                    <span class="home-brand-name">제네시스</span>
+                </button>
+                <button class="home-brand-card" type="button" onclick="openHomeBrand('벤츠')" aria-label="벤츠 차량 보기">
+                    <span class="home-brand-logo"><img src="./images/brands/benz.svg" alt=""></span>
+                    <span class="home-brand-name">벤츠</span>
+                </button>
+                <button class="home-brand-card" type="button" onclick="openHomeBrand('BMW')" aria-label="BMW 차량 보기">
+                    <span class="home-brand-logo"><img src="./images/brands/bmw.svg" alt=""></span>
+                    <span class="home-brand-name">BMW</span>
+                </button>
+                <button class="home-brand-card" type="button" onclick="openHomeBrand('아우디')" aria-label="아우디 차량 보기">
+                    <span class="home-brand-logo"><img src="./images/brands/audi.svg" alt=""></span>
+                    <span class="home-brand-name">아우디</span>
+                </button>
+                <button class="home-brand-card" type="button" onclick="openHomeBrand('볼보')" aria-label="볼보 차량 보기">
+                    <span class="home-brand-logo"><img src="./images/brands/volvo.svg" alt=""></span>
+                    <span class="home-brand-name">볼보</span>
+                </button>
+                <button class="home-brand-card" type="button" onclick="openHomeBrand('테슬라')" aria-label="테슬라 차량 보기">
+                    <span class="home-brand-logo"><img src="./images/brands/tesla.svg" alt=""></span>
+                    <span class="home-brand-name">테슬라</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="home-section" aria-labelledby="homePopularTitle">
+            <div class="home-section-head">
+                <div>
+                    <h2 class="home-section-title" id="homePopularTitle">오토지니 추천 차량</h2>
+                </div>
+                <button class="home-section-link" type="button" onclick="openMainView('vehicle')">전체보기</button>
+            </div>
+            <div class="home-popular-marquee">
+                <div class="home-popular-grid" id="homePopularGrid"></div>
+            </div>
+        </section>
+
+        <section class="home-section home-recommend-section" aria-labelledby="homeRecommendLabel">
+            <div class="home-recommend-title-row">
+                <div>
+                    <button class="home-recommend-head" id="homeRecommendLabel" type="button" aria-haspopup="dialog" aria-expanded="false">
+                        고객님을 위한 <strong id="homeRecommendTitle">넉넉한 SUV</strong>
+                    </button>
+                    <p class="home-section-desc home-recommend-desc">추천 기준을 눌러 원하는 차량군으로 바꿔보세요.</p>
+                </div>
+                <button class="home-section-link" type="button" onclick="openMainView('vehicle')">전체보기</button>
+            </div>
+            <div class="home-recommend-list" id="homeRecommendList"></div>
+        </section>
+
+        <div class="home-guide">
+            <span class="home-guide-kicker">GUIDE</span>
+            <h2 class="home-guide-title">장기렌트와 리스,<br>어떤 게 맞을까요?</h2>
+            <p>차이점을 쉽게 확인하고<br>내 상황에 맞게 선택해보세요.</p>
+            <button class="home-guide-button" type="button" onclick="showRentLeaseComparison()" aria-controls="rentLeaseComparison">차이 확인하기</button>
+        </div>
+
+        <details class="home-comparison" id="rentLeaseComparison">
+            <summary>장기렌트·리스 차이 한눈에 보기 <span aria-hidden="true">⌄</span></summary>
+            <div class="home-comparison-inner">
+                <p class="home-comparison-caption">대표적인 이용 형태를 비교한 내용이며, 실제 적용 조건은 상품과 계약에 따라 달라질 수 있습니다.</p>
+                <div class="home-comparison-table-wrap">
+                    <table class="home-comparison-table">
+                        <thead><tr><th scope="col">비교 항목</th><th scope="col">장기렌트</th><th scope="col">리스</th></tr></thead>
+                        <tbody>
+                            <tr><th scope="row">차량 명의</th><td>렌터카 업체</td><td>리스사 등 계약 형태에 따름</td></tr>
+                            <tr><th scope="row">번호판</th><td>렌터카 번호판</td><td>일반 번호판</td></tr>
+                            <tr><th scope="row">보험</th><td>렌트 상품에 포함되는 경우가 일반적</td><td>이용자 별도 가입이 일반적</td></tr>
+                            <tr><th scope="row">자동차세</th><td>월 이용료에 포함되는 경우가 일반적</td><td>계약 유형별 확인 필요</td></tr>
+                            <tr><th scope="row">초기비용</th><td>심사에 따라 무보증·선납 가능</td><td>심사에 따라 보증금·선납금 등 결정</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="home-comparison-cta" type="button" onclick="openMainView('quick')">내 조건으로 상담받기</button>
+            </div>
+        </details>
+
+        <section class="home-process" aria-labelledby="homeProcessTitle">
+            <h2 id="homeProcessTitle" class="home-section-title">견적 신청 후 진행 과정</h2>
+            <ol class="home-process-list">
+                <li><span>01</span><strong>견적 신청</strong><small>차량·조건 또는 상담 정보 입력</small></li>
+                <li><span>02</span><strong>담당자 상담</strong><small>요청 조건과 이용 목적 확인</small></li>
+                <li><span>03</span><strong>상품 조건 확인</strong><small>가능한 렌트·리스 조건 안내</small></li>
+                <li><span>04</span><strong>계약 및 출고</strong><small>심사·계약 완료 후 출고 진행</small></li>
+            </ol>
+        </section>
+
+        <div class="home-consult">
+            <strong>복잡한 견적,<br>오토지니가 쉽게 안내해드릴게요</strong>
+            <button type="button" onclick="openMainView('quick')">무료 상담 신청하기</button>
+        </div>
+
+        <footer class="home-footer" aria-label="오토지니 회사정보">
+            <div class="home-footer-brand">
+                <strong class="home-footer-logo">AUTOGENIE</strong>
+                <p class="home-footer-slogan">장기렌트·리스, 좋은 조건을 찾는 가장 쉬운 방법</p>
+            </div>
+
+            <div class="home-footer-divider"></div>
+
+            <div class="home-footer-info">
+                <div class="home-footer-item">
+                    <span class="home-footer-label">상호명</span>
+                    <strong class="home-footer-value">에이지기획 주식회사</strong>
+                </div>
+
+                <div class="home-footer-item">
+                    <span class="home-footer-label">대표자</span>
+                    <strong class="home-footer-value">이태우</strong>
+                </div>
+
+                <div class="home-footer-item">
+                    <span class="home-footer-label">사업자등록번호</span>
+                    <strong class="home-footer-value">438-87-03620</strong>
+                </div>
+
+                <div class="home-footer-item">
+                    <span class="home-footer-label">이메일</span>
+                    <strong class="home-footer-value">
+                        <a href="mailto:chayogi8934@naver.com">chayogi8934@naver.com</a>
+                    </strong>
+                </div>
+
+                <div class="home-footer-item wide">
+                    <span class="home-footer-label">주소</span>
+                    <strong class="home-footer-value">인천광역시 남동구 남동대로 687 3층(기원빌딩)</strong>
+                </div>
+
+                <div class="home-footer-item">
+                    <span class="home-footer-label">대표전화</span>
+                    <strong class="home-footer-value">
+                        <a href="tel:16003481">1600-3481</a>
+                    </strong>
+                </div>
+
+                <div class="home-footer-item">
+                    <span class="home-footer-label">상담시간</span>
+                    <strong class="home-footer-value">평일 09:00 - 18:00 상담 가능</strong>
+                </div>
+            </div>
+
+            <div class="home-footer-divider"></div>
+
+            <div class="home-footer-copy"><a href="./privacy.html?v=20261013-width-480" target="_blank" rel="noopener noreferrer">개인정보 처리 안내</a><span aria-hidden="true"> · </span>© AUTOGENIE. All rights reserved.</div>
+        </footer>
+    </section>
+
+    <section id="quickEstimateView" class="view-section quick-estimate-view" hidden>
+        <div class="quick-estimate-head">
+            <h1 class="quick-estimate-title">간편견적</h1>
+            <p class="quick-estimate-desc">
+                어떤 차량을 선택해야 할지 고민되시나요?<br>
+                <span class="quick-estimate-highlight">연락 가능한 정보를 확인해 주시면</span>
+                조건에 맞는 차량과 렌트·리스 견적을 안내해드려요.
+            </p>
+        </div>
+
+        <div class="quick-estimate-card">
+            <form id="quickEstimateForm" class="quick-estimate-form">
+                <p class="estimate-member-note" id="quickEstimateMemberNote" hidden aria-live="polite"></p>
+                <div class="quick-estimate-field">
+                    <label for="quickEstimateName">성함 <span class="required">필수</span></label>
+                    <input
+                        id="quickEstimateName"
+                        name="customer_name"
+                        type="text"
+                        maxlength="30"
+                        required
+                        autocomplete="name"
+                        placeholder="성함을 입력해 주세요"
+                    >
+                </div>
+
+                <div class="quick-estimate-field">
+                    <label for="quickEstimatePhone">연락처 <span class="required">필수</span></label>
+                    <input
+                        id="quickEstimatePhone"
+                        name="customer_phone"
+                        type="tel"
+                        inputmode="numeric"
+                        maxlength="13"
+                        required
+                        autocomplete="tel"
+                        placeholder="010-0000-0000"
+                    >
+                </div>
+
+                <p class="estimate-contact-note" id="quickEstimateContactNote" hidden>신청 연락처를 변경해도 회원정보는 바뀌지 않습니다.</p>
+                <div class="quick-estimate-field">
+                    <label for="quickEstimateCarType">관심 차종 <span class="optional">선택</span></label>
+                    <select id="quickEstimateCarType" name="car_type">
+                        <option value="">아직 정하지 못했어요</option>
+                        <option value="세단">세단</option>
+                        <option value="SUV">SUV</option>
+                        <option value="RV/MPV">RV / MPV</option>
+                        <option value="전기차">전기차</option>
+                        <option value="하이브리드">하이브리드</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+
+                <div class="quick-estimate-field">
+                    <label for="quickEstimateBudget">희망 월 예산 <span class="optional">선택</span></label>
+                    <select id="quickEstimateBudget" name="monthly_budget">
+                        <option value="">예산을 아직 정하지 못했어요</option>
+                        <option value="30만원 이하">30만원 이하</option>
+                        <option value="30~50만원">30~50만원</option>
+                        <option value="50~70만원">50~70만원</option>
+                        <option value="70~100만원">70~100만원</option>
+                        <option value="100만원 이상">100만원 이상</option>
+                    </select>
+                </div>
+
+                <div class="quick-estimate-field">
+                    <label for="quickEstimateProduct">이용 방식 <span class="optional">선택</span></label>
+                    <select id="quickEstimateProduct" name="product_type">
+                        <option value="">잘 모르겠어요 · 상담 후 결정</option>
+                        <option value="RENT">장기렌트</option>
+                        <option value="LEASE">리스</option>
+                    </select>
+                </div>
+
+                <label class="ag-privacy-consent">
+                    <input type="checkbox" name="privacy_consent" value="1" required>
+                    <span><strong>[필수] 개인정보 수집·이용에 동의합니다.</strong><small>이름·연락처를 상담 신청 및 회신 목적으로 이용합니다. <a href="./privacy.html?v=20261013-width-480" target="_blank" rel="noopener noreferrer">자세히 보기</a></small></span>
+                </label>
+                <button class="quick-estimate-submit" type="submit">무료 상담 신청하기</button>
+                <div class="quick-estimate-result" id="quickEstimateResult"></div>
+            </form>
+
+            <p class="quick-estimate-notice">
+                상담을 위해 입력한 연락처로 안내가 진행될 수 있습니다.
+            </p>
+        </div>
+
+        <div class="quick-estimate-guide">
+            <h2 class="quick-estimate-guide-title">이런 분께 추천해요</h2>
+            <div class="quick-estimate-guide-list">
+                <div class="quick-estimate-guide-item">
+                    <span class="quick-estimate-guide-num">1</span>
+                    <span>렌트와 리스 중 어떤 방식이 유리한지 잘 모르겠을 때</span>
+                </div>
+                <div class="quick-estimate-guide-item">
+                    <span class="quick-estimate-guide-num">2</span>
+                    <span>예산에 맞는 차량을 여러 차종 중에서 추천받고 싶을 때</span>
+                </div>
+                <div class="quick-estimate-guide-item">
+                    <span class="quick-estimate-guide-num">3</span>
+                    <span>직접 트림과 조건을 고르기보다 상담 후 결정하고 싶을 때</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faqView" class="view-section faq-view" hidden>
+
+        <div id="mypageQnaHead" class="mypage-qna-head mypage-subview-head">
+            <button class="mypage-subview-back ag-back-button" type="button" aria-label="마이페이지로 돌아가기" onclick="closeMypageQna()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
+            <h1 class="mypage-subview-title">내 Q&amp;A</h1>
+        </div>
+        <p id="mypageQnaDesc" class="mypage-subview-desc" hidden>궁금한 내용을 남기고 자주 묻는 질문을 확인할 수 있어요.</p>
+        <header class="ag-qna-page-header"><button type="button" class="ag-qna-page-back ag-back-button" aria-label="홈으로 돌아가기" onclick="openMainView('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button><h1>Q&amp;A</h1></header>
+
+        <div class="qna-hero">
+            <div class="ag-qna-intro">
+                <p class="qna-kicker"><strong>AUTO</strong><span>GENIE</span></p>
+                <p class="ag-qna-headline">궁금한 점이 있으신가요?</p>
+                <p class="qna-hero-desc">차량 이용의 모든 궁금증, 오토지니가 도와드립니다.</p>
+            </div>
+            <div class="ag-qna-hero-visual" aria-hidden="true">
+                <img class="ag-qna-hero-photo" src="images/cars/기아/쏘렌토-스노우 화이트 펄.webp" alt="" loading="eager" onerror="this.style.display='none'">
+            </div>
+            <label class="ag-faq-search" for="agFaqSearch">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 4.3 4.3" stroke-linecap="round"/></svg>
+                <input id="agFaqSearch" type="search" placeholder="궁금한 내용을 검색해 보세요" autocomplete="off" aria-label="Q&A 질문 검색">
+            </label>
+        </div>
+
+        <section class="qna-section" aria-labelledby="qnaPopularTitle">
+            <div class="ag-faq-controls">
+                <div class="ag-faq-categories" role="group" aria-label="질문 카테고리">
+                    <button type="button" class="ag-faq-category active" data-faq-filter="전체" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M7 3h10v18H7V3ZM10 8h4M10 12h4M10 16h2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>전체</span></button>
+                    <button type="button" class="ag-faq-category" data-faq-filter="장기렌트" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M4 14l2-6h12l2 6v5h-3v-2H7v2H4v-5Zm0 0h16M7 11h.01M17 11h.01" stroke-linejoin="round" stroke-linecap="round"/></svg><span>렌트</span></button>
+                    <button type="button" class="ag-faq-category" data-faq-filter="리스" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M6 3h9l4 4v14H6V3Zm9 0v5h4M9 12h7M9 16h7" stroke-linejoin="round" stroke-linecap="round"/></svg><span>리스</span></button>
+                    <button type="button" class="ag-faq-category" data-faq-filter="심사" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="7" r="3"/><path d="M5 20v-2a7 7 0 0 1 14 0v2" stroke-linecap="round"/><path d="m16 11 2 2 3-3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>심사</span></button>
+                    <button type="button" class="ag-faq-category" data-faq-filter="차량" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M4 14l2-6h12l2 6v5h-3v-2H7v2H4v-5Zm0 0h16M7 11h.01M17 11h.01" stroke-linejoin="round" stroke-linecap="round"/></svg><span>차량</span></button>
+                    <button type="button" class="ag-faq-category" data-faq-filter="출고" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M3 7h12v11H3V7Zm12 4h4l3 4v3h-7v-7Z" stroke-linejoin="round"/><circle cx="7" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg><span>출고</span></button>
+                </div>
+            </div>
+            <div class="qna-section-head">
+                <h2 class="qna-section-title" id="qnaPopularTitle">자주 묻는 질문</h2>
+                <button class="ag-qna-show-all" type="button" id="agQnaShowAll" aria-controls="faqList" aria-expanded="false">전체보기 <span aria-hidden="true">›</span></button>
+            </div>
+            <p class="ag-faq-empty" id="agFaqEmpty" hidden>해당하는 질문이 없습니다.</p>
+            <div class="qna-list" id="faqList">
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false" id="qnaDepositQuestion" type="button">
+                        <span class="faq-category">계약</span>
+                        <strong>선납금과 보증금은 뭐가 다른가요?</strong>
+                    </button>
+                    <div class="faq-answer">선납금은 미리 납부하는 이용료라 반환되지 않고, 보증금은 계약 이행을 위한 담보 성격으로 계약 종료 시 정산 후 반환되는 구조입니다.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false" id="qnaMileageQuestion" type="button">
+                        <span class="faq-category">차량</span>
+                        <strong>주행거리 초과 시 어떻게 되나요?</strong>
+                    </button>
+                    <div class="faq-answer">약정 주행거리를 초과하면 계약 종료 시 초과 운행거리에 대한 정산금이 발생할 수 있습니다.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false" id="qnaRentLeaseQuestion" type="button">
+                        <span class="faq-category">리스</span>
+                        <strong>장기렌트와 리스는 어떤 차이가 있나요?</strong>
+                    </button>
+                    <div class="faq-answer">장기렌트는 렌터카 업체 명의 차량을 이용하며 보험·자동차세가 월 이용료에 포함되는 경우가 일반적입니다. 리스는 일반 번호판을 사용하며 보험을 별도로 가입하는 경우가 많습니다. 세금·보험 적용 방식은 상품에 따라 다르므로 계약 전에 개별 확인이 필요합니다.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" type="button" aria-expanded="false">
+                        <span class="faq-category">리스</span>
+                        <strong>표시된 월 이용료가 최종 계약금액인가요?</strong>
+                    </button>
+                    <div class="faq-answer">화면의 월 이용료는 선택한 조건으로 등록된 참고 금액입니다. 보험·세금·부가세 적용과 심사 결과, 출고 시점에 따라 실제 계약 조건이 달라질 수 있습니다. 담당자 상담 시 최종 견적을 확인해 주세요.</div>
+                </div>
+                <div class="faq-item" data-faq-sample="true">
+                    <button class="faq-question" type="button" aria-expanded="false">
+                        <span class="faq-category">심사</span>
+                        <strong>심사 결과는 얼마나 걸리나요?</strong>
+                    </button>
+                    <div class="faq-answer">심사 기간은 신청 조건과 금융사에 따라 다릅니다. 보통 접수 후 순차적으로 진행되며, 정확한 진행 상황은 담당자가 안내해 드립니다.</div>
+                </div>
+                <div class="faq-item" data-faq-sample="true">
+                    <button class="faq-question" type="button" aria-expanded="false">
+                        <span class="faq-category">출고</span>
+                        <strong>출고까지 기간은 얼마나 소요되나요?</strong>
+                    </button>
+                    <div class="faq-answer">계약 완료 후 차량 재고와 옵션, 탁송 일정에 따라 출고 기간이 달라질 수 있습니다. 재고 차량은 비교적 빠르게 출고 안내가 가능합니다.</div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false" id="qnaInitialQuestion" type="button">
+                        <span class="faq-category">장기렌트</span>
+                        <strong>초기비용 없이도 이용할 수 있나요?</strong>
+                    </button>
+                    <div class="faq-answer">차량과 심사 조건에 따라 선납금이나 보증금 없이 진행할 수 있습니다. 실제 가능 여부와 월 이용료는 견적 조건에 따라 달라질 수 있습니다.</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="ag-qna-contact" id="agQnaContact">
+            <div class="ag-qna-contact-copy">
+                <strong>원하는 답을 찾지 못하셨나요?</strong>
+                <span>전문 상담원이 친절하게 도와드립니다.</span>
+            </div>
+            <button type="button" class="ag-qna-contact-btn" id="agQnaContactButton">1:1 문의하기 <span aria-hidden="true">›</span></button>
+        </div>
+
+        <div class="qna-compose">
+            <div class="qna-compose-head">
+                <div>
+                    <strong>1:1 문의</strong>
+                    <span>찾으시는 답변이 없다면 문의를 남겨주세요.</span>
+                </div>
+            </div>
+            <div class="qna-compose-input">
+                <textarea id="qnaQuestionInput" maxlength="200" placeholder="장기렌트·리스에 대해 궁금한 점을 입력해 주세요."></textarea>
+            </div>
+            <div class="qna-compose-footer">
+                <span class="qna-compose-count"><span id="qnaQuestionCount">0</span>/200</span>
+                <button class="qna-submit" id="qnaSubmitButton" type="button" disabled>문의 등록</button>
+            </div>
+            <p class="qna-compose-result" id="qnaComposeResult"></p>
+        </div>
+
+    </section>
+
+    
+    <section id="qnaInquiryView" class="view-section qna-inquiry-view" hidden>
+        <div class="mypage-subview-head qna-inquiry-head">
+            <button class="mypage-subview-back ag-back-button" type="button" aria-label="이전 화면으로 돌아가기" onclick="closeQnaInquiryPage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
+            <h1 class="mypage-subview-title">1:1 문의하기</h1>
+        </div>
+        <div class="qna-inquiry-body">
+            <div class="qna-inquiry-intro">
+                <strong>궁금한 내용을 남겨주세요.</strong>
+                <p>남겨주신 내용은 마이페이지 &gt; 문의하기에서도 확인할 수 있습니다.</p>
+            </div>
+            <div class="qna-inquiry-form">
+                <label class="qna-inquiry-label" for="qnaInquiryCategory">문의 유형</label>
+                <select id="qnaInquiryCategory" class="qna-inquiry-select">
+                    <option value="">카테고리 선택</option>
+                    <option value="계약">계약</option>
+                    <option value="장기렌트">장기렌트</option>
+                    <option value="리스">리스</option>
+                    <option value="심사">심사</option>
+                    <option value="차량">차량</option>
+                    <option value="출고">출고</option>
+                    <option value="기타">기타</option>
+                </select>
+                <label class="qna-inquiry-label" for="qnaInquiryInput">문의 내용</label>
+                <div class="qna-inquiry-textarea-wrap">
+                    <textarea id="qnaInquiryInput" maxlength="200" placeholder="궁금한 내용을 자세히 입력해 주세요."></textarea>
+                </div>
+                <div class="qna-inquiry-footer">
+                    <span class="qna-inquiry-count"><span id="qnaInquiryCount">0</span>/200</span>
+                    <button class="qna-inquiry-submit" id="qnaInquirySubmit" type="button" disabled>문의하기</button>
+                </div>
+                <p class="qna-compose-result" id="qnaInquiryResult"></p>
+            </div>
+        </div>
+    </section>
+
+    <section id="mypageView" class="view-section mypage-view" hidden>
+        <div class="mypage-top">
+            <div class="mypage-profile-head">
+                <h1 class="mypage-user-name" id="mypageUserName">고객님</h1>
+                <button class="mypage-settings" type="button" aria-label="설정" onclick="openMemberSettings()">
+                    <img src="images/menu-icons/settings.png" alt="" aria-hidden="true">
+                </button>
+            </div>
+
+            <div id="memberGuestArea">
+                <p class="member-status-text">카카오 또는 휴대폰 번호로 로그인하고 견적과 문의 내역을 확인하세요.</p>
+                <div class="member-auth-actions">
+                    <a class="member-auth-btn member-kakao-button" href="./api/kakao-login.php">카카오로 시작하기</a>
+                    <button class="member-auth-btn member-email-secondary" type="button" onclick="openMemberModal('login')">휴대폰 로그인</button>
+                </div>
+            </div>
+            <p class="member-status-text" id="memberSignedInText" hidden></p>
+
+            <div class="mypage-progress">
+                <button class="mypage-progress-item" type="button" data-estimate-status="NEW" data-estimate-title="내 견적">
+                    <span class="mypage-progress-icon">
+                        <img src="./images/menu-icons/status-estimate.png" alt="" aria-hidden="true">
+                    </span>
+                    <span class="mypage-progress-label">내 견적</span>
+                    <span class="mypage-progress-count" id="mypageEstimateTotalCount">0</span>
+                </button>
+
+                <button class="mypage-progress-item" type="button" data-estimate-status="CONTACTED" data-estimate-title="상담중">
+                    <span class="mypage-progress-icon">
+                        <img src="./images/menu-icons/status-consulting.png" alt="" aria-hidden="true">
+                    </span>
+                    <span class="mypage-progress-label">상담중</span>
+                    <span class="mypage-progress-count" id="mypageContactedCount">0</span>
+                </button>
+
+                <button class="mypage-progress-item" type="button" data-estimate-status="REVIEWING" data-estimate-title="심사중">
+                    <span class="mypage-progress-icon">
+                        <img src="./images/menu-icons/status-review.png" alt="" aria-hidden="true">
+                    </span>
+                    <span class="mypage-progress-label">심사중</span>
+                    <span class="mypage-progress-count" id="mypageReviewingCount">0</span>
+                </button>
+
+                <button class="mypage-progress-item" type="button" data-estimate-status="APPROVED" data-estimate-title="승인">
+                    <span class="mypage-progress-icon">
+                        <img src="./images/menu-icons/status-approved.png" alt="" aria-hidden="true">
+                    </span>
+                    <span class="mypage-progress-label">승인</span>
+                    <span class="mypage-progress-count" id="mypageApprovedCount">0</span>
+                </button>
+
+                <button class="mypage-progress-item" type="button" data-estimate-status="CONTRACTED" data-estimate-title="계약">
+                    <span class="mypage-progress-icon">
+                        <img src="./images/menu-icons/status-contract.png" alt="" aria-hidden="true">
+                    </span>
+                    <span class="mypage-progress-label">계약</span>
+                    <span class="mypage-progress-count" id="mypageContractCount">0</span>
+                </button>
+            </div>
+        </div>
+        <div class="mypage-divider"></div>
+
+        <div class="mypage-menu-list">
+            <button class="mypage-menu-item" type="button" data-estimate-status="ALL" data-estimate-title="내 견적">
+                <span class="mypage-menu-label">내 견적 <span class="record-new-badge" id="mypageEstimateNew" hidden>NEW</span></span>
+                <span class="mypage-menu-right">
+                    <span class="count" id="mypageEstimateMenuCount">0개</span>
+                    <span class="mypage-menu-arrow" aria-hidden="true"></span>
+                </span>
+            </button>
+
+            <button class="mypage-menu-item" type="button" onclick="openMyInquiries()">
+                <span class="mypage-menu-label">문의내역 <span class="record-new-badge" id="mypageInquiryNew" hidden>NEW</span></span>
+                <span class="mypage-menu-right">
+                    <span class="count" id="mypageInquiryCount">0개</span>
+                    <span class="mypage-menu-arrow" aria-hidden="true"></span>
+                </span>
+            </button>
+            <button class="mypage-menu-item" type="button" data-mypage-vehicle-list="favorites" aria-controls="myVehiclesView">
+                <span class="mypage-menu-label">관심 차량</span>
+                <span class="mypage-menu-right">
+                    <span class="count" id="mypageFavoriteCount">0대</span>
+                    <span class="mypage-menu-arrow" aria-hidden="true"></span>
+                </span>
+            </button>
+            <button class="mypage-menu-item" type="button" data-mypage-vehicle-list="recent" aria-controls="myVehiclesView">
+                <span class="mypage-menu-label">최근 본 차량</span>
+                <span class="mypage-menu-right">
+                    <span class="count" id="mypageRecentCount">0대</span>
+                    <span class="mypage-menu-arrow" aria-hidden="true"></span>
+                </span>
+            </button>
+        </div>
+
+        <div class="mypage-help-card">
+            <h2>도움이 필요하신가요?</h2>
+            <p>장기렌트·리스 및 견적 신청이 궁금하다면 확인해 보세요.</p>
+            <div class="mypage-help-actions">
+                <button type="button" onclick="openMainView('faq')">자주 묻는 질문 <span aria-hidden="true">›</span></button>
+                <button type="button" onclick="openQnaInquiryPage('mypage')">1:1 문의하기 <span aria-hidden="true">›</span></button>
+            </div>
+        </div>
+    </section>
+
+    <section id="myEstimatesView" class="view-section my-estimates-page-view mypage-subview" hidden>
+        <div class="mypage-subview-head">
+            <button class="mypage-subview-back ag-back-button" type="button" aria-label="마이페이지로 돌아가기" onclick="closeMyEstimates()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
+            <h1 class="mypage-subview-title" id="myEstimatesPageTitle">내 견적</h1>
+        </div>
+        <div class="record-filter-tabs" id="estimateRecordTabs" role="tablist" aria-label="내 견적 필터">
+            <button type="button" class="record-filter-tab active" data-estimate-record-filter="ALL">전체 <span id="estimateTabAll">0</span></button>
+            <button type="button" class="record-filter-tab" data-estimate-record-filter="ACTIVE">상담중 <span id="estimateTabActive">0</span></button>
+            <button type="button" class="record-filter-tab" data-estimate-record-filter="CONTRACTED">계약완료 <span id="estimateTabContracted">0</span></button>
+        </div>
+        <div id="myEstimatesPageContent" class="my-estimates-page-content mypage-subview-content">
+            <div class="my-estimates-empty">견적 정보를 불러오는 중입니다.</div>
+        </div>
+    </section>
+
+    <section id="myInquiriesView" class="view-section my-inquiries-page-view mypage-subview" hidden>
+        <div class="mypage-subview-head">
+            <button class="mypage-subview-back ag-back-button" type="button" aria-label="마이페이지로 돌아가기" onclick="closeMyInquiries()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
+            <h1 class="mypage-subview-title">문의 내역</h1>
+        </div>
+        <div class="record-filter-tabs" id="inquiryRecordTabs" role="tablist" aria-label="문의 내역 필터">
+            <button type="button" class="record-filter-tab active" data-inquiry-record-filter="ALL">전체 <span id="inquiryTabAll">0</span></button>
+            <button type="button" class="record-filter-tab" data-inquiry-record-filter="ANSWERED">답변완료 <span id="inquiryTabAnswered">0</span></button>
+            <button type="button" class="record-filter-tab" data-inquiry-record-filter="WAITING">답변대기 <span id="inquiryTabWaiting">0</span></button>
+        </div>
+        <div id="myInquiriesPageContent" class="my-inquiries-page-content mypage-subview-content">
+            <div class="my-estimates-empty">문의내역을 불러오는 중입니다.</div>
+        </div>
+    </section>
+
+    <!-- 마이페이지: 관심 차량 / 최근 본 차량은 메뉴 내부가 아닌 독립 화면으로 이동 -->
+    <section id="myVehiclesView" class="view-section mypage-subview my-vehicles-page-view" hidden>
+        <div class="mypage-subview-head">
+            <button class="mypage-subview-back ag-back-button" type="button" aria-label="마이페이지로 돌아가기" onclick="closeMypageVehiclePage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
+            <h1 class="mypage-subview-title" id="myVehiclesPageTitle">관심 차량</h1>
+        </div>
+        <div id="myVehiclesPageList" class="mypage-vehicle-page-list mypage-subview-content" aria-live="polite"></div>
+        <p class="mypage-vehicle-storage-note">관심 차량과 최근 본 차량은 이 브라우저에 저장됩니다.</p>
+    </section>
+
+</div>
+
+
+
+
+
+
+<div id="myEstimatesModal" class="my-estimates-modal" hidden>
+    <div class="my-estimates-card" role="dialog" aria-modal="true" aria-labelledby="myEstimatesTitle">
+        <div class="my-estimates-head">
+            <h2 class="my-estimates-title" id="myEstimatesTitle">내 견적</h2>
+            <button class="my-estimates-close" type="button" aria-label="닫기" onclick="closeMyEstimates()">×</button>
+        </div>
+        <div id="myEstimatesContent">
+            <div class="my-estimates-empty">견적 정보를 불러오는 중입니다.</div>
+        </div>
+    </div>
+</div>
+
+<div id="myInquiriesModal" class="my-estimates-modal" hidden>
+    <div class="my-estimates-card" role="dialog" aria-modal="true" aria-labelledby="myInquiriesTitle">
+        <div class="my-estimates-head">
+            <h2 class="my-estimates-title" id="myInquiriesTitle">문의 내역</h2>
+            <button class="my-estimates-close" type="button" aria-label="닫기" onclick="closeMyInquiries()">×</button>
+        </div>
+        <div id="myInquiriesContent">
+            <div class="my-estimates-empty">문의 내역이 없습니다.</div>
+        </div>
+    </div>
+</div>
+
+
+<button id="adminInquiryLauncher" class="admin-inquiry-launcher" type="button" onclick="openAdminInquiries()">관리자 문의 관리</button>
+
+<div id="adminInquiriesModal" class="my-estimates-modal" hidden>
+    <div class="my-estimates-card" role="dialog" aria-modal="true" aria-labelledby="adminInquiriesTitle">
+        <div class="my-estimates-head">
+            <h2 class="my-estimates-title" id="adminInquiriesTitle">관리자 문의 관리</h2>
+            <button class="my-estimates-close" type="button" aria-label="닫기" onclick="closeAdminInquiries()">×</button>
+        </div>
+        <div id="adminInquiriesContent">
+            <div class="my-estimates-empty">문의 내역을 불러오는 중입니다.</div>
+        </div>
+    </div>
+</div>
+
+<div id="memberModal" class="member-modal" hidden>
+    <div class="member-modal-card" role="dialog" aria-modal="true" aria-labelledby="memberModalTitle">
+        <button class="member-modal-close" type="button" aria-label="닫기" onclick="closeMemberModal()">×</button>
+
+        <div id="memberLoginPanel">
+            <h2 class="member-modal-title" id="memberModalTitle">로그인</h2>
+            <p class="member-modal-desc">카카오 또는 휴대폰 번호로 간편하게 로그인하세요.</p>
+            <a class="member-kakao-button member-kakao-primary" href="./api/kakao-login.php">카카오로 시작하기</a>
+            <div class="member-auth-divider"><span>또는 휴대폰 번호로 로그인</span></div>
+            <details class="member-email-details" id="memberEmailDetails" open>
+                <summary>휴대폰 번호로 로그인하기</summary>
+            <form id="memberLoginForm" class="member-form">
+                <div class="member-field">
+                    <label for="memberLoginEmail">휴대폰 번호</label>
+                    <input id="memberLoginEmail" name="login" type="text" maxlength="190" autocomplete="username" required placeholder="010-0000-0000 (기존 이메일도 가능)">
+                </div>
+                <div class="member-field">
+                    <label for="memberLoginPassword">비밀번호</label>
+                    <input id="memberLoginPassword" name="password" type="password" autocomplete="current-password" required placeholder="비밀번호">
+                </div>
+                <div class="member-forgot"><button type="button" onclick="openMemberModal('reset-support')">비밀번호를 잊으셨나요?</button></div>
+                <div id="memberLoginMessage" class="member-form-message"></div>
+                <button class="member-form-submit" type="submit">로그인</button>
+            </form>
+            </details>
+            <p class="member-switch">처음 방문하셨나요? <button type="button" onclick="openMemberModal('register')">휴대폰 인증 후 회원가입</button></p>
+        </div>
+
+        <div id="memberRegisterPanel" hidden>
+            <h2 class="member-modal-title">회원가입</h2>
+            <p class="member-modal-desc">휴대폰 문자 인증을 완료하면 사이트 회원으로 가입할 수 있습니다. 문자 인증은 SMS 서비스가 연결된 경우에만 작동합니다.</p>
+            <form id="memberRegisterForm" class="member-form">
+                <div class="member-field">
+                    <label for="memberRegisterName">이름</label>
+                    <input id="memberRegisterName" name="name" type="text" maxlength="30" autocomplete="name" required placeholder="이름">
+                </div>
+                <div class="member-field">
+                    <label for="memberRegisterPhone">휴대폰 번호</label>
+                    <div class="member-reset-code-row">
+                        <input id="memberRegisterPhone" name="phone" type="tel" maxlength="13" inputmode="numeric" autocomplete="tel" required placeholder="010-0000-0000">
+                        <button class="member-reset-code-btn" id="memberRegisterPhoneCodeButton" type="button">인증번호 받기</button>
+                    </div>
+                </div>
+                <div class="member-field">
+                    <label for="memberRegisterPhoneCode">문자 인증번호</label>
+                    <div class="member-reset-code-row">
+                        <input id="memberRegisterPhoneCode" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="6자리" aria-describedby="memberRegisterPhoneVerifyState">
+                        <button class="member-reset-code-btn" id="memberRegisterPhoneVerifyButton" type="button">인증 확인</button>
+                    </div>
+                    <p class="member-reset-help" id="memberRegisterPhoneVerifyState" aria-live="polite">문자로 받은 6자리 인증번호를 입력해 주세요. (10분 유효)</p>
+                </div>
+                <div class="member-field">
+                    <label for="memberRegisterPassword">비밀번호</label>
+                    <input id="memberRegisterPassword" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="8자 이상">
+                </div>
+                <div class="member-field">
+                    <label for="memberRegisterPasswordConfirm">비밀번호 확인</label>
+                    <input id="memberRegisterPasswordConfirm" name="password_confirm" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="비밀번호 다시 입력">
+                </div>
+                <label class="ag-privacy-consent">
+                    <input type="checkbox" name="privacy_consent" value="1" required>
+                    <span><strong>[필수] 회원가입을 위한 개인정보 수집·이용에 동의합니다.</strong><small>이름·휴대폰 번호를 가입, 계정 관리 목적으로 이용합니다. <a href="./privacy.html?v=20261013-width-480" target="_blank" rel="noopener noreferrer">자세히 보기</a></small></span>
+                </label>
+                <div id="memberRegisterMessage" class="member-form-message"></div>
+                <button class="member-form-submit" type="submit">가입하기</button>
+            </form>
+            <p class="member-switch">이미 가입하셨나요? <button type="button" onclick="openMemberModal('login')">로그인</button></p>
+        </div>
+
+        <div id="memberResetPanel" hidden>
+            <h2 class="member-modal-title">비밀번호 재설정</h2>
+            <p class="member-modal-desc">가입한 이메일로 6자리 인증번호를 받은 뒤 새 비밀번호를 설정해 주세요.</p>
+            <form id="memberResetForm" class="member-form">
+                <div class="member-field">
+                    <label for="memberResetEmail">가입 이메일</label>
+                    <input id="memberResetEmail" name="email" type="email" maxlength="190" autocomplete="email" required placeholder="example@email.com">
+                </div>
+                <div class="member-field">
+                    <label for="memberResetCode">인증번호</label>
+                    <div class="member-reset-code-row">
+                        <input id="memberResetCode" name="code" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required placeholder="6자리">
+                        <button class="member-reset-code-btn" id="memberResetCodeButton" type="button">인증번호 받기</button>
+                    </div>
+                </div>
+                <div class="member-field">
+                    <label for="memberResetPassword">새 비밀번호</label>
+                    <input id="memberResetPassword" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="8자 이상">
+                </div>
+                <div class="member-field">
+                    <label for="memberResetPasswordConfirm">새 비밀번호 확인</label>
+                    <input id="memberResetPasswordConfirm" name="password_confirm" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="비밀번호 다시 입력">
+                </div>
+                <p class="member-reset-help">인증번호는 발급 후 10분 동안 유효합니다.</p>
+                <div id="memberResetMessage" class="member-form-message"></div>
+                <button class="member-form-submit" type="submit">새 비밀번호로 변경</button>
+            </form>
+            <p class="member-switch">비밀번호가 기억나셨나요? <button type="button" onclick="openMemberModal('login')">로그인</button></p>
+            <p class="member-switch">가입 이메일을 사용할 수 없나요? <button type="button" onclick="openMemberModal('reset-support')">관리자에게 재설정 요청</button></p>
+        </div>
+
+        <div id="memberResetSupportPanel" hidden>
+            <h2 class="member-modal-title">관리자에게 재설정 요청</h2>
+            <p class="member-modal-desc">휴대폰으로 가입하셨거나 이메일을 사용할 수 없다면, 가입한 이름과 휴대폰 번호로 재설정을 요청해 주세요.</p>
+            <form id="memberResetSupportForm" class="member-form">
+                <div class="member-field">
+                    <label for="memberResetSupportName">가입 이름</label>
+                    <input id="memberResetSupportName" name="name" type="text" maxlength="30" autocomplete="name" required placeholder="가입할 때 사용한 이름">
+                </div>
+                <div class="member-field">
+                    <label for="memberResetSupportPhone">가입 휴대폰 번호</label>
+                    <input id="memberResetSupportPhone" name="phone" type="tel" maxlength="13" inputmode="numeric" autocomplete="tel" required placeholder="010-0000-0000">
+                </div>
+                <p class="member-reset-help">본인 확인 후 관리자가 임시 비밀번호를 안내하는 방식입니다.</p>
+                <div id="memberResetSupportMessage" class="member-form-message"></div>
+                <button class="member-form-submit" type="submit">재설정 요청 보내기</button>
+            </form>
+            <p class="member-switch">기존 이메일 회원이신가요? <button type="button" onclick="openMemberModal('reset')">이메일로 재설정</button></p>
+        </div>
+
+        <div id="memberSettingsPanel" hidden>
+            <h2 class="member-modal-title">내 정보</h2>
+            <p class="member-modal-desc">현재 로그인한 회원 정보입니다.</p>
+            <div class="member-info-box">
+                <div class="member-info-row"><span class="member-info-label">이름</span><span class="member-info-value" id="memberInfoName">-</span></div>
+                <div class="member-info-row"><span class="member-info-label">연락처</span><span class="member-info-value" id="memberInfoPhone">-</span></div>
+                <div class="member-info-row"><span class="member-info-label">이메일</span><span class="member-info-value" id="memberInfoEmail">-</span></div>
+                <div class="member-info-row"><span class="member-info-label">가입일</span><span class="member-info-value" id="memberInfoCreatedAt">-</span></div>
+            </div>
+            <button class="member-logout-btn" type="button" onclick="logoutMember()">로그아웃</button>
+        </div>
+    </div>
+</div>
+
+<div class="home-recommend-modal" id="homeRecommendModal" hidden>
+    <div class="home-recommend-sheet" role="dialog" aria-modal="true" aria-labelledby="homeRecommendSheetTitle">
+        <div class="home-recommend-handle" aria-hidden="true"></div>
+        <div class="home-recommend-options" id="homeRecommendOptions">
+            <button class="home-recommend-option active" id="homeRecommendSheetTitle" type="button" data-home-recommend="SUV">넉넉한 SUV</button>
+            <button class="home-recommend-option" type="button" data-home-recommend="SEDAN">세련된 세단</button>
+            <button class="home-recommend-option" type="button" data-home-recommend="COMPACT">가성비 경차</button>
+            <button class="home-recommend-option" type="button" data-home-recommend="HYBRID">하이브리드 차량</button>
+            <button class="home-recommend-option" type="button" data-home-recommend="EV">친환경 전기차</button>
+            <button class="home-recommend-option" type="button" data-home-recommend="FIRST">생애 첫 차</button>
+        </div>
+    </div>
+</div>
+
+<nav id="bottomNav" class="bottom-nav" aria-label="하단 메뉴">
+    <button class="bottom-nav-item active" type="button" data-main-nav="home">
+        <span class="bottom-nav-icon" aria-hidden="true">
+            <img class="menu-icon-default" src="images/menu-icons/home-black.png" alt="">
+            <img class="menu-icon-active" src="images/menu-icons/home-orange.png" alt="">
+        </span>
+        <span>홈</span>
+    </button>
+
+    <button class="bottom-nav-item" type="button" data-main-nav="vehicle">
+        <span class="bottom-nav-icon" aria-hidden="true">
+            <img class="menu-icon-default" src="images/menu-icons/vehicle-black.png" alt="">
+            <img class="menu-icon-active" src="images/menu-icons/vehicle-orange.png" alt="">
+        </span>
+        <span>차량찾기</span>
+    </button>
+
+    <button class="bottom-nav-item" type="button" data-main-nav="quick">
+        <span class="bottom-nav-icon" aria-hidden="true">
+            <img class="menu-icon-default" src="images/menu-icons/quick-black.png" alt="">
+            <img class="menu-icon-active" src="images/menu-icons/quick-orange.png" alt="">
+        </span>
+        <span>간편견적</span>
+    </button>
+
+    <button class="bottom-nav-item" type="button" data-main-nav="faq">
+        <span class="bottom-nav-icon" aria-hidden="true">
+            <img class="menu-icon-default" src="images/menu-icons/faq-black.png" alt="">
+            <img class="menu-icon-active" src="images/menu-icons/faq-orange.png" alt="">
+        </span>
+        <span>Q&amp;A</span>
+    </button>
+
+    <button class="bottom-nav-item" type="button" data-main-nav="mypage">
+        <span class="bottom-nav-icon" aria-hidden="true">
+            <img class="menu-icon-default" src="images/menu-icons/mypage-black.png" alt="">
+            <img class="menu-icon-active" src="images/menu-icons/mypage-orange.png" alt="">
+        </span>
+        <span>마이페이지</span>
+    </button>
+</nav>
+
+<div class="estimate-modal" id="estimateModal" aria-hidden="true">
+    <div class="estimate-modal-card" role="dialog" aria-modal="true" aria-labelledby="estimateModalTitle">
+        <div class="estimate-modal-head">
+            <div>
+                <h2 class="estimate-modal-title" id="estimateModalTitle">견적 신청</h2>
+                <p class="estimate-modal-desc">신청 정보를 확인하시면 선택한 조건으로 견적을 접수해 드립니다.</p>
+            </div>
+            <button class="estimate-modal-close" type="button" data-estimate-close aria-label="닫기">×</button>
+        </div>
+        <div class="estimate-summary" id="estimateSummary"></div>
+        <form id="estimateForm">
+            <p class="estimate-member-note" id="estimateMemberNote" hidden aria-live="polite"></p>
+            <div class="estimate-form-grid">
+                <div class="estimate-field">
+                    <label for="estimateName">성함</label>
+                    <input id="estimateName" name="customer_name" type="text" maxlength="30" required autocomplete="name" placeholder="한글 또는 영문 이름을 입력해 주세요">
+                </div>
+                <div class="estimate-field">
+                    <label for="estimatePhone">연락처</label>
+                    <input id="estimatePhone" name="customer_phone" type="tel" inputmode="numeric" maxlength="13" required autocomplete="tel" placeholder="010-0000-0000">
+                </div>
+                <p class="estimate-contact-note" id="estimateContactNote" hidden>신청 연락처를 변경해도 회원정보는 바뀌지 않습니다.</p>
+                <div class="estimate-field">
+                    <label for="estimateMemo">요청사항 <span style="font-weight:400;color:#9aa1aa">(선택)</span></label>
+                    <textarea id="estimateMemo" name="customer_memo" maxlength="1000" placeholder="상담 시 전달할 내용이 있다면 입력해 주세요."></textarea>
+                </div>
+                <div class="estimate-region-fields" id="estimateRegionField" hidden>
+                    <div class="estimate-field">
+                    <label for="estimateProvince">차량 등록 지역 (전기차 보조금 확인용)</label>
+                    <select id="estimateProvince" name="registration_province" disabled>
+                        <option value="">시·도 선택</option>
+                        <option>서울</option><option>부산</option><option>대구</option><option>인천</option><option>광주</option><option>대전</option><option>울산</option><option>세종</option><option>경기</option><option>강원</option><option>충북</option><option>충남</option><option>전북</option><option>전남</option><option>경북</option><option>경남</option><option>제주</option>
+                    </select>
+                    </div>
+                </div>
+            </div>
+            <label class="ag-privacy-consent">
+                    <input type="checkbox" name="privacy_consent" value="1" required>
+                    <span><strong>[필수] 개인정보 수집·이용에 동의합니다.</strong><small>이름·연락처를 상담 신청 및 회신 목적으로 이용합니다. <a href="./privacy.html?v=20261013-width-480" target="_blank" rel="noopener noreferrer">자세히 보기</a></small></span>
+                </label>
+            <button class="estimate-submit" type="submit">이 견적으로 신청하기</button>
+            <div class="estimate-result" id="estimateResult"></div>
+        </form>
+    </div>
+</div>
+
+<script src="./site.js?v=20261013-mypage-inquiry-direct-05"></script>
+</body>
+</html>
+
+
