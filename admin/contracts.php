@@ -6,16 +6,20 @@ require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/admin_helpers.php';
 require_once __DIR__ . '/contract-performance.php';
 
+$month=(string)($_GET['month']??date('Y-m'));
+if($month!=='all' && (!preg_match('/^\d{4}-(0[1-9]|1[0-2])$/D',$month) || substr($month,0,4)<'2000' || substr($month,0,4)>'2100'))$month=date('Y-m');
 $isMain = isSuperAdmin();
 $rows = [];
 $error = null;
 try {
-    $rows = contractPerformance($pdo, $isMain, (int)$_SESSION['admin_id']);
+    $rows = contractPerformance($pdo, $isMain, (int)$_SESSION['admin_id'], $month==='all'?'':$month);
 } catch (Throwable $e) {
     error_log('Contract performance query failed: ' . $e->getMessage());
     $error = '계약 실적을 불러오지 못했습니다. 견적 DB 연결과 담당자 정보를 확인해주세요.';
 }
 
+$previousTotal=null;
+if($month!=='all' && $error===null){$previousMonth=(new DateTimeImmutable($month.'-01'))->modify('-1 month')->format('Y-m');$previousTotal=array_sum(array_column(contractPerformance($pdo,$isMain,(int)$_SESSION['admin_id'],$previousMonth),'total'));}
 $view = $isMain ? (string)($_GET['view'] ?? 'team') : 'individual';
 if (!in_array($view, ['team', 'individual'], true)) $view = $isMain ? 'team' : 'individual';
 
@@ -56,7 +60,8 @@ $teamScaleMax = contractChartScaleMax($maxTeamTotal);
 $memberScaleMax = contractChartScaleMax($maxMemberTotal);
 
 function contractsUrl(string $view, string $team = ''): string {
-    $params = ['view' => $view];
+    global $month;
+    $params = ['view' => $view, 'month'=>$month];
     if ($team !== '') $params['team'] = $team;
     return './contracts.php?' . http_build_query($params);
 }
@@ -65,18 +70,20 @@ function contractsUrl(string $view, string $team = ''): string {
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>계약 실적 - 오토지니</title>
 <link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
-<link rel="stylesheet" href="./admin-ui.css"><link rel="stylesheet" href="./contracts-page.css?v=<?= filemtime(__DIR__ . '/contracts-page.css') ?>">
+<link rel="stylesheet" href="./admin-ui.css?v=<?= filemtime(__DIR__ . '/./admin-ui.css') ?>"><link rel="stylesheet" href="./contracts-page.css?v=<?= filemtime(__DIR__ . '/contracts-page.css') ?>">
 </head><body><div class="admin-shell">
 <?php $currentAdminPage = 'contracts'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main"><section class="card admin-page-sections">
     <div class="contract-head">
         <div>
             <h1><?= $isMain ? '영업사원 계약 실적' : '내 계약 실적' ?></h1>
-            <p class="description">전체 기간 · 현재 계약완료 상태인 견적을 담당자 기준으로 집계합니다.</p>
+            <p class="description"><?= $month==='all'?'전체 기간':ag_h($month).' 계약일 기준' ?> · 현재 계약완료인 견적을 담당자 기준으로 집계합니다.</p>
         </div>
         <?php if ($isMain): ?><a class="account-link" href="./admins.php">영업사원 팀 설정</a><?php endif; ?>
     </div>
 
+    <form method="get" class="performance-period-form"><input type="hidden" name="view" value="<?=ag_h($view)?>"><label>기간 <input type="month" name="month" value="<?=ag_h($month==='all'?date('Y-m'):$month)?>"></label><button type="submit" class="gray-btn">조회</button><a class="gray-btn" href="<?=ag_h(contractsUrl($view,$selectedTeam).'&month=all')?>">전체 기간</a></form>
+    <?php if($previousTotal!==null && $selectedTeam===''): ?><p class="description"><?=ag_h($previousMonth)?> <?=number_format($previousTotal)?>건 → <?=ag_h($month)?> <?=number_format($total)?>건 (전월 대비 <?=($total-$previousTotal)>0?'+':''?><?=number_format($total-$previousTotal)?>건)</p><?php endif; ?>
     <div class="card admin-page-body">
     <?php if ($error !== null): ?>
         <p role="alert" class="error"><?= ag_h($error) ?></p>

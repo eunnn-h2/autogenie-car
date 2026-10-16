@@ -5,6 +5,8 @@ header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 
 require_once __DIR__ . '/member-auth-common.php';
+require_once __DIR__ . '/submission-common.php';
+require_once __DIR__ . '/../config/consultation.php';
 
 function fail(string $message, int $status = 400): never
 {
@@ -17,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     fail('POST 요청만 허용됩니다.', 405);
 }
 
+if(($_SERVER['HTTP_X_REQUESTED_WITH']??'')!=='XMLHttpRequest')fail('허용되지 않은 요청입니다.',403);
 $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
 if (stripos($contentType, 'application/json') !== false) {
     $raw = file_get_contents('php://input');
@@ -25,6 +28,8 @@ if (stripos($contentType, 'application/json') !== false) {
 } else {
     $data = $_POST;
 }
+
+$submission = agSubmissionStart('quick', $data);
 
 $customerName = trim((string)($data['customer_name'] ?? ''));
 $customerPhone = trim((string)($data['customer_phone'] ?? ''));
@@ -52,17 +57,6 @@ if (mb_strlen($nameWithoutSpaces, 'UTF-8') < 2 || mb_strlen($customerName, 'UTF-
 $phoneDigits = preg_replace('/\D/', '', $customerPhone) ?? '';
 if (!preg_match('/^(?:010\d{8}|01[16789]\d{7,8})$/', $phoneDigits)) {
     fail('연락처는 010, 011, 016, 017, 018, 019로 시작하는 올바른 휴대폰 번호를 입력해 주세요.');
-}
-
-$subscriberDigits = substr($phoneDigits, 3);
-$middleLength = strlen($phoneDigits) === 10 ? 3 : 4;
-$middleBlock = substr($phoneDigits, 3, $middleLength);
-$lastBlock = substr($phoneDigits, 3 + $middleLength);
-$repeatedSubscriber = preg_match('/^(\d{1,4})\1+$/', $subscriberDigits) === 1;
-$repeatedMiddleBlock = preg_match('/^(\d)\1+$/', $middleBlock) === 1;
-$repeatedLastBlock = preg_match('/^(\d)\1+$/', $lastBlock) === 1;
-if ($repeatedSubscriber || $repeatedMiddleBlock || $repeatedLastBlock) {
-    fail('반복되는 숫자가 많은 번호는 사용할 수 없습니다. 실제 휴대폰 번호를 입력해 주세요.');
 }
 
 $middleLength = strlen($phoneDigits) === 10 ? 3 : 4;
@@ -113,15 +107,19 @@ try {
     $estimateId = (int)$pdo->lastInsertId();
     $estimateNo = 'Q' . date('Ymd') . '-' . str_pad((string)$estimateId, 6, '0', STR_PAD_LEFT);
     $pdo->prepare('UPDATE estimate_quick SET estimate_no=? WHERE id=?')->execute([$estimateNo, $estimateId]);
+    $acquisition=agAcquisitionValues($data);
+    $pdo->prepare('UPDATE estimate_quick SET utm_source=?,utm_medium=?,utm_campaign=?,utm_content=?,utm_term=?,referrer=?,landing_page=? WHERE id=?')->execute([...array_values($acquisition),$estimateId]);
+    agAlimtalkQueue($pdo, 'estimate_quick', $estimateId, 'receipt');
     $pdo->commit();
+    agAlimtalkDispatchEstimate($pdo, 'estimate_quick', $estimateId);
 
-    echo json_encode([
+    agSubmissionRespond($submission, [
         'success' => true,
         'message' => '간편견적이 저장되었습니다.',
         'estimate_id' => $estimateId,
         'estimate_no' => $estimateNo,
         'admin_detail_url' => './admin/estimate-detail.php?type=quick&id=' . $estimateId,
-    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    ]);
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) $pdo->rollBack();
 

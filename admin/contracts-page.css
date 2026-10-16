@@ -37,3 +37,5 @@ h1{margin:0;font-size:22px}.section-title-row h2{margin:0;font-size:17px;color:#
 
 .contract-table-wrap th,.contract-table-wrap td{text-align:center;vertical-align:middle}
 .contract-table-wrap tbody th{text-align:center}
+
+.performance-period-form{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:16px 0}.performance-period-form label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#526476}.performance-period-form input{height:38px;font:inherit;padding:0 10px;border:1px solid #dce3eb;border-radius:8px;min-width:0}.performance-period-form .gray-btn{display:inline-flex;align-items:center;justify-content:center;height:38px;padding:0 13px;font:inherit;font-size:13px;font-weight:700;line-height:1;text-decoration:none;white-space:nowrap;cursor:pointer}

@@ -56,7 +56,7 @@ try {
         $link = $pdo->prepare('INSERT INTO member_kakao_accounts (kakao_app_hash, kakao_user_id, member_id) VALUES (?, ?, ?)');
         $link->execute([$appHash, $userId, $id]);
     }
-    $memberQuery = $pdo->prepare('SELECT id, name, phone, email, status, created_at FROM member_accounts WHERE id = ? LIMIT 1');
+    $memberQuery = $pdo->prepare('SELECT id, name, phone, email, password_hash, status, created_at FROM member_accounts WHERE id = ? LIMIT 1');
     $memberQuery->execute([$id]);
     $member = $memberQuery->fetch();
     if (!$member || $member['status'] !== 'ACTIVE') {
@@ -65,6 +65,7 @@ try {
     $pdo->prepare('UPDATE member_accounts SET last_login_at = NOW() WHERE id = ?')->execute([$id]);
     $pdo->commit();
     session_regenerate_id(true);
+    $_SESSION['member_auth_stamp']=hash('sha256',(string)$member['password_hash']);
     $_SESSION['member_id'] = $id;
     header('Location: ../db-test.html', true, 302);
     exit;

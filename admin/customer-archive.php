@@ -39,6 +39,9 @@ function customerArchiveApply(PDO $pdo, bool $isMainAdmin, string $sessionToken,
         if (!isset($customers[$hash]) || isset($archived[$hash])) {
             throw new RuntimeException('삭제할 고객이 없거나 이미 삭제되었습니다.', 409);
         }
+        if (!empty($customers[$hash]['is_withdrawn'])) {
+            throw new RuntimeException('탈퇴 고객은 법정 보존 절차로 관리됩니다.', 409);
+        }
         $stmt = $pdo->prepare('INSERT INTO admin_customer_archive (customer_hash, snapshot, deleted_by) VALUES (?, ?, ?)');
         $stmt->execute([$hash, json_encode($customers[$hash], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR), $adminId]);
     } elseif ($action === 'restore') {

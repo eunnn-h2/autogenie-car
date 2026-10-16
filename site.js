@@ -1,3 +1,74 @@
+const agSubmissionRequests = new Map();
+const AG_SUBMISSION_STORAGE = 'autogenie_submission_requests_v1';
+
+function readSubmissionKeys() {
+    try {
+        const items = JSON.parse(sessionStorage.getItem(AG_SUBMISSION_STORAGE) || '{}');
+        return Object.fromEntries(Object.entries(items).filter(([, item]) => item && item.expires > Date.now()));
+    } catch (_) { return {}; }
+}
+
+function writeSubmissionKeys(items) {
+    try { sessionStorage.setItem(AG_SUBMISSION_STORAGE, JSON.stringify(Object.fromEntries(Object.entries(items).slice(-30)))); } catch (_) {}
+}
+
+async function fetchSubmissionOnce(url, options) {
+    const signature = new URL(url, location.href).pathname + '\n' + String(options.body || '');
+    let record = agSubmissionRequests.get(signature);
+    if (!record) {
+        let storageKey = '';
+        if (globalThis.crypto?.subtle) {
+            const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(signature));
+            storageKey = Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, '0')).join('');
+        }
+        record = agSubmissionRequests.get(signature);
+        if (!record) {
+            const cached = storageKey ? readSubmissionKeys()[storageKey] : null;
+            const bytes = new Uint8Array(16);
+            if (globalThis.crypto?.getRandomValues) crypto.getRandomValues(bytes);
+            const key = cached?.key || (bytes.some(Boolean)
+                ? 'ag_' + Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('')
+                : 'ag_' + Date.now().toString(36) + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2));
+            record = {key, storageKey, pending: null};
+            agSubmissionRequests.set(signature, record);
+            if (storageKey) {
+                const items = readSubmissionKeys();
+                items[storageKey] = {key, expires: Date.now() + 3600000};
+                writeSubmissionKeys(items);
+            }
+        }
+    }
+    if (record.pending) return (await record.pending).clone();
+    const headers = new Headers(options.headers);
+    headers.set('X-Idempotency-Key', record.key);
+    record.pending = fetch(url, {...options, headers});
+    try {
+        const response = await record.pending;
+        const result = await response.clone().json().catch(() => null);
+        if ((response.ok && (result?.ok === true || result?.success === true)) || (response.status >= 400 && response.status < 500 && result)) {
+            agSubmissionRequests.delete(signature);
+            if (record.storageKey) {
+                const items = readSubmissionKeys();
+                delete items[record.storageKey];
+                writeSubmissionKeys(items);
+            }
+        }
+        return response.clone();
+    } finally { record.pending = null; }
+}
+
+function agFetch(url, options = {}) {
+    const headers = new Headers(options.headers || {});
+    const target = new URL(url, location.href);
+    if (String(options.method || 'GET').toUpperCase() === 'POST' && target.origin === location.origin) {
+        headers.set('X-Requested-With', 'XMLHttpRequest');
+        if (['inquiry-create.php', 'save-estimate.php', 'save-quick-estimate.php'].includes(target.pathname.split('/').pop())) {
+            return fetchSubmissionOnce(url, {...options, headers});
+        }
+    }
+    return fetch(url, {...options, headers});
+}
+
 /* 오토지니 사용자 화면 · 원본 JavaScript 로직 변경 없이 분리 */
 const API_URL = './api/test-car-data.php?v=chazm-style-20260819';
 const SAVE_ESTIMATE_URL = './api/save-estimate.php';
@@ -58,14 +129,14 @@ function trackEstimateProgress(stage, extra = {}){
     lastTrackedStageOrder = Math.max(lastTrackedStageOrder, order);
     const payload = {session_key:getEstimateSessionKey(), stage, active_seconds:getActiveStaySeconds(), ...getAcquisitionData(), ...extra};
     try {
-        fetch(TRACK_ESTIMATE_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}).catch(()=>{});
+        agFetch(TRACK_ESTIMATE_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}).catch(()=>{});
     } catch (_) {}
 }
 function trackEstimateHeartbeat(){
     const stage = TRACK_STAGE_BY_ORDER[lastTrackedStageOrder] || 'LANDING';
     const payload = {session_key:getEstimateSessionKey(), stage, active_seconds:getActiveStaySeconds(), ...getAcquisitionData()};
     try {
-        fetch(TRACK_ESTIMATE_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}).catch(()=>{});
+        agFetch(TRACK_ESTIMATE_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}).catch(()=>{});
     } catch (_) {}
 }
 document.addEventListener('visibilitychange', () => {
@@ -128,7 +199,7 @@ function formatMileageButton(value) {
 }
 function yearsFromMonths(months) {
     const m = Number(months || 0);
-    return m ? `${Math.round(m / 12)}년` : '-';
+    return m ? (m % 12 === 0 ? `${m / 12}년` : `${m}개월`) : '-';
 }
 function productLabel(value) {
     if (value === 'RENT') return '장기렌트';
@@ -184,7 +255,7 @@ function vehicleImageHtml(v, vehicleKey) {
         <img
             src="${escapeHtml(candidates[0])}"
             alt="${escapeHtml(getVehicleName(v))}"
-            data-vehicle-preview="${escapeHtml(vehicleKey)}"
+            loading="lazy" decoding="async" data-vehicle-preview="${escapeHtml(vehicleKey)}"
             data-image-candidates='${escapeHtml(JSON.stringify(candidates))}'
             data-image-index="0"
             onload="normalizeVehicleListImage(this)"
@@ -515,6 +586,7 @@ function selectVehicleColor(vehicleKey, optionButton) {
         wrapper.dataset.selectedColorId = optionButton.dataset.colorId || '';
         wrapper.dataset.selectedColorName = optionButton.dataset.colorName || '';
     }
+    if (typeof syncSavedQuoteButtons === 'function') syncSavedQuoteButtons(vehicleKey);
     wrapper?.classList.remove('open');
 
     changeVehicleColorImage(
@@ -580,7 +652,7 @@ function createOptionButtons(allValues, availableValues, formatter, selectedValu
     return allValues.map((value, idx) => {
         const isAvailable = availableValues.some(v => String(v) === String(value));
         const isActive = isAvailable && String(value) === String(selectedValue);
-        const badge = idx === allValues.length - 1 ? '<span class="badge">최대</span>' : '';
+        const badge = allValues.length > 1 && idx === allValues.length - 1 ? '<span class="badge">최대</span>' : '';
         return `
             <button
                 class="option-btn ${extraClass} ${isActive ? 'active' : ''}"
@@ -715,12 +787,11 @@ function renderQuotePanel(vehicle, vehicleKey) {
 
         <div class="quote-box" data-quote-panel="${escapeHtml(vehicleKey)}">
             <div class="quote-price-head">
-                <div class="quote-price-sub">선택한 조건의 등록 월 이용료</div>
                 <div class="quote-price-main">
                     <span class="quote-price-value-wrap" data-role="monthly-wrap">
                         <strong class="quote-price-digits" data-role="monthly-main">-</strong>
                     </span>
-                    <span>원 / 월</span>
+                    <span class="quote-price-unit">원/월</span><span class="quote-price-chevron" aria-hidden="true">›</span>
                 </div>
                 <div class="price-tags">
                     <span class="price-tag active" data-role="insurance-info">보험·세금 조건 확인</span>
@@ -760,12 +831,14 @@ function renderQuotePanel(vehicle, vehicleKey) {
 
             <div class="notice" data-role="notice"></div>
             <div class="quote-choice-summary" data-role="choice-summary" aria-live="polite"></div>
-            <p class="quote-condition-footnote">월 이용료는 등록된 참고 금액이며, 최종 보험·세금·부가세 적용 및 계약 조건은 상담 시 확인됩니다.</p>
-            <button class="action-btn" type="button" data-role="save-estimate">견적 신청하기</button>
+            <p id="savedQuoteNotice" hidden></p><p class="quote-condition-footnote">월 이용료는 등록된 참고 금액이며, 최종 보험·세금·부가세 적용 및 계약 조건은 상담 시 확인됩니다.</p>
+            <div class="quote-action-row">
+                <button class="save-snapshot-button" type="button" data-quote-key="${escapeHtml(vehicleKey)}" onclick="saveCurrentQuote('${escapeHtml(vehicleKey)}', this)">조건 저장</button>
+                <button class="action-btn" type="button" data-role="save-estimate">견적 신청하기</button>
+            </div>
         </div>
     `;
 }
-
 
 function normalizePriceText(value) {
     const text = String(value ?? '').trim();
@@ -782,29 +855,19 @@ function normalizePriceText(value) {
    - 각 자리의 0~9 레일은 최초 1회만 생성
    - 이후 가격 변경은 transform만 갱신
    ============================================================ */
-const PRICE_ODOMETER = Object.freeze({
-    maxDigits: 7,
-    // 충분한 레일 길이를 확보해 매 롤링 종료 후 재정렬하지 않는다.
-    // 필요할 때(레일 끝에 가까워졌을 때) 다음 롤링 직전에만 조용히 중앙으로 되돌린다.
-    cycles: 21,
-    centerCycle: 10,
-    duration: 360
-});
-
+const PRICE_ODOMETER = Object.freeze({ maxDigits:7, cycles:21, centerCycle:10 });
 const monthlyOdometers = new WeakMap();
 
 function getPriceSlotHeight(panel) {
-    const main = panel.querySelector('.quote-price-main');
-    if (!main) return 54;
-    const raw = getComputedStyle(main).getPropertyValue('--price-slot-height').trim();
+    const raw = getComputedStyle(panel.querySelector('.quote-price-main'))
+        .getPropertyValue('--price-slot-height').trim();
     const value = parseFloat(raw);
-    return Number.isFinite(value) && value > 0 ? value : 54;
+    return Number.isFinite(value) && value > 0 ? value : 48;
 }
 
 function createOdometerTrack() {
     const track = document.createElement('span');
     track.className = 'price-digit-track';
-
     for (let cycle = 0; cycle < PRICE_ODOMETER.cycles; cycle++) {
         for (let digit = 0; digit <= 9; digit++) {
             const cell = document.createElement('span');
@@ -813,7 +876,6 @@ function createOdometerTrack() {
             track.appendChild(cell);
         }
     }
-
     return track;
 }
 
@@ -825,21 +887,17 @@ function createOdometer(panel, value) {
     const wrap = panel.querySelector('[data-role="monthly-wrap"]');
     if (!wrap) return null;
 
-    const number = Number(String(value).replaceAll(',', ''));
-    if (!Number.isFinite(number)) return null;
-
-    const rounded = Math.max(0, Math.round(number));
-    const digitLength = String(rounded).length;
-    const maxDigits = Math.max(PRICE_ODOMETER.maxDigits, digitLength);
+    const rounded = Math.max(0, Math.round(Number(String(value).replaceAll(',', ''))));
+    if (!Number.isFinite(rounded)) return null;
+    const text = rounded.toLocaleString('ko-KR');
+    const maxDigits = Math.max(PRICE_ODOMETER.maxDigits, String(rounded).length);
     const slotHeight = getPriceSlotHeight(panel);
     const digits = String(rounded).padStart(maxDigits, '0').split('').map(Number);
-
     const container = document.createElement('strong');
     container.className = 'quote-price-digits';
     container.dataset.role = 'monthly-main';
-    container.dataset.rawValue = rounded.toLocaleString('ko-KR');
-    container.setAttribute('aria-label', rounded.toLocaleString('ko-KR'));
-
+    container.dataset.rawValue = text;
+    container.setAttribute('aria-label', text);
     const slots = [];
     const commas = [];
 
@@ -847,17 +905,13 @@ function createOdometer(panel, value) {
         const slot = document.createElement('span');
         slot.className = 'price-digit';
         slot.dataset.digit = String(digit);
-
         const track = createOdometerTrack();
         const position = PRICE_ODOMETER.centerCycle * 10 + digit;
-
         slot._digit = digit;
         slot._position = position;
         slot.appendChild(track);
-
         track.style.transition = 'none';
         setTrackPosition(track, position, slotHeight);
-
         container.appendChild(slot);
         slots.push(slot);
 
@@ -872,34 +926,14 @@ function createOdometer(panel, value) {
     });
 
     wrap.replaceChildren(container);
-
-    const state = {
-        panel,
-        wrap,
-        container,
-        slots,
-        commas,
-        maxDigits,
-        slotHeight,
-        currentValue:rounded,
-        currentDigits:digits
-    };
-
+    const state = { container, slots, commas, maxDigits, slotHeight, currentValue:rounded, currentDigits:digits };
     monthlyOdometers.set(panel, state);
     updateOdometerLeadingVisibility(state, rounded, false);
-
-    requestAnimationFrame(() => {
-        state.slots.forEach(slot => {
-            const track = slot.querySelector('.price-digit-track');
-            if (track) track.style.transition = '';
-        });
-    });
-
+    requestAnimationFrame(() => slots.forEach(slot => {
+        const track = slot.querySelector('.price-digit-track');
+        if (track) track.style.transition = '';
+    }));
     return state;
-}
-
-function clearOdometerTimer(state) {
-    // 이전 버전 호환용. 매 롤링 종료 후 재정렬 타이머는 사용하지 않는다.
 }
 
 function signedShortestDigitDelta(fromDigit, toDigit) {
@@ -909,59 +943,21 @@ function signedShortestDigitDelta(fromDigit, toDigit) {
     return delta;
 }
 
-function normalizeOdometerSlot(slot, slotHeight) {
-    if (!slot) return;
-
-    const digit = Number(slot._digit ?? 0);
-    const normalized = PRICE_ODOMETER.centerCycle * 10 + digit;
-    const track = slot.querySelector('.price-digit-track');
-    if (!track) return;
-
-    slot._position = normalized;
-
-    // 같은 숫자가 있는 중앙 사이클로 '애니메이션 없이' 이동한다.
-    // transition:none 상태를 실제 렌더 트리에 확정한 뒤 원래 transition을 즉시 복원해야
-    // 사용자 눈에는 두 번째 움직임이 보이지 않는다.
-    const oldTransition = track.style.transition;
-    track.style.transition = 'none';
-    setTrackPosition(track, normalized, slotHeight);
-    void track.offsetHeight;
-    track.style.transition = oldTransition;
-}
-
 function updateOdometerLeadingVisibility(state, value, animate = true) {
-    const actualLength = String(Math.max(0, Math.round(value))).length;
-    const firstVisibleIndex = state.maxDigits - actualLength;
-
-    state.slots.forEach((slot, index) => {
-        slot.classList.toggle('is-leading-hidden', index < firstVisibleIndex);
-    });
-
-    state.commas.forEach(({ afterIndex, el }) => {
-        const digitsAfter = state.maxDigits - afterIndex - 1;
-        const visible = afterIndex >= firstVisibleIndex && digitsAfter > 0;
-
+    const firstVisibleIndex = state.maxDigits - String(Math.max(0, Math.round(value))).length;
+    state.slots.forEach((slot, index) => slot.classList.toggle('is-leading-hidden', index < firstVisibleIndex));
+    state.commas.forEach(({afterIndex, el}) => {
+        const visible = afterIndex >= firstVisibleIndex && state.maxDigits - afterIndex - 1 > 0;
         if (!animate) el.style.transition = 'none';
         el.classList.toggle('is-hidden', !visible);
     });
-
-    if (!animate) {
-        requestAnimationFrame(() => {
-            state.commas.forEach(({ el }) => {
-                el.style.transition = '';
-            });
-        });
-    }
+    if (!animate) requestAnimationFrame(() => state.commas.forEach(({el}) => { el.style.transition = ''; }));
 }
 
 function showEmptyMonthlyPrice(panel) {
-    const oldState = monthlyOdometers.get(panel);
-    if (oldState) clearOdometerTimer(oldState);
     monthlyOdometers.delete(panel);
-
     const wrap = panel.querySelector('[data-role="monthly-wrap"]');
     if (!wrap) return;
-
     const empty = document.createElement('strong');
     empty.className = 'quote-price-digits quote-price-empty';
     empty.dataset.role = 'monthly-main';
@@ -972,7 +968,6 @@ function showEmptyMonthlyPrice(panel) {
 
 function animateMonthlyPrice(panel, nextValue) {
     const nextText = normalizePriceText(nextValue);
-
     if (nextText === '-') {
         showEmptyMonthlyPrice(panel);
         return;
@@ -985,41 +980,34 @@ function animateMonthlyPrice(panel, nextValue) {
     }
 
     let state = monthlyOdometers.get(panel);
-
-    // 최초 숫자 표시 또는 기존 슬롯보다 자릿수가 커진 경우만 한 번 재구성한다.
     if (!state || String(nextNumber).length > state.maxDigits) {
-        if (state) clearOdometerTimer(state);
         createOdometer(panel, nextNumber);
         return;
     }
-
     if (state.currentValue === nextNumber) return;
 
-    clearOdometerTimer(state);
-
-    const nextDigits = String(nextNumber)
-        .padStart(state.maxDigits, '0')
-        .split('')
-        .map(Number);
-
+    const nextDigits = String(nextNumber).padStart(state.maxDigits, '0').split('').map(Number);
     state.slots.forEach((slot, index) => {
         const fromDigit = Number(slot._digit ?? state.currentDigits[index] ?? 0);
         const toDigit = nextDigits[index];
         if (fromDigit === toDigit) return;
-
         const delta = signedShortestDigitDelta(fromDigit, toDigit);
-        let nextPosition = Number(slot._position ?? (PRICE_ODOMETER.centerCycle * 10 + fromDigit)) + delta;
-
-        // 레일 끝에 가까워지는 경우 같은 숫자의 중앙 사이클로 순간 재배치 후 이동한다.
-        if (nextPosition < 10 || nextPosition > (PRICE_ODOMETER.cycles * 10 - 11)) {
-            normalizeOdometerSlot(slot, state.slotHeight);
-            nextPosition = Number(slot._position) + delta;
+        let nextPosition = Number(slot._position ?? PRICE_ODOMETER.centerCycle * 10 + fromDigit) + delta;
+        if (nextPosition < 10 || nextPosition > PRICE_ODOMETER.cycles * 10 - 11) {
+            nextPosition = PRICE_ODOMETER.centerCycle * 10 + fromDigit;
+            slot._position = nextPosition;
+            const track = slot.querySelector('.price-digit-track');
+            if (track) {
+                track.style.transition = 'none';
+                setTrackPosition(track, nextPosition, state.slotHeight);
+                void track.offsetHeight;
+                track.style.transition = '';
+            }
+            nextPosition += delta;
         }
-
         slot._digit = toDigit;
         slot.dataset.digit = String(toDigit);
         slot._position = nextPosition;
-
         const track = slot.querySelector('.price-digit-track');
         if (track) setTrackPosition(track, nextPosition, state.slotHeight);
     });
@@ -1028,11 +1016,7 @@ function animateMonthlyPrice(panel, nextValue) {
     state.currentDigits = nextDigits;
     state.container.dataset.rawValue = nextText;
     state.container.setAttribute('aria-label', nextText);
-
     updateOdometerLeadingVisibility(state, nextNumber, true);
-
-    // 중요: 롤링이 끝난 뒤에는 아무 동작도 하지 않는다.
-    // 중앙 사이클 재정렬은 레일 끝에 가까워졌을 때 '다음 롤링 직전'에만 수행한다.
 }
 
 function initQuotePanel(vehicle, vehicleKey, initialQuote = null) {
@@ -1067,6 +1051,7 @@ function initQuotePanel(vehicle, vehicleKey, initialQuote = null) {
         priceId: ''
     };
 
+    let preserveUnavailable = Boolean(initialQuote?.preserveUnavailable);
     function getCurrentTrim() {
         if (!state.trimId || state.trimId === '__NO_TRIM__') return null;
         return getTrimById(trims, state.trimId);
@@ -1115,6 +1100,11 @@ function initQuotePanel(vehicle, vehicleKey, initialQuote = null) {
         return prices.length ? uniqueValues(prices, 'annual_mileage', true) : ALL_MILEAGE;
     }
 
+    function getAllOptionValues(defaultValues, field) {
+        return [...new Set([...defaultValues, ...uniqueValues(getTrimPrices(), field, true), ...(preserveUnavailable && initialQuote?.price?.[field] !== undefined ? [Number(initialQuote.price[field])] : [])])]
+            .sort((a, b) => a - b);
+    }
+
     function getMatchedPrice() {
         return getTrimPrices().find(row =>
             String(row.product_type) === String(state.product) &&
@@ -1131,6 +1121,7 @@ function initQuotePanel(vehicle, vehicleKey, initialQuote = null) {
     function bindButtons(container, onSelect) {
         container.querySelectorAll('button[data-value]:not(:disabled)').forEach(btn => {
             btn.addEventListener('click', () => {
+                preserveUnavailable = false;
                 onSelect(btn.dataset.value);
                 const selectedTrim = getCurrentTrim();
                 trackEstimateProgress('CONDITIONS_SELECTED', {
@@ -1145,7 +1136,7 @@ function initQuotePanel(vehicle, vehicleKey, initialQuote = null) {
     }
 
     function getPrepaymentText() {
-        const basePrice = Number(vehicle.base_price || getCurrentTrim()?.price || 0);
+        const basePrice = Number(getCurrentTrim()?.price || vehicle.base_price || 0);
         const percent = Number(state.prepayment || 0);
 
         if (!basePrice || !percent) return '0만원';
@@ -1158,41 +1149,41 @@ function initQuotePanel(vehicle, vehicleKey, initialQuote = null) {
 
     function render() {
         const availableProducts = getAvailableProducts();
-        if (!availableProducts.some(v => String(v) === String(state.product))) {
+        if (!preserveUnavailable && !availableProducts.some(v => String(v) === String(state.product))) {
             state.product = selectFirstAvailable(availableProducts, ALL_PRODUCTS[0]);
         }
 
         const availableMonths = getAvailableMonths();
-        if (!availableMonths.some(v => String(v) === String(state.months))) {
+        if (!preserveUnavailable && !availableMonths.some(v => String(v) === String(state.months))) {
             state.months = selectFirstAvailable(availableMonths, ALL_MONTHS[ALL_MONTHS.length - 1]);
         }
 
         const availablePrepayments = getAvailablePrepayment();
-        if (!availablePrepayments.some(v => String(v) === String(state.prepayment))) {
+        if (!preserveUnavailable && !availablePrepayments.some(v => String(v) === String(state.prepayment))) {
             state.prepayment = selectFirstAvailable(availablePrepayments, 0);
         }
 
         const availableMileages = getAvailableMileage();
-        if (!availableMileages.some(v => String(v) === String(state.mileage))) {
+        if (!preserveUnavailable && !availableMileages.some(v => String(v) === String(state.mileage))) {
             state.mileage = selectFirstAvailable(availableMileages, ALL_MILEAGE[0]);
         }
 
         monthsWrap.innerHTML = createOptionButtons(
-            ALL_MONTHS,
+            getAllOptionValues(ALL_MONTHS, 'contract_months'),
             availableMonths,
             yearsFromMonths,
             state.months
         );
 
         prepaymentWrap.innerHTML = createOptionButtons(
-            ALL_PREPAYMENT,
+            getAllOptionValues(ALL_PREPAYMENT, 'prepayment_rate'),
             availablePrepayments,
             v => `${v}%`,
             state.prepayment
         );
 
         mileageWrap.innerHTML = createOptionButtons(
-            ALL_MILEAGE,
+            getAllOptionValues(ALL_MILEAGE, 'annual_mileage'),
             availableMileages,
             formatMileageButton,
             state.mileage
@@ -1223,6 +1214,7 @@ function initQuotePanel(vehicle, vehicleKey, initialQuote = null) {
             price: matchedPrice,
             priceId: state.priceId
         });
+        if (typeof syncSavedQuoteButtons === 'function') syncSavedQuoteButtons(vehicleKey);
         prepaymentView.textContent = getPrepaymentText();
         const insuranceInfo = panel.querySelector('[data-role="insurance-info"]');
         const taxInfo = panel.querySelector('[data-role="tax-info"]');
@@ -1233,12 +1225,12 @@ function initQuotePanel(vehicle, vehicleKey, initialQuote = null) {
             const choices = [
                 ['계약기간', yearsFromMonths(state.months)],
                 ['선납금', `${Number(state.prepayment || 0)}%`],
-                ['연 주행거리', `${Number(state.mileage || 0).toLocaleString('ko-KR')}km`],
+                ['연 주행거리', Number(state.mileage) === 0 ? '무제한' : `${Number(state.mileage).toLocaleString('ko-KR')}km`],
                 ['이용상품', productLabel(state.product)]
             ];
             choiceSummary.innerHTML = `<strong class="quote-choice-title">선택한 견적 조건</strong><div class="quote-choice-grid">${choices.map(([label, value]) => `<div><span>${escapeHtml(label)}</span><b>${escapeHtml(value)}</b></div>`).join('')}</div>`;
         }
-        if (saveButton) saveButton.disabled = !matchedPrice || !selectedTrim;
+        if (saveButton) saveButton.disabled = !matchedPrice || Number(matchedPrice.monthly_payment) <= 0 || !selectedTrim;
 
         if (matchedPrice?.monthly_payment) {
             animateMonthlyPrice(panel, shortMoney(matchedPrice.monthly_payment));
@@ -1261,6 +1253,7 @@ function initQuotePanel(vehicle, vehicleKey, initialQuote = null) {
     saveButton?.addEventListener('click', () => openEstimateModal(vehicleKey));
 
     trimSelect.addEventListener('change', () => {
+        preserveUnavailable = false;
         state.trimId = trimSelect.value;
         state.product = '';
         state.months = '';
@@ -1282,7 +1275,6 @@ function initQuotePanel(vehicle, vehicleKey, initialQuote = null) {
     }
     render();
 }
-
 
 function openEstimateModal(vehicleKey) {
     const quote = quoteStates.get(String(vehicleKey));
@@ -1327,7 +1319,7 @@ function openEstimateModal(vehicleKey) {
     summary.innerHTML = `
         <strong>${escapeHtml(getBrandName(quote.vehicle))} ${escapeHtml(getVehicleName(quote.vehicle))}</strong>
         ${escapeHtml(quote.trim.name ?? '-')} · ${escapeHtml(colorName)}<br>
-        ${escapeHtml(productLabel(quote.product))} · ${escapeHtml(yearsFromMonths(quote.months))} · 선납금 ${escapeHtml(String(quote.prepayment))}% · 연 ${escapeHtml(Number(quote.mileage).toLocaleString('ko-KR'))}km<br>
+        ${escapeHtml(productLabel(quote.product))} · ${escapeHtml(yearsFromMonths(quote.months))} · 선납금 ${escapeHtml(String(quote.prepayment))}% · 연 ${Number(quote.mileage)===0?'무제한':escapeHtml(Number(quote.mileage).toLocaleString('ko-KR'))+'km'}<br>
         월 <b>${escapeHtml(Number(quote.price.monthly_payment || 0).toLocaleString('ko-KR'))}원</b>
     `;
 
@@ -1424,6 +1416,7 @@ document.getElementById('estimateForm')?.addEventListener('submit', async event 
     if (!pendingEstimate) return;
 
     const form = event.currentTarget;
+    if (form.dataset.agSubmitting === '1') return;
     const submit = form.querySelector('.estimate-submit');
     const result = document.getElementById('estimateResult');
     const formData = new FormData(form);
@@ -1454,30 +1447,15 @@ document.getElementById('estimateForm')?.addEventListener('submit', async event 
         return;
     }
 
-    // 식별번호 뒤 가입자 번호가 단순 반복 패턴이면 테스트/허위 번호로 보고 차단합니다.
-    const subscriberDigits = phoneDigits.slice(3);
-    const middleLength = phoneDigits.length === 10 ? 3 : 4;
-    const middleBlock = phoneDigits.slice(3, 3 + middleLength);
-    const lastBlock = phoneDigits.slice(3 + middleLength);
-    const repeatedSubscriber = /^(\d{1,4})\1+$/.test(subscriberDigits);
-    const repeatedMiddleBlock = /^(\d)\1+$/.test(middleBlock);
-    const repeatedLastBlock = /^(\d)\1+$/.test(lastBlock);
-
-    if (repeatedSubscriber || repeatedMiddleBlock || repeatedLastBlock) {
-        estimatePhoneInput?.setCustomValidity('반복되는 숫자가 많은 번호는 사용할 수 없습니다. 실제 휴대폰 번호를 입력해 주세요.');
-        estimatePhoneInput?.reportValidity();
-        estimatePhoneInput?.focus();
-        return;
-    }
-
+    form.dataset.agSubmitting = '1';
     submit.disabled = true;
-    submit.textContent = '저장 중...';
+    submit.textContent = '접수 중...';
     result.className = 'estimate-result';
 
     try {
-        const response = await fetch(SAVE_ESTIMATE_URL, {
+        const response = await agFetch(SAVE_ESTIMATE_URL, {
             method: 'POST',
-            headers: {'Content-Type':'application/json'},
+            headers: {'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest'},
             body: JSON.stringify(payload)
         });
         const data = await response.json().catch(() => ({}));
@@ -1486,13 +1464,15 @@ document.getElementById('estimateForm')?.addEventListener('submit', async event 
 
         result.className = 'estimate-result show ok';
         result.innerHTML = `견적 신청이 완료되었습니다.<br><strong>접수번호 ${escapeHtml(data.estimate_no || '')}</strong><br>확인 후 입력하신 연락처로 안내드리겠습니다.`;
-        submit.textContent = '저장 완료';
+        submit.textContent = '신청 완료';
         form.querySelectorAll('input, textarea').forEach(el => el.disabled = true);
     } catch (error) {
         result.className = 'estimate-result show error';
         result.textContent = error.message || '견적 저장에 실패했습니다.';
         submit.disabled = false;
         submit.textContent = '이 견적으로 신청하기';
+    } finally {
+        delete form.dataset.agSubmitting;
     }
 });
 
@@ -1642,13 +1622,38 @@ function listVehicleImageHtml(vehicle, vehicleKey) {
         <img
             src="${escapeHtml(candidates[0])}"
             alt="${escapeHtml(getVehicleName(vehicle))}"
+            data-vehicle-key="${escapeHtml(vehicleKey)}"
+            data-vehicle-brand="${escapeHtml(getBrandName(vehicle))}"
+            data-vehicle-name="${escapeHtml(getVehicleName(vehicle))}"
             data-image-candidates='${escapeHtml(JSON.stringify(candidates))}'
             data-image-index="0"
+            onload="normalizeVehicleListImage(this)"
             onerror="tryNextVehicleImage(this)"
         >
     `;
 }
 
+// x/y are offsets relative to the image holder; scale adjusts the automatic fit.
+const VEHICLE_LIST_IMAGE_ADJUSTMENTS = window.VEHICLE_LIST_IMAGE_ADJUSTMENTS || {
+    default: {},
+    // Brand defaults apply to every model; vehicles can be keyed by model name or vehicle ID.
+    // Example: '기아': {default: {scale: 1}, vehicles: {'쏘렌토': {scale: 1.05, x: -0.02, y: 0}}}
+    brands: {
+        '현대': {default: {}, vehicles: {}},
+        '기아': {default: {}, vehicles: {}},
+        '쉐보레': {default: {}, vehicles: {}},
+        '르노': {default: {}, vehicles: {}},
+        'KGM': {default: {}, vehicles: {}},
+        'BMW': {default: {}, vehicles: {}},
+        '벤츠': {default: {}, vehicles: {}},
+        '아우디': {default: {}, vehicles: {}},
+        '폭스바겐': {default: {}, vehicles: {}},
+        '볼보': {default: {}, vehicles: {}},
+        '랜드로버': {default: {}, vehicles: {}},
+        '테슬라': {default: {}, vehicles: {}}
+    },
+    vehicles: {}
+};
 
 const vehicleListThumbBoundsCache = new Map();
 
@@ -1797,20 +1802,40 @@ function normalizeVehicleListImage(img) {
 
     // 리스트에서는 차종마다 높이 차이가 커도 가로 폭이 지나치게 작아지지 않게 합니다.
     // 기본은 피사체 가로폭을 맞추고, 너무 높은 차량만 높이 상한으로 제한합니다.
-    const targetW = cw * 0.92;
-    const targetH = ch * 0.84;
+    const brand = VEHICLE_LIST_IMAGE_ADJUSTMENTS.brands?.[img.dataset.vehicleBrand] || {};
+    const defaults = {...VEHICLE_LIST_IMAGE_ADJUSTMENTS.default, ...brand.default};
+    const targetW = cw * (defaults.fitWidth ?? 0.92);
+    const targetH = ch * (defaults.fitHeight ?? 0.84);
     let scale = targetW / boxW;
     if (boxH * scale > targetH) scale = targetH / boxH;
 
-    const displayW = nw * scale;
-    const displayH = nh * scale;
+    const adjustment = {
+        ...brand.vehicles?.[img.dataset.vehicleName],
+        ...brand.vehicles?.[img.dataset.vehicleKey],
+        ...VEHICLE_LIST_IMAGE_ADJUSTMENTS.vehicles?.[img.dataset.vehicleKey]
+    };
+    const requestedScale = Number(adjustment.scale ?? defaults.scale);
+    // Keep manual adjustments visible and editable in DevTools, separate from automatic fitting.
+    if (!img.style.getPropertyValue('--vehicle-image-scale')) {
+        if (Number.isFinite(requestedScale) && requestedScale > 0) {
+            img.style.setProperty('--vehicle-image-scale', String(requestedScale));
+        }
+        if (adjustment.x !== undefined) img.style.setProperty('--vehicle-image-x', String(Number(adjustment.x) || 0));
+        if (adjustment.y !== undefined) img.style.setProperty('--vehicle-image-y', String(Number(adjustment.y) || 0));
+    }
+    img.style.setProperty('--vehicle-image-holder-width', `${cw}px`);
+    img.style.setProperty('--vehicle-image-holder-height', `${ch}px`);
+    img.style.setProperty('--vehicle-image-origin', `${(bounds.left + bounds.right) * 50}% ${bounds.bottom * 100}%`);
+    const displayScale = scale;
+    const displayW = nw * displayScale;
+    const displayH = nh * displayScale;
     const subjectCenterX = ((bounds.left + bounds.right) / 2) * displayW;
     const subjectBottomY = bounds.bottom * displayH;
 
     // 차량 본체의 중심과 바닥선을 고정 앵커에 맞춥니다.
     // 우측 끝으로 몰려 보이지 않도록 기존보다 중심을 약간 왼쪽에 둡니다.
-    const targetCenterX = cw * 0.47;
-    const targetBottomY = ch * 0.89;
+    const targetCenterX = cw * ((defaults.centerX ?? 0.47) + (Number(defaults.x) || 0));
+    const targetBottomY = ch * ((defaults.bottomY ?? 0.89) + (Number(defaults.y) || 0));
 
     img.classList.remove('vehicle-thumb-fallback');
     img.style.width = `${displayW.toFixed(2)}px`;
@@ -2145,7 +2170,6 @@ function renderHomePopularVehicles() {
     hero.innerHTML = listVehicleImageHtml(heroVehicle, getVehicleId(heroVehicle, heroIndex));
 }
 
-
 // 홈 추천 차량: 이미지 캔버스가 아니라 실제 차량 피사체 기준으로 중앙 정렬
 // - 투명 배경의 alpha 영역을 분석해 피사체 중심점을 계산합니다.
 // - CSS의 width/height 110%는 그대로 유지하고 위치만 보정합니다.
@@ -2347,22 +2371,27 @@ function renderHomeContent() {
     renderHomeRecommendations();
 }
 
+let homeRecommendScrollY = 0;
+
 function openHomeRecommendModal() {
     const modal = document.getElementById('homeRecommendModal');
     const trigger = document.getElementById('homeRecommendLabel');
-    if (!modal) return;
+    if (!modal || !modal.hidden) return;
+    homeRecommendScrollY = window.scrollY;
     modal.hidden = false;
     trigger?.setAttribute('aria-expanded','true');
-    document.body.classList.add('home-modal-open');
+    document.documentElement.classList.add('home-modal-open');
+    window.scrollTo(0, homeRecommendScrollY);
 }
 
 function closeHomeRecommendModal() {
     const modal = document.getElementById('homeRecommendModal');
     const trigger = document.getElementById('homeRecommendLabel');
-    if (!modal) return;
+    if (!modal || modal.hidden) return;
     modal.hidden = true;
     trigger?.setAttribute('aria-expanded','false');
-    document.body.classList.remove('home-modal-open');
+    document.documentElement.classList.remove('home-modal-open');
+    window.scrollTo(0, homeRecommendScrollY);
 }
 
 function selectHomeRecommend(type) {
@@ -2409,7 +2438,7 @@ function renderVehicleList() {
         const minMonthly = getMinMonthlyPrice(vehicle, vehicleProductFilter);
         const productBadge = getListProductLabel(vehicle);
         return `
-            <button class="vehicle-list-card" type="button" onclick="openVehicleDetail('${escapeHtml(vehicleKey)}', true)">
+            <div class="vehicle-list-item"><button class="vehicle-list-card" type="button" onclick="openVehicleDetail('${escapeHtml(vehicleKey)}', true)">
                 <div class="vehicle-list-copy">
                     <div class="vehicle-list-name">
                         <span>${escapeHtml(getVehicleName(vehicle))}</span>
@@ -2423,11 +2452,12 @@ function renderVehicleList() {
                 </div>
                 <span class="vehicle-list-arrow" aria-hidden="true"></span>
                 <div class="vehicle-list-image">${listVehicleImageHtml(vehicle, vehicleKey)}</div>
-            </button>
+            </button><button class="vehicle-compare-select" type="button" data-compare-vehicle="${escapeHtml(vehicleKey)}" aria-pressed="${agCompareIds.includes(vehicleKey)}">${agCompareIds.includes(vehicleKey)?'✓ 비교 선택됨':'+ 비교하기'}</button></div>
 
         `;
     }).join('');
 
+    agRenderCompareTray();
     requestAnimationFrame(() => normalizeVehicleListThumbnails(list));
 }
 
@@ -2505,9 +2535,7 @@ function getOptionImage(option) {
     const bmwFallback = {
         'BMW 커브드 디스플레이': './images/options/BMW/BMW 커브드 디스플레이.webp',
         '드라이빙 어시스턴트 프로페셔널': './images/options/BMW/드라이빙 어시스턴트 프로페셔널.webp',
-        '드라이빙 어시스턴트': './images/options/BMW/드라이빙 어시스턴트 프로페셔널.webp',
         '파킹 어시스턴트 플러스': './images/options/BMW/파킹 어시스턴트 플러스.webp',
-        '파킹 어시스턴트': './images/options/BMW/파킹 어시스턴트 플러스.webp',
         '하이빔 어시스턴트': './images/options/BMW/하이빔 어시스턴트.webp',
         'BMW 디지털 키': './images/options/BMW/BMW 디지털 키.webp',
         'BMW 디지털 키 플러스': './images/options/BMW/BMW 디지털 키.webp',
@@ -2528,91 +2556,34 @@ function isStandardOption(option) {
     return raw === true || raw === 1 || ['1','Y','YES','TRUE','기본','기본옵션','포함'].includes(String(raw).trim().toUpperCase());
 }
 
-/*
- * 임시 옵션 데이터
- * - DB(vehicle_options)에 옵션이 있으면 DB 값을 우선 사용합니다.
- * - DB가 비어 있을 때만 차량 정보 화면을 확인하기 위한 샘플로 표시합니다.
- * - 실제 국내 출고 사양은 연식/트림에 따라 달라질 수 있습니다.
- */
-const TEMP_OPTION_SETS = {
-    IX1: [
-        ['BMW 커브드 디스플레이', '운전자 중심의 와이드 디스플레이에서 차량 정보와 주요 기능을 확인합니다.'],
-        ['BMW 헤드업 디스플레이', '주행 및 내비게이션 정보를 운전자 전방 시야에 표시합니다.'],
-        ['드라이빙 어시스턴트 프로페셔널', '차선 및 앞차와의 안전 거리를 유지하도록 보조하는 주행 지원 기능입니다.'],
-        ['파킹 어시스턴트 플러스', '카메라와 센서를 활용해 주차 시 주변 확인과 조작을 보조합니다.'],
-        ['하이빔 어시스턴트', '주변 교통 상황에 따라 하이빔 사용을 자동으로 보조합니다.'],
-        ['BMW 디지털 키', '호환 스마트폰을 차량 키처럼 활용할 수 있는 기능입니다.'],
-        ['무선 충전 트레이', '센터 콘솔에서 호환 스마트폰을 무선으로 충전할 수 있습니다.'],
-        ['BMW 아이코닉 사운드 일렉트릭', '전기 주행 상황에 맞춰 BMW 특유의 주행 사운드를 제공합니다.']
-    ],
-    SERIES1: [
-        ['BMW 커브드 디스플레이', 'BMW 오퍼레이팅 시스템과 주요 차량 정보를 통합해 보여주는 디스플레이입니다.'],
-        ['BMW 헤드업 디스플레이', '주행 정보와 내비게이션 안내를 전방 시야에 표시합니다.'],
-        ['파킹 어시스턴트 플러스', '카메라 및 초음파 센서를 활용해 주차와 좁은 공간 주행을 보조합니다.'],
-        ['하이빔 어시스턴트', '야간 주행 시 주변 차량을 고려해 하이빔 사용을 보조합니다.'],
-        ['BMW 디지털 키 플러스', '호환 스마트폰을 차량 키로 사용할 수 있는 기능입니다.'],
-        ['M 스포츠 시트', '스포티한 주행 시 몸을 안정적으로 지지하도록 설계된 시트입니다.'],
-        ['BMW 오퍼레이팅 시스템 9', '내비게이션과 차량 설정, 디지털 서비스를 직관적으로 이용할 수 있습니다.']
-    ],
-    SERIES2: [
-        ['BMW 커브드 디스플레이', '운전자 중심의 디지털 콕핏에서 차량 기능과 콘텐츠를 확인합니다.'],
-        ['스포츠 시트', '다이내믹한 주행에서도 안정적인 착좌와 지지력을 제공합니다.'],
-        ['드라이빙 어시스턴트 프로페셔널', '차선 및 앞차와의 거리를 유지하도록 보조합니다.'],
-        ['파킹 어시스턴트 플러스', '카메라와 초음파 센서 기반으로 주차 시 넓은 시야를 제공합니다.'],
-        ['BMW 디지털 키', '호환 스마트폰을 자동차 키처럼 이용할 수 있습니다.'],
-        ['어댑티브 M 서스펜션', '노면과 주행 상황에 따라 감쇠력을 조정해 주행 안정성을 높입니다.'],
-        ['M 스포츠 스티어링', '보다 직접적이고 스포티한 조향감을 제공합니다.']
-    ],
-    ELECTRIC: [
-        ['BMW 커브드 디스플레이', '차량 상태와 전기 주행 관련 정보를 한눈에 확인할 수 있습니다.'],
-        ['BMW 헤드업 디스플레이', '주요 주행 정보를 전방 시야에 표시합니다.'],
-        ['드라이빙 어시스턴트', '차선 및 전방 교통 상황을 감지해 운전을 보조합니다.'],
-        ['파킹 어시스턴트', '주차 및 저속 이동 시 주변 확인을 보조합니다.'],
-        ['BMW 디지털 키', '호환 스마트폰을 차량 키로 사용할 수 있습니다.'],
-        ['무선 Apple CarPlay / Android Auto', '호환 스마트폰의 주요 기능을 차량에서 무선으로 사용할 수 있습니다.']
-    ],
-    COMMON: [
-        ['BMW 커브드 디스플레이', '주요 차량 정보와 인포테인먼트 기능을 직관적으로 확인할 수 있습니다.'],
-        ['BMW 헤드업 디스플레이', '주요 주행 정보를 운전자 전방 시야에 표시합니다.'],
-        ['드라이빙 어시스턴트', '전방 및 차선 상황을 감지해 안전 운전을 보조합니다.'],
-        ['파킹 어시스턴트', '주차 시 센서와 카메라를 활용해 운전을 보조합니다.'],
-        ['BMW 디지털 키', '호환 스마트폰을 차량 키처럼 활용할 수 있습니다.'],
-        ['컴포트 액세스', '차량 키를 직접 꺼내지 않고도 편리하게 승하차할 수 있도록 지원합니다.']
-    ]
-};
-
-const TEMP_OPTION_IMAGES = {
-    'BMW 커브드 디스플레이': './images/options/BMW/BMW 커브드 디스플레이.webp',
-    '드라이빙 어시스턴트 프로페셔널': './images/options/BMW/드라이빙 어시스턴트 프로페셔널.webp',
-    '드라이빙 어시스턴트': './images/options/BMW/드라이빙 어시스턴트 프로페셔널.webp',
-    '파킹 어시스턴트 플러스': './images/options/BMW/파킹 어시스턴트 플러스.webp',
-    '파킹 어시스턴트': './images/options/BMW/파킹 어시스턴트 플러스.webp',
-    '하이빔 어시스턴트': './images/options/BMW/하이빔 어시스턴트.webp',
-    'BMW 디지털 키': './images/options/BMW/BMW 디지털 키.webp',
-    'BMW 디지털 키 플러스': './images/options/BMW/BMW 디지털 키.webp',
-    '무선 충전 트레이': './images/options/BMW/무선 충전 트레이.webp'
-};
-
-function getTemporaryOptions(vehicle, trim) {
-    const vehicleName = String(getVehicleName(vehicle) || '').replace(/\s+/g, '').toUpperCase();
-    const trimName = String(trim?.name || '').replace(/\s+/g, '').toUpperCase();
-    let source = TEMP_OPTION_SETS.COMMON;
-
-    if (vehicleName.includes('IX1')) source = TEMP_OPTION_SETS.IX1;
-    else if (vehicleName.includes('1시리즈') || /^1SERIES/.test(vehicleName) || trimName.includes('120')) source = TEMP_OPTION_SETS.SERIES1;
-    else if (vehicleName.includes('2시리즈') || /^2SERIES/.test(vehicleName) || trimName.includes('220') || trimName.includes('M235')) source = TEMP_OPTION_SETS.SERIES2;
-    else if (vehicleName.startsWith('I') || vehicleName.includes('IX')) source = TEMP_OPTION_SETS.ELECTRIC;
-
-    return source.map((item, index) => ({
-        option_name: item[0],
-        description: item[1],
-        option_price: 0,
-        is_standard: 1,
-        is_active: 1,
-        sort_order: index + 1,
-        is_temporary: 1,
-        image_path: TEMP_OPTION_IMAGES[item[0]] || ''
-    }));
+function renderVehicleOptionCards(options) {
+    return options.map((option, index) => {
+        const name = getOptionName(option, index);
+        const desc = getOptionDescription(option);
+        const price = getOptionPrice(option);
+        const standard = isStandardOption(option);
+        const image = getOptionImage(option);
+        const imageNote = getOptionField(option, ['image_note'], '');
+        const imageWidth = Math.floor(Number(getOptionField(option, ['image_width'], 0)));
+        const imageHeight = Math.floor(Number(getOptionField(option, ['image_height'], 0)));
+        const imageSize = imageWidth > 0 && imageHeight > 0 ? ` width="${imageWidth}" height="${imageHeight}"` : '';
+        return `
+            <div class="vehicle-info-option ${image ? 'has-image' : ''}">
+                ${image ? `<div class="vehicle-info-option-image"><img src="${escapeHtml(image)}" alt="${escapeHtml(name)}"${imageSize} loading="lazy" decoding="async" onerror="this.closest('.vehicle-info-option-image').remove()"></div>` : ''}
+                ${image && imageNote ? `<div class="vehicle-info-option-image-note">${escapeHtml(imageNote)}</div>` : ''}
+                <div class="vehicle-info-option-body">
+                    <div class="vehicle-info-option-top">
+                        <div class="vehicle-info-option-name">
+                            ${escapeHtml(name)}
+                            ${standard ? '<span class="vehicle-info-option-badge">기본</span>' : ''}
+                        </div>
+                        ${price ? `<div class="vehicle-info-option-price">${escapeHtml(price)}</div>` : ''}
+                    </div>
+                    ${desc ? `<div class="vehicle-info-option-desc">${escapeHtml(desc)}</div>` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
 function renderVehicleInfo(vehicleKey) {
@@ -2626,11 +2597,15 @@ function renderVehicleInfo(vehicleKey) {
         return active === undefined || active === null || Number(active) !== 0;
     }) : [];
     const usingTemporaryOptions = dbOptions.length === 0;
-    const options = usingTemporaryOptions ? getTemporaryOptions(vehicle, trim) : dbOptions;
+    const options = dbOptions;
+    const modelOptions = Array.isArray(trim?.model_options) ? trim.model_options.filter(option => Number(option?.is_active ?? 1) !== 0) : [];
     const usingOfficialSiteSummary = options.some(option => Number(option?.is_official_site_summary || 0) === 1);
 
     const trimName = trim?.name || '트림 미선택';
-    const trimDescription = String(trim?.description || '').trim();
+    // Old seeded trim summaries can contain placeholder specifications.
+    const trimDescription = String(trim?.description || '').split(/\r?\n/)
+        .filter(line => !/^\s*주요\s*옵션\s*\(\s*임시\s*\)\s*[:：]/.test(line))
+        .join('\n').trim();
 
     content.innerHTML = `
         <div class="vehicle-info-hero">
@@ -2640,48 +2615,34 @@ function renderVehicleInfo(vehicleKey) {
         </div>
 
         <section class="vehicle-info-card">
-            <h3 class="vehicle-info-section-title">${escapeHtml(trimName)}</h3>
+            <h3 class="vehicle-info-section-title">${usingOfficialSiteSummary ? '주요 사양 및 옵션' : escapeHtml(trimName)}</h3>
             <p class="vehicle-info-section-desc">
                 ${usingOfficialSiteSummary
-                    ? '제조사 공식 사이트의 공개 정보를 바탕으로 주요 사양과 기능을 정리했습니다. 실제 적용 여부는 연식·세부 트림·선택 사양에 따라 달라질 수 있습니다.'
+                    ? '차종별 주요 사양입니다. 실제 적용 여부와 기본·선택 구분은 연식·트림·패키지에 따라 달라집니다.'
                     : (usingTemporaryOptions
-                        ? '임시 옵션 정보입니다. 실제 국내 출고 사양은 연식·트림에 따라 달라질 수 있습니다.'
+                        ? '상세 사양은 담당자 상담으로 확인해 주세요.'
                         : '선택한 트림에 포함되거나 등록된 옵션입니다.')}
             </p>
             ${trimDescription ? `<div class="vehicle-info-trim-description">${escapeHtml(trimDescription)}</div>` : ''}
 
             ${options.length ? `
                 <div class="vehicle-info-option-list">
-                    ${options.map((option, index) => {
-                        const name = getOptionName(option, index);
-                        const desc = getOptionDescription(option);
-                        const price = getOptionPrice(option);
-                        const standard = isStandardOption(option);
-                        const image = getOptionImage(option);
-                        return `
-                            <div class="vehicle-info-option ${image ? 'has-image' : ''}">
-                                ${image ? `<div class="vehicle-info-option-image"><img src="${escapeHtml(image)}" alt="${escapeHtml(name)}" loading="lazy" onerror="this.closest('.vehicle-info-option-image').remove()"></div>` : ''}
-                                <div class="vehicle-info-option-body">
-                                <div class="vehicle-info-option-top">
-                                    <div class="vehicle-info-option-name">
-                                        ${escapeHtml(name)}
-                                        ${standard ? '<span class="vehicle-info-option-badge">기본</span>' : ''}
-                                    </div>
-                                    ${price ? `<div class="vehicle-info-option-price">${escapeHtml(price)}</div>` : ''}
-                                </div>
-                                ${desc ? `<div class="vehicle-info-option-desc">${escapeHtml(desc)}</div>` : ''}
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
+                    ${renderVehicleOptionCards(options)}
                 </div>
             ` : `
                 <div class="vehicle-info-empty">
                     이 트림에 등록된 옵션 정보가 없습니다.<br>
-                    <strong>car_vehicle_options</strong>에 트림 옵션을 등록하면 여기에 표시됩니다.
+                    자세한 사양은 담당자 상담으로 안내해드립니다.
                 </div>
             `}
         </section>
+        ${modelOptions.length ? `
+            <section class="vehicle-info-card">
+                <h3 class="vehicle-info-section-title">차량 주요 사양</h3>
+                <p class="vehicle-info-section-desc">차종별 주요 사양입니다. 실제 적용 여부와 기본·선택 구분은 연식·트림·패키지에 따라 달라집니다.</p>
+                <div class="vehicle-info-option-list">${renderVehicleOptionCards(modelOptions)}</div>
+            </section>
+        ` : ''}
     `;
 }
 
@@ -2716,14 +2677,14 @@ function openVehicleDetail(vehicleKey, useListPrice = false) {
     // 홈 전용 배경/하단 여백 규칙이 차량 상세에 남지 않도록 먼저 해제
     document.body.classList.remove('home-main-active');
     document.body.classList.add('detail-mode');
-    ['homeView','vehicleListView','quickEstimateView','faqView','mypageView','myInquiriesView','myEstimatesView','myVehiclesView','vehicleInfoView'].forEach(id => {
+    ['homeView','vehicleListView','quickEstimateView','faqView','mypageView','myInquiriesView','myEstimatesView','myVehiclesView','vehicleInfoView','savedQuotesView'].forEach(id => {
         const view = document.getElementById(id);
         if (view) view.hidden = true;
     });
     document.getElementById('vehicleDetailView').hidden = false;
     resetPageScroll();
 
-    history.replaceState({vehicleKey:String(vehicleKey)}, '', `#vehicle=${encodeURIComponent(vehicleKey)}`);
+    // URL changes are managed by the shared screen history controller.
 }
 
 function closeVehicleDetail() {
@@ -2732,7 +2693,7 @@ function closeVehicleDetail() {
     document.getElementById('vehicleInfoView').hidden = true;
     document.getElementById('app').innerHTML = '';
     quoteStates.clear();
-    history.replaceState(null, '', location.pathname + location.search);
+    // URL changes are managed by the shared screen history controller.
     if (vehicleDetailReturnView === 'mypage-vehicles') openMypageVehiclePage(mypageVehiclePanelMode || 'recent');
     else openMainView(vehicleDetailReturnView);
 }
@@ -2814,7 +2775,7 @@ function bindVehicleListControls() {
 async function loadData() {
     const status = document.getElementById('status');
     try {
-        const response = await fetch(API_URL, { cache:'no-store' });
+        const response = await agFetch(API_URL, { cache:'no-store' });
         if (!response.ok) throw new Error(`API 오류: HTTP ${response.status}`);
         const raw = await response.json();
         allVehicles = normalizeData(raw);
@@ -2853,7 +2814,6 @@ bindVehicleListControls();
 bindHomeQnaControls();
 loadData();
 openMainView('home', false);
-
 
 // ============================================================
 // 하단 3메뉴 화면 전환
@@ -2925,6 +2885,8 @@ function openMainView(name, updateUrl = true){
     if (myEstimatesView) myEstimatesView.hidden = true;
     if (myInquiriesView) myInquiriesView.hidden = true;
     if (myVehiclesView) myVehiclesView.hidden = true;
+    const savedQuotesView = document.getElementById('savedQuotesView');
+    if (savedQuotesView) savedQuotesView.hidden = true;
     document.body.classList.remove('detail-mode');
 
     if (name === 'home') {
@@ -2955,7 +2917,6 @@ function openMainView(name, updateUrl = true){
     setBottomNavVisible(true);
     resetPageScroll();
 }
-
 
 function openMypageQna(){
     openMainView('faq');
@@ -3113,52 +3074,48 @@ function bindHomeQnaControls(){
     const inquirySubmit = document.getElementById('qnaInquirySubmit');
     const inquiryResult = document.getElementById('qnaInquiryResult');
     const inquiryCategory = document.getElementById('qnaInquiryCategory');
+    let inquirySending = false;
     const syncQuestionState = () => {
         const length = String(input?.value || '').length;
         if (count) count.textContent = String(length);
-        if (submit) submit.disabled = length < 5;
+        if (submit) submit.disabled = inquirySending || length < 5;
         if (result) result.classList.remove('show');
     };
     const syncInquiryState = () => {
         const length = String(inquiryInput?.value || '').length;
         if (inquiryCount) inquiryCount.textContent = String(length);
-        if (inquirySubmit) inquirySubmit.disabled = length < 5;
+        if (inquirySubmit) inquirySubmit.disabled = inquirySending || length < 5;
         if (inquiryResult) inquiryResult.classList.remove('show');
     };
     input?.addEventListener('input', syncQuestionState);
     inquiryInput?.addEventListener('input', syncInquiryState);
-    submit?.addEventListener('click', async () => {
-        const question = String(input?.value || '').trim();
-        if (question.length < 5) return;
-        await saveInquiry(question);
-        input.value = '';
-        syncQuestionState();
-        if (result) {
-            result.textContent = '문의가 접수되었습니다. 마이페이지 > 문의하기에서 내역을 확인할 수 있습니다.';
-            result.classList.add('show');
+    const sendQuestion = async (field, button, notice, category = '') => {
+        const message=String(field?.value || '').trim();
+        if(message.length<5 || inquirySending || button.disabled)return;
+        inquirySending=true;
+        if(submit)submit.disabled=true;
+        if(inquirySubmit)inquirySubmit.disabled=true;
+        if(notice){notice.textContent='문의 접수 중입니다.';notice.classList.add('show');notice.setAttribute('role','status');}
+        try {
+            await saveInquiry(message,category);
+            if (String(field.value || '').trim() === message) {
+                field.value='';
+                if(inquiryCategory && field===inquiryInput && inquiryCategory.value===category)inquiryCategory.value='';
+            }
+            syncQuestionState();syncInquiryState();
+            if(notice){notice.textContent='문의가 접수되었습니다. 마이페이지 > 문의 내역에서 확인할 수 있습니다.';notice.classList.add('show');}
+        }catch(error){
+            if(notice){notice.textContent=error.message || '문의 접수에 실패했습니다. 작성 내용을 유지했습니다. 다시 시도해 주세요.';notice.classList.add('show');notice.setAttribute('role','alert');}
+        }finally{
+            inquirySending=false;
+            if(submit)submit.disabled=String(input?.value||'').trim().length<5;
+            if(inquirySubmit)inquirySubmit.disabled=String(inquiryInput?.value||'').trim().length<5;
         }
-    });
-    inquirySubmit?.addEventListener('click', async () => {
-        const question = String(inquiryInput?.value || '').trim();
-        if (question.length < 5) return;
-        const category = String(inquiryCategory?.value || '').trim();
-        const payloadQuestion = category ? `[${category}] ${question}` : question;
-        await saveInquiry(payloadQuestion);
-        if (inquiryInput) inquiryInput.value = '';
-        if (inquiryCategory) inquiryCategory.value = '';
-        syncInquiryState();
-        if (inquiryResult) {
-            inquiryResult.textContent = '문의가 접수되었습니다. 마이페이지 > 문의하기에서 내역을 확인할 수 있습니다.';
-            inquiryResult.classList.add('show');
-        }
-    });
-
+    };
+    submit?.addEventListener('click',()=>sendQuestion(input,submit,result));
+    inquirySubmit?.addEventListener('click',()=>sendQuestion(inquiryInput,inquirySubmit,inquiryResult,String(inquiryCategory?.value||'')));
 
 }
-
-
-
-
 
 // ============================================================
 // 마이페이지 - 로그인 회원의 내 견적
@@ -3171,8 +3128,13 @@ function productTypeLabel(value) {
     if (value === 'LEASE') return '리스';
     return '';
 }
+function isInquiryCompleted(item) {
+    const status = String(item.status || '').toUpperCase();
+    return status ? status === 'ANSWERED' : Boolean(String(item.answer || '').trim());
+}
+
 function isNewInquiry(item) {
-    return item.status ? item.status === 'NEW' : !String(item.answer || '').trim();
+    return !isInquiryCompleted(item);
 }
 
 function updateMyEstimateCounts(counts = {}) {
@@ -3205,18 +3167,25 @@ function updateMyEstimateCounts(counts = {}) {
 }
 let myEstimateRecordCache = [];
 let myEstimateRecordFilter = 'ALL';
+let myEstimateStatusFilter = 'ALL';
+
+function estimateViewTitle(filter) {
+    return {ALL:'내 견적', ACTIVE:'상담중', NEW:'신규 견적', CONTACTED:'상담중', REVIEWING:'심사중', APPROVED:'승인', CONTRACTED:'계약완료', CANCELED:'취소'}[filter] || '내 견적';
+}
 
 function estimateRecordFilterMatch(item, filter) {
     const status = item.status === 'DONE' ? 'APPROVED' : item.status;
     if (filter === 'ALL') return true;
     if (filter === 'CONTRACTED') return status === 'CONTRACTED';
-    if (filter === 'ACTIVE') return ['NEW','CONTACTED','REVIEWING','APPROVED'].includes(status);
+    if (filter === 'ACTIVE') return ['CONTACTED','REVIEWING','APPROVED'].includes(status);
     return true;
 }
 
 function updateEstimateRecordTabs(estimates = []) {
     const all = estimates.length;
-    const active = estimates.filter(item => estimateRecordFilterMatch(item, 'ACTIVE')).length;
+    const active = estimates.filter(item => estimateRecordFilterMatch(item, 'ACTIVE') &&
+        (myEstimateRecordFilter !== 'ACTIVE' || myEstimateStatusFilter === 'ALL' ||
+            (item.status === 'DONE' ? 'APPROVED' : item.status) === myEstimateStatusFilter)).length;
     const contracted = estimates.filter(item => estimateRecordFilterMatch(item, 'CONTRACTED')).length;
     const values = {estimateTabAll:all, estimateTabActive:active, estimateTabContracted:contracted};
     Object.entries(values).forEach(([id,value]) => { const el=document.getElementById(id); if(el) el.textContent=String(value); });
@@ -3245,12 +3214,15 @@ function updateMypageOverview(id, count, unit) {
     if (target) target.innerHTML = `${Number(count) || 0}<small>${unit}</small>`;
 }
 function renderMyEstimates(estimates = [], emptyLabel = '해당 상태') {
-    const content = document.getElementById('myEstimatesPageContent') || document.getElementById('myEstimatesContent');
+    const content = document.getElementById('myEstimatesPageContent');
     if (!content) return;
     myEstimateRecordCache = estimates.slice();
     updateEstimateRecordTabs(myEstimateRecordCache);
 
-    const filtered = myEstimateRecordCache.filter(item => estimateRecordFilterMatch(item, myEstimateRecordFilter));
+    const filtered = myEstimateRecordCache.filter(item =>
+        estimateRecordFilterMatch(item, myEstimateRecordFilter) &&
+        (myEstimateStatusFilter === 'ALL' || (item.status === 'DONE' ? 'APPROVED' : item.status) === myEstimateStatusFilter)
+    );
     if (!filtered.length) {
         content.innerHTML = mypageEmptyCard('estimate', `${emptyLabel} 견적이 없습니다`, '차량을 살펴보고 조건에 맞는 견적을 신청해 보세요.', 'vehicle', '차량 둘러보기');
         return;
@@ -3291,10 +3263,15 @@ function renderMyEstimates(estimates = [], emptyLabel = '해당 상태') {
                         ${item.subtitle ? `<div><dt>세부 모델</dt><dd>${escapeEstimateText(item.subtitle)}</dd></div>` : ''}
                         <div><dt>이용 방식</dt><dd>${escapeEstimateText(product)}</dd></div>
                         <div><dt>계약 기간</dt><dd>${escapeEstimateText(month)}</dd></div>
+                        ${item.type==='DIRECT'?`<div><dt>외장색상</dt><dd>${escapeEstimateText(item.color_name||'-')}</dd></div><div><dt>선납률</dt><dd>${escapeEstimateText(String(item.prepayment_rate??0))}%</dd></div><div><dt>연 주행거리</dt><dd>${Number(item.annual_mileage)===0?'무제한':Number(item.annual_mileage).toLocaleString('ko-KR')+'km'}</dd></div>`:''}
+                        ${item.registration_region?`<div><dt>등록 지역</dt><dd>${escapeEstimateText(item.registration_region)}</dd></div>`:''}
+                        ${item.consultant_name?`<div><dt>담당자</dt><dd>${escapeEstimateText(item.consultant_name)}</dd></div>`:''}
+                        ${item.contracted_at?`<div><dt>계약일</dt><dd>${escapeEstimateText(item.contracted_at)}</dd></div>`:''}
                         <div class="price-row"><dt>월 납입금</dt><dd>${escapeEstimateText(monthly)}</dd></div>
                         <div><dt>견적 상태</dt><dd>${escapeEstimateText(item.status_label)}</dd></div>
                         <div><dt>신청일</dt><dd>${escapeEstimateText(dateText)}</dd></div>
                     </dl>
+                    <div class="estimate-consultation-actions"><a href="./consultation.php?type=${item.type==='QUICK'?'QUICK':'DIRECT'}&amp;id=${Number(item.id)||0}">${item.consultant_name?'담당자 확인 · 카카오톡 상담':'신청 내역 · 담당자 확인'}</a>${/^01[016789]\d{7,8}$/.test(String(item.consultation_phone||'').replace(/\D/g,''))?`<a href="tel:${String(item.consultation_phone).replace(/\D/g,'')}">담당자에게 전화하기</a>`:''}</div>
                 </div>
             </details>
         </article>`;
@@ -3308,7 +3285,7 @@ async function loadMyEstimates(showError = false, statusFilter = 'ALL', titleLab
     }
 
     try {
-        const response = await fetch('./api/member-estimates.php', {
+        const response = await agFetch('./api/member-estimates.php', {
             credentials:'same-origin',
             cache:'no-store'
         });
@@ -3316,7 +3293,7 @@ async function loadMyEstimates(showError = false, statusFilter = 'ALL', titleLab
 
         if (!response.ok || !data.ok) {
             if (showError) {
-                const content = document.getElementById('myEstimatesPageContent') || document.getElementById('myEstimatesContent');
+                const content = document.getElementById('myEstimatesPageContent');
                 if (content) {
                     content.innerHTML = `<div class="my-estimates-empty">${escapeEstimateText(data.message || '내 견적을 불러오지 못했습니다.')}</div>`;
                 }
@@ -3330,19 +3307,24 @@ async function loadMyEstimates(showError = false, statusFilter = 'ALL', titleLab
         const normalizeEstimateStatus = status => status === 'DONE' ? 'APPROVED' : status;
         const filtered = statusFilter === 'ALL'
             ? allEstimates
-            : allEstimates.filter(item => normalizeEstimateStatus(item.status) === statusFilter);
+            : statusFilter === 'ACTIVE'
+                ? allEstimates.filter(item => estimateRecordFilterMatch(item, 'ACTIVE'))
+                : allEstimates.filter(item => normalizeEstimateStatus(item.status) === statusFilter);
 
-        renderMyEstimates(filtered, titleLabel);
+        renderMyEstimates(allEstimates, titleLabel);
         return filtered;
     } catch (error) {
         if (showError) {
-            const content = document.getElementById('myEstimatesPageContent') || document.getElementById('myEstimatesContent');
+            const content = document.getElementById('myEstimatesPageContent');
             if (content) content.innerHTML = '<div class="my-estimates-empty">내 견적을 불러오지 못했습니다.</div>';
         }
         return [];
     }
 }
 async function openMyEstimates(statusFilter = 'ALL', titleLabel = '내 견적') {
+    if (['CONTACTED','REVIEWING','APPROVED','DONE'].includes(statusFilter)) statusFilter = 'ACTIVE';
+    if (statusFilter === 'NEW') statusFilter = 'ALL';
+    titleLabel = estimateViewTitle(statusFilter);
     if (!currentMember) {
         openMemberModal('login');
         return;
@@ -3361,7 +3343,8 @@ async function openMyEstimates(statusFilter = 'ALL', titleLabel = '내 견적') 
     if (vehicleView) vehicleView.hidden = true;
     if (mypageView) mypageView.hidden = true;
     view.hidden = false;
-    if (title) title.textContent = titleLabel === '내 견적 전체' ? '내 견적' : (titleLabel || '내 견적');
+    if (title) title.textContent = estimateViewTitle(statusFilter);
+    myEstimateStatusFilter = statusFilter === 'ACTIVE' ? 'ALL' : statusFilter;
     myEstimateRecordFilter = statusFilter === 'CONTRACTED' ? 'CONTRACTED' : (statusFilter === 'ALL' ? 'ALL' : 'ACTIVE');
     document.querySelectorAll('[data-estimate-record-filter]').forEach(tab => tab.classList.toggle('active', tab.dataset.estimateRecordFilter === myEstimateRecordFilter));
     content.innerHTML = '<div class="my-estimates-empty">견적 정보를 불러오는 중입니다.</div>';
@@ -3385,9 +3368,16 @@ document.querySelectorAll('[data-estimate-status]').forEach(button => {
 document.getElementById('estimateRecordTabs')?.addEventListener('click', event => {
     const button = event.target.closest('[data-estimate-record-filter]');
     if (!button) return;
+    myEstimateStatusFilter = 'ALL';
     myEstimateRecordFilter = button.dataset.estimateRecordFilter || 'ALL';
     document.querySelectorAll('[data-estimate-record-filter]').forEach(tab => tab.classList.toggle('active', tab === button));
-    renderMyEstimates(myEstimateRecordCache, myEstimateRecordFilter === 'CONTRACTED' ? '계약완료' : myEstimateRecordFilter === 'ACTIVE' ? '상담중' : '전체');
+    const title = estimateViewTitle(myEstimateRecordFilter);
+    const heading = document.getElementById('myEstimatesPageTitle');
+    if (heading) heading.textContent = title;
+    renderMyEstimates(myEstimateRecordCache, title);
+    if (history.state?.ag_view?.kind === 'estimates') {
+        history.replaceState({...history.state, ag_view:{kind:'estimates', filter:myEstimateRecordFilter, title}}, '', location.href);
+    }
 });
 
 document.getElementById('inquiryRecordTabs')?.addEventListener('click', event => {
@@ -3408,24 +3398,12 @@ function closeMyEstimates() {
     resetPageScroll();
 }
 
+// ============================================================
+// Q&A 문의 접수 / 마이페이지 문의 내역
+// ============================================================
 
-// ============================================================
-// Q&A 문의 저장 / 마이페이지 문의 내역 / 관리자 답변
-// 단일 HTML 테스트 환경에서는 브라우저 localStorage에 저장
-// 관리자 테스트: 파일 URL 뒤에 ?admin=1 을 붙이면 관리자 문의 관리 버튼 표시
-// ============================================================
-const INQUIRY_STORAGE_KEY = 'autogenie_inquiries_v1';
-const GLOBAL_INQUIRY_STORAGE_KEY = 'autogenie_inquiries_admin_v1';
 const INQUIRY_GUEST_KEY_STORAGE = 'autogenie_inquiry_guest_key_v1';
 let inquiryRemoteCache = [];
-
-function getInquiryMemberKey() {
-    return String(currentMember?.email || currentMember?.id || 'guest');
-}
-
-function getInquiryStorageKey(memberKey = getInquiryMemberKey()) {
-    return `${INQUIRY_STORAGE_KEY}:${memberKey}`;
-}
 
 function getInquiryGuestKey() {
     if (currentMember) return '';
@@ -3437,42 +3415,13 @@ function getInquiryGuestKey() {
     return key;
 }
 
-function getMyInquiriesLocal() {
-    try {
-        const raw = localStorage.getItem(getInquiryStorageKey());
-        const items = raw ? JSON.parse(raw) : [];
-        return Array.isArray(items) ? items : [];
-    } catch (error) {
-        return [];
-    }
-}
-
-function getMyInquiries() {
-    // 문의 목록의 기준은 서버 DB입니다. 삭제한 문의를 로컬 백업에서 복원하지 않습니다.
-    return inquiryRemoteCache;
-}
-
-async function migrateLegacyInquiries() {
-    const items = getMyInquiriesLocal();
-    if (!items.length) return;
-    try {
-        await fetch('./api/inquiry-migrate.php', {
-            method: 'POST',
-            credentials: 'same-origin',
-            cache: 'no-store',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({items, guest_key: getInquiryGuestKey()})
-        });
-    } catch (error) {}
-}
-
 async function loadMyInquiriesFromServer() {
     // 이전 구현은 목록 조회마다 localStorage 문의를 DB로 다시 이관하여
     // 관리자에서 삭제한 문의를 재생성했습니다. 이관은 조회 경로에서 실행하지 않습니다.
     try {
         const guest = getInquiryGuestKey();
         const url = './api/inquiry-list.php' + (guest ? `?guest_key=${encodeURIComponent(guest)}&_=${Date.now()}` : `?_=${Date.now()}`);
-        const response = await fetch(url, {credentials:'same-origin', cache:'no-store'});
+        const response = await agFetch(url, {credentials:'same-origin', cache:'no-store'});
         const data = await response.json();
         if (response.ok && data?.ok && Array.isArray(data.inquiries)) {
             inquiryRemoteCache = data.inquiries;
@@ -3486,83 +3435,16 @@ async function loadMyInquiriesFromServer() {
     return inquiryRemoteCache;
 }
 
-function getAllAdminInquiries() {
-    try {
-        const raw = localStorage.getItem(GLOBAL_INQUIRY_STORAGE_KEY);
-        const items = raw ? JSON.parse(raw) : [];
-        return Array.isArray(items) ? items : [];
-    } catch (error) {
-        return [];
-    }
-}
-
-function setAllAdminInquiries(items) {
-    localStorage.setItem(GLOBAL_INQUIRY_STORAGE_KEY, JSON.stringify(Array.isArray(items) ? items : []));
-}
-
-function syncLegacyInquiriesToAdmin() {
-    const adminItems = getAllAdminInquiries();
-    const knownIds = new Set(adminItems.map(item => item.id));
-    let changed = false;
-
-    for (let i = 0; i < localStorage.length; i += 1) {
-        const key = localStorage.key(i);
-        if (!key || !key.startsWith(`${INQUIRY_STORAGE_KEY}:`)) continue;
-        const memberKey = key.slice(`${INQUIRY_STORAGE_KEY}:`.length) || 'guest';
-        try {
-            const list = JSON.parse(localStorage.getItem(key) || '[]');
-            if (!Array.isArray(list)) continue;
-            list.forEach(item => {
-                if (!item?.id || knownIds.has(item.id)) return;
-                adminItems.push({ ...item, member_key: memberKey });
-                knownIds.add(item.id);
-                changed = true;
-            });
-        } catch (error) {}
-    }
-
-    if (changed) {
-        adminItems.sort((a,b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
-        setAllAdminInquiries(adminItems);
-    }
-    return adminItems;
-}
-
-async function saveInquiry(message) {
-    const memberKey = getInquiryMemberKey();
-    const fallbackItem = {
-        id: `INQ-${Date.now()}`,
-        member_key: memberKey,
-        member_name: currentMember?.name || '',
-        member_email: currentMember?.email || '',
-        message,
-        status: '접수완료',
-        answer: '',
-        answered_at: '',
-        created_at: new Date().toISOString()
-    };
-
-    let savedToServer = false;
-    try {
-        const response = await fetch('./api/inquiry-create.php', {
-            method: 'POST',
-            credentials: 'same-origin',
-            cache: 'no-store',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({message, guest_key: getInquiryGuestKey()})
-        });
-        const data = await response.json();
-        savedToServer = !!(response.ok && data?.ok);
-    } catch (error) {}
-
-    // 서버 저장 실패 시에만 브라우저 저장소에 임시 보관합니다.
-    if (!savedToServer) {
-        const localItems = getMyInquiriesLocal();
-        localItems.unshift(fallbackItem);
-        localStorage.setItem(getInquiryStorageKey(memberKey), JSON.stringify(localItems));
-    }
-
+async function saveInquiry(message, category = '') {
+    const response = await agFetch('./api/inquiry-create.php', {
+        method: 'POST', credentials: 'same-origin', cache: 'no-store',
+        headers: {'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest'},
+        body: JSON.stringify({message,category,guest_key:getInquiryGuestKey()})
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.ok) throw new Error(data.message || '문의 접수에 실패했습니다. 작성 내용은 유지됩니다. 잠시 후 다시 시도해 주세요.');
     await updateInquiryCount();
+    return data.inquiry;
 }
 
 async function updateInquiryCount() {
@@ -3585,7 +3467,7 @@ let myInquiryRecordCache = [];
 let myInquiryRecordFilter = 'ALL';
 
 function updateInquiryRecordTabs(items = []) {
-    const answered = items.filter(item => !!String(item.answer || '').trim()).length;
+    const answered = items.filter(isInquiryCompleted).length;
     const waiting = items.length - answered;
     const values = {inquiryTabAll:items.length, inquiryTabAnswered:answered, inquiryTabWaiting:waiting};
     Object.entries(values).forEach(([id,value]) => { const el=document.getElementById(id); if(el) el.textContent=String(value); });
@@ -3595,7 +3477,7 @@ function renderInquiryRecordList() {
     const content = document.getElementById('myInquiriesPageContent');
     if (!content) return;
     const filtered = myInquiryRecordCache.filter(item => {
-        const answered = !!String(item.answer || '').trim();
+        const answered = isInquiryCompleted(item);
         if (myInquiryRecordFilter === 'ANSWERED') return answered;
         if (myInquiryRecordFilter === 'WAITING') return !answered;
         return true;
@@ -3605,10 +3487,11 @@ function renderInquiryRecordList() {
         return;
     }
     content.innerHTML = `<div class="my-estimates-list">${filtered.map((item,index) => {
-        const answered = !!String(item.answer || '').trim();
-        const statusText = answered ? '답변완료' : '답변대기';
-        const answerText = answered
-            ? escapeHtml(item.answer)
+        const answered = isInquiryCompleted(item);
+        const statusText = answered ? '처리완료' : '답변대기';
+        const hasAnswer = Boolean(String(item.answer || '').trim());
+        const answerText = hasAnswer ? escapeHtml(item.answer)
+            : answered ? '<span class="my-inquiry-answer-empty">상담 처리가 완료되었습니다. 추가 문의가 있으면 새 문의를 남겨 주세요.</span>'
             : '<span class="my-inquiry-answer-empty">아직 답변이 등록되지 않았습니다. 빠르게 확인 후 안내드리겠습니다.</span>';
         const message = String(item.message || '문의 내용 없음');
         const title = message.split(/\r?\n/)[0].slice(0,42) || '문의 내용';
@@ -3633,7 +3516,7 @@ function renderInquiryRecordList() {
                         <div class="my-inquiry-expanded-text">${escapeHtml(message)}</div>
                     </div>
                     <div class="my-inquiry-expanded-answer">
-                        <div class="answer-box-head"><span class="answer-box-icon" aria-hidden="true">↩</span><strong>AutoGenie 답변</strong></div>
+                        <div class="answer-box-head"><span class="answer-box-icon" aria-hidden="true">↩</span><strong>${hasAnswer && !answered ? '이전 답변' : 'AutoGenie 답변'}</strong></div>
                         <div class="my-inquiry-answer-body">${answerText}</div>
                     </div>
                 </div>
@@ -3683,121 +3566,14 @@ function closeMyInquiries() {
     resetPageScroll();
 }
 
-function isAdminInquiryMode() {
-    const params = new URLSearchParams(location.search);
-    return params.get('admin') === '1';
-}
-
-function initializeAdminInquiryMode() {
-    if (!isAdminInquiryMode()) return;
-    document.body.classList.add('admin-inquiry-mode');
-    syncLegacyInquiriesToAdmin();
-}
-
-function openAdminInquiries() {
-    const modal = document.getElementById('adminInquiriesModal');
-    if (!modal) return;
-    renderAdminInquiries();
-    modal.hidden = false;
-    // 모바일에서 회원가입을 끝까지 내린 뒤 로그인 등으로 전환해도
-    // 새 화면이 스크롤 중간에서 열리지 않도록 상단으로 복귀합니다.
-    const card = modal.querySelector('.member-modal-card');
-    if (card) card.scrollTop = 0;
-    document.body.style.overflow = 'hidden';
-}
-
-function closeAdminInquiries() {
-    const modal = document.getElementById('adminInquiriesModal');
-    if (modal) modal.hidden = true;
-    document.body.style.overflow = '';
-}
-
-function renderAdminInquiries() {
-    const content = document.getElementById('adminInquiriesContent');
-    if (!content) return;
-    const items = syncLegacyInquiriesToAdmin();
-
-    if (!items.length) {
-        content.innerHTML = '<div class="my-estimates-empty">접수된 문의가 없습니다.</div>';
-        return;
-    }
-
-    content.innerHTML = items.map(item => {
-        const who = item.member_name || item.member_email || item.member_key || '비회원';
-        return `
-            <article class="admin-inquiry-item" data-admin-inquiry-id="${escapeHtml(item.id || '')}">
-                <div class="my-inquiry-top">
-                    <span class="my-inquiry-date">${escapeHtml(formatInquiryDate(item.created_at))}</span>
-                    <span class="my-inquiry-status ${item.answer ? 'answered' : ''}">${item.answer ? '답변완료' : '접수완료'}</span>
-                </div>
-                <p class="admin-inquiry-user">문의자 · ${escapeHtml(who)}</p>
-                <p class="admin-inquiry-message">${escapeHtml(item.message || '')}</p>
-                ${item.answer ? `<div class="admin-inquiry-existing"><strong>현재 답변</strong><br>${escapeHtml(item.answer)}</div>` : ''}
-                <div class="admin-inquiry-reply">
-                    <textarea maxlength="1000" placeholder="관리자 답변을 입력해 주세요.">${escapeHtml(item.answer || '')}</textarea>
-                    <div class="admin-inquiry-actions">
-                        <button class="admin-inquiry-save" type="button" onclick="saveAdminInquiryAnswer('${escapeHtml(item.id || '')}', this)">${item.answer ? '답변 수정' : '답변 등록'}</button>
-                    </div>
-                </div>
-            </article>
-        `;
-    }).join('');
-}
-
-function saveAdminInquiryAnswer(id, button) {
-    const article = button?.closest('[data-admin-inquiry-id]');
-    const textarea = article?.querySelector('textarea');
-    const answer = textarea?.value.trim() || '';
-    if (!id || !answer) {
-        textarea?.focus();
-        return;
-    }
-
-    const adminItems = getAllAdminInquiries();
-    const index = adminItems.findIndex(item => item.id === id);
-    if (index < 0) return;
-
-    const answeredAt = new Date().toISOString();
-    adminItems[index] = {
-        ...adminItems[index],
-        answer,
-        answered_at: answeredAt,
-        status: '답변완료'
-    };
-    setAllAdminInquiries(adminItems);
-
-    const memberKey = adminItems[index].member_key || 'guest';
-    try {
-        const memberStorageKey = getInquiryStorageKey(memberKey);
-        const memberItems = JSON.parse(localStorage.getItem(memberStorageKey) || '[]');
-        if (Array.isArray(memberItems)) {
-            const memberIndex = memberItems.findIndex(item => item.id === id);
-            if (memberIndex >= 0) {
-                memberItems[memberIndex] = {
-                    ...memberItems[memberIndex],
-                    answer,
-                    answered_at: answeredAt,
-                    status: '답변완료'
-                };
-                localStorage.setItem(memberStorageKey, JSON.stringify(memberItems));
-            }
-        }
-    } catch (error) {}
-
-    renderAdminInquiries();
-    updateInquiryCount();
-}
-
-document.getElementById('adminInquiriesModal')?.addEventListener('click', event => {
-    if (event.target.id === 'adminInquiriesModal') closeAdminInquiries();
-});
-
-initializeAdminInquiryMode();
+// Customer inquiries are managed exclusively in the authenticated PHP admin pages.
 
 // ============================================================
 // 회원 로그인 / 회원가입 / 세션
 // ============================================================
 let currentMember = null;
+try{const consultation=new URLSearchParams(location.search).get('consultation');if(/^(DIRECT|QUICK)-[1-9]\d{0,9}$/.test(consultation||''))sessionStorage.setItem('ag_pending_consultation',consultation);}catch(_){}
+let memberWithdrawalInProgress = false;
 
 // 견적에 사용할 연락처는 회원정보와 별도로 입력/수정하며, 회원 DB를 수정하지 않습니다.
 function fillEstimateMemberFields(mode) {
@@ -3833,8 +3609,26 @@ function setMemberMessage(elementId, message = '', type = 'error') {
     el.className = `member-form-message${message ? ` show ${type}` : ''}`;
 }
 
+function resumeEstimateConsultation(member) {
+    const query=new URLSearchParams(location.search).get('consultation')||'';
+    let pending='';
+    try {
+        if(/^(DIRECT|QUICK)-[1-9]\d{0,9}$/.test(query))sessionStorage.setItem('ag_pending_consultation',query);
+        pending=sessionStorage.getItem('ag_pending_consultation')||query;
+    } catch (_) { pending=query; }
+    const match=/^(DIRECT|QUICK)-([1-9]\d{0,9})$/.exec(pending);
+    if(!match)return;
+    if(member){try{sessionStorage.removeItem('ag_pending_consultation');}catch(_){}location.replace(`./consultation.php?type=${match[1]}&id=${match[2]}`);}
+    else if(query)openMemberModal('login');
+}
+let memberStateRevision = 0;
 function updateMemberUI(member) {
+    memberStateRevision++;
     currentMember = member || null;
+    resumeEstimateConsultation(currentMember);
+    favoriteOwnerId=String(currentMember?.id||'');
+    if (typeof refreshSavedQuoteCount === 'function') refreshSavedQuoteCount();
+    if(currentMember)loadMemberFavorites();else updateMypageVehicleCounts();
     fillEstimateMemberFields('quick');
     // 열린 신청 모달의 정보는 로그인 상태가 바뀐 경우에만 새로 불러옵니다.
     if (document.getElementById('estimateModal')?.classList.contains('open')) fillEstimateMemberFields('estimate');
@@ -3862,15 +3656,30 @@ function updateMemberUI(member) {
     }
 }
 
-async function loadCurrentMember() {
+async function loadCurrentMember(attempt = 0) {
+    const revision = memberStateRevision;
     try {
-        const response = await fetch('./api/member-me.php', {credentials:'same-origin', cache:'no-store'});
+        const response = await agFetch('./api/member-me.php', {credentials:'same-origin', cache:'no-store'});
+        if (!response.ok) throw new Error('member lookup unavailable');
         const data = await response.json();
-        updateMemberUI(data.ok && data.member ? data.member : null);
+        if (data.ok !== true || !Object.prototype.hasOwnProperty.call(data, 'member')) throw new Error('invalid member lookup');
+        if (revision === memberStateRevision) updateMemberUI(data.member || null);
     } catch (error) {
-        updateMemberUI(null);
+        // A temporary network/server error does not mean the account has logged out.
+        if (revision === memberStateRevision && attempt < 2) {
+            setTimeout(() => { if (revision === memberStateRevision) loadCurrentMember(attempt + 1); }, attempt ? 3000 : 1000);
+        }
     }
 }
+let lastMemberRecheck = Date.now();
+function recheckMemberOnReturn() {
+    if (document.visibilityState !== 'visible' || Date.now() - lastMemberRecheck < 60000) return;
+    lastMemberRecheck = Date.now();
+    loadCurrentMember();
+}
+window.addEventListener('online', recheckMemberOnReturn);
+window.addEventListener('pageshow', recheckMemberOnReturn);
+document.addEventListener('visibilitychange', recheckMemberOnReturn);
 
 function openMemberModal(mode = 'login') {
     const modal = document.getElementById('memberModal');
@@ -3879,6 +3688,7 @@ function openMemberModal(mode = 'login') {
     const reset = document.getElementById('memberResetPanel');
     const resetSupport = document.getElementById('memberResetSupportPanel');
     const settings = document.getElementById('memberSettingsPanel');
+    const withdrawal = document.getElementById('memberWithdrawPanel');
     if (!modal) return;
 
     login.hidden = mode !== 'login';
@@ -3890,6 +3700,16 @@ function openMemberModal(mode = 'login') {
     reset.hidden = mode !== 'reset';
     resetSupport.hidden = mode !== 'reset-support';
     settings.hidden = mode !== 'settings';
+    withdrawal.hidden = mode !== 'withdraw';
+    const titleIds = {
+        login: 'memberModalTitle',
+        register: 'memberRegisterTitle',
+        reset: 'memberResetTitle',
+        'reset-support': 'memberResetSupportTitle',
+        settings: 'memberSettingsTitle',
+        withdraw: 'memberWithdrawNoticeTitle'
+    };
+    modal.querySelector('.member-modal-card')?.setAttribute('aria-labelledby', titleIds[mode] || 'memberModalTitle');
     modal.hidden = false;
     document.body.style.overflow = 'hidden';
     setMemberMessage('memberLoginMessage');
@@ -3915,8 +3735,65 @@ function openMemberSettings() {
     document.getElementById('memberInfoPhone').textContent = currentMember.phone || '-';
     document.getElementById('memberInfoEmail').textContent = currentMember.email || '등록된 이메일 없음';
     document.getElementById('memberInfoCreatedAt').textContent = currentMember.created_at || '-';
+    if (typeof resetProfileForm === 'function') resetProfileForm();
     openMemberModal('settings');
 }
+
+function beginMemberWithdrawal() {
+    if (!currentMember) return;
+    const acknowledged = document.getElementById('memberWithdrawAcknowledged');
+    const nextButton = document.getElementById('memberWithdrawNextButton');
+    const confirmation = document.getElementById('memberWithdrawConfirmation');
+    const finalButton = document.getElementById('memberWithdrawFinalButton');
+    if (acknowledged) acknowledged.checked = false;
+    if (nextButton) nextButton.disabled = true;
+    if (confirmation) confirmation.value = '';
+    if (finalButton) finalButton.disabled = true;
+    document.getElementById('memberWithdrawNoticeStage').hidden = false;
+    document.getElementById('memberWithdrawConfirmStage').hidden = true;
+    setMemberMessage('memberWithdrawMessage');
+    openMemberModal('withdraw');
+    document.getElementById('memberWithdrawAcknowledged')?.focus();
+}
+
+function cancelMemberWithdrawal() {
+    openMemberModal('settings');
+    document.querySelector('.member-withdraw-btn')?.focus();
+}
+
+function advanceMemberWithdrawal(step) {
+    if (step === 2 && !document.getElementById('memberWithdrawAcknowledged')?.checked) return;
+    const noticeStage = document.getElementById('memberWithdrawNoticeStage');
+    const confirmStage = document.getElementById('memberWithdrawConfirmStage');
+    noticeStage.hidden = step !== 1;
+    confirmStage.hidden = step !== 2;
+    document.querySelector('#memberModal .member-modal-card')?.setAttribute(
+        'aria-labelledby', step === 2 ? 'memberWithdrawConfirmTitle' : 'memberWithdrawNoticeTitle'
+    );
+    if (step === 2) document.getElementById('memberWithdrawConfirmation')?.focus();
+    else {
+        const confirmation = document.getElementById('memberWithdrawConfirmation');
+        const finalButton = document.getElementById('memberWithdrawFinalButton');
+        if (confirmation) confirmation.value = '';
+        if (finalButton) finalButton.disabled = true;
+        setMemberMessage('memberWithdrawMessage');
+        document.getElementById('memberWithdrawAcknowledged')?.focus();
+    }
+}
+
+document.getElementById('memberWithdrawAcknowledged')?.addEventListener('change', event => {
+    document.getElementById('memberWithdrawNextButton').disabled = !event.currentTarget.checked;
+});
+
+document.getElementById('memberWithdrawConfirmation')?.addEventListener('input', event => {
+    document.getElementById('memberWithdrawFinalButton').disabled = memberWithdrawalInProgress || event.currentTarget.value.trim() !== '탈퇴';
+    setMemberMessage('memberWithdrawMessage');
+});
+
+document.getElementById('memberWithdrawFinalForm')?.addEventListener('submit', event => {
+    event.preventDefault();
+    withdrawMember();
+});
 
 // 로그인/회원가입 팝업은 바깥 배경을 눌러도 닫히지 않도록 유지합니다.
 // 사용자가 오른쪽 위 X 버튼을 눌렀을 때만 직접 닫힙니다.
@@ -3930,7 +3807,6 @@ document.getElementById('memberModal')?.addEventListener('click', event => {
 document.getElementById('memberRegisterPhone')?.addEventListener('input', event => {
     event.currentTarget.value = formatEstimatePhone(event.currentTarget.value);
 });
-
 
 let memberRegisterPhoneVerified = '';
 
@@ -3970,7 +3846,7 @@ document.getElementById('memberRegisterPhoneCodeButton')?.addEventListener('clic
     button.textContent = '발송 중...';
 
     try {
-        const response = await fetch('./api/member-phone-verification-request.php', {
+        const response = await agFetch('./api/member-phone-verification-request.php', {
             method: 'POST', credentials: 'same-origin',
             headers: {'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'},
             body: JSON.stringify({phone})
@@ -4017,7 +3893,7 @@ document.getElementById('memberRegisterPhoneVerifyButton')?.addEventListener('cl
     const originalText = button.textContent;
     button.textContent = '확인 중...';
     try {
-        const response = await fetch('./api/member-phone-verification-confirm.php', {
+        const response = await agFetch('./api/member-phone-verification-confirm.php', {
             method: 'POST', credentials: 'same-origin',
             headers: {'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'},
             body: JSON.stringify({phone, code})
@@ -4056,7 +3932,7 @@ document.getElementById('memberRegisterForm')?.addEventListener('submit', async 
     submit.disabled = true;
 
     try {
-        const response = await fetch('./api/member-register.php', {
+        const response = await agFetch('./api/member-register.php', {
             method:'POST',
             credentials:'same-origin',
             headers:{'Content-Type':'application/json', 'X-Requested-With':'XMLHttpRequest'},
@@ -4087,10 +3963,10 @@ document.getElementById('memberLoginForm')?.addEventListener('submit', async eve
     submit.disabled = true;
 
     try {
-        const response = await fetch('./api/member-login.php', {
+        const response = await agFetch('./api/member-login.php', {
             method:'POST',
             credentials:'same-origin',
-            headers:{'Content-Type':'application/json'},
+            headers:{'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest'},
             body:JSON.stringify(Object.fromEntries(new FormData(form).entries()))
         });
         const data = await response.json();
@@ -4106,7 +3982,6 @@ document.getElementById('memberLoginForm')?.addEventListener('submit', async eve
     }
 });
 
-
 document.getElementById('memberResetSupportPhone')?.addEventListener('input', event => {
     event.currentTarget.value = formatEstimatePhone(event.currentTarget.value);
 });
@@ -4119,7 +3994,7 @@ document.getElementById('memberResetSupportForm')?.addEventListener('submit', as
     submit.disabled = true;
 
     try {
-        const response = await fetch('./api/member-password-reset-admin-request.php', {
+        const response = await agFetch('./api/member-password-reset-admin-request.php', {
             method:'POST',
             credentials:'same-origin',
             headers:{'Content-Type':'application/json'},
@@ -4139,7 +4014,6 @@ document.getElementById('memberResetSupportForm')?.addEventListener('submit', as
         submit.disabled = false;
     }
 });
-
 
 document.getElementById('memberResetCode')?.addEventListener('input', event => {
     event.currentTarget.value = event.currentTarget.value.replace(/\D/g, '').slice(0, 6);
@@ -4162,7 +4036,7 @@ document.getElementById('memberResetCodeButton')?.addEventListener('click', asyn
     button.textContent = '발송 중...';
 
     try {
-        const response = await fetch('./api/member-password-reset-request.php', {
+        const response = await agFetch('./api/member-password-reset-request.php', {
             method:'POST',
             credentials:'same-origin',
             headers:{'Content-Type':'application/json'},
@@ -4198,7 +4072,7 @@ document.getElementById('memberResetForm')?.addEventListener('submit', async eve
 
     submit.disabled = true;
     try {
-        const response = await fetch('./api/member-password-reset-confirm.php', {
+        const response = await agFetch('./api/member-password-reset-confirm.php', {
             method:'POST',
             credentials:'same-origin',
             headers:{'Content-Type':'application/json'},
@@ -4223,10 +4097,40 @@ document.getElementById('memberResetForm')?.addEventListener('submit', async eve
 
 async function logoutMember() {
     try {
-        await fetch('./api/member-logout.php', {method:'POST', credentials:'same-origin'});
+        await agFetch('./api/member-logout.php', {method:'POST', credentials:'same-origin'});
     } finally {
         updateMemberUI(null);
         closeMemberModal();
+    }
+}
+
+async function withdrawMember() {
+    const confirmation = document.getElementById('memberWithdrawConfirmation');
+    if (memberWithdrawalInProgress || !currentMember || confirmation?.value.trim() !== '탈퇴') return;
+
+    const button = document.getElementById('memberWithdrawFinalButton');
+    memberWithdrawalInProgress = true;
+    if (button) button.disabled = true;
+    try {
+        const response = await agFetch('./api/member-withdraw.php', {
+            method: 'POST', credentials: 'same-origin',
+            headers: {'X-Requested-With': 'XMLHttpRequest', 'Content-Type': 'application/json'},
+            body: JSON.stringify({confirmation: confirmation.value.trim()})
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.message || '탈퇴 처리에 실패했습니다.');
+        updateMemberUI(null);
+        ['memberInfoName', 'memberInfoPhone', 'memberInfoEmail', 'memberInfoCreatedAt'].forEach(id => {
+            const field = document.getElementById(id);
+            if (field) field.textContent = '-';
+        });
+        closeMemberModal();
+        window.alert('회원 탈퇴가 완료되었습니다.');
+    } catch (error) {
+        setMemberMessage('memberWithdrawMessage', error.message || '탈퇴 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+    } finally {
+        memberWithdrawalInProgress = false;
+        if (button) button.disabled = confirmation?.value.trim() !== '탈퇴';
     }
 }
 
@@ -4282,6 +4186,7 @@ document.getElementById('quickEstimateForm')?.addEventListener('submit', async e
     event.preventDefault();
 
     const form = event.currentTarget;
+    if (form.dataset.agSubmitting === '1') return;
     const formData = new FormData(form);
     const result = document.getElementById('quickEstimateResult');
 
@@ -4308,22 +4213,8 @@ document.getElementById('quickEstimateForm')?.addEventListener('submit', async e
         return;
     }
 
-    const subscriberDigits = phoneDigits.slice(3);
-    const middleLength = phoneDigits.length === 10 ? 3 : 4;
-    const middleBlock = phoneDigits.slice(3, 3 + middleLength);
-    const lastBlock = phoneDigits.slice(3 + middleLength);
-    const repeatedSubscriber = /^(\d{1,4})\1+$/.test(subscriberDigits);
-    const repeatedMiddleBlock = /^(\d)\1+$/.test(middleBlock);
-    const repeatedLastBlock = /^(\d)\1+$/.test(lastBlock);
-
-    if (repeatedSubscriber || repeatedMiddleBlock || repeatedLastBlock) {
-        quickEstimatePhoneInput?.setCustomValidity('반복되는 숫자가 많은 번호는 사용할 수 없습니다. 실제 휴대폰 번호를 입력해 주세요.');
-        quickEstimatePhoneInput?.reportValidity();
-        quickEstimatePhoneInput?.focus();
-        return;
-    }
-
     const submitButton = form.querySelector('.quick-estimate-submit');
+    form.dataset.agSubmitting = '1';
     if (submitButton) submitButton.disabled = true;
     result.className = 'quick-estimate-result';
     result.textContent = '';
@@ -4339,9 +4230,9 @@ document.getElementById('quickEstimateForm')?.addEventListener('submit', async e
     };
 
     try {
-        const response = await fetch(SAVE_QUICK_ESTIMATE_URL, {
+        const response = await agFetch(SAVE_QUICK_ESTIMATE_URL, {
             method: 'POST',
-            headers: {'Content-Type':'application/json'},
+            headers: {'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest'},
             body: JSON.stringify(payload)
         });
         const data = await response.json();
@@ -4362,6 +4253,7 @@ document.getElementById('quickEstimateForm')?.addEventListener('submit', async e
         result.className = 'quick-estimate-result show error';
         result.textContent = error.message || '간편견적 저장 중 오류가 발생했습니다.';
     } finally {
+        delete form.dataset.agSubmitting;
         if (submitButton) submitButton.disabled = false;
     }
 });
@@ -4377,18 +4269,22 @@ document.getElementById('quickEstimateForm')?.addEventListener('submit', async e
     window.addEventListener('pageshow', sync);
 })();
 
-
 /* 마이페이지 하단 관심 차량 / 최근 본 차량: 현재 브라우저에만 저장 */
 const MYPAGE_RECENT_STORAGE = 'autogenie_mypage_recent_v1';
 const MYPAGE_FAVORITES_STORAGE = 'autogenie_mypage_favorites_v1';
 let mypageVehiclePanelMode = '';
+let favoriteOwnerId = '';
+function memberVehicleStorageKey(key){ return key===MYPAGE_FAVORITES_STORAGE ? `${key}:${favoriteOwnerId||'guest'}` : key; }
 function readMypageVehicleIds(key) {
+    key=memberVehicleStorageKey(key);
     try {
-        const raw = JSON.parse(localStorage.getItem(key) || '[]');
+        const legacy=key===`${MYPAGE_FAVORITES_STORAGE}:guest` ? localStorage.getItem(MYPAGE_FAVORITES_STORAGE) : null;
+        const raw = JSON.parse(localStorage.getItem(key) || legacy || '[]');
         return Array.isArray(raw) ? [...new Set(raw.filter(v => typeof v === 'string' && v.length < 100))] : [];
     } catch (_) { return []; }
 }
 function writeMypageVehicleIds(key, ids) {
+    key=memberVehicleStorageKey(key);
     try { localStorage.setItem(key, JSON.stringify(ids)); } catch (_) { /* 저장 제한된 브라우저 */ }
 }
 function rememberMypageRecentVehicle(key) {
@@ -4407,10 +4303,14 @@ function mypageHeartButton(id, active, extraClass = '') {
     const label = active ? '관심 차량에서 해제' : '관심 차량에 추가';
     return `<button class="mypage-saved-vehicle-heart ${extraClass}" type="button" data-mypage-toggle-favorite="${escapeHtml(String(id))}" aria-label="${label}" title="${label}" aria-pressed="${active}"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.9a5.4 5.4 0 0 0-7.6 0L12 6.1l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6l1.2 1.2L12 21l7.6-7.3 1.2-1.2a5.4 5.4 0 0 0 0-7.6Z"/></svg></button>`;
 }
-function toggleMypageVehicleFavorite(id) {
+async function toggleMypageVehicleFavorite(id) {
     if (!id) return;
     const current = readMypageVehicleIds(MYPAGE_FAVORITES_STORAGE);
     const active = !current.includes(id);
+    if(currentMember){
+        try{const response=await agFetch('./api/member-favorites.php',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest'},body:JSON.stringify({vehicle_id:Number(id),active})});const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.message||'관심 차량 저장에 실패했습니다.');}
+        catch(error){alert(error.message||'관심 차량 저장에 실패했습니다. 잠시 후 다시 시도해 주세요.');return;}
+    }
     writeMypageVehicleIds(MYPAGE_FAVORITES_STORAGE, active ? [id, ...current].slice(0, 40) : current.filter(v => v !== id));
     updateMypageVehicleCounts();
     // Keep all hearts in sync without rebuilding and jumping the vehicle list.
@@ -4503,3 +4403,180 @@ function bindMypageVehicleMenu() {
     updateMypageVehicleCounts();
 }
 bindMypageVehicleMenu();
+
+async function loadMemberFavorites(){
+    if(!currentMember)return;
+    const owner=String(currentMember.id);
+    try{const response=await agFetch('./api/member-favorites.php',{credentials:'same-origin',cache:'no-store'});const data=await response.json();if(response.ok&&data.ok&&String(currentMember?.id)===owner){writeMypageVehicleIds(MYPAGE_FAVORITES_STORAGE,data.ids);updateMypageVehicleCounts();if(!document.getElementById('myVehiclesView')?.hidden)renderMypageVehiclePage();}}
+    catch(error){console.error('관심 차량 조회 실패',error);}
+}
+
+// Vehicle comparison uses one identical product/term/prepayment/mileage combination.
+let agCompareIds=[];
+let agComparisonQuotes=new Map();
+let agCompareSelection=null;
+const agCompareBaseline={product_type:'RENT',contract_months:'36',prepayment_rate:'0',annual_mileage:'10000'};
+function agCompareKey(price){return [price.product_type,Number(price.contract_months),Number(price.prepayment_rate||0),Number(price.annual_mileage||0)].join('|');}
+function agCompareConditionOptions(vehicles,field,defaults){
+    const values=new Set(defaults.map(String));
+    vehicles.forEach(vehicle=>(vehicle.trims||[]).forEach(trim=>(trim.prices||[]).forEach(price=>{
+        let value=price[field];
+        if((value===undefined||value===null||value==='')&&(field==='prepayment_rate'||field==='annual_mileage'))value=0;
+        if(value!==undefined&&value!==null&&value!=='')values.add(String(value));
+    })));
+    return [...values].sort(field==='product_type'
+        ?(a,b)=>defaults.indexOf(a)-defaults.indexOf(b)
+        :(a,b)=>Number(a)-Number(b));
+}
+function agRenderCompareTray(){
+    const tray=document.getElementById('vehicleCompareTray');if(!tray)return;
+    tray.hidden=agCompareIds.length===0 || document.getElementById('vehicleListView')?.hidden;
+    tray.querySelector('[data-compare-count]').textContent=String(agCompareIds.length);
+    tray.querySelector('[data-open-compare]').disabled=agCompareIds.length<2;
+}
+function agToggleCompare(id){
+    if(agCompareIds.includes(id))agCompareIds=agCompareIds.filter(x=>x!==id);
+    else{if(agCompareIds.length>=3){alert('차량은 최대 3대까지 비교할 수 있습니다.');return;}agCompareIds.push(id);}
+    document.querySelectorAll('[data-compare-vehicle]').forEach(button=>{const active=agCompareIds.includes(button.dataset.compareVehicle);button.setAttribute('aria-pressed',String(active));button.textContent=active?'✓ 비교 선택됨':'+ 비교하기';});agRenderCompareTray();
+}
+function agRenderComparison(){
+    const vehicles=agCompareIds.map(getCurrentVehicleByKey).filter(Boolean);if(vehicles.length<2)return;
+    const maps=vehicles.map(vehicle=>{const map=new Map();for(const trim of vehicle.trims||[])for(const price of trim.prices||[]){const key=agCompareKey(price);const previous=map.get(key);if(!previous||Number(price.monthly_payment)<Number(previous.price.monthly_payment))map.set(key,{price,trim});}return map;});
+    const options={
+        product_type:agCompareConditionOptions(vehicles,'product_type',['RENT','LEASE']),
+        contract_months:agCompareConditionOptions(vehicles,'contract_months',[12,24,36,48,60]),
+        prepayment_rate:agCompareConditionOptions(vehicles,'prepayment_rate',[0,10,20,30]),
+        annual_mileage:agCompareConditionOptions(vehicles,'annual_mileage',[0,10000,15000,20000,30000])
+    };
+    const hasSelection=agCompareSelection&&Object.keys(options).every(field=>options[field].includes(String(agCompareSelection[field])));
+    if(!hasSelection)agCompareSelection={...agCompareBaseline};
+    const selected=agCompareKey(agCompareSelection);
+    agComparisonQuotes=new Map(vehicles.map((vehicle,index)=>[getVehicleId(vehicle),maps[index].get(selected)]));
+    const content=document.getElementById('vehicleCompareContent');if(!content)return;
+    const renderControl=(label,field,format)=>`<label class="compare-condition-label">${label}<select data-compare-condition="${field}">${options[field].map(value=>`<option value="${escapeHtml(value)}" ${String(value)===String(agCompareSelection[field])?'selected':''}>${escapeHtml(format(value))}</option>`).join('')}</select></label>`;
+    content.innerHTML=`<p class="compare-desc">기본 조건: 장기렌트 · 3년 · 선납 0% · 연 10,000km. 원하는 항목만 변경할 수 있습니다.</p><div class="compare-condition-controls">${renderControl('이용상품','product_type',productLabel)}${renderControl('계약기간','contract_months',yearsFromMonths)}${renderControl('선납률','prepayment_rate',value=>`${value}%`)}${renderControl('연 주행거리','annual_mileage',value=>Number(value)===0?'무제한':`연 ${Number(value).toLocaleString('ko-KR')}km`)}</div><div class="compare-table-wrap"><table class="compare-table ${vehicles.length===2?'compare-table--two':''}"><thead><tr><th>항목</th>${vehicles.map(vehicle=>`<th>${escapeHtml(getVehicleName(vehicle))}</th>`).join('')}</tr></thead><tbody>
+    <tr><th>브랜드</th>${vehicles.map(v=>`<td>${escapeHtml(getBrandName(v))}</td>`).join('')}</tr>
+    <tr><th>연료</th>${vehicles.map(v=>`<td>${escapeHtml(({GASOLINE:'휘발유',DIESEL:'경유',HYBRID:'하이브리드',PHEV:'플러그인 하이브리드',EV:'전기',LPG:'LPG',OTHER:'기타'})[v.fuel_type]||'-')}</td>`).join('')}</tr>
+    <tr><th>비교 트림</th>${maps.map(map=>`<td>${escapeHtml(map.get(selected)?.trim.name||'조건 확인 필요')}</td>`).join('')}</tr>
+    <tr class="compare-price-row"><th>월 이용료</th>${maps.map(map=>`<td>${map.has(selected)?money(map.get(selected).price.monthly_payment):'조건 확인 필요'}</td>`).join('')}</tr>
+    <tr><th>선납금</th>${maps.map((map,index)=>{const q=map.get(selected);return `<td>${q?Math.round(Number(q.trim.price||vehicles[index].base_price||0)*Number(q.price.prepayment_rate||0)/100).toLocaleString('ko-KR')+'원':'조건 확인 필요'}</td>`;}).join('')}</tr>
+    <tr><th>계약기간</th>${maps.map(map=>`<td>${map.has(selected)?yearsFromMonths(map.get(selected).price.contract_months):'조건 확인 필요'}</td>`).join('')}</tr>
+    <tr><th>연 주행거리</th>${maps.map(map=>{const q=map.get(selected);return `<td>${q?(Number(q.price.annual_mileage)===0?'무제한':Number(q.price.annual_mileage).toLocaleString('ko-KR')+'km'):'조건 확인 필요'}</td>`;}).join('')}</tr>
+    <tr><th>차량 상세</th>${vehicles.map(v=>`<td><button type="button" data-compare-detail="${escapeHtml(getVehicleId(v))}">견적 보기</button></td>`).join('')}</tr></tbody></table></div>${vehicles.length===3?'<p class="compare-scroll-hint">모바일에서는 표를 좌우로 밀어 세 차량을 확인해 주세요.</p>':''}<p class="compare-desc">표시 금액은 등록된 참고 금액입니다. 최종 조건은 상담 시 확인해 주세요.</p>`;
+    content.querySelectorAll('[data-compare-condition]').forEach(select=>select.addEventListener('change',event=>{agCompareSelection={...agCompareSelection,[event.currentTarget.dataset.compareCondition]:event.currentTarget.value};agRenderComparison();}));
+}
+function agOpenCompare(){if(agCompareIds.length<2)return;agRenderComparison();const modal=document.getElementById('vehicleCompareModal');modal.hidden=false;document.body.classList.add('modal-open');modal.querySelector('[data-close-compare]')?.focus();}
+function agCloseCompare(){document.getElementById('vehicleCompareModal').hidden=true;document.body.classList.remove('modal-open');}
+document.addEventListener('click',event=>{const toggle=event.target.closest('[data-compare-vehicle]');if(toggle)agToggleCompare(toggle.dataset.compareVehicle);if(event.target.closest('[data-open-compare]'))agOpenCompare();if(event.target.closest('[data-clear-compare]')){agCompareIds=[];renderVehicleList();}if(event.target.closest('[data-close-compare]')||event.target.id==='vehicleCompareModal')agCloseCompare();const detail=event.target.closest('[data-compare-detail]');if(detail){const id=detail.dataset.compareDetail;const quote=agComparisonQuotes.get(id);agCloseCompare();openVehicleDetail(id,true);const vehicle=getCurrentVehicleByKey(id);if(vehicle&&quote)renderVehicleDetail(vehicle,allVehicles.indexOf(vehicle),quote);}});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!document.getElementById('vehicleCompareModal')?.hidden)agCloseCompare();});
+
+// History follows visible screens. Public paths/filenames are unchanged.
+let agRestoringView=false;
+let agHistoryReady=false;
+function agCurrentRoute(){return history.state?.ag_view||{kind:'main',name:'home'};}
+function agRouteHash(route){
+    const params=new URLSearchParams();
+    if(route.kind==='vehicle'||route.kind==='info')params.set('vehicle',route.key);
+    else if(route.kind==='main'){if(route.name!=='home')params.set('view',route.name);}
+    else {params.set('view',route.kind);if(route.mode)params.set('mode',route.mode);}
+    if(route.kind==='info')params.set('info','1');
+    if(route.modal)params.set('modal',route.modal.type);
+    return params.toString()?`#${params}`:'';
+}
+function agRememberCurrentScroll(){
+    const state=history.state||{};
+    const route=state.ag_view;
+    const quote=(route?.kind==='vehicle'||route?.kind==='info')?quoteStates.get(String(route.key)):null;
+    const color=route?.key?document.querySelector(`[data-color-select="${CSS.escape(route.key)}"]`)?.dataset.selectedColorId:null;
+    const selected=quote?{trimId:quote.trimId,priceId:quote.priceId,colorId:color,product:quote.product,months:quote.months,prepayment:quote.prepayment,mileage:quote.mileage}:state.ag_quote;
+    history.replaceState({...state,ag_scroll:window.scrollY,ag_quote:selected},'',location.href);
+}
+function agCommitRoute(route){
+    if(!agHistoryReady||agRestoringView)return;
+    const url=location.pathname+location.search+agRouteHash(route);
+    const same=JSON.stringify(agCurrentRoute())===JSON.stringify(route);
+    const depth=Number(history.state?.ag_depth||0);
+    if(same)history.replaceState({...history.state,ag_view:route},'',url);
+    else history.pushState({ag_view:route,ag_depth:depth+1,ag_scroll:0},'',url);
+    agRenderCompareTray();
+}
+function agBackOr(fallback){if(agHistoryReady&&!agRestoringView&&Number(history.state?.ag_depth)>0){history.back();return true;}fallback();return false;}
+const agOriginalMain=openMainView;
+openMainView=function(name,updateUrl=true){if(updateUrl&&!agRestoringView)agRememberCurrentScroll();const value=agOriginalMain(name,false);if(updateUrl)agCommitRoute({kind:'main',name});agRenderCompareTray();return value;};
+const agOriginalDetail=openVehicleDetail;
+openVehicleDetail=function(key,useListPrice=false){if(!agRestoringView)agRememberCurrentScroll();const value=agOriginalDetail(key,useListPrice);if(getCurrentVehicleByKey(key))agCommitRoute({kind:'vehicle',key:String(key),useListPrice});return value;};
+// The original direct replacement is removed below; only the history controller writes screen URLs.
+const agOriginalCloseDetail=closeVehicleDetail;
+closeVehicleDetail=function(){agBackOr(()=>{agRestoringView=true;agOriginalCloseDetail();agRestoringView=false;agCommitRoute({kind:'main',name:'vehicle'});});};
+const agOriginalInfo=openVehicleInfo;
+openVehicleInfo=function(key){agRememberCurrentScroll();agOriginalInfo(key);agCommitRoute({kind:'info',key:String(key)});};
+const agOriginalCloseInfo=closeVehicleInfo;
+closeVehicleInfo=function(){agBackOr(()=>{agOriginalCloseInfo();const route=agCurrentRoute();agCommitRoute({kind:'vehicle',key:route.key});});};
+const agOriginalEstimate=openEstimateModal;
+openEstimateModal=function(key){agRememberCurrentScroll();agOriginalEstimate(key);if(document.getElementById('estimateModal')?.classList.contains('open'))agCommitRoute({...agCurrentRoute(),modal:{type:'estimate',key:String(key)}});};
+const agOriginalCloseEstimate=closeEstimateModal;
+closeEstimateModal=function(){if(agCurrentRoute().modal?.type==='estimate'&&Number(history.state?.ag_depth)>0&&!agRestoringView){history.back();return;}agOriginalCloseEstimate();};
+const agOriginalInquiry=openQnaInquiryPage;
+openQnaInquiryPage=function(origin='faq'){agRememberCurrentScroll();agOriginalInquiry(origin);agCommitRoute({kind:'inquiry',origin});};
+const agOriginalCloseInquiry=closeQnaInquiryPage;
+closeQnaInquiryPage=function(){agBackOr(agOriginalCloseInquiry);};
+const agOriginalSaved=openMypageVehiclePage;
+openMypageVehiclePage=function(mode){agRememberCurrentScroll();agOriginalSaved(mode);agCommitRoute({kind:'saved',mode});};
+const agOriginalCloseSaved=closeMypageVehiclePage;
+closeMypageVehiclePage=function(){agBackOr(agOriginalCloseSaved);};
+const agOriginalEstimates=openMyEstimates;
+openMyEstimates=async function(filter='ALL',title='내 견적'){
+    agRememberCurrentScroll();
+    await agOriginalEstimates(filter,title);
+    if(!document.getElementById('myEstimatesView')?.hidden){
+        const selected=myEstimateStatusFilter==='ALL'?myEstimateRecordFilter:myEstimateStatusFilter;
+        agCommitRoute({kind:'estimates',filter:selected,title:estimateViewTitle(selected)});
+    }
+};
+const agOriginalMyInquiries=openMyInquiries;
+openMyInquiries=async function(){agRememberCurrentScroll();await agOriginalMyInquiries();agCommitRoute({kind:'my-inquiries'});};
+const agOriginalCloseMyInquiries=closeMyInquiries;
+closeMyInquiries=function(){agBackOr(agOriginalCloseMyInquiries);};
+const agOriginalCloseMyEstimates=closeMyEstimates;
+closeMyEstimates=function(){agBackOr(agOriginalCloseMyEstimates);};
+async function agRestoreRoute(route,scroll=0){
+    agRestoringView=true;
+    try{
+        agOriginalCloseEstimate();agCloseCompare();closeMemberModal();
+        if(route.kind==='vehicle'||route.kind==='info'){
+            agOriginalMain('vehicle',false);if(allVehicles.length){
+                const vehicle=getCurrentVehicleByKey(route.key);const selected=history.state?.ag_quote;
+                const trim=vehicle?.trims?.find(x=>String(x.id)===String(selected?.trimId));const price=trim?.prices?.find(x=>String(x.id)===String(selected?.priceId));
+                agOriginalDetail(route.key,route.useListPrice||false);
+                if(trim&&(price||selected?.product)){renderVehicleDetail(vehicle,allVehicles.indexOf(vehicle),{trim,price:price||{product_type:selected.product,contract_months:selected.months,prepayment_rate:selected.prepayment,annual_mileage:selected.mileage},preserveUnavailable:!price});const colorButton=document.querySelector(`[data-color-select="${CSS.escape(route.key)}"] [data-color-id="${CSS.escape(String(selected.colorId||''))}"]`);if(colorButton)selectVehicleColor(route.key,colorButton);}
+if(route.kind==='info')agOriginalInfo(route.key);if(route.modal?.type==='estimate')agOriginalEstimate(route.modal.key);}
+        }else if(route.kind==='inquiry'){agOriginalMain(route.origin||'faq',false);agOriginalInquiry(route.origin);}
+        else if(route.kind==='saved-quotes'){if(typeof openSavedQuotes==='function')await openSavedQuotes();else window.addEventListener('ag-member-features-ready',()=>agRestoreRoute(route,scroll),{once:true});}
+        else if(route.kind==='saved')agOriginalSaved(route.mode||'favorites');
+        else if(route.kind==='my-inquiries'){agOriginalMain('mypage',false);await agOriginalMyInquiries();}
+        else if(route.kind==='estimates'){agOriginalMain('mypage',false);if(!currentMember)await loadCurrentMember(2);if(currentMember)await agOriginalEstimates(route.filter||'ALL',route.title||'내 견적');}
+        else agOriginalMain(route.name||'home',false);
+        requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo(0,scroll)));
+    }finally{agRestoringView=false;agRenderCompareTray();}
+}
+window.addEventListener('popstate',event=>agRestoreRoute(event.state?.ag_view||{kind:'main',name:'home'},Number(event.state?.ag_scroll||0)));
+// Initialize after synchronous startup; deep-linked vehicle data restores when loadData completes.
+const agOriginalLoadData=loadData;
+loadData=async function(){await agOriginalLoadData();if(agHistoryReady&&(agCurrentRoute().kind==='vehicle'||agCurrentRoute().kind==='info'))await agRestoreRoute(agCurrentRoute());};
+setTimeout(()=>{
+    history.scrollRestoration='manual';
+    const params=new URLSearchParams(location.hash.replace(/^#/,''));
+    const route=history.state?.ag_view||(params.get('view')==='saved-quotes'?{kind:'saved-quotes'}:params.has('vehicle')?{kind:params.get('info')==='1'?'info':'vehicle',key:params.get('vehicle')}:{kind:'main',name:['vehicle','quick','faq','mypage'].includes(params.get('view'))?params.get('view'):'home'});
+    history.replaceState({ag_view:route,ag_depth:0,ag_scroll:0},'',location.pathname+location.search+agRouteHash(route));agHistoryReady=true;agRestoreRoute(route);
+},0);
+
+document.addEventListener('keydown',event=>{
+    if(event.key!=='Tab')return;
+    const modal=document.querySelector('#vehicleCompareModal:not([hidden]) .vehicle-compare-dialog');
+    if(!modal)return;
+    const focusable=[...modal.querySelectorAll('button:not(:disabled),select,a[href],input')].filter(el=>el.getClientRects().length);
+    if(!focusable.length)return;
+    const first=focusable[0],last=focusable[focusable.length-1];
+    if(event.shiftKey&&document.activeElement===first){last.focus();event.preventDefault();}
+    else if(!event.shiftKey&&document.activeElement===last){first.focus();event.preventDefault();}
+});

@@ -5,8 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>오토지니 | 장기렌트·리스 차량 견적 비교</title>
 <meta name="description" content="오토지니에서 국산차와 수입차의 장기렌트·리스 이용 조건과 등록된 월 이용료를 비교하고 상담을 신청하세요.">
-<link rel="stylesheet" href="./site.css?v=20261013-detail-heart-header-04">
+<link rel="stylesheet" href="./fonts/fonts.css?v=20261015">
+<link rel="stylesheet" href="./site.css?v=20261016-faq-spacing">
 
+<link rel="stylesheet" href="./site-improvements.css?v=20261016-compare-spacing">
+<link rel="stylesheet" href="./site-member-features.css?v=20261015-quote-actions">
+<link rel="stylesheet" href="./consultation.css?v=d0d211723f6d">
 </head>
 <body>
 <div class="page">
@@ -68,8 +72,6 @@
         <div id="vehicleInfoContent"></div>
     </section>
 
-
-
     <section id="homeView" class="view-section home-view">
         <header class="home-topbar">
             <div class="home-logo" aria-label="AUTOGENIE">AUTO<span>GENIE</span></div>
@@ -101,7 +103,6 @@
                 <span>간편 신청</span>
             </div>
         </div> -->
-
 
         <section class="home-brand-section" aria-labelledby="homeBrandTitle">
             <div class="home-section-head">
@@ -181,7 +182,7 @@
         </div>
 
         <details class="home-comparison" id="rentLeaseComparison">
-            <summary>장기렌트·리스 차이 한눈에 보기 <span aria-hidden="true">⌄</span></summary>
+            <summary>장기렌트·리스 차이 한눈에 보기 <span aria-hidden="true"></span></summary>
             <div class="home-comparison-inner">
                 <p class="home-comparison-caption">대표적인 이용 형태를 비교한 내용이며, 실제 적용 조건은 상품과 계약에 따라 달라질 수 있습니다.</p>
                 <div class="home-comparison-table-wrap">
@@ -404,12 +405,30 @@
         <section class="qna-section" aria-labelledby="qnaPopularTitle">
             <div class="ag-faq-controls">
                 <div class="ag-faq-categories" role="group" aria-label="질문 카테고리">
-                    <button type="button" class="ag-faq-category active" data-faq-filter="전체" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M7 3h10v18H7V3ZM10 8h4M10 12h4M10 16h2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>전체</span></button>
-                    <button type="button" class="ag-faq-category" data-faq-filter="장기렌트" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M4 14l2-6h12l2 6v5h-3v-2H7v2H4v-5Zm0 0h16M7 11h.01M17 11h.01" stroke-linejoin="round" stroke-linecap="round"/></svg><span>렌트</span></button>
-                    <button type="button" class="ag-faq-category" data-faq-filter="리스" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M6 3h9l4 4v14H6V3Zm9 0v5h4M9 12h7M9 16h7" stroke-linejoin="round" stroke-linecap="round"/></svg><span>리스</span></button>
-                    <button type="button" class="ag-faq-category" data-faq-filter="심사" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="7" r="3"/><path d="M5 20v-2a7 7 0 0 1 14 0v2" stroke-linecap="round"/><path d="m16 11 2 2 3-3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>심사</span></button>
-                    <button type="button" class="ag-faq-category" data-faq-filter="차량" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M4 14l2-6h12l2 6v5h-3v-2H7v2H4v-5Zm0 0h16M7 11h.01M17 11h.01" stroke-linejoin="round" stroke-linecap="round"/></svg><span>차량</span></button>
-                    <button type="button" class="ag-faq-category" data-faq-filter="출고" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M3 7h12v11H3V7Zm12 4h4l3 4v3h-7v-7Z" stroke-linejoin="round"/><circle cx="7" cy="19" r="2"/><circle cx="18" cy="19" r="2"/></svg><span>출고</span></button>
+                    <button type="button" class="ag-faq-category active" data-faq-filter="전체" aria-pressed="true">
+                        <span class="ag-faq-category-icon ag-faq-category-icon--all" aria-hidden="true"><img src="images/menu-icons/Q%26A/all.png" alt=""></span>
+                        <span>전체</span>
+                    </button>
+                    <button type="button" class="ag-faq-category" data-faq-filter="장기렌트" aria-pressed="false">
+                        <span class="ag-faq-category-icon ag-faq-category-icon--rent" aria-hidden="true"><img src="images/menu-icons/Q%26A/rent.png" alt=""></span>
+                        <span>렌트</span>
+                    </button>
+                    <button type="button" class="ag-faq-category" data-faq-filter="리스" aria-pressed="false">
+                        <span class="ag-faq-category-icon ag-faq-category-icon--lease" aria-hidden="true"><img src="images/menu-icons/Q%26A/lease.png" alt=""></span>
+                        <span>리스</span>
+                    </button>
+                    <button type="button" class="ag-faq-category" data-faq-filter="심사" aria-pressed="false">
+                        <span class="ag-faq-category-icon ag-faq-category-icon--screening" aria-hidden="true"><img src="images/menu-icons/Q%26A/screening.png" alt=""></span>
+                        <span>심사</span>
+                    </button>
+                    <button type="button" class="ag-faq-category" data-faq-filter="차량" aria-pressed="false">
+                        <span class="ag-faq-category-icon ag-faq-category-icon--car" aria-hidden="true"><img src="images/menu-icons/Q%26A/car.png" alt=""></span>
+                        <span>차량</span>
+                    </button>
+                    <button type="button" class="ag-faq-category" data-faq-filter="출고" aria-pressed="false">
+                        <span class="ag-faq-category-icon ag-faq-category-icon--delivery" aria-hidden="true"><img src="images/menu-icons/Q%26A/delivery.png" alt=""></span>
+                        <span>출고</span>
+                    </button>
                 </div>
             </div>
             <div class="qna-section-head">
@@ -498,7 +517,6 @@
 
     </section>
 
-    
     <section id="qnaInquiryView" class="view-section qna-inquiry-view" hidden>
         <div class="mypage-subview-head qna-inquiry-head">
             <button class="mypage-subview-back ag-back-button" type="button" aria-label="이전 화면으로 돌아가기" onclick="closeQnaInquiryPage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
@@ -553,7 +571,7 @@
             <p class="member-status-text" id="memberSignedInText" hidden></p>
 
             <div class="mypage-progress">
-                <button class="mypage-progress-item" type="button" data-estimate-status="NEW" data-estimate-title="내 견적">
+                <button class="mypage-progress-item" type="button" data-estimate-status="ALL" data-estimate-title="내 견적">
                     <span class="mypage-progress-icon">
                         <img src="./images/menu-icons/status-estimate.png" alt="" aria-hidden="true">
                     </span>
@@ -612,6 +630,10 @@
                     <span class="mypage-menu-arrow" aria-hidden="true"></span>
                 </span>
             </button>
+            <button class="mypage-menu-item" type="button" onclick="openSavedQuotes()" aria-controls="savedQuotesView">
+                <span class="mypage-menu-label">저장한 견적</span>
+                <span class="mypage-menu-right"><span class="count" id="mypageSavedQuoteCount">0개</span><span class="mypage-menu-arrow" aria-hidden="true"></span></span>
+            </button>
             <button class="mypage-menu-item" type="button" data-mypage-vehicle-list="favorites" aria-controls="myVehiclesView">
                 <span class="mypage-menu-label">관심 차량</span>
                 <span class="mypage-menu-right">
@@ -638,6 +660,14 @@
         </div>
     </section>
 
+    <section id="savedQuotesView" class="view-section mypage-subview" hidden>
+        <div class="mypage-subview-head">
+            <button class="mypage-subview-back ag-back-button" type="button" aria-label="마이페이지로 돌아가기" onclick="agBackOr(() => openMainView('mypage'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
+            <h1 class="mypage-subview-title">저장한 견적</h1>
+        </div>
+        <div class="mypage-subview-content"><p class="saved-quote-note" id="savedQuoteStorageNote"></p><div id="savedQuotesList" class="saved-quotes-list" aria-live="polite"></div></div>
+    </section>
+
     <section id="myEstimatesView" class="view-section my-estimates-page-view mypage-subview" hidden>
         <div class="mypage-subview-head">
             <button class="mypage-subview-back ag-back-button" type="button" aria-label="마이페이지로 돌아가기" onclick="closeMyEstimates()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14.5 5-7 7 7 7"/></svg></button>
@@ -660,7 +690,7 @@
         </div>
         <div class="record-filter-tabs" id="inquiryRecordTabs" role="tablist" aria-label="문의 내역 필터">
             <button type="button" class="record-filter-tab active" data-inquiry-record-filter="ALL">전체 <span id="inquiryTabAll">0</span></button>
-            <button type="button" class="record-filter-tab" data-inquiry-record-filter="ANSWERED">답변완료 <span id="inquiryTabAnswered">0</span></button>
+            <button type="button" class="record-filter-tab" data-inquiry-record-filter="ANSWERED">처리완료 <span id="inquiryTabAnswered">0</span></button>
             <button type="button" class="record-filter-tab" data-inquiry-record-filter="WAITING">답변대기 <span id="inquiryTabWaiting">0</span></button>
         </div>
         <div id="myInquiriesPageContent" class="my-inquiries-page-content mypage-subview-content">
@@ -675,53 +705,9 @@
             <h1 class="mypage-subview-title" id="myVehiclesPageTitle">관심 차량</h1>
         </div>
         <div id="myVehiclesPageList" class="mypage-vehicle-page-list mypage-subview-content" aria-live="polite"></div>
-        <p class="mypage-vehicle-storage-note">관심 차량과 최근 본 차량은 이 브라우저에 저장됩니다.</p>
+        <p class="mypage-vehicle-storage-note">로그인한 관심 차량은 같은 계정에서 함께 사용할 수 있습니다. 비로그인 관심 차량과 최근 본 차량은 이 기기에 보관됩니다.</p>
     </section>
 
-</div>
-
-
-
-
-
-
-<div id="myEstimatesModal" class="my-estimates-modal" hidden>
-    <div class="my-estimates-card" role="dialog" aria-modal="true" aria-labelledby="myEstimatesTitle">
-        <div class="my-estimates-head">
-            <h2 class="my-estimates-title" id="myEstimatesTitle">내 견적</h2>
-            <button class="my-estimates-close" type="button" aria-label="닫기" onclick="closeMyEstimates()">×</button>
-        </div>
-        <div id="myEstimatesContent">
-            <div class="my-estimates-empty">견적 정보를 불러오는 중입니다.</div>
-        </div>
-    </div>
-</div>
-
-<div id="myInquiriesModal" class="my-estimates-modal" hidden>
-    <div class="my-estimates-card" role="dialog" aria-modal="true" aria-labelledby="myInquiriesTitle">
-        <div class="my-estimates-head">
-            <h2 class="my-estimates-title" id="myInquiriesTitle">문의 내역</h2>
-            <button class="my-estimates-close" type="button" aria-label="닫기" onclick="closeMyInquiries()">×</button>
-        </div>
-        <div id="myInquiriesContent">
-            <div class="my-estimates-empty">문의 내역이 없습니다.</div>
-        </div>
-    </div>
-</div>
-
-
-<button id="adminInquiryLauncher" class="admin-inquiry-launcher" type="button" onclick="openAdminInquiries()">관리자 문의 관리</button>
-
-<div id="adminInquiriesModal" class="my-estimates-modal" hidden>
-    <div class="my-estimates-card" role="dialog" aria-modal="true" aria-labelledby="adminInquiriesTitle">
-        <div class="my-estimates-head">
-            <h2 class="my-estimates-title" id="adminInquiriesTitle">관리자 문의 관리</h2>
-            <button class="my-estimates-close" type="button" aria-label="닫기" onclick="closeAdminInquiries()">×</button>
-        </div>
-        <div id="adminInquiriesContent">
-            <div class="my-estimates-empty">문의 내역을 불러오는 중입니다.</div>
-        </div>
-    </div>
 </div>
 
 <div id="memberModal" class="member-modal" hidden>
@@ -753,7 +739,7 @@
         </div>
 
         <div id="memberRegisterPanel" hidden>
-            <h2 class="member-modal-title">회원가입</h2>
+            <h2 class="member-modal-title" id="memberRegisterTitle">회원가입</h2>
             <p class="member-modal-desc">휴대폰 문자 인증을 완료하면 사이트 회원으로 가입할 수 있습니다. 문자 인증은 SMS 서비스가 연결된 경우에만 작동합니다.</p>
             <form id="memberRegisterForm" class="member-form">
                 <div class="member-field">
@@ -794,7 +780,7 @@
         </div>
 
         <div id="memberResetPanel" hidden>
-            <h2 class="member-modal-title">비밀번호 재설정</h2>
+            <h2 class="member-modal-title" id="memberResetTitle">비밀번호 재설정</h2>
             <p class="member-modal-desc">가입한 이메일로 6자리 인증번호를 받은 뒤 새 비밀번호를 설정해 주세요.</p>
             <form id="memberResetForm" class="member-form">
                 <div class="member-field">
@@ -825,7 +811,7 @@
         </div>
 
         <div id="memberResetSupportPanel" hidden>
-            <h2 class="member-modal-title">관리자에게 재설정 요청</h2>
+            <h2 class="member-modal-title" id="memberResetSupportTitle">관리자에게 재설정 요청</h2>
             <p class="member-modal-desc">휴대폰으로 가입하셨거나 이메일을 사용할 수 없다면, 가입한 이름과 휴대폰 번호로 재설정을 요청해 주세요.</p>
             <form id="memberResetSupportForm" class="member-form">
                 <div class="member-field">
@@ -844,7 +830,7 @@
         </div>
 
         <div id="memberSettingsPanel" hidden>
-            <h2 class="member-modal-title">내 정보</h2>
+            <h2 class="member-modal-title" id="memberSettingsTitle">내 정보</h2>
             <p class="member-modal-desc">현재 로그인한 회원 정보입니다.</p>
             <div class="member-info-box">
                 <div class="member-info-row"><span class="member-info-label">이름</span><span class="member-info-value" id="memberInfoName">-</span></div>
@@ -852,7 +838,52 @@
                 <div class="member-info-row"><span class="member-info-label">이메일</span><span class="member-info-value" id="memberInfoEmail">-</span></div>
                 <div class="member-info-row"><span class="member-info-label">가입일</span><span class="member-info-value" id="memberInfoCreatedAt">-</span></div>
             </div>
+            <form id="memberProfileForm" class="member-form">
+                <div class="member-field"><label for="memberProfileName">이름 수정</label><input id="memberProfileName" name="name" type="text" maxlength="30" autocomplete="name" required></div>
+                <div class="member-field"><label for="memberProfilePhone">휴대폰 번호 수정</label><div class="member-reset-code-row"><input id="memberProfilePhone" name="phone" type="tel" maxlength="13" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000"><button id="memberProfileRequestCode" class="member-reset-code-btn" type="button">변경 번호 인증</button></div><p class="member-reset-help">휴대폰 번호를 변경할 때만 문자 인증이 필요합니다.</p></div>
+                <div class="member-field" id="memberProfileCodeField" hidden><label for="memberProfileCode">문자 인증번호</label><div class="member-reset-code-row"><input id="memberProfileCode" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="6자리"><button id="memberProfileVerifyCode" class="member-reset-code-btn" type="button">인증 확인</button></div><p class="member-reset-help" id="memberProfileVerifyState" aria-live="polite"></p></div>
+                <div class="member-form-message" id="memberProfileMessage" role="status"></div><button class="member-form-submit" type="submit">정보 저장</button>
+            </form>
             <button class="member-logout-btn" type="button" onclick="logoutMember()">로그아웃</button>
+            <div class="member-withdraw-area">
+                <button class="member-withdraw-btn" type="button" onclick="beginMemberWithdrawal()">회원 탈퇴</button>
+            </div>
+        </div>
+
+        <div id="memberWithdrawPanel" hidden>
+            <div id="memberWithdrawNoticeStage">
+                <p class="member-withdraw-step">탈퇴 절차 · 1 / 2</p>
+                <h2 class="member-modal-title" id="memberWithdrawNoticeTitle">회원 탈퇴 안내</h2>
+                <p class="member-modal-desc">탈퇴 후에는 로그인할 수 없으며, 계정을 복구할 수 없습니다.</p>
+                <ul class="member-withdraw-list">
+                    <li>이름·연락처 등 계정 식별정보는 익명화됩니다.</li>
+                    <li>보존 지정이 없는 견적·문의 기록은 삭제됩니다.</li>
+                    <li>법정 보존 기록은 해당 기간 동안 별도로 보관된 뒤 삭제됩니다.</li>
+                </ul>
+                <label class="member-withdraw-ack" for="memberWithdrawAcknowledged">
+                    <input id="memberWithdrawAcknowledged" type="checkbox">
+                    <span>탈퇴 후 처리 내용을 확인했습니다.</span>
+                </label>
+                <div class="member-withdraw-actions">
+                    <button class="member-withdraw-secondary" type="button" onclick="cancelMemberWithdrawal()">취소</button>
+                    <button class="member-withdraw-next" id="memberWithdrawNextButton" type="button" disabled onclick="advanceMemberWithdrawal(2)">다음</button>
+                </div>
+            </div>
+
+            <div id="memberWithdrawConfirmStage" hidden>
+                <p class="member-withdraw-step">탈퇴 절차 · 2 / 2</p>
+                <h2 class="member-modal-title" id="memberWithdrawConfirmTitle">최종 확인</h2>
+                <p class="member-modal-desc">계정 복구는 불가능합니다. 계속하려면 아래에 <strong>탈퇴</strong>를 입력해 주세요.</p>
+                <form id="memberWithdrawFinalForm" class="member-withdraw-final-form">
+                    <label for="memberWithdrawConfirmation">확인 문구</label>
+                    <input id="memberWithdrawConfirmation" type="text" autocomplete="off" spellcheck="false" placeholder="탈퇴">
+                    <div id="memberWithdrawMessage" class="member-form-message" role="alert"></div>
+                    <div class="member-withdraw-actions">
+                        <button class="member-withdraw-secondary" type="button" onclick="advanceMemberWithdrawal(1)">이전</button>
+                        <button class="member-withdraw-final" id="memberWithdrawFinalButton" type="submit" disabled>탈퇴 처리</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -871,6 +902,8 @@
     </div>
 </div>
 
+<div id="vehicleCompareTray" class="vehicle-compare-tray" hidden><span>비교 차량 <b data-compare-count>0</b>/3</span><button type="button" data-clear-compare>초기화</button><button type="button" data-open-compare disabled>선택 차량 비교</button></div>
+<div id="vehicleCompareModal" class="vehicle-compare-modal" hidden><section class="vehicle-compare-dialog" role="dialog" aria-modal="true" aria-labelledby="vehicleCompareTitle"><header><h2 id="vehicleCompareTitle">차량 비교</h2><button type="button" data-close-compare aria-label="비교 닫기">×</button></header><div id="vehicleCompareContent"></div></section></div>
 <nav id="bottomNav" class="bottom-nav" aria-label="하단 메뉴">
     <button class="bottom-nav-item active" type="button" data-main-nav="home">
         <span class="bottom-nav-icon" aria-hidden="true">
@@ -959,8 +992,9 @@
     </div>
 </div>
 
-<script src="./site.js?v=20261013-mypage-inquiry-direct-05"></script>
+<script src="./vehicle-list-image-adjustments.js?v=20261016"></script>
+<script src="./site.js?v=20261016-brand-image-controls"></script>
+<script src="./site-member-features.js?v=20261015-saved-quotes"></script>
 </body>
 </html>
-
 

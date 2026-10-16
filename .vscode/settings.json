@@ -1,0 +1,12 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^php -l admin/login\\.php$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node --check site\\.js$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

@@ -33,6 +33,16 @@ function saveEstimateForm(PDO $pdo, string $table, int $id, string $role, int $a
         $current = $query->fetch(PDO::FETCH_ASSOC);
         if (!$current) throw new RuntimeException('견적을 찾을 수 없습니다.');
         if ($sales && (int)($current['assigned_admin_id'] ?? 0) !== $authorId) throw new RuntimeException('본인 담당 견적만 수정할 수 있습니다.');
+        $beforeHistory=$current;
+        if($tagsReady)$beforeHistory['contact_tag']=getEstimateContactTag($pdo,$table==='estimate_quick'?'QUICK':'DIRECT',$id);
+        $nextContact=array_key_exists('next_contact_at',$input)?agDateTimeValue($input['next_contact_at'],'다음 연락일'):($current['next_contact_at'] ?? null);
+        $contractDate=$current['contracted_at'] ?? null;
+        if(array_key_exists('contracted_at',$input)) {
+            if(!$admin)throw new RuntimeException('계약일은 관리자만 변경할 수 있습니다.');
+            $contractDate=agDateTimeValue($input['contracted_at'],'계약일');
+        }
+        if($status==='CONTRACTED' && !$contractDate && $current['status']!=='CONTRACTED')$contractDate=date('Y-m-d H:i:s');
+        $pdo->prepare("UPDATE $table SET next_contact_at=?,contracted_at=? WHERE id=?")->execute([$nextContact,$contractDate,$id]);
         if ($editDetails) saveEstimateDetails($pdo, $table, $id, $role, $input, $current);
         if ($status !== (string)$current['status'] && !updateEstimateStatus($pdo, $table, $id, $status, $sales ? $authorId : null)) throw new RuntimeException('상태를 저장하지 못했습니다.');
         if (array_key_exists('assigned_admin_id', $input)) {
@@ -45,7 +55,7 @@ function saveEstimateForm(PDO $pdo, string $table, int $id, string $role, int $a
                 $query->execute([$assigneeId]);
                 if (!$query->fetch(PDO::FETCH_ASSOC)) throw new InvalidArgumentException('활동 중인 영업사원을 선택해 주세요.');
             }
-            if ($assigneeChanged && !assignEstimate($pdo, $table, $id, $assigneeId ?: null)) throw new RuntimeException('담당자를 저장하지 못했습니다.');
+            if ($assigneeChanged && !assignEstimate($pdo, $table, $id, $assigneeId ?: null, false)) throw new RuntimeException('담당자를 저장하지 못했습니다.');
         }
         $source = $table === 'estimate_quick' ? 'QUICK' : 'DIRECT';
         if ($tag !== null) saveEstimateContactTag($pdo, $source, $id, $tag, $authorId);
@@ -57,7 +67,11 @@ function saveEstimateForm(PDO $pdo, string $table, int $id, string $role, int $a
                 $pdo->prepare('INSERT INTO admin_estimate_notes (estimate_source, estimate_id, author_id, author_name, body) VALUES (?, ?, ?, ?, ?)')->execute([$source, $id, $authorId, $authorName, $note]);
             }
         }
+        $query=$pdo->prepare("SELECT * FROM $table WHERE id=?");$query->execute([$id]);$afterHistory=$query->fetch(PDO::FETCH_ASSOC);
+        if($tagsReady)$afterHistory['contact_tag']=getEstimateContactTag($pdo,$source,$id);
+        agEstimateHistory($pdo,$table,$id,$beforeHistory,$afterHistory,$authorId,$authorName);
         $pdo->commit();
+        agAlimtalkDispatchEstimate($pdo,$table,$id);
     } catch (Throwable $error) {
         if ($pdo->inTransaction()) $pdo->rollBack();
         throw $error;

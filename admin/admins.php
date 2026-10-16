@@ -4,6 +4,7 @@ declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
 
 require_once __DIR__ . '/auth.php';
+require_once __DIR__.'/../config/consultation.php';
 requireSuperAdmin();
 require_once __DIR__ . '/../config/database.php';
 
@@ -158,6 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
         if ($action === 'create_sales') {
             $username = trim((string)($_POST['new_username'] ?? ''));
             $name = trim((string)($_POST['new_name'] ?? ''));
+            [$businessPhone,$kakaoChatUrl]=agConsultationContact($_POST,'new_');
             $teamName = trim((string)($_POST['new_team_name'] ?? ''));
             $password = (string)($_POST['new_account_password'] ?? '');
             $password2 = (string)($_POST['new_account_password2'] ?? '');
@@ -187,13 +189,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
             $stmt = $pdo->prepare("
                 INSERT INTO admin_accounts (
                     username, password_hash, name, role, parent_admin_id, team_name,
-                    can_create, can_update, can_delete, category_permissions, is_active
+                    can_create, can_update, can_delete, category_permissions, is_active, business_phone, kakao_chat_url
                 ) VALUES (
                     :username, :password_hash, :name, 'SALES', :parent_admin_id, :team_name,
-                    :can_create, :can_update, :can_delete, :category_permissions, 1
+                    :can_create, :can_update, :can_delete, :category_permissions, 1, :business_phone, :kakao_chat_url
                 )
             ");
             $stmt->execute([
+                ':business_phone'=>$businessPhone, ':kakao_chat_url'=>$kakaoChatUrl,
                 ':username' => $username,
                 ':password_hash' => password_hash($password, PASSWORD_DEFAULT),
                 ':name' => $name,
@@ -277,6 +280,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
         }
 
         if ($action === 'update') {
+            [$businessPhone,$kakaoChatUrl]=agConsultationContact($_POST);
             $name = trim((string)($_POST['name'] ?? ''));
             $teamName = trim((string)($_POST['team_name'] ?? ''));
             $isActive = (int)($_POST['is_active'] ?? 1);
@@ -319,7 +323,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
                 $stmt = $pdo->prepare("
                     UPDATE admin_accounts
                     SET name = :name,
-                        team_name = :team_name,
+                        team_name = :team_name, business_phone=:business_phone, kakao_chat_url=:kakao_chat_url,
                         is_active = :is_active,
                         can_create = :can_create,
                         can_update = :can_update,
@@ -329,6 +333,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $error === null) {
                 ");
                 $stmt->execute([
                     ':name' => $name,
+                    ':business_phone'=>$businessPhone, ':kakao_chat_url'=>$kakaoChatUrl,
                     ':team_name' => $teamName,
                     ':is_active' => $isActive,
                     ':can_create' => $canCreate,
@@ -448,6 +453,8 @@ if (adminColumnExists($pdo, 'category_permissions') && adminColumnExists($pdo, '
             a.role,
             a.parent_admin_id,
             a.team_name,
+            a.business_phone,
+            a.kakao_chat_url,
             a.can_create,
             a.can_update,
             a.can_delete,
@@ -488,9 +495,9 @@ $teamNames = array_map(static fn(array $team): string => (string)$team['team_nam
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 계정 관리</title>
 <link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
-<link rel="stylesheet" href="./admin-ui.css">
-<link rel="stylesheet" href="./admin-accounts.css">
-</head>
+<link rel="stylesheet" href="./admin-ui.css?v=<?= filemtime(__DIR__ . '/./admin-ui.css') ?>">
+<link rel="stylesheet" href="./admin-accounts.css?v=<?= filemtime(__DIR__ . '/./admin-accounts.css') ?>">
+<link rel="stylesheet" href="./consultation-admin.css?v=<?=filemtime(__DIR__.'/consultation-admin.css')?>"></head>
 <body><div class="admin-shell">
 <?php $currentAdminPage='admins'; require __DIR__.'/sidebar.php'; ?>
 <main class="main"><div class="wrap">
@@ -577,6 +584,8 @@ $teamNames = array_map(static fn(array $team): string => (string)$team['team_nam
                 <label>비밀번호 확인</label>
                 <input type="password" name="new_account_password2" value="" required autocomplete="new-password" data-lpignore="true" data-1p-ignore>
             </div>
+            <div class="field"><label for="newBusinessPhone">영업용 휴대폰 번호</label><input id="newBusinessPhone" type="tel" name="new_business_phone" maxlength="20" placeholder="010-0000-0000"></div>
+            <div class="field"><label for="newKakaoChat">카카오 1:1 상담 링크</label><input id="newKakaoChat" type="url" name="new_kakao_chat_url" maxlength="255" placeholder="https://open.kakao.com/o/…"><small class="field-help">해당 영업용 카카오톡의 1:1 오픈프로필 링크를 등록하세요. 단체방 링크는 사용하지 마세요.</small></div>
             <div class="permission-create">
                 <label>차량 관리 권한</label>
                 <div class="permission-checks" data-permission-group>
@@ -726,6 +735,11 @@ $teamNames = array_map(static fn(array $team): string => (string)$team['team_nam
                                 </div>
                                 <?php renderCategoryPermissions(adminCategoriesForAccount($admin)); ?>
                                 <?php endif; ?>
+                                <?php if ($isSales): ?><div class="ag-contact-fields">
+                                    <label>영업용 휴대폰 번호<input type="tel" name="business_phone" maxlength="20" value="<?= h2((string)($admin['business_phone']??'')) ?>" placeholder="010-0000-0000"></label>
+                                    <label>카카오 1:1 상담 링크<input type="url" name="kakao_chat_url" maxlength="255" value="<?= h2((string)($admin['kakao_chat_url']??'')) ?>" placeholder="https://open.kakao.com/o/…"></label>
+                                    <small>영업용 카카오톡의 1:1 오픈프로필 링크를 등록하세요. 단체방 링크는 사용하지 마세요.</small>
+                                </div><?php endif; ?>
                                 <div class="editor-save"><span>체크한 권한을 확인한 후 저장하세요.</span><button class="btn save" type="submit">변경사항 저장</button></div>
                             </form>
                         </div>

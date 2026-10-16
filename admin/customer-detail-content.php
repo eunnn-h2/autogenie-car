@@ -23,7 +23,7 @@ $customerBackUrl = './customers.php?' . http_build_query(['q' => $q, 'view' => $
     <div class="customer-profile-identity">
         <div class="customer-avatar" aria-hidden="true"><?= ag_h(mb_substr($row['name'] ?: '고객', 0, 1, 'UTF-8')) ?></div>
         <div class="customer-profile-name">
-            <div class="customer-profile-name-line"><h2><?= ag_h($row['name'] ?: '비회원') ?></h2><span class="member-provider member-provider--<?= $providerKind ?>"><?= ag_h($providerLabel) ?></span><?php if ($showDeleted): ?><span class="customer-deleted-label">삭제된 고객</span><?php endif; ?></div>
+            <div class="customer-profile-name-line"><h2><?= ag_h($row['name'] ?: '비회원') ?></h2><span class="member-provider member-provider--<?= $providerKind ?>"><?= ag_h($providerLabel) ?></span><?php if (!empty($row['is_withdrawn'])): ?><span class="customer-account-status customer-account-status--withdrawn">탈퇴</span><?php endif; ?><?php if ($showDeleted): ?><span class="customer-deleted-label">삭제된 고객</span><?php endif; ?></div>
             <p><?= ag_h($row['phone'] ?: '연락처 미등록') ?></p>
         </div>
     </div>
@@ -39,8 +39,13 @@ $customerBackUrl = './customers.php?' . http_build_query(['q' => $q, 'view' => $
         <div><dt>휴대폰</dt><dd><?= ag_h($row['phone'] ?: '미등록') ?></dd></div>
         <div><dt>최근 활동</dt><dd><?= ag_h($row['latest_at'] ?: '-') ?></dd></div>
         <?php foreach ($row['members'] ?? [] as $member): ?>
+        <div><dt>회원 상태</dt><dd><?= ag_h($member['status_label'] ?? '확인 필요') ?></dd></div>
         <div><dt>이메일</dt><dd><?= ag_h($member['email'] ?: '미등록') ?></dd></div>
+        <?php if (($member['status_label'] ?? '') === '탈퇴'): ?>
+        <div><dt>탈퇴일</dt><dd><?= ag_h($member['withdrawn_at'] ?? '') ?></dd></div>
+        <?php else: ?>
         <div><dt>가입일</dt><dd><?= ag_h($member['created_at']) ?></dd></div>
+        <?php endif; ?>
         <div><dt>최근 로그인</dt><dd><?= ag_h($member['last_login_at'] ?: '-') ?></dd></div>
         <?php endforeach; ?>
         <?php if ($showDeleted): ?><div><dt>삭제일</dt><dd><?= ag_h($row['deleted_at']) ?></dd></div><?php endif; ?>
@@ -58,7 +63,10 @@ $customerBackUrl = './customers.php?' . http_build_query(['q' => $q, 'view' => $
     <?php foreach ($activities as $activity):
         $isEstimate = $activity['kind'] === 'estimate';
         $activityLabel = $isEstimate ? ($activity['source'] === 'direct' ? '차량견적' : '간편견적') : '고객문의';
-        $activityStatus = $isEstimate ? ($labels[$activity['status']] ?? $activity['status']) : ($activity['status'] === 'ANSWERED' ? '답변완료' : '미처리');
+        $activityStatus = $isEstimate ? ($labels[$activity['status']] ?? $activity['status']) : ($activity['status'] === 'ANSWERED' ? '처리완료' : '미처리');
+        $retentionType = $isEstimate ? ($activity['source'] === 'direct' ? 'estimate_direct' : 'estimate_quick') : 'customer_inquiries';
+        $retentionRecord = $retainedRecords[$retentionType . ':' . (int)$activity['id']] ?? null;
+        $retentionBasisLabels = ['CONTRACT' => '계약/청약철회', 'PAYMENT' => '대금결제/공급', 'DISPUTE' => '불만/분쟁'];
         $activityHref = $isEstimate
             ? './estimate-detail.php?' . http_build_query(['type' => $activity['source'], 'id' => (int)$activity['id']])
             : './inquiry-detail.php?' . http_build_query(['id' => (int)$activity['id']]);
@@ -68,12 +76,35 @@ $customerBackUrl = './customers.php?' . http_build_query(['q' => $q, 'view' => $
             <p><?= ag_h(trim((string)$activity['item']) ?: '-') ?></p>
             <div class="customer-activity-foot"><time><?= ag_h($activity['created_at']) ?></time>
             <?php if (canAccessAdminCategory($isEstimate ? 'estimates' : 'inquiries')): ?><a class="customer-action" href="<?= ag_h($activityHref) ?>">상세 보기</a><?php endif; ?></div>
+            <?php if ($retentionRecord): ?><p class="customer-retention-expiry">법정 보존: <?= ag_h($retentionBasisLabels[$retentionRecord['basis']] ?? '기타') ?> · 만료 <?= ag_h($retentionRecord['retention_until']) ?></p><?php endif; ?>
+            <?php if ($isMainAdmin && $retentionReady && empty($row['is_withdrawn']) && empty($row['is_blocked']) && empty($row['is_inactive']) && (int)($activity['member_id'] ?? $activity['retention_member_id'] ?? 0) > 0): ?>
+            <form class="customer-retention-form" method="post">
+                <input type="hidden" name="action" value="retention">
+                <input type="hidden" name="csrf_token" value="<?= ag_h($csrfToken) ?>">
+                <input type="hidden" name="customer_hash" value="<?= ag_h($row['customer_hash']) ?>">
+                <input type="hidden" name="record_type" value="<?= ag_h($retentionType) ?>">
+                <input type="hidden" name="record_id" value="<?= (int)$activity['id'] ?>">
+                <label>보존 사유
+                    <select name="basis" required>
+                        <option value="">선택</option>
+                        <?php foreach ($retentionBasisLabels as $basis => $basisLabel): ?>
+                        <option value="<?= ag_h($basis) ?>" <?= ($retentionRecord['basis'] ?? '') === $basis ? 'selected' : '' ?>><?= ag_h($basisLabel) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+                <label>보존 기준일
+                    <input type="date" name="retention_started_at" required value="<?= ag_h($retentionRecord['retention_started_at'] ?? '') ?>">
+                </label>
+                <button class="customer-action" type="submit" name="retention_action" value="save">보존 지정</button>
+                <?php if ($retentionRecord): ?><button class="customer-action danger" type="submit" name="retention_action" value="clear">지정 해제</button><?php endif; ?>
+            </form>
+            <?php endif; ?>
         </article>
     <?php endforeach; ?>
     </div>
 </section>
 </div>
-<?php if ($isMainAdmin): ?>
+<?php if ($isMainAdmin && empty($row['is_withdrawn'])): ?>
 <section class="panel customer-management-panel">
     <div><h2>고객 관리</h2><p class="customer-note">목록에서 삭제해도 회원 계정과 견적·문의 기록은 보관되며, 삭제된 고객에서 복원할 수 있습니다.</p></div>
     <form method="post" data-customer-action data-customer-name="<?= ag_h($row['name'] ?: '비회원') ?>">

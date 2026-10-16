@@ -728,6 +728,29 @@ a {
     white-space:nowrap;
 }
 
+@media(min-width:851px){
+    .table.estimates-table{
+        min-width:1360px;
+        table-layout:fixed;
+    }
+    .table.estimates-table th:nth-child(3),
+    .table.estimates-table td:nth-child(3){width:122px}
+    .table.estimates-table th:nth-child(4),
+    .table.estimates-table td:nth-child(4){width:132px}
+    .table.estimates-table th:nth-child(5),
+    .table.estimates-table td:nth-child(5){width:98px}
+    .table.estimates-table th:nth-child(6),
+    .table.estimates-table td:nth-child(6){width:84px}
+    .table.estimates-table th:nth-child(7),
+    .table.estimates-table td:nth-child(7){width:100px}
+    .table.estimates-table th:nth-child(8),
+    .table.estimates-table td:nth-child(8){width:110px}
+    .table.estimates-table th:nth-child(9),
+    .table.estimates-table td:nth-child(9){width:144px}
+    .table.estimates-table th:nth-child(11),
+    .table.estimates-table td:nth-child(11){min-width:178px;width:auto}
+}
+
 /* ===== 견적문의 모바일 전용 정리 ===== */
 @media (max-width: 850px) {
     .layout { display:block !important; width:100% !important; min-width:0 !important; }
@@ -1188,3 +1211,5 @@ a {
         margin:0;
     }
 }
+
+.estimate-pagination{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:20px 0}.estimate-pagination a{padding:8px 12px;border:1px solid #dce3eb;border-radius:7px;color:#283642;background:#fff;text-decoration:none}.estimate-pagination a[aria-current="page"]{background:#293b4c;color:#fff}.estimate-per-page{display:inline-flex;gap:6px;align-items:center}.estimate-per-page select{padding:6px;border:1px solid #dce3eb;border-radius:6px;background:#fff}.estimate-next-contact{display:block;margin-bottom:4px;font-size:12px;font-weight:600}

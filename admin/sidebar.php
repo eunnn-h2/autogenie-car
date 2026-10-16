@@ -40,9 +40,10 @@ $sidebarItems = [
 ];
 $sidebarSubItems = [];
 if (isSuperAdmin()) {
+    $sidebarItems[] = ['password-reset-requests', '비밀번호 재설정 요청', './password-reset-requests.php', true, ''];
     $sidebarItems[] = ['contact-tag-colors', '상담 색상', './contact-tag-colors.php', true, ''];
-    $sidebarSubItems = array_filter($sidebarItems, static fn(array $item): bool => in_array($item[0], ['admins', 'contracts', 'estimate-screen', 'database', 'contact-tag-colors'], true) && $item[3]);
-    $sidebarItems = array_filter($sidebarItems, static fn(array $item): bool => !in_array($item[0], ['admins', 'contracts', 'estimate-screen', 'database', 'contact-tag-colors'], true));
+    $sidebarSubItems = array_filter($sidebarItems, static fn(array $item): bool => in_array($item[0], ['admins', 'contracts', 'estimate-screen', 'database', 'contact-tag-colors', 'password-reset-requests'], true) && $item[3]);
+    $sidebarItems = array_filter($sidebarItems, static fn(array $item): bool => !in_array($item[0], ['admins', 'contracts', 'estimate-screen', 'database', 'contact-tag-colors', 'password-reset-requests'], true));
 }
 $currentSidebarLabel = '관리자 메뉴';
 foreach (array_merge(array_values($sidebarItems), array_values($sidebarSubItems)) as $item) {
@@ -71,7 +72,7 @@ foreach (array_merge(array_values($sidebarItems), array_values($sidebarSubItems)
       </a>
     <?php endforeach; ?>
     <?php if ($sidebarSubItems): ?>
-      <details class="admin-sidebar__group"<?= in_array($currentAdminPage, ['admins', 'contracts', 'contact-tag-colors'], true) ? ' open' : '' ?>>
+      <details class="admin-sidebar__group"<?= in_array($currentAdminPage, ['admins', 'contracts', 'contact-tag-colors', 'password-reset-requests'], true) ? ' open' : '' ?>>
         <summary class="admin-sidebar__link">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           <span>관리자 설정</span>
@@ -92,5 +93,5 @@ foreach (array_merge(array_values($sidebarItems), array_values($sidebarSubItems)
   </div>
   </div>
 </aside>
-<script src="./admin-delete-guard.js" defer></script>
-<script src="./admin-mobile.js" defer></script>
+<script src="./admin-delete-guard.js?v=<?= filemtime(__DIR__ . '/./admin-delete-guard.js') ?>" defer></script>
+<script src="./admin-mobile.js?v=<?= filemtime(__DIR__ . '/./admin-mobile.js') ?>" defer></script>

@@ -7,6 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     member_response(['ok' => false, 'message' => '잘못된 요청입니다.'], 405);
 }
 
-unset($_SESSION['member_id']);
+unset($_SESSION['member_id'],$_SESSION['member_auth_stamp']);
 session_regenerate_id(true);
 member_response(['ok' => true]);

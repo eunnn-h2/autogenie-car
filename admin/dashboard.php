@@ -31,11 +31,12 @@ $inquiryAnswered = dashCount($pdo, 'customer_inquiries', 'status=?', ['ANSWERED'
 
 $monthStart = date('Y-m-01 00:00:00');
 $nextMonthStart = date('Y-m-01 00:00:00', strtotime('+1 month'));
-$monthlyContracted = dashCount($pdo, 'estimate_direct', 'status=? AND created_at>=? AND created_at<?', ['CONTRACTED', $monthStart, $nextMonthStart])
-    + dashCount($pdo, 'estimate_quick', 'status=? AND created_at>=? AND created_at<?', ['CONTRACTED', $monthStart, $nextMonthStart]);
+$monthlyContracted = dashCount($pdo, 'estimate_direct', 'status=? AND contracted_at>=? AND contracted_at<?', ['CONTRACTED', $monthStart, $nextMonthStart])
+    + dashCount($pdo, 'estimate_quick', 'status=? AND contracted_at>=? AND contracted_at<?', ['CONTRACTED', $monthStart, $nextMonthStart]);
 $monthlyEstimateTotal = dashCount($pdo, 'estimate_direct', 'created_at>=? AND created_at<?', [$monthStart, $nextMonthStart])
     + dashCount($pdo, 'estimate_quick', 'created_at>=? AND created_at<?', [$monthStart, $nextMonthStart]);
 
+$undatedContracts=dashCount($pdo,'estimate_direct',"status='CONTRACTED' AND contracted_at IS NULL")+dashCount($pdo,'estimate_quick',"status='CONTRACTED' AND contracted_at IS NULL");
 $recentEstimates = [];
 try {
     if ($hasDirect) {
@@ -69,7 +70,7 @@ try {
 <title>운영 대시보드 - 오토지니</title>
 <link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
 <link rel="stylesheet" href="./dashboard-page.css?v=<?=filemtime(__DIR__.'/dashboard-page.css')?>">
-<link rel="stylesheet" href="./admin-ui.css">
+<link rel="stylesheet" href="./admin-ui.css?v=<?= filemtime(__DIR__ . '/./admin-ui.css') ?>">
 </head>
 <body>
 <div class="layout">
@@ -80,6 +81,7 @@ try {
   <span class="today">기준일 <?=date('Y.m.d')?></span>
 </header>
 
+<?php if($undatedContracts && isSuperAdmin()): ?><p class="description">계약일 미입력 <?=number_format($undatedContracts)?>건은 월별 집계에서 제외됩니다. 해당 견적의 실제 계약일을 입력해 주세요.</p><?php endif; ?>
 <section class="dashboard-kpi-grid" aria-label="핵심 업무 현황">
   <a class="dashboard-kpi dashboard-kpi--orange" href="./estimates.php">
     <span class="dashboard-kpi__label">이번달 견적 접수</span>

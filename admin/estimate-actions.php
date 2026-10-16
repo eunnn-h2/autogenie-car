@@ -13,7 +13,7 @@ if (!in_array($action, $allowedActions, true)) {
     exit('잘못된 작업입니다.');
 }
 if ($action !== 'claim') {
-    requireDataPermission('delete');
+    if(!canDeleteEstimates()){http_response_code(403);exit('견적 삭제 권한이 없습니다.');}
 }
 require_once __DIR__ . '/../config/database.php';
 
@@ -57,8 +57,7 @@ try {
     if ($action === 'single_delete') {
         $row = parseRowKey((string)($_POST['row_key'] ?? ''));
         if (!$row) { http_response_code(400); exit('견적 값이 올바르지 않습니다.'); }
-        $stmt = $pdo->prepare("DELETE FROM {$row['table']} WHERE id=?");
-        $stmt->execute([$row['id']]);
+        $pdo->beginTransaction();agDeleteEstimate($pdo,$row['table'],$row['id']);$pdo->commit();
         returnToList();
     }
 
@@ -78,7 +77,7 @@ try {
     $direct = $pdo->prepare('DELETE FROM estimate_direct WHERE id=?');
     $quick = $pdo->prepare('DELETE FROM estimate_quick WHERE id=?');
     foreach ($parsed as $row) {
-        ($row['source'] === 'QUICK' ? $quick : $direct)->execute([$row['id']]);
+        agDeleteEstimate($pdo,$row['table'],$row['id']);
     }
     $pdo->commit();
     returnToList();

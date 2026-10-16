@@ -1,3 +1,5 @@
+@import url("./fonts/fonts.css");
+
 /* Autogenie · 페이지 전용 스타일. 원래 선언 순서를 유지합니다. */
 
 /* ===== db-test.html · 원본 스타일 1/34 · 기존 스타일 ===== */
@@ -399,7 +401,7 @@ body.detail-mode .page {
 
 .product-btn .desc br {
     display: block;
-    content: '';
+    content: "";
     margin-bottom: 2px;
 }
 
@@ -819,10 +821,7 @@ body.detail-mode .page {
 }
 
 /* ============================================================
-   월 납입금 숫자 롤링 - 독립 테스트 HTML과 동일한 오도미터 방식
-   - 각 숫자 자리에 0~9 레일을 미리 생성
-   - 가격 변경 시 DOM을 다시 만들지 않고 transform만 이동
-   - 빠른 연속 클릭 시 진행 중인 transition에서 자연스럽게 새 목표로 연결
+    월 이용료 숫자 표시
    ============================================================ */
 
 .quote-box .quote-price-head {
@@ -830,17 +829,17 @@ body.detail-mode .page {
 }
 
 .quote-box .quote-price-head .quote-price-main {
-    --price-font-size: 40px;
-    --price-slot-height: 60px;
-    --price-digit-width: 0.67em;
-    --price-comma-width: 0.24em;
+    --price-font-size: 36px;
+    --price-slot-height: 48px;
+    --price-digit-width: 0.64em;
+    --price-comma-width: 0.22em;
     --price-roll-duration: 360ms;
     --price-roll-easing: cubic-bezier(0.18, 0.78, 0.22, 1);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-wrap: nowrap;
-    gap: 4px;
+    gap: 0;
     width: auto;
     max-width: 100%;
     margin: 5px auto 0;
@@ -882,11 +881,22 @@ body.detail-mode .page {
     font-size: var(--price-font-size) !important;
     font-weight: 900 !important;
     line-height: var(--price-slot-height) !important;
-    letter-spacing: -0.045em !important;
+    letter-spacing: -0.02em !important;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
     -webkit-font-smoothing: antialiased;
+}
+
+.quote-box .quote-price-head .quote-price-main .quote-price-empty {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1em;
+    height: var(--price-slot-height);
+    font-size: var(--price-font-size) !important;
+    font-weight: 900 !important;
+    line-height: var(--price-slot-height) !important;
 }
 
 .quote-box .quote-price-head .quote-price-main .price-digit {
@@ -897,31 +907,29 @@ body.detail-mode .page {
     height: var(--price-slot-height);
     overflow: hidden;
     vertical-align: middle;
-    /* 중요: .quote-price-main span {font-size:15px} 충돌 차단
-       .62em 슬롯 폭이 반드시 40px 가격 폰트를 기준으로 계산되게 한다. */
     font-family: inherit !important;
     font-size: var(--price-font-size) !important;
     font-weight: 900 !important;
     line-height: var(--price-slot-height) !important;
     letter-spacing: 0 !important;
-    transition: opacity 160ms ease;
+    font-variant-numeric: tabular-nums !important;
+    font-feature-settings: "tnum" 1 !important;
 }
 
 .quote-box .quote-price-head .quote-price-main .price-digit-track {
     position: absolute;
-    left: 0;
-    top: 0;
+    inset: 0 auto auto 0;
     display: block;
     width: 100%;
-    /* track도 span이므로 외부 span 규칙을 완전히 차단 */
     font-family: inherit !important;
     font-size: var(--price-font-size) !important;
     font-weight: 900 !important;
     line-height: var(--price-slot-height) !important;
     letter-spacing: 0 !important;
+    font-variant-numeric: tabular-nums !important;
+    font-feature-settings: "tnum" 1 !important;
     will-change: transform;
     backface-visibility: hidden;
-    transform: translate3d(0, 0, 0);
     transition: transform var(--price-roll-duration) var(--price-roll-easing);
 }
 
@@ -931,15 +939,15 @@ body.detail-mode .page {
     justify-content: center;
     width: 100%;
     height: var(--price-slot-height);
-    padding: 0;
     box-sizing: border-box;
     color: inherit;
     font-family: inherit !important;
     font-size: var(--price-font-size) !important;
     font-weight: 900 !important;
     line-height: var(--price-slot-height) !important;
-    letter-spacing: -0.045em !important;
-    text-align: center;
+    letter-spacing: 0 !important;
+    font-variant-numeric: tabular-nums !important;
+    font-feature-settings: "tnum" 1 !important;
 }
 
 .quote-box
@@ -958,12 +966,10 @@ body.detail-mode .page {
     width: var(--price-comma-width);
     height: var(--price-slot-height);
     color: inherit;
-    font-family: inherit !important;
     font-size: var(--price-font-size) !important;
     font-weight: 900 !important;
     line-height: var(--price-slot-height) !important;
-    letter-spacing: -0.045em !important;
-    text-align: center;
+    letter-spacing: 0 !important;
     transition: opacity 160ms ease;
 }
 
@@ -971,20 +977,9 @@ body.detail-mode .page {
     opacity: 0;
 }
 
-.quote-box .quote-price-head .quote-price-main .quote-price-empty {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 1em;
-    height: var(--price-slot-height);
-    font-size: var(--price-font-size) !important;
-    font-weight: 900 !important;
-    line-height: var(--price-slot-height) !important;
-}
-
 /* 차즘처럼 금액 바로 옆에 작게 붙는 단위 */
 
-.quote-box .quote-price-head .quote-price-main > span:last-child {
+.quote-box .quote-price-head .quote-price-main .quote-price-unit {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -992,14 +987,23 @@ body.detail-mode .page {
     flex: 0 0 auto;
     width: auto;
     height: auto;
-    margin: 3px 0 0 2px;
+    margin: 1px 0 0 5px;
     padding: 0;
     color: #22242a;
-    font-size: 13px !important;
-    font-weight: 800;
+    font-size: 15px !important;
+    font-weight: 700;
     line-height: 1;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.02em;
     white-space: nowrap;
+}
+
+.quote-box .quote-price-head .quote-price-main .quote-price-chevron {
+    align-self: center;
+    margin: 1px 0 0 2px;
+    color: #22242a;
+    font-size: 16px !important;
+    font-weight: 600;
+    line-height: 1;
 }
 
 /* 로그인 회원의 견적 신청 정보 안내 */
@@ -1626,15 +1630,13 @@ body.modal-open {
         overflow: hidden;
     }
     .quote-box .quote-price-head .quote-price-main {
-        --price-font-size: 38px;
-        --price-slot-height: 56px;
-        --price-digit-width: 0.65em;
-        --price-comma-width: 0.22em;
-        gap: 3px;
+        --price-font-size: 34px;
+        --price-slot-height: 48px;
+        gap: 0;
     }
-    .quote-box .quote-price-head .quote-price-main > span:last-child {
-        margin-left: 1px;
-        font-size: 12px !important;
+    .quote-box .quote-price-head .quote-price-main .quote-price-unit {
+        margin-left: 5px;
+        font-size: 15px !important;
     }
     .option-btn .badge {
         top: -8px;
@@ -1646,26 +1648,22 @@ body.modal-open {
 
 @media (max-width: 390px) {
     .quote-box .quote-price-head .quote-price-main {
-        --price-font-size: 35px;
-        --price-slot-height: 53px;
-        --price-digit-width: 0.64em;
-        --price-comma-width: 0.21em;
-        gap: 2px;
+        --price-font-size: 32px;
+        --price-slot-height: 48px;
+        gap: 0;
     }
-    .quote-box .quote-price-head .quote-price-main > span:last-child {
-        font-size: 11px !important;
+    .quote-box .quote-price-head .quote-price-main .quote-price-unit {
+        font-size: 15px !important;
     }
 }
 
 @media (max-width: 350px) {
     .quote-box .quote-price-head .quote-price-main {
-        --price-font-size: 32px;
-        --price-slot-height: 49px;
-        --price-digit-width: 0.63em;
-        --price-comma-width: 0.2em;
+        --price-font-size: 30px;
+        --price-slot-height: 46px;
     }
-    .quote-box .quote-price-head .quote-price-main > span:last-child {
-        font-size: 10px !important;
+    .quote-box .quote-price-head .quote-price-main .quote-price-unit {
+        font-size: 15px !important;
     }
 }
 
@@ -1688,7 +1686,7 @@ body.modal-open {
         padding-right: 10px;
         overflow-x: auto;
         justify-content: flex-start;
-        gap: 2px;
+        gap: 0;
     }
     .vehicle-category-tab {
         padding-left: 10px;
@@ -1993,7 +1991,6 @@ body.modal-open {
 
 .vehicle-info-option-image {
     width: 100%;
-    aspect-ratio: 16/8.5;
     border-radius: 14px;
     overflow: hidden;
     background: #f1f2f4;
@@ -2003,12 +2000,20 @@ body.modal-open {
 .vehicle-info-option-image img {
     display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    max-height: 360px;
+    object-fit: contain;
 }
 
 .vehicle-info-option-body {
     padding: 0 2px;
+}
+
+.vehicle-info-option-image-note {
+    margin: -5px 2px 10px;
+    font-size: 10px;
+    line-height: 1.5;
+    color: #8a919a;
 }
 
 .vehicle-info-option:first-child {
@@ -2045,6 +2050,8 @@ body.modal-open {
     line-height: 1.55;
     color: #7b838d;
     white-space: pre-line;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
 }
 
 .vehicle-info-option-badge {
@@ -3038,60 +3045,138 @@ body.modal-open {
     cursor: pointer;
 }
 
+.member-withdraw-area {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+    padding-top: 11px;
+    border-top: 1px solid #f0f1f2;
+}
+
+.member-withdraw-btn {
+    padding: 4px 0;
+    border: 0;
+    background: transparent;
+    color: #a1a8b0;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.member-withdraw-btn:hover {
+    color: #737c85;
+    text-decoration: underline;
+}
+.member-withdraw-btn:focus-visible {
+    outline: 2px solid #a1a8b0;
+    outline-offset: 3px;
+}
+.member-withdraw-btn:disabled {
+    color: #c1c6cb;
+    cursor: wait;
+}
+
+.member-withdraw-step {
+    margin: 0 0 8px;
+    color: #a33a31;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.member-withdraw-list {
+    margin: 14px 0;
+    padding-left: 19px;
+    color: #515861;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.member-withdraw-list li + li {
+    margin-top: 7px;
+}
+
+.member-withdraw-ack {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin: 18px 0 0;
+    color: #343a40;
+    font-size: 13px;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.member-withdraw-ack input {
+    flex: 0 0 auto;
+    margin: 2px 0 0;
+    accent-color: #343a40;
+}
+
+.member-withdraw-final-form {
+    display: grid;
+    gap: 10px;
+}
+.member-withdraw-final-form > label {
+    color: #30353b;
+    font-size: 12px;
+    font-weight: 800;
+}
+.member-withdraw-final-form > input {
+    width: 100%;
+    height: 48px;
+    padding: 0 13px;
+    border: 1px solid #e1e5e9;
+    border-radius: 12px;
+    font: inherit;
+    font-size: 14px;
+}
+.member-withdraw-final-form > input:focus {
+    border-color: #b42318;
+    outline: 2px solid rgba(180, 35, 24, 0.12);
+}
+
+.member-withdraw-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 17px;
+}
+
+.member-withdraw-secondary,
+.member-withdraw-next,
+.member-withdraw-final {
+    height: 46px;
+    padding: 0 12px;
+    border: 1px solid #e1e5e9;
+    border-radius: 12px;
+    background: #fff;
+    color: #414850;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.member-withdraw-next {
+    border-color: #111317;
+    background: #111317;
+    color: #fff;
+}
+.member-withdraw-final {
+    border-color: #a52a22;
+    background: #a52a22;
+    color: #fff;
+}
+.member-withdraw-next:disabled,
+.member-withdraw-final:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+}
+
 /* ============================================================
    마이페이지 - 내 견적
    ============================================================ */
-
-.my-estimates-modal[hidden] {
-    display: none !important;
-}
-
-.my-estimates-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 2600;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 18px;
-    background: rgba(17, 19, 23, 0.44);
-}
-
-.my-estimates-card {
-    width: min(100%, 480px);
-    max-height: 82vh;
-    overflow: auto;
-    padding: 22px 18px 24px;
-    border-radius: 24px 24px 18px 18px;
-    background: #fff;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
-}
-
-.my-estimates-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 17px;
-}
-
-.my-estimates-title {
-    margin: 0;
-    font-size: 21px;
-    font-weight: 900;
-    letter-spacing: -0.04em;
-}
-
-.my-estimates-close {
-    width: 34px;
-    height: 34px;
-    border: 0;
-    border-radius: 50%;
-    background: #f2f3f4;
-    color: #505760;
-    font-size: 22px;
-    cursor: pointer;
-}
 
 .my-estimates-empty {
     padding: 48px 12px;
@@ -3977,115 +4062,6 @@ body.modal-open {
 
 /* 관리자 문의 답변 테스트 UI: URL에 ?admin=1 일 때만 표시 */
 
-.admin-inquiry-launcher {
-    position: fixed;
-    right: 16px;
-    top: 16px;
-    z-index: 2800;
-    display: none;
-    height: 38px;
-    padding: 0 14px;
-    border: 0;
-    border-radius: 999px;
-    background: #111317;
-    color: #fff;
-    font: inherit;
-    font-size: 12px;
-    font-weight: 850;
-    box-shadow: 0 8px 24px rgba(17, 19, 23, 0.18);
-    cursor: pointer;
-}
-
-body.admin-inquiry-mode .admin-inquiry-launcher {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.admin-inquiry-item {
-    padding: 16px;
-    border: 1px solid #e8eaed;
-    border-radius: 16px;
-    background: #fff;
-}
-
-.admin-inquiry-item + .admin-inquiry-item {
-    margin-top: 10px;
-}
-
-.admin-inquiry-user {
-    margin: 0 0 5px;
-    color: #20242a;
-    font-size: 12px;
-    font-weight: 850;
-}
-
-.admin-inquiry-message {
-    margin: 0;
-    padding: 11px 12px;
-    border-radius: 11px;
-    background: #f7f7f8;
-    color: #333941;
-    font-size: 13px;
-    line-height: 1.55;
-    white-space: pre-wrap;
-    word-break: break-word;
-}
-
-.admin-inquiry-reply {
-    margin-top: 12px;
-}
-
-.admin-inquiry-reply textarea {
-    display: block;
-    width: 100%;
-    min-height: 78px;
-    padding: 11px 12px;
-    border: 1px solid #e1e4e8;
-    border-radius: 11px;
-    outline: 0;
-    resize: vertical;
-    font: inherit;
-    font-size: 13px;
-    line-height: 1.55;
-}
-
-.admin-inquiry-reply textarea:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
-}
-
-.admin-inquiry-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 8px;
-}
-
-.admin-inquiry-save {
-    height: 36px;
-    padding: 0 14px;
-    border: 0;
-    border-radius: 10px;
-    background: var(--accent);
-    color: #fff;
-    font: inherit;
-    font-size: 12px;
-    font-weight: 850;
-    cursor: pointer;
-}
-
-.admin-inquiry-existing {
-    margin-top: 10px;
-    padding: 10px 11px;
-    border-radius: 10px;
-    background: #fff4ee;
-    color: #633a25;
-    font-size: 12px;
-    line-height: 1.55;
-    white-space: pre-wrap;
-    word-break: break-word;
-}
-
 /* 하단 메뉴 PNG 아이콘 상태 전환 */
 
 .bottom-nav-icon .menu-icon-active {
@@ -4607,8 +4583,9 @@ body.admin-inquiry-mode .admin-inquiry-launcher {
     font-size: 17px;
 }
 
-body.home-modal-open {
+html.home-modal-open {
     overflow: hidden;
+    scrollbar-gutter: stable;
 }
 
 body.home-main-active .page {
@@ -5307,21 +5284,19 @@ body.home-main-active
         line-height: 1.4;
     }
     .quote-box .quote-price-head .quote-price-main {
-        --price-font-size: clamp(32px, 10.2vw, 40px);
-        --price-slot-height: 56px;
-        --price-digit-width: 0.64em;
-        --price-comma-width: 0.21em;
+        --price-font-size: clamp(30px, 8vw, 34px);
+        --price-slot-height: 48px;
         width: auto;
         max-width: 100%;
-        gap: 2px;
+        gap: 0;
         margin: 4px auto 0;
         left: auto;
         transform: none;
     }
-    .quote-box .quote-price-head .quote-price-main > span:last-child {
+    .quote-box .quote-price-head .quote-price-main .quote-price-unit {
         flex: 0 0 auto;
-        margin-left: 1px;
-        font-size: 11px !important;
+        margin-left: 5px;
+        font-size: 15px !important;
     }
     .price-tags {
         flex-wrap: wrap;
@@ -5447,8 +5422,11 @@ body.home-main-active
         padding: 12px 0;
     }
     .vehicle-info-option-image {
-        width: 82px;
-        height: 68px;
+        width: 100%;
+        height: auto;
+    }
+    .vehicle-info-option-image img {
+        max-height: 320px;
     }
     .vehicle-info-option-top {
         align-items: flex-start;
@@ -5694,20 +5672,6 @@ body.home-main-active
         overflow-wrap: anywhere;
     }
     /* 내 견적 모달 */
-    .my-estimates-modal {
-        align-items: flex-end;
-        padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
-    }
-    .my-estimates-card {
-        width: 100%;
-        max-width: none;
-        max-height: 92dvh;
-        padding: 19px 14px 20px;
-        border-radius: 24px 24px 16px 16px;
-    }
-    .my-estimates-title {
-        font-size: 20px;
-    }
     .my-estimate-item {
         padding: 13px;
         border-radius: 14px;
@@ -5789,10 +5753,8 @@ body.home-main-active
         padding-right: 13px;
     }
     .quote-box .quote-price-head .quote-price-main {
-        --price-font-size: 34px;
-        --price-slot-height: 52px;
-        --price-digit-width: 0.63em;
-        --price-comma-width: 0.2em;
+        --price-font-size: 32px;
+        --price-slot-height: 48px;
     }
     .option-group {
         gap: 7px;
@@ -5855,9 +5817,7 @@ body.home-main-active
     }
     .quote-box .quote-price-head .quote-price-main {
         --price-font-size: 30px;
-        --price-slot-height: 48px;
-        --price-digit-width: 0.62em;
-        --price-comma-width: 0.19em;
+        --price-slot-height: 46px;
     }
     .option-group {
         gap: 5px;
@@ -5903,11 +5863,6 @@ body.home-main-active
 }
 
 /* ===== db-test.html · 원본 스타일 3/34 · 기존 스타일 ===== */
-
-/* ============================================================
-   검색 아이콘 좌측 여백 최종 보정
-   - 모바일 폭에서도 검색창 내부 기준으로 일정한 위치 유지
-   ============================================================ */
 
 @media (max-width: 480px) {
     .vehicle-list-search {
@@ -6089,12 +6044,6 @@ body.home-main-active
 }
 
 /* ===== db-test.html · 원본 스타일 6/34 · 기존 스타일 ===== */
-
-/* ============================================================
-   모바일 차량 카테고리 / 정렬바 최종 보정
-   - 425px 이하 카테고리 6칸 균등 정렬
-   - 카테고리/정렬바 경계선 복구
-   ============================================================ */
 
 @media (max-width: 425px) {
     .vehicle-category-tabs {
@@ -6306,11 +6255,6 @@ body.home-main-active
 }
 
 /* ===== db-test.html · 원본 스타일 10/34 · 기존 스타일 ===== */
-
-/* ============================================================
-   HOME REBUILD 2026-08-24
-   차량찾기 화면을 기준으로 홈의 여백/타이포/이미지 스케일을 재구성
-   ============================================================ */
 
 body.home-main-active .page {
     padding: 20px 16px calc(96px + env(safe-area-inset-bottom));
@@ -6961,11 +6905,6 @@ body.home-main-active .bottom-nav-icon img {
 
 /* ===== db-test.html · 원본 스타일 11/34 · 기존 스타일 ===== */
 
-/* ============================================================
-   BOTTOM NAV UNIFIED 2026-08-24
-   모든 화면에서 차량찾기 화면과 동일한 하단 메뉴 크기/비율 유지
-   ============================================================ */
-
 .bottom-nav,
 body.home-main-active .bottom-nav {
     position: fixed !important;
@@ -7031,11 +6970,6 @@ body.home-main-active .page {
 }
 
 /* ===== db-test.html · 원본 스타일 12/34 · 기존 스타일 ===== */
-
-/* ============================================================
-   HOME HERO FORCE FIX 2026-08-25
-   좁은 데스크톱/태블릿 폭에서 홈 히어로 배치를 강하게 덮어씀
-   ============================================================ */
 
 @media (min-width: 391px) and (max-width: 768px) {
     body.home-main-active .page {
@@ -7174,14 +7108,6 @@ body.home-main-active .home-footer {
 
 /* ===== db-test.html · 원본 스타일 17/34 · 기존 스타일 ===== */
 
-/* ============================================================
-   홈 전체 여백 최종 보정
-   - 이전 수정에서 .page 배경을 #f5f7f9로 바꾸며
-     페이지 padding 영역이 상하좌우 띠처럼 보였던 문제 복구
-   - 홈 본문은 다시 흰색
-   - 푸터만 #f5f7f9 배경으로 좌우 끝까지 확장
-   ============================================================ */
-
 body.home-main-active .page {
     background: #fff !important;
     padding-bottom: 0 !important;
@@ -7215,11 +7141,6 @@ body.home-main-active .home-footer {
 }
 
 /* ===== db-test.html · 원본 스타일 18/34 · 기존 스타일 ===== */
-
-/* ============================================================
-   UI POLISH + RESPONSIVE SYSTEM 2026-09-01
-   모바일 중심 320px~480px / 태블릿·데스크톱은 480px 앱 셸 유지
-   ============================================================ */
 
 :root {
     --accent: #ff5a24;
@@ -7382,7 +7303,7 @@ body.home-main-active .home-hero-image img {
 }
 
 .vehicle-list-card {
-    min-height: 154px !important;
+    min-height: 184px !important;
     padding: 16px 15px !important;
     border-radius: 18px !important;
 }
@@ -7528,7 +7449,7 @@ body.home-main-active .home-footer {
         margin-right: -18px !important;
     }
     .vehicle-list-card {
-        min-height: 154px !important;
+        min-height: 184px !important;
     }
 }
 
@@ -7560,7 +7481,7 @@ body.home-main-active .home-footer {
         margin-right: -14px !important;
     }
     .vehicle-list-card {
-        min-height: 150px !important;
+        min-height: 180px !important;
         padding: 15px 14px !important;
     }
     .vehicle-list-copy {
@@ -7634,7 +7555,7 @@ body.home-main-active .home-footer {
         height: 34px !important;
     }
     .vehicle-list-card {
-        min-height: 146px !important;
+        min-height: 176px !important;
     }
     .vehicle-list-copy {
         width: 58% !important;
@@ -7698,7 +7619,7 @@ body.home-main-active .home-footer {
         height: 32px !important;
     }
     .vehicle-list-card {
-        min-height: 142px !important;
+        min-height: 172px !important;
         padding: 14px 12px !important;
     }
     .vehicle-list-image {
@@ -7730,11 +7651,6 @@ body.home-main-active .home-footer {
 }
 
 /* ===== db-test.html · 원본 스타일 19/34 · 기존 스타일 ===== */
-
-/* ============================================================
-   HOME + Q&A DETAIL POLISH 2026-09-01
-   구조는 모바일 퍼스트 유지 / 320~480px 최적화 / 태블릿·PC 앱 셸 유지
-   ============================================================ */
 
 /* ---------- HOME : hero information hierarchy ---------- */
 
@@ -8123,7 +8039,7 @@ body.home-main-active .home-hero-image img {
     margin-top: 4px !important;
     color: #606870;
     font-size: 14px !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
 }
 
 .home-recommend-body {
@@ -8721,8 +8637,6 @@ body.home-main-active .home-hero-image img {
     }
 }
 
-/* 2026-09-21 Q&A redesign: 오토지니 고객센터 / 공통 카드 스타일 */
-
 #faqView {
     padding-top: 13px !important;
     color: #222428;
@@ -9036,12 +8950,6 @@ body.home-main-active .home-hero-image img {
 
 /* ===== db-test.html · 원본 스타일 20/34 · 기존 스타일 ===== */
 
-/* ============================================================
-   VEHICLE DETAIL RESTORE 2026-09-01
-   - 견적 상세 화면 전체 배경을 그레이로 유지
-   - 고정 하단 메뉴와 마지막 콘텐츠가 겹치지 않도록 안전 여백 확보
-   ============================================================ */
-
 body.detail-mode {
     background: #f3f4f5 !important;
 }
@@ -9084,6 +8992,22 @@ body.detail-mode #vehicleDetailView #app {
     transition: none !important;
 }
 
+/* Edit these inline variables on each image in DevTools: scale=1, x/y=0 (holder ratio). */
+.vehicle-list-image img[data-vehicle-key]:not(.vehicle-thumb-fallback) {
+    transform: translate(
+            calc(
+                var(--vehicle-image-x, 0) *
+                    var(--vehicle-image-holder-width, 0px)
+            ),
+            calc(
+                var(--vehicle-image-y, 0) *
+                    var(--vehicle-image-holder-height, 0px)
+            )
+        )
+        scale(var(--vehicle-image-scale, 1)) !important;
+    transform-origin: var(--vehicle-image-origin, center bottom) !important;
+}
+
 .vehicle-list-image img.vehicle-thumb-fallback {
     position: static !important;
     width: 100% !important;
@@ -9103,7 +9027,7 @@ body.detail-mode #vehicleDetailView #app {
     right: 4px !important;
     bottom: 6px !important;
     width: min(50vw, 220px) !important;
-    height: 136px !important;
+    height: 150px !important;
     display: block !important;
 }
 
@@ -9128,7 +9052,7 @@ body.detail-mode #vehicleDetailView #app {
 @media (max-width: 380px) {
     .vehicle-list-image {
         width: min(49vw, 196px) !important;
-        height: 126px !important;
+        height: 140px !important;
         right: 2px !important;
     }
 }
@@ -9136,15 +9060,12 @@ body.detail-mode #vehicleDetailView #app {
 @media (max-width: 340px) {
     .vehicle-list-image {
         width: min(48vw, 172px) !important;
-        height: 116px !important;
+        height: 130px !important;
         right: 0 !important;
     }
 }
 
 /* ===== db-test.html · 원본 스타일 23/34 · mypage-order-history-redesign ===== */
-
-/* MY PAGE ORDER/INQUIRY HISTORY · compact storefront design · 2026-09-21
-   White across the whole page; individually outlined records for clear separation. */
 
 #myEstimatesView.mypage-subview,
 #myInquiriesView.mypage-subview {
@@ -10138,11 +10059,64 @@ body.detail-mode #vehicleDetailView #app {
     display: block !important;
     width: 20px !important;
     height: 20px !important;
+}
+
+#faqView:not(.mypage-qna-mode) .ag-faq-category svg {
     stroke: #172537 !important;
 }
 
 #faqView:not(.mypage-qna-mode) .ag-faq-category.active svg {
     stroke: #fff !important;
+}
+
+#faqView:not(.mypage-qna-mode) .ag-faq-category-icon {
+    position: relative;
+    display: block;
+    flex: none;
+    width: var(--faq-icon-frame-width, 22px);
+    height: 22px;
+    overflow: hidden;
+}
+
+#faqView:not(.mypage-qna-mode) .ag-faq-category-icon img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: var(--faq-icon-canvas-size);
+    height: var(--faq-icon-canvas-size);
+    max-width: none;
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+}
+
+#faqView:not(.mypage-qna-mode) .ag-faq-category-icon--all {
+    --faq-icon-canvas-size: 42px;
+}
+#faqView:not(.mypage-qna-mode) .ag-faq-category-icon--rent {
+    --faq-icon-canvas-size: 35px;
+}
+#faqView:not(.mypage-qna-mode) .ag-faq-category-icon--lease {
+    --faq-icon-canvas-size: 44px;
+}
+#faqView:not(.mypage-qna-mode) .ag-faq-category-icon--screening {
+    --faq-icon-canvas-size: 42px;
+    --faq-icon-frame-width: 23px;
+}
+#faqView:not(.mypage-qna-mode) .ag-faq-category-icon--car {
+    --faq-icon-canvas-size: 40px;
+    --faq-icon-frame-width: 28px;
+}
+#faqView:not(.mypage-qna-mode) .ag-faq-category-icon--delivery {
+    --faq-icon-canvas-size: 39px;
+    --faq-icon-frame-width: 24px;
+}
+
+#faqView:not(.mypage-qna-mode)
+    .ag-faq-category.active
+    .ag-faq-category-icon
+    img {
+    filter: brightness(0) invert(1) !important;
 }
 
 #faqView:not(.mypage-qna-mode) .qna-section-head {
@@ -10178,7 +10152,8 @@ body.detail-mode #vehicleDetailView #app {
 }
 
 #faqView .ag-qna-show-all[hidden] {
-    display: none !important;
+    display: inline-flex !important;
+    visibility: hidden !important;
 }
 
 #faqView:not(.mypage-qna-mode) .ag-qna-show-all span {
@@ -10219,9 +10194,9 @@ body.detail-mode #vehicleDetailView #app {
     align-items: center !important;
     gap: 0 !important;
     width: 100% !important;
-    min-height: 69px !important;
+    min-height: 52px !important;
     margin: 0 !important;
-    padding: 16px 32px 16px 2px !important;
+    padding: 11px 32px 11px 2px !important;
     border: 0 !important;
     border-radius: 0 !important;
     background: #fff !important;
@@ -10272,7 +10247,7 @@ body.detail-mode #vehicleDetailView #app {
 #faqView:not(.mypage-qna-mode) .faq-answer {
     display: none !important;
     margin: 0 !important;
-    padding: 16px 13px 18px !important;
+    padding: 12px 13px 13px !important;
     border: 0 !important;
     border-top: 1px solid #ecf0f3 !important;
     border-radius: 0 !important;
@@ -12048,12 +12023,6 @@ body.detail-mode #vehicleDetailView #app {
 
 /* ===== db-test.html · 원본 스타일 34/34 · 기존 스타일 ===== */
 
-/* ============================================================
-   2026-08-24 차량찾기 화면 스케일 보정
-   홈 → 차량찾기 전환 시 폰트/차량 이미지가 갑자기 작아 보이지 않도록
-   차량 목록 화면의 모바일 축소 규칙을 기준 크기로 다시 맞춤.
-   ============================================================ */
-
 @media (max-width: 480px) {
     .vehicle-list-view {
         padding-bottom: 28px;
@@ -12308,11 +12277,6 @@ body.detail-mode #vehicleDetailView #app {
 .member-auth-actions .member-kakao-button {
     flex: auto;
 }
-
-/* ============================================================
-   HOME HERO VISUAL UPDATE 2026-09-28
-   Generated premium automotive hero visual
-   ============================================================ */
 .home-hero,
 body.home-main-active .home-hero {
     background-image:
@@ -12375,10 +12339,6 @@ body.home-main-active .home-primary-action {
     border-color: rgba(225, 71, 24, 0.12) !important;
     box-shadow: 0 10px 24px rgba(222, 72, 28, 0.24) !important;
 }
-
-/* HOME BRAND SELECT 2026-09-28
-   기존 홈 디자인은 유지하고 브랜드 선택 영역만 추가
-   ============================================================ */
 .home-brand-section {
     margin-top: 30px;
 }
@@ -12503,10 +12463,6 @@ body.home-main-active .home-primary-action {
         font-size: 11px;
     }
 }
-
-/* HOME POPULAR DESIGN OPTION 3 2026-09-28
-   3번째 시안: 장식 최소화 + 이미지/차명/가격 위계 중심
-   ============================================================ */
 #homeView [aria-labelledby="homePopularTitle"] {
     margin-top: 30px !important;
 }
@@ -12888,294 +12844,993 @@ body.home-main-active .home-primary-action {
         font-size: 22px !important;
     }
 }
-
-/* === 2026-10-13: 기존 디자인을 보존하는 콘텐츠 개선용 최소 스타일 === */
-.home-comparison { margin: 12px 20px 20px; border: 1px solid #e6e9ee; border-radius: 12px; background: #fff; overflow: hidden; }
-.home-comparison > summary { display:flex; align-items:center; justify-content:space-between; gap:8px; cursor:pointer; list-style:none; padding:16px 18px; font-size:14px; font-weight:800; color:#242a31; }
-.home-comparison > summary::-webkit-details-marker { display:none; }
-.home-comparison[open] > summary { border-bottom:1px solid #eff1f3; }
-.home-comparison[open] > summary span { transform: rotate(180deg); }
-.home-comparison-inner { padding: 15px; }
-.home-comparison-caption { margin:0 0 12px; font-size:12px; line-height:1.6; color:#77808e; }
-.home-comparison-table-wrap { width:100%; overflow-x:auto; }
-.home-comparison-table { border-collapse:collapse; width:100%; table-layout:fixed; text-align:left; font-size:12px; line-height:1.5; }
-.home-comparison-table th,.home-comparison-table td { padding:10px 7px; border-bottom:1px solid #e9ecf0; overflow-wrap:anywhere; }
-.home-comparison-table thead th { background:#f7f8fa; color:#353c45; }
-.home-comparison-table tbody th { font-weight:750; color:#3e4752; width:28%; }
-.home-comparison-table td { color:#555f6b; }
-.home-comparison-cta { display:block; width:100%; height:42px; margin-top:15px; background:#ff6028; border:0; border-radius:8px; color:white; font-size:13px; font-weight:800; cursor:pointer; }
-.home-process { margin:26px 20px; }
-.home-process > h2 { margin:0 0 14px; }
-.home-process-list { list-style:none; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; padding:0; margin:0; }
-.home-process-list li { display:flex; flex-direction:column; gap:3px; padding:14px 12px; border:1px solid #eef0f3; background:#fff; border-radius:10px; min-width:0; }
-.home-process-list li span { font-size:11px; font-weight:850; color:#ff6028; }
-.home-process-list li strong { font-size:13px; color:#242a31; }
-.home-process-list li small { font-size:11px; line-height:1.5; color:#808a96; }
-.ag-privacy-consent { display:flex; align-items:flex-start; gap:9px; margin:15px 0 12px; font-size:12px; line-height:1.55; color:#3d4651; text-align:left; cursor:pointer; }
-.ag-privacy-consent input { appearance:auto; flex:0 0 17px; width:17px; height:17px; margin:1px 0 0; accent-color:#ff6028; cursor:pointer; }
-.ag-privacy-consent span { flex:1; min-width:0; }
-.ag-privacy-consent strong { display:block; font-size:12px; font-weight:750; }
-.ag-privacy-consent small { display:block; margin-top:4px; font-size:11px; color:#87919d; }
-.ag-privacy-consent a,.home-footer-copy a { color:inherit; text-underline-offset:2px; }
-.quote-choice-summary { margin:15px 0 8px; padding:13px 14px; border-radius:10px; background:#f7f8fa; }
-.quote-choice-title { display:block; margin-bottom:10px; font-size:12px; color:#252d37; }
-.quote-choice-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); column-gap:12px; row-gap:9px; }
-.quote-choice-grid > div { display:flex; flex-direction:column; min-width:0; gap:3px; }
-.quote-choice-grid span { font-size:11px; color:#7a8490; }
-.quote-choice-grid b { font-size:12px; color:#303945; }
-.quote-condition-footnote { margin:10px 0 12px; font-size:11px; color:#7a8490; line-height:1.6; }
-#vehicleDetailView .action-btn[data-role="save-estimate"] { position:static; left:auto; bottom:auto; transform:none; width:100%; max-width:none; }
-.quote-box .price-tags { flex-wrap:wrap; }
-.quote-box .price-tag { max-width:100%; white-space:normal; line-height:1.4; text-align:center; }
-.vehicle-data-retry { margin-top:14px; padding:9px 20px; border:1px solid #e9a284; background:#fff; border-radius:8px; color:#df5c27; font-weight:800; cursor:pointer; }
-@media(max-width:350px) { .home-comparison { margin-left:13px; margin-right:13px; } .home-comparison-inner { padding:10px; } .home-comparison-table { font-size:11px; } .home-process { margin-left:13px; margin-right:13px; } .home-process-list li { padding:12px 9px; } }
+.home-comparison {
+    margin: 12px 0 20px;
+    border: 1px solid #e6e9ee;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+.home-comparison > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    cursor: pointer;
+    list-style: none;
+    padding: 16px 18px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #242a31;
+}
+.home-comparison > summary span {
+    flex: 0 0 8px;
+    width: 8px;
+    height: 8px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    font-size: 0;
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+}
+.home-comparison > summary::-webkit-details-marker {
+    display: none;
+}
+.home-comparison[open] > summary {
+    border-bottom: 1px solid #eff1f3;
+}
+.home-comparison[open] > summary span {
+    transform: rotate(225deg);
+}
+.home-comparison-inner {
+    padding: 15px;
+}
+.home-comparison-caption {
+    margin: 0 0 12px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #77808e;
+}
+.home-comparison-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+.home-comparison-table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    text-align: left;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.home-comparison-table th,
+.home-comparison-table td {
+    padding: 10px 7px;
+    border-bottom: 1px solid #e9ecf0;
+    overflow-wrap: normal;
+    word-break: keep-all;
+}
+.home-comparison-table th {
+    text-align: center;
+}
+.home-comparison-table thead th {
+    background: #f7f8fa;
+    color: #353c45;
+}
+.home-comparison-table thead th:first-child {
+    width: 24%;
+}
+.home-comparison-table tbody th {
+    font-weight: 750;
+    color: #3e4752;
+    width: 24%;
+}
+.home-comparison-table td {
+    color: #555f6b;
+}
+.home-comparison-cta {
+    display: block;
+    width: 100%;
+    height: 42px;
+    margin-top: 15px;
+    background: #ff6028;
+    border: 0;
+    border-radius: 8px;
+    color: white;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+.home-process {
+    margin: 26px 0;
+}
+.home-process > h2 {
+    margin: 0 0 14px;
+}
+.home-process-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+    padding: 0;
+    margin: 0;
+}
+.home-process-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 14px 12px;
+    border: 1px solid #eef0f3;
+    background: #fff;
+    border-radius: 10px;
+    min-width: 0;
+}
+.home-process-list li span {
+    font-size: 11px;
+    font-weight: 850;
+    color: #ff6028;
+}
+.home-process-list li strong {
+    font-size: 13px;
+    color: #242a31;
+}
+.home-process-list li small {
+    font-size: 11px;
+    line-height: 1.5;
+    color: #808a96;
+}
+.ag-privacy-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin: 15px 0 12px;
+    font-size: 12px;
+    line-height: 1.55;
+    color: #3d4651;
+    text-align: left;
+    cursor: pointer;
+}
+.ag-privacy-consent input {
+    appearance: auto;
+    flex: 0 0 17px;
+    width: 17px;
+    height: 17px;
+    margin: 1px 0 0;
+    accent-color: #ff6028;
+    cursor: pointer;
+}
+.ag-privacy-consent span {
+    flex: 1;
+    min-width: 0;
+}
+.ag-privacy-consent strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 750;
+}
+.ag-privacy-consent small {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    color: #87919d;
+}
+.ag-privacy-consent a,
+.home-footer-copy a {
+    color: inherit;
+    text-underline-offset: 2px;
+}
+.quote-choice-summary {
+    margin: 15px 0 8px;
+    padding: 13px 14px;
+    border-radius: 10px;
+    background: #f7f8fa;
+}
+.quote-choice-title {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: #252d37;
+}
+.quote-choice-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 12px;
+    row-gap: 9px;
+}
+.quote-choice-grid > div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 3px;
+}
+.quote-choice-grid span {
+    font-size: 11px;
+    color: #7a8490;
+}
+.quote-choice-grid b {
+    font-size: 12px;
+    color: #303945;
+}
+.quote-condition-footnote {
+    margin: 10px 0 12px;
+    font-size: 11px;
+    color: #7a8490;
+    line-height: 1.6;
+}
+#vehicleDetailView .quote-action-row .action-btn[data-role="save-estimate"] {
+    position: static;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    width: auto;
+    flex: 1 1 0;
+    max-width: none;
+    margin-top: 0;
+}
+.quote-box .price-tags {
+    flex-wrap: wrap;
+}
+.quote-box .price-tag {
+    max-width: 100%;
+    white-space: normal;
+    line-height: 1.4;
+    text-align: center;
+}
+.vehicle-data-retry {
+    margin-top: 14px;
+    padding: 9px 20px;
+    border: 1px solid #e9a284;
+    background: #fff;
+    border-radius: 8px;
+    color: #df5c27;
+    font-weight: 800;
+    cursor: pointer;
+}
+@media (max-width: 350px) {
+    .home-comparison {
+        margin-left: 13px;
+        margin-right: 13px;
+    }
+    .home-comparison-inner {
+        padding: 10px;
+    }
+    .home-comparison-table {
+        font-size: 11px;
+    }
+    .home-process {
+        margin-left: 13px;
+        margin-right: 13px;
+    }
+    .home-process-list li {
+        padding: 12px 9px;
+    }
+}
 
 /* 상세견적 버튼은 화면 크기에 관계없이 견적 카드의 마지막 요소로 배치합니다.
    모바일 하단 5개 내비게이션은 원래 동작을 유지합니다. */
-
-
-/* ================================================================
-   2026-10-13 | 모바일 레이아웃 안정화
-   기존 UI/컬러/컨텐츠 디자인은 유지하고 뷰포트 경계, 팝업,
-   모바일 키보드, 하단 플로팅 버튼 충돌만 수정합니다.
-   ================================================================ */
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
 @media (max-width: 480px) {
-  /* 기존 -16px 마진이 320~430px에서 실제 페이지 여백보다 커서
+    /* 기존 -16px 마진이 320~430px에서 실제 페이지 여백보다 커서
      Q&A 상단과 마이페이지가 화면 밖으로 잘리던 문제 보정 */
-  #faqView:not(.mypage-qna-mode) .ag-qna-page-header,
-  #faqView:not(.mypage-qna-mode) .qna-hero,
-  #qnaInquiryView .qna-inquiry-head {
-    margin-left: calc((100% - 100vw) / 2) !important;
-    margin-right: calc((100% - 100vw) / 2) !important;
-  }
-  #mypageView {
-    margin-left: calc((100% - 100vw) / 2) !important;
-    margin-right: calc((100% - 100vw) / 2) !important;
-  }
-  /* 텍스트/아이콘만 축소하지 않고 부모에서 자연스럽게 줄바꿈 */
-  #faqView .ag-qna-page-header,
-  #qnaInquiryView .qna-inquiry-head,
-  #mypageView .mypage-top,
-  #mypageView .mypage-menu-list { box-sizing: border-box; }
+    #faqView:not(.mypage-qna-mode) .ag-qna-page-header,
+    #faqView:not(.mypage-qna-mode) .qna-hero,
+    #qnaInquiryView .qna-inquiry-head {
+        margin-left: calc((100% - 100vw) / 2) !important;
+        margin-right: calc((100% - 100vw) / 2) !important;
+    }
+    #mypageView {
+        margin-left: calc((100% - 100vw) / 2) !important;
+        margin-right: calc((100% - 100vw) / 2) !important;
+    }
+    /* 텍스트/아이콘만 축소하지 않고 부모에서 자연스럽게 줄바꿈 */
+    #faqView .ag-qna-page-header,
+    #qnaInquiryView .qna-inquiry-head,
+    #mypageView .mypage-top,
+    #mypageView .mypage-menu-list {
+        box-sizing: border-box;
+    }
 }
 @media (max-width: 768px) and (hover: none) and (pointer: coarse) {
-  /* iOS Safari에서 작은 글씨 입력칸을 탭할 때 자동 확대되는 현상 방지 */
-  .page input:not([type="checkbox"]):not([type="radio"]),
-  .page select, .page textarea,
-  .member-modal input:not([type="checkbox"]):not([type="radio"]),
-  .estimate-modal input:not([type="checkbox"]):not([type="radio"]),
-  .estimate-modal select, .estimate-modal textarea {
-    font-size: 16px !important;
-  }
-  /* 키보드가 뜬 상태에서는 내비게이션이 입력창을 덮지 않게 처리 */
-  body.ag-mobile-field-focus .bottom-nav { display: none !important; }
-  /* 좁고 세로가 짧은 모바일에서는 팝업 내용을 내부에서 끝까지 스크롤 */
-  .member-modal,
-  .estimate-modal,
-  .my-estimates-modal { box-sizing: border-box; }
-  .member-modal-card,
-  .estimate-modal-card,
-  .my-estimates-card {
-    min-height: 0;
-    max-height: calc(100dvh - 20px - env(safe-area-inset-bottom, 0px));
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-  }
-  .estimate-modal,
-  .my-estimates-modal {
-    padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 0px));
-  }
-  .estimate-modal-card { width: 100%; max-width: 480px; border-radius: 24px 24px 16px 16px; }
-  .estimate-modal-head { min-width: 0; }
-  .estimate-modal-head > div { min-width: 0; }
-  .estimate-modal-close { flex: 0 0 36px; }
-  .member-reset-code-row { min-width: 0; }
-  .member-reset-code-row input { min-width: 0; flex: 1 1 auto; }
-  .member-reset-code-btn { flex-shrink: 0; }
+    /* iOS Safari에서 작은 글씨 입력칸을 탭할 때 자동 확대되는 현상 방지 */
+    .page input:not([type="checkbox"]):not([type="radio"]),
+    .page select,
+    .page textarea,
+    .member-modal input:not([type="checkbox"]):not([type="radio"]),
+    .estimate-modal input:not([type="checkbox"]):not([type="radio"]),
+    .estimate-modal select,
+    .estimate-modal textarea {
+        font-size: 16px !important;
+    }
+    /* 키보드가 뜬 상태에서는 내비게이션이 입력창을 덮지 않게 처리 */
+    body.ag-mobile-field-focus .bottom-nav {
+        display: none !important;
+    }
+    /* 좁고 세로가 짧은 모바일에서는 팝업 내용을 내부에서 끝까지 스크롤 */
+    .member-modal,
+    .estimate-modal {
+        box-sizing: border-box;
+    }
+    .member-modal-card,
+    .estimate-modal-card {
+        min-height: 0;
+        max-height: calc(100dvh - 20px - env(safe-area-inset-bottom, 0px));
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+    .estimate-modal {
+        padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 0px));
+    }
+    .estimate-modal-card {
+        width: 100%;
+        max-width: 480px;
+        border-radius: 24px 24px 16px 16px;
+    }
+    .estimate-modal-head {
+        min-width: 0;
+    }
+    .estimate-modal-head > div {
+        min-width: 0;
+    }
+    .estimate-modal-close {
+        flex: 0 0 36px;
+    }
+    .member-reset-code-row {
+        min-width: 0;
+    }
+    .member-reset-code-row input {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+    .member-reset-code-btn {
+        flex-shrink: 0;
+    }
 }
 /* 아주 작은 화면에서 모달 닫기 버튼을 스크롤 중에도 사용할 수 있게 유지 */
 @media (max-height: 680px) and (max-width: 768px) {
-  .member-modal-card .member-modal-close {
-    position: sticky;
-    float: right;
-    top: 0;
-    margin: -6px -2px -34px 0;
-    z-index: 3;
-  }
-  .member-modal-card .member-modal-title { padding-right: 42px; }
+    .member-modal-card .member-modal-close {
+        position: sticky;
+        float: right;
+        top: 0;
+        margin: -6px -2px -34px 0;
+        z-index: 3;
+    }
+    .member-modal-card .member-modal-title {
+        padding-right: 42px;
+    }
 }
 /* 모바일 가로 보기에서 화면 높이를 넘지 않도록 보조 조정 */
 @media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
-  .member-modal, .estimate-modal, .my-estimates-modal {
-    align-items: center;
-    padding: 8px;
-  }
-  .member-modal-card, .estimate-modal-card, .my-estimates-card {
-    max-height: calc(100dvh - 16px - env(safe-area-inset-bottom, 0px));
-    border-radius: 16px;
-  }
+    .member-modal,
+    .estimate-modal {
+        align-items: center;
+        padding: 8px;
+    }
+    .member-modal-card,
+    .estimate-modal-card {
+        max-height: calc(100dvh - 16px - env(safe-area-inset-bottom, 0px));
+        border-radius: 16px;
+    }
 }
-
-/* 2026-10-13 | 견적신청 버튼 위치 최종 보정: 모바일/PC 동일한 카드 내부 흐름 */
-body.detail-mode #vehicleDetailView:not([hidden]) .action-btn[data-role="save-estimate"] {
+body.detail-mode
+    #vehicleDetailView:not([hidden])
+    .quote-action-row
+    .action-btn[data-role="save-estimate"] {
     position: static !important;
     inset: auto !important;
     left: auto !important;
     right: auto !important;
     bottom: auto !important;
     transform: none !important;
-    width: 100% !important;
+    width: auto !important;
+    flex: 1 1 0;
     max-width: none !important;
-    margin-top: 20px;
+    margin-top: 0;
     visibility: visible;
     box-shadow: none;
 }
 body.detail-mode #vehicleDetailView:not([hidden]) .quote-box {
     padding-bottom: 18px !important;
 }
-
-
-/* 2026-10-13 | 마이페이지 하단 메뉴 / 안내 카드 전용 보완 */
-#mypageView .mypage-menu-list { padding-bottom: 12px; }
-#mypageView .mypage-menu-item[data-mypage-vehicle-list] .mypage-menu-arrow { transition: transform .18s ease; }
-#mypageView .mypage-menu-item[data-mypage-vehicle-list][aria-expanded="true"] .mypage-menu-arrow { transform: rotate(90deg); }
-#mypageView .mypage-vehicle-panel { margin: 2px 20px 18px; padding: 16px 14px; background:#fafbfc; border:1px solid #edf0f2; border-radius:14px; }
-#mypageView .mypage-vehicle-panel[hidden] { display:none !important; }
-#mypageView .mypage-vehicle-panel-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
-#mypageView .mypage-vehicle-panel-head h2 { margin:0; font-size:15px; font-weight:800; color:#1b2026; }
-#mypageView .mypage-vehicle-panel-close { border:0; background:transparent; color:#77808b; cursor:pointer; font-size:12px; padding:6px 0 6px 10px; white-space:nowrap; }
-#mypageView .mypage-vehicle-panel-close span { margin-left:4px; font-size:18px; vertical-align:middle; }
-#mypageView .mypage-vehicle-panel-list { display:grid; gap:8px; }
-#mypageView .mypage-vehicle-empty { text-align:center; padding:24px 7px; }
-#mypageView .mypage-vehicle-empty p { margin:0 0 12px; font-size:13px; line-height:1.6; color:#7d8792; word-break:keep-all; }
-#mypageView .mypage-vehicle-empty button { border:1px solid #e5e9ed; background:#fff; color:#303945; font-size:12px; font-weight:700; padding:10px 15px; border-radius:9px; cursor:pointer; }
-#mypageView .mypage-saved-vehicle { display:flex; align-items:center; gap:9px; min-width:0; padding:9px; border:1px solid #edf0f2; background:#fff; border-radius:10px; }
-#mypageView .mypage-saved-vehicle-image { flex:0 0 76px; height:55px; display:flex; align-items:center; justify-content:center; overflow:hidden; border-radius:7px; background:#f7f8f9; }
-#mypageView .mypage-saved-vehicle-image img { display:block; width:100%; height:100%; object-fit:contain; }
-#mypageView .mypage-saved-vehicle-image .image-missing { font-size:10px; color:#a0a8b1; text-align:center; }
-#mypageView .mypage-saved-vehicle-info { flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:5px; border:0; background:transparent; cursor:pointer; text-align:left; padding:5px 0; }
-#mypageView .mypage-saved-vehicle-info strong { display:block; max-width:100%; color:#20252c; font-size:13px; font-weight:800; overflow-wrap:anywhere; }
-#mypageView .mypage-saved-vehicle-info small { font-size:11px; color:#89929d; }
-#mypageView .mypage-saved-vehicle-heart { flex:0 0 34px; display:grid; place-items:center; height:38px; border:0; background:transparent; color:#abb2bb; cursor:pointer; }
-#mypageView .mypage-saved-vehicle-heart[aria-pressed="true"] { color:#ff6028; }
-#mypageView .mypage-saved-vehicle-heart svg { width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:1.8; }
-#mypageView .mypage-saved-vehicle-heart[aria-pressed="true"] svg { fill:#ffede4; }
-#mypageView .mypage-vehicle-storage-note { margin:12px 0 0; font-size:10px; line-height:1.5; color:#9da5af; word-break:keep-all; }
-#mypageView .mypage-help-card { margin:12px 20px 32px; padding:18px 16px; border-radius:14px; background:#f6f7f9; }
-#mypageView .mypage-help-card h2 { margin:0 0 7px; font-size:15px; font-weight:800; color:#242930; }
-#mypageView .mypage-help-card p { margin:0 0 14px; font-size:12px; line-height:1.6; color:#79838d; word-break:keep-all; }
-#mypageView .mypage-help-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
-#mypageView .mypage-help-actions button { display:flex; align-items:center; justify-content:space-between; min-width:0; gap:4px; padding:12px 10px; border:1px solid #e6e9ee; background:#fff; border-radius:9px; color:#303740; font-size:12px; font-weight:700; cursor:pointer; white-space:normal; word-break:keep-all; text-align:left; }
-#mypageView .mypage-help-actions button span { font-size:18px; color:#929ca6; line-height:1; }
-@media (max-width:350px) {
-  #mypageView .mypage-vehicle-panel, #mypageView .mypage-help-card { margin-left:15px; margin-right:15px; }
-  #mypageView .mypage-saved-vehicle-image { flex-basis:65px; }
-  #mypageView .mypage-help-actions button { padding:10px 8px; font-size:11px; }
+#mypageView .mypage-menu-list {
+    padding-bottom: 12px;
 }
-
-/* ==================================================================
-   2026-10-13 | 마이페이지 4개 상세 화면 통합 디자인 (다른 화면 변경 없음)
-   ================================================================== */
-.page:has(> #myVehiclesView:not([hidden])) { background:#fff !important; }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView).mypage-subview {
-    box-sizing:border-box; min-height:calc(100dvh - 40px);
-    padding:0 14px calc(108px + env(safe-area-inset-bottom,0px)) !important;
-    background:#fff !important; color:#222831;
+#mypageView .mypage-menu-item[data-mypage-vehicle-list] .mypage-menu-arrow {
+    transition: transform 0.18s ease;
 }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-subview-head {
-    display:flex; align-items:center; min-height:62px; height:auto;
-    gap:8px; margin:0 -14px 18px !important; padding:10px 15px !important;
-    border-bottom:1px solid #edf0f3 !important; background:#fff !important;
+#mypageView
+    .mypage-menu-item[data-mypage-vehicle-list][aria-expanded="true"]
+    .mypage-menu-arrow {
+    transform: rotate(90deg);
 }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-subview-back {
-    flex:0 0 36px; width:36px; height:36px; display:grid; place-items:center;
-    border-radius:10px; background:#f6f7f9; color:#303741; padding:0;
+#mypageView .mypage-vehicle-panel {
+    margin: 2px 20px 18px;
+    padding: 16px 14px;
+    background: #fafbfc;
+    border: 1px solid #edf0f2;
+    border-radius: 14px;
 }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-subview-back svg { width:18px; height:18px; }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-subview-title {
-    color:#1d2630 !important; font-size:20px !important; font-weight:850 !important; letter-spacing:-.045em;
+#mypageView .mypage-vehicle-panel[hidden] {
+    display: none !important;
 }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-record-overview {
-    display:flex; align-items:center; gap:12px; min-width:0; margin:0 0 19px;
-    padding:15px 14px; background:#f6f7f9; border-radius:14px;
+#mypageView .mypage-vehicle-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
 }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-overview-icon {
-    flex:0 0 42px; width:42px; height:42px; display:grid; place-items:center;
-    background:#fff0e9; color:#fc602e; border-radius:12px;
+#mypageView .mypage-vehicle-panel-head h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+    color: #1b2026;
 }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-overview-icon svg { width:23px; height:23px; }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-overview-copy { flex:1; min-width:0; display:flex; flex-direction:column; gap:4px; }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-overview-copy strong { font-size:13px; font-weight:800; line-height:1.35; color:#26303a; word-break:keep-all; }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-overview-copy small { font-size:11px; line-height:1.5; color:#89929f; word-break:keep-all; }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-overview-count { display:flex; align-items:baseline; flex:0 0 auto; color:#ff6028; font-weight:900; font-size:21px; line-height:1; font-variant-numeric:tabular-nums; }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-overview-count small { margin-left:2px; font-size:11px; color:#777e88; }
-:is(#myEstimatesView,#myInquiriesView) .record-filter-tabs { margin:0 0 17px !important; gap:7px; }
-:is(#myEstimatesView,#myInquiriesView) .record-filter-tab { border-radius:11px !important; height:43px !important; font-size:12px !important; }
-:is(#myEstimatesView,#myInquiriesView) .record-filter-tab.active { background:#ff6028 !important; }
-:is(#myEstimatesView,#myInquiriesView) .my-estimates-list { gap:11px !important; }
-:is(#myEstimatesView,#myInquiriesView) .my-estimate-item,
-:is(#myEstimatesView,#myInquiriesView) .my-inquiry-item {
-    border:1px solid #e9ecf0 !important; border-radius:15px !important; overflow:hidden;
-    box-shadow:0 4px 17px rgba(35,45,56,.035) !important;
+#mypageView .mypage-vehicle-panel-close {
+    border: 0;
+    background: transparent;
+    color: #77808b;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 6px 0 6px 10px;
+    white-space: nowrap;
 }
-:is(#myEstimatesView,#myInquiriesView) .my-estimate-item:has(details[open]),
-:is(#myEstimatesView,#myInquiriesView) .my-inquiry-item:has(details[open]) {
-    border-color:#ffcab3 !important; box-shadow:0 7px 18px rgba(52,40,30,.055) !important;
+#mypageView .mypage-vehicle-panel-close span {
+    margin-left: 4px;
+    font-size: 18px;
+    vertical-align: middle;
 }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-record-empty {
-    display:flex; flex-direction:column; align-items:center; text-align:center; padding:54px 15px 48px;
-    background:#fafbfc; border:1px dashed #e4e9ee; border-radius:16px;
+#mypageView .mypage-vehicle-panel-list {
+    display: grid;
+    gap: 8px;
 }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-empty-icon {
-    display:grid; place-items:center; width:64px; height:64px; border-radius:50%;
-    background:#fff; color:#ff6b3b; border:1px solid #fff0e6; margin-bottom:16px;
+#mypageView .mypage-vehicle-empty {
+    text-align: center;
+    padding: 24px 7px;
 }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-empty-icon svg { width:30px; height:30px; }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-record-empty strong { font-size:15px; color:#2a323d; line-height:1.5; word-break:keep-all; }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-record-empty p { margin:8px 0 18px; font-size:12px; line-height:1.6; color:#8a929e; word-break:keep-all; }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-record-empty button {
-    display:inline-flex; align-items:center; gap:11px; padding:11px 15px;
-    background:#fff; border:1px solid #e5e9ee; color:#303945;
-    border-radius:9px; font-size:12px; font-weight:800; cursor:pointer;
+#mypageView .mypage-vehicle-empty p {
+    margin: 0 0 12px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #7d8792;
+    word-break: keep-all;
 }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-record-empty button span { color:#ff6028; font-size:17px; }
-#myVehiclesView .mypage-vehicle-section-caption { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:4px 0 11px; }
-#myVehiclesView .mypage-vehicle-section-caption strong { color:#202832; font-size:14px; }
-#myVehiclesView .mypage-vehicle-section-caption > span { color:#8e97a1; font-size:11px; }
-#myVehiclesView .mypage-vehicle-cards { display:grid; gap:11px; }
-#myVehiclesView .mypage-saved-vehicle { position:relative; display:flex; align-items:center; min-width:0; padding:12px; background:#fff; border:1px solid #e9ecf0; border-radius:15px; box-shadow:0 4px 17px rgba(35,45,56,.035); }
-#myVehiclesView .mypage-saved-vehicle-info { flex:1; min-width:0; display:flex; align-items:center; gap:13px; padding:0 5px 0 0; background:none; border:0; cursor:pointer; text-align:left; }
-#myVehiclesView .mypage-saved-vehicle-image { flex:0 0 103px; width:103px; height:79px; display:grid; place-items:center; overflow:hidden; border-radius:10px; background:#f5f6f8; }
-#myVehiclesView .mypage-saved-vehicle-image img { display:block; width:100%; height:100%; object-fit:contain; }
-#myVehiclesView .mypage-saved-vehicle-image .image-missing { font-size:11px; color:#a6adb6; }
-#myVehiclesView .mypage-saved-vehicle-text { display:flex; flex:1; min-width:0; flex-direction:column; align-items:flex-start; gap:5px; }
-#myVehiclesView .mypage-vehicle-brand { color:#87909a; font-size:11px; font-weight:650; }
-#myVehiclesView .mypage-saved-vehicle-text strong { display:block; max-width:100%; font-size:15px; font-weight:850; color:#222a34; line-height:1.35; word-break:keep-all; }
-#myVehiclesView .mypage-vehicle-link { margin-top:6px; font-size:11px; color:#ff6028; font-weight:750; }
-#myVehiclesView .mypage-vehicle-link span { margin-left:4px; }
-#myVehiclesView .mypage-saved-vehicle-heart { flex:0 0 38px; display:grid; place-items:center; width:38px; height:38px; background:#fafbfc; border:1px solid #eff1f4; border-radius:50%; color:#a9b0b8; cursor:pointer; }
-#myVehiclesView .mypage-saved-vehicle-heart[aria-pressed="true"] { color:#ff6028; background:#fff1eb; border-color:#ffe3d8; }
-#myVehiclesView .mypage-saved-vehicle-heart svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.75; }
-#myVehiclesView .mypage-saved-vehicle-heart[aria-pressed="true"] svg { fill:#ffdad0; }
-#myVehiclesView .mypage-vehicle-storage-note { margin:19px 2px 0; font-size:11px; line-height:1.5; color:#9aa3ad; word-break:keep-all; }
-@media (max-width:350px) {
-    #myVehiclesView .mypage-saved-vehicle-image { flex-basis:78px; width:78px; height:70px; }
-    #myVehiclesView .mypage-saved-vehicle-info { gap:9px; }
-    #myVehiclesView .mypage-saved-vehicle-text strong { font-size:13px; }
-    :is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-record-overview { padding:13px 11px; gap:9px; }
-    :is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-overview-icon { flex-basis:35px; width:35px; height:35px; }
-    :is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-overview-count { font-size:18px; }
+#mypageView .mypage-vehicle-empty button {
+    border: 1px solid #e5e9ed;
+    background: #fff;
+    color: #303945;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 15px;
+    border-radius: 9px;
+    cursor: pointer;
+}
+#mypageView .mypage-saved-vehicle {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+    padding: 9px;
+    border: 1px solid #edf0f2;
+    background: #fff;
+    border-radius: 10px;
+}
+#mypageView .mypage-saved-vehicle-image {
+    flex: 0 0 76px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 7px;
+    background: #f7f8f9;
+}
+#mypageView .mypage-saved-vehicle-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+#mypageView .mypage-saved-vehicle-image .image-missing {
+    font-size: 10px;
+    color: #a0a8b1;
+    text-align: center;
+}
+#mypageView .mypage-saved-vehicle-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    padding: 5px 0;
+}
+#mypageView .mypage-saved-vehicle-info strong {
+    display: block;
+    max-width: 100%;
+    color: #20252c;
+    font-size: 13px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+#mypageView .mypage-saved-vehicle-info small {
+    font-size: 11px;
+    color: #89929d;
+}
+#mypageView .mypage-saved-vehicle-heart {
+    flex: 0 0 34px;
+    display: grid;
+    place-items: center;
+    height: 38px;
+    border: 0;
+    background: transparent;
+    color: #abb2bb;
+    cursor: pointer;
+}
+#mypageView .mypage-saved-vehicle-heart[aria-pressed="true"] {
+    color: #ff6028;
+}
+#mypageView .mypage-saved-vehicle-heart svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+}
+#mypageView .mypage-saved-vehicle-heart[aria-pressed="true"] svg {
+    fill: #ffede4;
+}
+#mypageView .mypage-vehicle-storage-note {
+    margin: 12px 0 0;
+    font-size: 10px;
+    line-height: 1.5;
+    color: #9da5af;
+    word-break: keep-all;
+}
+#mypageView .mypage-help-card {
+    margin: 12px 20px 32px;
+    padding: 18px 16px;
+    border-radius: 14px;
+    background: #f6f7f9;
+}
+#mypageView .mypage-help-card h2 {
+    margin: 0 0 7px;
+    font-size: 15px;
+    font-weight: 800;
+    color: #242930;
+}
+#mypageView .mypage-help-card p {
+    margin: 0 0 14px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #79838d;
+    word-break: keep-all;
+}
+#mypageView .mypage-help-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+#mypageView .mypage-help-actions button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 0;
+    gap: 4px;
+    padding: 12px 10px;
+    border: 1px solid #e6e9ee;
+    background: #fff;
+    border-radius: 9px;
+    color: #303740;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: normal;
+    word-break: keep-all;
+    text-align: left;
+}
+#mypageView .mypage-help-actions button span {
+    font-size: 18px;
+    color: #929ca6;
+    line-height: 1;
+}
+@media (max-width: 350px) {
+    #mypageView .mypage-vehicle-panel,
+    #mypageView .mypage-help-card {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+    #mypageView .mypage-saved-vehicle-image {
+        flex-basis: 65px;
+    }
+    #mypageView .mypage-help-actions button {
+        padding: 10px 8px;
+        font-size: 11px;
+    }
+}
+.page:has(> #myVehiclesView:not([hidden])) {
+    background: #fff !important;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView).mypage-subview {
+    box-sizing: border-box;
+    min-height: calc(100dvh - 40px);
+    padding: 0 14px calc(108px + env(safe-area-inset-bottom, 0px)) !important;
+    background: #fff !important;
+    color: #222831;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView) .mypage-subview-head {
+    display: flex;
+    align-items: center;
+    min-height: 62px;
+    height: auto;
+    gap: 8px;
+    margin: 0 -14px 18px !important;
+    padding: 10px 15px !important;
+    border-bottom: 1px solid #edf0f3 !important;
+    background: #fff !important;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView) .mypage-subview-back {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: #f6f7f9;
+    color: #303741;
+    padding: 0;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+    .mypage-subview-back
+    svg {
+    width: 18px;
+    height: 18px;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView) .mypage-subview-title {
+    color: #1d2630 !important;
+    font-size: 20px !important;
+    font-weight: 850 !important;
+    letter-spacing: -0.045em;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+    .mypage-record-overview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    margin: 0 0 19px;
+    padding: 15px 14px;
+    background: #f6f7f9;
+    border-radius: 14px;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView) .mypage-overview-icon {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    background: #fff0e9;
+    color: #fc602e;
+    border-radius: 12px;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+    .mypage-overview-icon
+    svg {
+    width: 23px;
+    height: 23px;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView) .mypage-overview-copy {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+    .mypage-overview-copy
+    strong {
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.35;
+    color: #26303a;
+    word-break: keep-all;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+    .mypage-overview-copy
+    small {
+    font-size: 11px;
+    line-height: 1.5;
+    color: #89929f;
+    word-break: keep-all;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+    .mypage-overview-count {
+    display: flex;
+    align-items: baseline;
+    flex: 0 0 auto;
+    color: #ff6028;
+    font-weight: 900;
+    font-size: 21px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+    .mypage-overview-count
+    small {
+    margin-left: 2px;
+    font-size: 11px;
+    color: #777e88;
+}
+:is(#myEstimatesView, #myInquiriesView) .record-filter-tabs {
+    margin: 0 0 17px !important;
+    gap: 7px;
+}
+:is(#myEstimatesView, #myInquiriesView) .record-filter-tab {
+    border-radius: 11px !important;
+    height: 43px !important;
+    font-size: 12px !important;
+}
+:is(#myEstimatesView, #myInquiriesView) .record-filter-tab.active {
+    background: #ff6028 !important;
+}
+:is(#myEstimatesView, #myInquiriesView) .my-estimates-list {
+    gap: 11px !important;
+}
+:is(#myEstimatesView, #myInquiriesView) .my-estimate-item,
+:is(#myEstimatesView, #myInquiriesView) .my-inquiry-item {
+    border: 1px solid #e9ecf0 !important;
+    border-radius: 15px !important;
+    overflow: hidden;
+    box-shadow: 0 4px 17px rgba(35, 45, 56, 0.035) !important;
+}
+:is(#myEstimatesView, #myInquiriesView) .my-estimate-item:has(details[open]),
+:is(#myEstimatesView, #myInquiriesView) .my-inquiry-item:has(details[open]) {
+    border-color: #ffcab3 !important;
+    box-shadow: 0 7px 18px rgba(52, 40, 30, 0.055) !important;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView) .mypage-record-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 54px 15px 48px;
+    background: #fafbfc;
+    border: 1px dashed #e4e9ee;
+    border-radius: 16px;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView) .mypage-empty-icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #fff;
+    color: #ff6b3b;
+    border: 1px solid #fff0e6;
+    margin-bottom: 16px;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+    .mypage-empty-icon
+    svg {
+    width: 30px;
+    height: 30px;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+    .mypage-record-empty
+    strong {
+    font-size: 15px;
+    color: #2a323d;
+    line-height: 1.5;
+    word-break: keep-all;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+    .mypage-record-empty
+    p {
+    margin: 8px 0 18px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #8a929e;
+    word-break: keep-all;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+    .mypage-record-empty
+    button {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    padding: 11px 15px;
+    background: #fff;
+    border: 1px solid #e5e9ee;
+    color: #303945;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+    .mypage-record-empty
+    button
+    span {
+    color: #ff6028;
+    font-size: 17px;
+}
+#myVehiclesView .mypage-vehicle-section-caption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 4px 0 11px;
+}
+#myVehiclesView .mypage-vehicle-section-caption strong {
+    color: #202832;
+    font-size: 14px;
+}
+#myVehiclesView .mypage-vehicle-section-caption > span {
+    color: #8e97a1;
+    font-size: 11px;
+}
+#myVehiclesView .mypage-vehicle-cards {
+    display: grid;
+    gap: 11px;
+}
+#myVehiclesView .mypage-saved-vehicle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #e9ecf0;
+    border-radius: 15px;
+    box-shadow: 0 4px 17px rgba(35, 45, 56, 0.035);
+}
+#myVehiclesView .mypage-saved-vehicle-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 0 5px 0 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    text-align: left;
+}
+#myVehiclesView .mypage-saved-vehicle-image {
+    flex: 0 0 103px;
+    width: 103px;
+    height: 79px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #f5f6f8;
+}
+#myVehiclesView .mypage-saved-vehicle-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+#myVehiclesView .mypage-saved-vehicle-image .image-missing {
+    font-size: 11px;
+    color: #a6adb6;
+}
+#myVehiclesView .mypage-saved-vehicle-text {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+#myVehiclesView .mypage-vehicle-brand {
+    color: #87909a;
+    font-size: 11px;
+    font-weight: 650;
+}
+#myVehiclesView .mypage-saved-vehicle-text strong {
+    display: block;
+    max-width: 100%;
+    font-size: 15px;
+    font-weight: 850;
+    color: #222a34;
+    line-height: 1.35;
+    word-break: keep-all;
+}
+#myVehiclesView .mypage-vehicle-link {
+    margin-top: 6px;
+    font-size: 11px;
+    color: #ff6028;
+    font-weight: 750;
+}
+#myVehiclesView .mypage-vehicle-link span {
+    margin-left: 4px;
+}
+#myVehiclesView .mypage-saved-vehicle-heart {
+    flex: 0 0 38px;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    background: #fafbfc;
+    border: 1px solid #eff1f4;
+    border-radius: 50%;
+    color: #a9b0b8;
+    cursor: pointer;
+}
+#myVehiclesView .mypage-saved-vehicle-heart[aria-pressed="true"] {
+    color: #ff6028;
+    background: #fff1eb;
+    border-color: #ffe3d8;
+}
+#myVehiclesView .mypage-saved-vehicle-heart svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+}
+#myVehiclesView .mypage-saved-vehicle-heart[aria-pressed="true"] svg {
+    fill: #ffdad0;
+}
+#myVehiclesView .mypage-vehicle-storage-note {
+    margin: 19px 2px 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #9aa3ad;
+    word-break: keep-all;
+}
+@media (max-width: 350px) {
+    #myVehiclesView .mypage-saved-vehicle-image {
+        flex-basis: 78px;
+        width: 78px;
+        height: 70px;
+    }
+    #myVehiclesView .mypage-saved-vehicle-info {
+        gap: 9px;
+    }
+    #myVehiclesView .mypage-saved-vehicle-text strong {
+        font-size: 13px;
+    }
+    :is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+        .mypage-record-overview {
+        padding: 13px 11px;
+        gap: 9px;
+    }
+    :is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+        .mypage-overview-icon {
+        flex-basis: 35px;
+        width: 35px;
+        height: 35px;
+    }
+    :is(#myEstimatesView, #myInquiriesView, #myVehiclesView)
+        .mypage-overview-count {
+        font-size: 18px;
+    }
 }
 /* 4개 상세 페이지 타이틀 위치 통일: 뒤로가기 버튼은 왼쪽, 제목은 정중앙 */
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-subview-head { position:relative; justify-content:flex-start !important; }
-:is(#myEstimatesView,#myInquiriesView,#myVehiclesView) .mypage-subview-title {
-    position:absolute; left:50%; transform:translateX(-50%);
-    max-width:calc(100% - 112px); margin:0 !important; text-align:center;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView) .mypage-subview-head {
+    position: relative;
+    justify-content: flex-start !important;
 }
-
-/* 2026-10-13 | 차량 상세 상단 제목줄 오른쪽 관심 차량 버튼 */
+:is(#myEstimatesView, #myInquiriesView, #myVehiclesView) .mypage-subview-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: calc(100% - 112px);
+    margin: 0 !important;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 #vehicleDetailView .detail-topbar .detail-favorite-slot {
     margin-left: auto;
     flex: 0 0 38px;
@@ -13195,9 +13850,9 @@ body.detail-mode #vehicleDetailView:not([hidden]) .quote-box {
     padding: 0;
     border: 1px solid #e8e9ed;
     border-radius: 50%;
-    background: rgba(255,255,255,.96);
+    background: rgba(255, 255, 255, 0.96);
     color: #818996;
-    box-shadow: 0 3px 9px rgba(25,33,43,.05);
+    box-shadow: 0 3px 9px rgba(25, 33, 43, 0.05);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 }
@@ -13214,8 +13869,1107 @@ body.detail-mode #vehicleDetailView:not([hidden]) .quote-box {
     background: #fff0e8;
     border-color: #ffc5a7;
 }
-#vehicleDetailView .vehicle-detail-favorite[aria-pressed="true"] svg { fill: #ff6028; }
+#vehicleDetailView .vehicle-detail-favorite[aria-pressed="true"] svg {
+    fill: #ff6028;
+}
 #vehicleDetailView .vehicle-detail-favorite:focus-visible {
     outline: 2px solid #ff6028;
     outline-offset: 2px;
 }
+
+/* 메인 탭 하단 간격: 메뉴 공간은 바깥 페이지에서 한 번만 확보합니다. */
+.page:has(
+    > :is(#vehicleListView, #faqView, #quickEstimateView, #mypageView):not(
+            [hidden]
+        )
+) {
+    padding-bottom: calc(
+        var(--nav-h) +
+            max(var(--nav-bottom), env(safe-area-inset-bottom, 0px)) + 24px
+    ) !important;
+}
+
+#vehicleListView,
+#faqView:not(.mypage-qna-mode),
+#quickEstimateView,
+#mypageView {
+    padding-bottom: 0 !important;
+    min-height: 0;
+}
+
+.page:has(> #vehicleListView:not([hidden])) {
+    padding-bottom: calc(
+        var(--nav-h) +
+            max(var(--nav-bottom), env(safe-area-inset-bottom, 0px)) + 12px
+    ) !important;
+}
+
+#mypageView .mypage-help-card {
+    margin-bottom: 0;
+}
+
+/* 차량찾기 이미지 개별 조절 · 브랜드별 (scale: 배율, x/y: 영역 대비 이동 비율) */
+/* 브랜드 순서: 현대 → 기아 → KGM → 르노 → 쉐보레 → BMW → 벤츠 → 아우디 → 볼보 → 랜드로버 → 폭스바겐 → 테슬라 */
+
+/* ======================================================================
+   현대 차량 이미지 조절 시작 · 23개 차종
+   ====================================================================== */
+
+/* 현대 · g70 */
+.vehicle-list-image img[data-vehicle-brand="현대"][data-vehicle-name="g70" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · g80 */
+.vehicle-list-image img[data-vehicle-brand="현대"][data-vehicle-name="g80" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · g80 ev */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="g80 ev" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · g90 */
+.vehicle-list-image img[data-vehicle-brand="현대"][data-vehicle-name="g90" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · gv60 ev */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="gv60 ev" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · gv70 */
+.vehicle-list-image img[data-vehicle-brand="현대"][data-vehicle-name="gv70" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · gv70 ev */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="gv70 ev" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · gv80 */
+.vehicle-list-image img[data-vehicle-brand="현대"][data-vehicle-name="gv80" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 그랜저 */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="그랜저" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 베뉴 */
+.vehicle-list-image img[data-vehicle-brand="현대"][data-vehicle-name="베뉴" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 스타리아 */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="스타리아" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 싼타페 */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="싼타페" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 쏘나타 */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="쏘나타" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 아반떼 */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="아반떼" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 아이오닉5 */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="아이오닉5" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 아이오닉6 */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="아이오닉6" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 아이오닉9 */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="아이오닉9" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 캐스퍼 */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="캐스퍼" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 코나 */
+.vehicle-list-image img[data-vehicle-brand="현대"][data-vehicle-name="코나" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 투싼 */
+.vehicle-list-image img[data-vehicle-brand="현대"][data-vehicle-name="투싼" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 팰리세이드 */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="팰리세이드" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 포터2 */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="포터2" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 현대 · 포터2 ev */
+.vehicle-list-image
+    img[data-vehicle-brand="현대"][data-vehicle-name="포터2 ev" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* ==================== 현대 차량 이미지 조절 끝 ==================== */
+
+/* ======================================================================
+   기아 차량 이미지 조절 시작 · 18개 차종
+   ====================================================================== */
+
+/* 기아 · EV3 */
+.vehicle-list-image img[data-vehicle-brand="기아"][data-vehicle-name="EV3" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · EV4 */
+.vehicle-list-image img[data-vehicle-brand="기아"][data-vehicle-name="EV4" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · EV5 */
+.vehicle-list-image img[data-vehicle-brand="기아"][data-vehicle-name="EV5" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · EV6 */
+.vehicle-list-image img[data-vehicle-brand="기아"][data-vehicle-name="EV6" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · EV9 */
+.vehicle-list-image img[data-vehicle-brand="기아"][data-vehicle-name="EV9" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · K5 */
+.vehicle-list-image img[data-vehicle-brand="기아"][data-vehicle-name="K5" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · K8 */
+.vehicle-list-image img[data-vehicle-brand="기아"][data-vehicle-name="K8" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · K9 */
+.vehicle-list-image img[data-vehicle-brand="기아"][data-vehicle-name="K9" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · PV 카고 */
+.vehicle-list-image
+    img[data-vehicle-brand="기아"][data-vehicle-name="PV 카고" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · 니로 */
+.vehicle-list-image img[data-vehicle-brand="기아"][data-vehicle-name="니로" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · 레이 */
+.vehicle-list-image img[data-vehicle-brand="기아"][data-vehicle-name="레이" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · 레이EV */
+.vehicle-list-image
+    img[data-vehicle-brand="기아"][data-vehicle-name="레이EV" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · 모닝 */
+.vehicle-list-image img[data-vehicle-brand="기아"][data-vehicle-name="모닝" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · 봉고3 */
+.vehicle-list-image
+    img[data-vehicle-brand="기아"][data-vehicle-name="봉고3" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · 셀토스 */
+.vehicle-list-image
+    img[data-vehicle-brand="기아"][data-vehicle-name="셀토스" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · 스포티지 */
+.vehicle-list-image
+    img[data-vehicle-brand="기아"][data-vehicle-name="스포티지" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · 쏘렌토 */
+.vehicle-list-image
+    img[data-vehicle-brand="기아"][data-vehicle-name="쏘렌토" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 기아 · 카니발 */
+.vehicle-list-image
+    img[data-vehicle-brand="기아"][data-vehicle-name="카니발" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* ==================== 기아 차량 이미지 조절 끝 ==================== */
+
+/* ======================================================================
+   KGM 차량 이미지 조절 시작 · 9개 차종
+   ====================================================================== */
+
+/* KGM · 렉스턴 뉴 아레나 */
+.vehicle-list-image
+    img[data-vehicle-brand="KGM"][data-vehicle-name="렉스턴 뉴 아레나" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* KGM · 무쏘 */
+.vehicle-list-image img[data-vehicle-brand="KGM"][data-vehicle-name="무쏘" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* KGM · 무쏘ev */
+.vehicle-list-image
+    img[data-vehicle-brand="KGM"][data-vehicle-name="무쏘ev" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* KGM · 액티언 */
+.vehicle-list-image
+    img[data-vehicle-brand="KGM"][data-vehicle-name="액티언" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* KGM · 액티언 하이브리드 */
+.vehicle-list-image
+    img[data-vehicle-brand="KGM"][data-vehicle-name="액티언 하이브리드" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* KGM · 토레스 */
+.vehicle-list-image
+    img[data-vehicle-brand="KGM"][data-vehicle-name="토레스" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* KGM · 토레스 하이브리드 */
+.vehicle-list-image
+    img[data-vehicle-brand="KGM"][data-vehicle-name="토레스 하이브리드" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* KGM · 토레스ev */
+.vehicle-list-image
+    img[data-vehicle-brand="KGM"][data-vehicle-name="토레스ev" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* KGM · 티볼리 */
+.vehicle-list-image
+    img[data-vehicle-brand="KGM"][data-vehicle-name="티볼리" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* ==================== KGM 차량 이미지 조절 끝 ==================== */
+
+/* ======================================================================
+   르노 차량 이미지 조절 시작 · 3개 차종
+   ====================================================================== */
+
+/* 르노 · 그랑콜레오스 */
+.vehicle-list-image
+    img[data-vehicle-brand="르노"][data-vehicle-name="그랑콜레오스" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 르노 · 아르카나 */
+.vehicle-list-image
+    img[data-vehicle-brand="르노"][data-vehicle-name="아르카나" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 르노 · 필랑트 */
+.vehicle-list-image
+    img[data-vehicle-brand="르노"][data-vehicle-name="필랑트" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* ==================== 르노 차량 이미지 조절 끝 ==================== */
+
+/* ======================================================================
+   쉐보레 차량 이미지 조절 시작 · 2개 차종
+   ====================================================================== */
+
+/* 쉐보레 · 트랙스 */
+.vehicle-list-image
+    img[data-vehicle-brand="쉐보레"][data-vehicle-name="트랙스" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 쉐보레 · 트레일블레이저 */
+.vehicle-list-image
+    img[data-vehicle-brand="쉐보레"][data-vehicle-name="트레일블레이저" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* ==================== 쉐보레 차량 이미지 조절 끝 ==================== */
+
+/* ======================================================================
+   BMW 차량 이미지 조절 시작 · 22개 차종
+   ====================================================================== */
+
+/* BMW · 1시리즈 */
+.vehicle-list-image
+    img[data-vehicle-brand="BMW"][data-vehicle-name="1시리즈" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · 2시리즈 */
+.vehicle-list-image
+    img[data-vehicle-brand="BMW"][data-vehicle-name="2시리즈" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · 3시리즈 */
+.vehicle-list-image
+    img[data-vehicle-brand="BMW"][data-vehicle-name="3시리즈" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · 4시리즈 */
+.vehicle-list-image
+    img[data-vehicle-brand="BMW"][data-vehicle-name="4시리즈" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · 5시리즈 */
+.vehicle-list-image
+    img[data-vehicle-brand="BMW"][data-vehicle-name="5시리즈" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · 7시리즈 */
+.vehicle-list-image
+    img[data-vehicle-brand="BMW"][data-vehicle-name="7시리즈" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · 8시리즈 */
+.vehicle-list-image
+    img[data-vehicle-brand="BMW"][data-vehicle-name="8시리즈" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · X1 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="X1" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · X2 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="X2" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · X3 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="X3" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · X4 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="X4" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · X5 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="X5" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · X6 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="X6" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · X7 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="X7" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · XM */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="XM" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · i4 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="i4" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · i5 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="i5" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · i7 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="i7" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · iX */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="iX" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · iX1 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="iX1" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · iX2 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="iX2" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* BMW · iX3 */
+.vehicle-list-image img[data-vehicle-brand="BMW"][data-vehicle-name="iX3" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* ==================== BMW 차량 이미지 조절 끝 ==================== */
+
+/* ======================================================================
+   벤츠 차량 이미지 조절 시작 · 27개 차종
+   ====================================================================== */
+
+/* 벤츠 · AMG GT 43 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="AMG GT 43" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · AMG GT 55 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="AMG GT 55" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · AMG GT 63 S E Performance */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="AMG GT 63 S E Performance" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · AMG SL 로드스터 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="AMG SL 로드스터" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · A클래스 해치백 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="A클래스 해치백" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · CLA AMG GT 쿠페 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="CLA AMG GT 쿠페" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · CLE AMG 카브리올레 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="CLE AMG 카브리올레" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · CLE AMG 쿠페 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="CLE AMG 쿠페" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · C클래스 아방가르드 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="C클래스 아방가르드" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · EQA */
+.vehicle-list-image img[data-vehicle-brand="벤츠"][data-vehicle-name="EQA" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · EQB */
+.vehicle-list-image img[data-vehicle-brand="벤츠"][data-vehicle-name="EQB" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · EQE */
+.vehicle-list-image img[data-vehicle-brand="벤츠"][data-vehicle-name="EQE" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · EQS */
+.vehicle-list-image img[data-vehicle-brand="벤츠"][data-vehicle-name="EQS" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · E클래스 아방가르드 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="E클래스 아방가르드" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · E클래스 익스클루시브 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="E클래스 익스클루시브" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · GLA */
+.vehicle-list-image img[data-vehicle-brand="벤츠"][data-vehicle-name="GLA" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · GLB */
+.vehicle-list-image img[data-vehicle-brand="벤츠"][data-vehicle-name="GLB" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · GLC */
+.vehicle-list-image img[data-vehicle-brand="벤츠"][data-vehicle-name="GLC" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · GLC 쿠페 아방가르드 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="GLC 쿠페 아방가르드" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · GLE */
+.vehicle-list-image img[data-vehicle-brand="벤츠"][data-vehicle-name="GLE" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · GLS */
+.vehicle-list-image img[data-vehicle-brand="벤츠"][data-vehicle-name="GLS" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · G클래스 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="G클래스" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · S클래스 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="S클래스" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · 마이바흐 EQS */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="마이바흐 EQS" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · 마이바흐 GLS */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="마이바흐 GLS" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · 마이바흐 SL 모노그램 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="마이바흐 SL 모노그램" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 벤츠 · 마이바흐 S클래스 */
+.vehicle-list-image
+    img[data-vehicle-brand="벤츠"][data-vehicle-name="마이바흐 S클래스" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* ==================== 벤츠 차량 이미지 조절 끝 ==================== */
+
+/* ======================================================================
+   아우디 차량 이미지 조절 시작 · 12개 차종
+   ====================================================================== */
+
+/* 아우디 · A3 */
+.vehicle-list-image img[data-vehicle-brand="아우디"][data-vehicle-name="A3" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 아우디 · A5 */
+.vehicle-list-image img[data-vehicle-brand="아우디"][data-vehicle-name="A5" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 아우디 · A6 */
+.vehicle-list-image img[data-vehicle-brand="아우디"][data-vehicle-name="A6" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 아우디 · Q3 */
+.vehicle-list-image img[data-vehicle-brand="아우디"][data-vehicle-name="Q3" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 아우디 · Q4 e */
+.vehicle-list-image
+    img[data-vehicle-brand="아우디"][data-vehicle-name="Q4 e" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 아우디 · Q5 */
+.vehicle-list-image img[data-vehicle-brand="아우디"][data-vehicle-name="Q5" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 아우디 · Q6 e */
+.vehicle-list-image
+    img[data-vehicle-brand="아우디"][data-vehicle-name="Q6 e" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 아우디 · Q7 */
+.vehicle-list-image img[data-vehicle-brand="아우디"][data-vehicle-name="Q7" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 아우디 · Q8 */
+.vehicle-list-image img[data-vehicle-brand="아우디"][data-vehicle-name="Q8" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 아우디 · RS Q8 performance */
+.vehicle-list-image
+    img[data-vehicle-brand="아우디"][data-vehicle-name="RS Q8 performance" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 아우디 · S e */
+.vehicle-list-image
+    img[data-vehicle-brand="아우디"][data-vehicle-name="S e" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 아우디 · SQ7 */
+.vehicle-list-image
+    img[data-vehicle-brand="아우디"][data-vehicle-name="SQ7" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* ==================== 아우디 차량 이미지 조절 끝 ==================== */
+
+/* ======================================================================
+   볼보 차량 이미지 조절 시작 · 6개 차종
+   ====================================================================== */
+
+/* 볼보 · EX30 */
+.vehicle-list-image img[data-vehicle-brand="볼보"][data-vehicle-name="EX30" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 볼보 · EX90 */
+.vehicle-list-image img[data-vehicle-brand="볼보"][data-vehicle-name="EX90" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 볼보 · S90 */
+.vehicle-list-image img[data-vehicle-brand="볼보"][data-vehicle-name="S90" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 볼보 · XC40 */
+.vehicle-list-image img[data-vehicle-brand="볼보"][data-vehicle-name="XC40" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 볼보 · XC60 */
+.vehicle-list-image img[data-vehicle-brand="볼보"][data-vehicle-name="XC60" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 볼보 · XC90 */
+.vehicle-list-image img[data-vehicle-brand="볼보"][data-vehicle-name="XC90" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* ==================== 볼보 차량 이미지 조절 끝 ==================== */
+
+/* ======================================================================
+   랜드로버 차량 이미지 조절 시작 · 4개 차종
+   ====================================================================== */
+
+/* 랜드로버 · 더 뉴 레인지로버 */
+.vehicle-list-image
+    img[data-vehicle-brand="랜드로버"][data-vehicle-name="더 뉴 레인지로버" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 랜드로버 · 디펜더 110 */
+.vehicle-list-image
+    img[data-vehicle-brand="랜드로버"][data-vehicle-name="디펜더 110" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 랜드로버 · 디펜더 130 */
+.vehicle-list-image
+    img[data-vehicle-brand="랜드로버"][data-vehicle-name="디펜더 130" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 랜드로버 · 디펜더 90 */
+.vehicle-list-image
+    img[data-vehicle-brand="랜드로버"][data-vehicle-name="디펜더 90" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* ==================== 랜드로버 차량 이미지 조절 끝 ==================== */
+
+/* ======================================================================
+   폭스바겐 차량 이미지 조절 시작 · 2개 차종
+   ====================================================================== */
+
+/* 폭스바겐 · ID.4 */
+.vehicle-list-image
+    img[data-vehicle-brand="폭스바겐"][data-vehicle-name="ID.4" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 폭스바겐 · ID.5 */
+.vehicle-list-image
+    img[data-vehicle-brand="폭스바겐"][data-vehicle-name="ID.5" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* ==================== 폭스바겐 차량 이미지 조절 끝 ==================== */
+
+/* ======================================================================
+   테슬라 차량 이미지 조절 시작 · 3개 차종
+   ====================================================================== */
+
+/* 테슬라 · 모델3 */
+.vehicle-list-image
+    img[data-vehicle-brand="테슬라"][data-vehicle-name="모델3" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 테슬라 · 모델Y */
+.vehicle-list-image
+    img[data-vehicle-brand="테슬라"][data-vehicle-name="모델Y" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* 테슬라 · 모델Y L */
+.vehicle-list-image
+    img[data-vehicle-brand="테슬라"][data-vehicle-name="모델Y L" i] {
+    --vehicle-image-scale: 1;
+    --vehicle-image-x: 0;
+    --vehicle-image-y: 0;
+}
+
+/* ==================== 테슬라 차량 이미지 조절 끝 ==================== */

@@ -33,7 +33,7 @@ if (!in_array($action, ['bulk', 'save_answer'], true)) {
     http_response_code(400);
     exit('잘못된 작업입니다.');
 }
-requireDataPermission($action === 'bulk' && ($_POST['bulk_action'] ?? '') === 'delete' ? 'delete' : 'update');
+if(($action==='bulk' && ($_POST['bulk_action']??'')==='delete') ? !canDeleteInquiries() : !canUpdateInquiries()){http_response_code(403);exit('고객문의 작업 권한이 없습니다.');}
 require_once __DIR__ . '/../config/database.php';
 
 if ($action === 'bulk') {

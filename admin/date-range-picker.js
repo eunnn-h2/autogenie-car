@@ -22,7 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
             trigger.setAttribute('aria-label', `${host.dataset.label || '조회기간'}: ${text}`);
             clear.hidden = !from.value && !to.value;
         };
-        const commit = (a,b) => { from.value=a; to.value=b; from.dispatchEvent(new Event('change',{bubbles:true})); to.dispatchEvent(new Event('change',{bubbles:true})); refresh(); };
+        const commit = (a,b) => {
+            from.value=a; to.value=b;
+            from.dispatchEvent(new Event('change',{bubbles:true}));
+            to.dispatchEvent(new Event('change',{bubbles:true}));
+            refresh();
+            const form = host.closest('form');
+            if (host.dataset.autoSubmit === 'true' && form) {
+                if (typeof form.requestSubmit === 'function') form.requestSubmit();
+                else form.submit();
+            }
+        };
         clear.addEventListener('click', () => commit('',''));
         const dialog = document.createElement('dialog');
         dialog.className = 'dr-dialog';

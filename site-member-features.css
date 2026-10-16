@@ -1,0 +1,26 @@
+/* New feature styles use the existing font and application width. */
+.quote-price-heading {display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.quote-price-heading .quote-price-sub {min-width:0}
+.save-snapshot-button {flex-shrink:0;border:1px solid #e5e8eb;border-radius:8px;background:#fff;color:#606b77;padding:6px 9px;font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.save-snapshot-button:disabled {opacity:.5;cursor:default}
+#vehicleDetailView .quote-action-row {display:flex;align-items:stretch;gap:8px;margin-top:16px}
+#vehicleDetailView .quote-action-row .save-snapshot-button {flex:0 0 auto;min-height:54px;padding:0 14px;border:1px solid #cfd5dc;border-radius:14px;color:#303945;font-size:15px;font-weight:800;white-space:nowrap}
+#vehicleDetailView .quote-action-row .save-snapshot-button[aria-pressed="true"] {background:#fff1ea;border-color:#f4b89e;color:#d8562a}
+#vehicleDetailView .quote-action-row .action-btn[data-role="save-estimate"] {min-width:0}
+#savedQuoteNotice {font-size:12px;line-height:1.6;color:#66717d;margin:10px 0 0;overflow-wrap:anywhere}
+#savedQuoteNotice[hidden] {display:none}
+.saved-quote-note {margin:0 0 16px;color:#8b929b;font-size:12px;line-height:1.65}
+.saved-quotes-list {display:grid;gap:12px}
+.saved-quote-card {min-width:0;padding:18px;border:1px solid #e9edf0;border-radius:16px;background:#fff}
+.saved-quote-card-head,.saved-quote-card-foot {display:flex;align-items:center;justify-content:space-between;gap:12px}
+.saved-quote-card-head strong {min-width:0;font-size:16px;font-weight:700;overflow-wrap:anywhere}
+.saved-quote-card p {margin:9px 0;color:#7a8490;font-size:12px;line-height:1.65;overflow-wrap:anywhere}
+.saved-quote-card-foot {margin-top:15px;font-size:13px;color:#3d4650;flex-wrap:wrap}
+.saved-quote-delete {flex-shrink:0;background:none;border:0;padding:6px;color:#8b929b;font:inherit;font-size:12px;cursor:pointer}
+.saved-quote-open {border:0;border-radius:9px;background:#fff1ea;color:#e65e2c;padding:10px 14px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.saved-quote-open:disabled {opacity:.45;cursor:default}
+#memberProfileForm {margin:20px 0}
+#memberProfileForm .member-reset-code-row input {min-width:0;width:100%}
+#memberProfileForm .member-reset-code-btn {flex-shrink:0}
+#memberProfileForm [hidden] {display:none!important}
+@media(max-width:360px){.saved-quote-card{padding:14px}.save-snapshot-button{padding:5px 7px;font-size:11px}}

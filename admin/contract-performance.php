@@ -7,7 +7,7 @@ function contractTeamColumnExists(PDO $pdo): bool {
     return (int)$stmt->fetchColumn() > 0;
 }
 
-function contractPerformance(PDO $pdo, bool $isMain, int $currentAdminId): array {
+function contractPerformance(PDO $pdo, bool $isMain, int $currentAdminId, string $month=''): array {
     if ($currentAdminId < 1) throw new RuntimeException('로그인 정보를 확인해주세요.');
 
     $hasTeam = contractTeamColumnExists($pdo);
@@ -21,9 +21,11 @@ function contractPerformance(PDO $pdo, bool $isMain, int $currentAdminId): array
         $rows[(int)$account['id']] = $account + ['direct' => 0, 'quick' => 0, 'total' => 0];
     }
 
+    $dateParams=[]; $dateSql='';
+    if($month!==''){ $start=$month.'-01 00:00:00';$end=(new DateTimeImmutable($start))->modify('+1 month')->format('Y-m-d H:i:s');$dateSql=' AND contracted_at>=? AND contracted_at<?';$dateParams=[$start,$end]; }
     foreach (['estimate_direct' => 'direct', 'estimate_quick' => 'quick'] as $table => $type) {
-        $stmt = $pdo->prepare("SELECT assigned_admin_id, COUNT(*) AS contract_count FROM $table WHERE status = 'CONTRACTED'" . ($isMain ? '' : ' AND assigned_admin_id = ?') . ' GROUP BY assigned_admin_id');
-        $stmt->execute($isMain ? [] : [$currentAdminId]);
+        $stmt = $pdo->prepare("SELECT assigned_admin_id, COUNT(*) AS contract_count FROM $table WHERE status = 'CONTRACTED'" . $dateSql . ($isMain ? '' : ' AND assigned_admin_id = ?') . ' GROUP BY assigned_admin_id');
+        $stmt->execute([...$dateParams,...($isMain?[]:[$currentAdminId])]);
         foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $count) {
             $id = (int)$count['assigned_admin_id'];
             if (!isset($rows[$id])) continue;

@@ -39,8 +39,8 @@ $contactTagColors = getEstimateContactTagColors($pdo);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>상담 색상</title>
 <link rel="stylesheet" href="./sidebar.css?v=<?=filemtime(__DIR__ . '/sidebar.css')?>">
-<link rel="stylesheet" href="./account-settings-page.css">
-<link rel="stylesheet" href="./admin-ui.css">
+<link rel="stylesheet" href="./account-settings-page.css?v=<?= filemtime(__DIR__ . '/./account-settings-page.css') ?>">
+<link rel="stylesheet" href="./admin-ui.css?v=<?= filemtime(__DIR__ . '/./admin-ui.css') ?>">
 </head><body><div class="admin-shell">
 <?php $currentAdminPage = 'contact-tag-colors'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main"><div class="wrap">

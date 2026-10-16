@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 header('Content-Type: text/html; charset=utf-8');
 require_once __DIR__ . '/auth.php';
+requireSuperAdmin();
 require_once __DIR__ . '/../config/database.php';
 
 $message = '';
@@ -14,7 +15,7 @@ function h(string $value): string {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    requireVehicleEditor();
+    requireSuperAdmin();
 
     $requestId = (int)($_POST['request_id'] ?? 0);
     $action = (string)($_POST['action'] ?? '');
@@ -118,14 +119,14 @@ $pendingCount = (int)$pdo->query("
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>비밀번호 재설정 요청 | 오토지니 관리자</title>
-<link rel="stylesheet" href="./password-reset-requests-page.css">
+<link rel="stylesheet" href="./password-reset-requests-page.css?v=<?= filemtime(__DIR__ . '/./password-reset-requests-page.css') ?>">
 </head>
 <body>
 <div class="wrap">
     <div class="head">
         <div>
             <h1>비밀번호 재설정 요청 (<?= $pendingCount ?>)</h1>
-            <div class="sub">가입 이메일을 사용할 수 없는 회원이 이름과 휴대폰 번호로 요청한 목록입니다.</div>
+            <div class="sub">회원이 이름과 휴대폰 번호로 요청한 목록입니다. 별도 본인 확인 후 처리해 주세요.</div>
         </div>
         <a class="back" href="./estimates.php">견적 신청 관리로 돌아가기</a>
     </div>

@@ -6,9 +6,11 @@ require_once __DIR__ . '/member-auth-common.php';
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     member_response(['ok' => false, 'message' => '잘못된 요청입니다.'], 405);
 }
+if(($_SERVER['HTTP_X_REQUESTED_WITH']??'')!=='XMLHttpRequest')member_response(['ok'=>false,'message'=>'허용되지 않은 요청입니다.'],403);
 $data = member_json_input();
 $login = trim((string)($data['login'] ?? $data['email'] ?? ''));
 $password = (string)($data['password'] ?? '');
+if (!agLoginAllowed($pdo,'member',$login)) member_response(['ok'=>false,'message'=>'로그인 시도가 많습니다. 15분 후 다시 시도해 주세요.'],429);
 $phone = normalize_member_phone($login);
 if ($phone !== '') {
     $stmt = $pdo->prepare('SELECT id, name, phone, email, password_hash, status, created_at FROM member_accounts WHERE phone = ? LIMIT 1');
@@ -24,10 +26,12 @@ if (!$member || $member['status'] !== 'ACTIVE' || !password_verify($password, (s
     member_response(['ok' => false, 'message' => '휴대폰 번호(또는 이메일)와 비밀번호를 확인해 주세요.'], 401);
 }
 // 카카오 계정의 임시 전화번호나 랜덤 비밀번호를 통한 사이트 로그인은 허용하지 않습니다.
-if (str_starts_with((string)$member['phone'], 'KAKAO-')) {
+if (member_public($member)['provider'] === 'kakao') {
     member_response(['ok' => false, 'message' => '카카오 계정은 카카오로 로그인해 주세요.'], 401);
 }
 session_regenerate_id(true);
+agLoginSucceeded($pdo,'member',$login);
+$_SESSION['member_auth_stamp']=hash('sha256',(string)$member['password_hash']);
 $_SESSION['member_id'] = (int)$member['id'];
 $pdo->prepare('UPDATE member_accounts SET last_login_at = NOW() WHERE id = ?')->execute([(int)$member['id']]);
 member_response(['ok' => true, 'member' => member_public($member)]);

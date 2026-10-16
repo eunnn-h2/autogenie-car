@@ -4,6 +4,7 @@ declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
 
 require_once __DIR__ . '/auth.php';
+require_once __DIR__.'/../config/consultation.php';
 require_once __DIR__ . '/../config/database.php';
 
 
@@ -20,7 +21,7 @@ $teamColumnStmt = $pdo->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
 $teamColumnStmt->execute();
 $hasTeamColumn = (int)$teamColumnStmt->fetchColumn() > 0;
 $teamSelect = $hasTeamColumn ? ', team_name' : ", NULL AS team_name";
-$stmt = $pdo->prepare("SELECT id, username, name, role, is_active, password_hash, last_login_at, created_at{$teamSelect} FROM admin_accounts WHERE id = ? LIMIT 1");
+$stmt = $pdo->prepare("SELECT id, username, name, role, is_active, password_hash, last_login_at, created_at,business_phone,kakao_chat_url{$teamSelect} FROM admin_accounts WHERE id = ? LIMIT 1");
 $stmt->execute([$currentAdminId]);
 $account = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -33,6 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = (string)($_POST['action'] ?? '');
 
     try {
+        if ($action === 'save_contact') {
+            if(!isSalesAdmin())throw new RuntimeException('영업사원 계정에서만 설정할 수 있습니다.');
+            [$phone,$url]=agConsultationContact($_POST);
+            $pdo->prepare("UPDATE admin_accounts SET business_phone=?,kakao_chat_url=? WHERE id=? AND role='SALES'")->execute([$phone,$url,$currentAdminId]);
+            $account['business_phone']=$phone;$account['kakao_chat_url']=$url;
+            $message='고객에게 안내할 상담 연락처를 저장했습니다.';
+        }
         if ($action === 'change_password') {
             $currentPassword = (string)($_POST['current_password'] ?? '');
             $newPassword = (string)($_POST['new_password'] ?? '');
@@ -56,10 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $stmt = $pdo->prepare("UPDATE admin_accounts SET password_hash = ? WHERE id = ?");
             $stmt->execute([password_hash($newPassword, PASSWORD_DEFAULT), $currentAdminId]);
+            unset($_SESSION['admin_auth_stamp']); // The account is re-read below; keep this session after its own password change.
             session_regenerate_id(true);
             $message = '비밀번호가 변경되었습니다.';
 
-            $stmt = $pdo->prepare("SELECT id, username, name, role, is_active, password_hash, last_login_at, created_at{$teamSelect} FROM admin_accounts WHERE id = ? LIMIT 1");
+            $stmt = $pdo->prepare("SELECT id, username, name, role, is_active, password_hash, last_login_at, created_at,business_phone,kakao_chat_url{$teamSelect} FROM admin_accounts WHERE id = ? LIMIT 1");
             $stmt->execute([$currentAdminId]);
             $account = $stmt->fetch(PDO::FETCH_ASSOC);
         }
@@ -76,9 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>내 계정</title>
 <link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
-<link rel="stylesheet" href="./admin-ui.css">
+<link rel="stylesheet" href="./admin-ui.css?v=<?= filemtime(__DIR__ . '/./admin-ui.css') ?>">
 <link rel="stylesheet" href="./account-settings-page.css?v=<?= filemtime(__DIR__ . '/account-settings-page.css') ?>">
-</head>
+<link rel="stylesheet" href="./consultation-admin.css?v=<?=filemtime(__DIR__.'/consultation-admin.css')?>"></head>
 <body><div class="admin-shell">
 <?php $currentAdminPage='account-settings'; require __DIR__.'/sidebar.php'; ?>
 <main class="main"><div class="wrap account-settings">
@@ -104,6 +113,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </section>
 
+    <?php if(isSalesAdmin()): ?><section class="card settings-section"><div class="section-intro"><h2>고객 상담 연락처</h2><p>배정된 고객에게 표시되는 영업용 번호와 카카오 1:1 상담 링크입니다.</p></div>
+    <form method="post" class="ag-contact-fields"><input type="hidden" name="action" value="save_contact">
+    <label>영업용 휴대폰 번호<input type="tel" name="business_phone" maxlength="20" value="<?=esc((string)($account['business_phone']??''))?>"></label>
+    <label>카카오 1:1 상담 링크<input type="url" name="kakao_chat_url" maxlength="255" value="<?=esc((string)($account['kakao_chat_url']??''))?>" placeholder="https://open.kakao.com/o/…"></label>
+    <small>영업용 카카오톡에서 1:1 오픈프로필을 만들고 링크를 등록하세요. 단체방 링크는 사용하지 마세요.</small><button type="submit">상담 연락처 저장</button></form></section><?php endif; ?>
     <section class="card settings-section" aria-labelledby="password-title">
         <div class="section-intro">
             <span class="section-eyebrow">SECURITY</span>

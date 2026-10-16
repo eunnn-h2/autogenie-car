@@ -100,8 +100,8 @@ $todayCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE cr
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>고객 문의 - 오토지니</title>
 <link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
-<link rel="stylesheet" href="./inquiries-page.css">
-<link rel="stylesheet" href="./admin-ui.css"><link rel="stylesheet" href="./date-range-picker.css?v=<?=filemtime(__DIR__ . '/date-range-picker.css')?>"><script src="./date-range-picker.js?v=<?=filemtime(__DIR__ . '/date-range-picker.js')?>" defer></script></head>
+<link rel="stylesheet" href="./inquiries-page.css?v=<?=filemtime(__DIR__ . '/inquiries-page.css')?>">
+<link rel="stylesheet" href="./admin-ui.css?v=<?=filemtime(__DIR__ . '/admin-ui.css')?>"><link rel="stylesheet" href="./date-range-picker.css?v=<?=filemtime(__DIR__ . '/date-range-picker.css')?>"><script src="./date-range-picker.js?v=<?=filemtime(__DIR__ . '/date-range-picker.js')?>" defer></script></head>
 <body><div class="layout">
 <?php $currentAdminPage = 'inquiries'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main"><section class="card admin-page-sections">
@@ -131,20 +131,20 @@ $todayCount = (int)$pdo->query("SELECT COUNT(*) FROM customer_inquiries WHERE cr
 </div></form>
 <div class="result-bar"><div class="result-tools"><select aria-label="페이지당 목록 수" onchange="location.href='?<?=h(qstr(['per_page'=>null,'page'=>null]))?>'+(this.value?'&per_page='+this.value:'')"><option value="20" <?=$perPage===20?'selected':''?>>20개</option><option value="50" <?=$perPage===50?'selected':''?>>50개</option><option value="100" <?=$perPage===100?'selected':''?>>100개</option></select></div></div>
 <form id="bulkForm" action="./inquiry-actions.php" method="post"><input type="hidden" name="return_query" value="<?=h(qstr(['open'=>null]))?>"><input type="hidden" name="action" value="bulk"></form>
-<div class="table-wrap"><table class="inquiry-table"><thead><tr><th class="col-check"><input type="checkbox" id="checkAll"></th><th class="col-status">처리상태</th><th class="col-no">문의번호</th><th>문의내용</th><th class="col-writer">작성자</th><th class="col-date">등록일</th><th class="col-answer">상세 관리</th></tr></thead><tbody>
+<div class="table-wrap"><table class="inquiry-table"><thead><tr><th class="col-check"><input type="checkbox" id="checkAll"></th><th class="col-status">처리상태</th><th class="col-no">문의번호</th><th class="col-message">문의내용</th><th class="col-writer">작성자</th><th class="col-date">등록일</th><th class="col-answer">상세 관리</th></tr></thead><tbody>
 <?php if(!$rows):?><tr><td colspan="7" class="empty">조건에 맞는 문의가 없습니다.</td></tr><?php endif;?>
 <?php foreach($rows as $r): $detailHref = "./inquiry-detail.php?" . http_build_query(["id"=>(int)$r["id"], "return_query"=>qstr(["open"=>null, "saved"=>null, "bulk"=>null, "error"=>null])]); ?>
 <tr class="data-row">
 <td><input type="checkbox" name="ids[]" value="<?= (int)$r['id'] ?>" class="row-check" form="bulkForm"></td>
 <td><span class="state <?=$r['status']==='ANSWERED'?'answered':'new'?>"><?=$r['status']==='ANSWERED'?'답변완료':'미처리'?></span></td>
 <td><a class="inquiry-no" href="<?=h($detailHref)?>" title="<?=h($r['inquiry_no'])?>"><span class="inquiry-card-title">고객 문의</span><span class="inquiry-number-text"><?=h($r['inquiry_no'])?></span></a></td>
-<td class="subject"><a href="<?=h($detailHref)?>"><?=h(mb_strimwidth(preg_replace('/\s+/', ' ', (string)$r['message']),0,90,'…','UTF-8'))?></a><small><?=h($r['member_phone'] ?: ($r['member_email'] ?: '연락처 없음'))?></small></td>
-<td><a class="inquiry-customer-link" href="<?=h($detailHref)?>"><?=h($r['member_name'] ?: '비회원')?></a></td>
-<td><?=h(date('Y-m-d H:i', strtotime((string)$r['created_at'])))?></td>
-<td><a class="answer-link <?=$r['status']==='ANSWERED'?'done':'pending'?>" href="<?=h($detailHref)?>"><?=$r['status']==='ANSWERED'?'답변 확인':'문의 확인'?></a><details class="inquiry-row-menu"><summary aria-label="<?=h($r['member_name'] ?: '비회원')?> 문의 관리"><span aria-hidden="true">⋮</span></summary><div class="inquiry-row-menu-items"><a href="<?=h($detailHref)?>">문의 상세 보기</a><a href="<?=h($detailHref)?>#replyForm"><?=$r['status']==='ANSWERED' || !canUpdateData()?'답변 확인':'답변 등록'?></a></div></details></td>
+<td class="subject col-message"><a href="<?=h($detailHref)?>"><?=h(mb_strimwidth(preg_replace('/\s+/', ' ', (string)$r['message']),0,90,'…','UTF-8'))?></a></td>
+<td class="col-writer"><a class="inquiry-customer-link" href="<?=h($detailHref)?>"><?=h($r['member_name'] ?: '비회원')?></a></td>
+<td class="col-date"><?=h(date('Y-m-d H:i', strtotime((string)$r['created_at'])))?></td>
+<td class="col-answer"><a class="answer-link <?=$r['status']==='ANSWERED'?'done':'pending'?>" href="<?=h($detailHref)?>"><?=$r['status']==='ANSWERED'?'답변 확인':'문의 확인'?></a><details class="inquiry-row-menu"><summary aria-label="<?=h($r['member_name'] ?: '비회원')?> 문의 관리"><span aria-hidden="true">⋮</span></summary><div class="inquiry-row-menu-items"><a href="<?=h($detailHref)?>">문의 상세 보기</a><a href="<?=h($detailHref)?>#replyForm"><?=$r['status']==='ANSWERED' || !canUpdateInquiries()?'답변 확인':'답변 등록'?></a></div></details></td>
 </tr>
 <?php endforeach;?></tbody></table></div>
-<?php if (canUpdateData() || canDeleteData()): ?><div class="bulk-bar"><div class="bulk-left"><select name="bulk_action" form="bulkForm"><option value="">선택 문의 처리</option><?php if (canUpdateData()): ?><option value="mark_answered">답변완료 처리</option><option value="mark_new">미처리로 변경</option><?php endif; ?><?php if (canDeleteData()): ?><option value="delete">삭제</option><?php endif; ?></select><button class="btn small" type="submit" form="bulkForm" onclick="return confirmBulk()">적용</button></div><span style="color:#8696a0">체크한 문의를 일괄 처리할 수 있습니다.</span></div><?php endif; ?>
+<?php if (canUpdateInquiries() || canDeleteInquiries()): ?><div class="bulk-bar"><div class="bulk-left"><select name="bulk_action" form="bulkForm"><option value="">선택 문의 처리</option><?php if (canUpdateInquiries()): ?><option value="mark_answered">답변완료 처리</option><option value="mark_new">미처리로 변경</option><?php endif; ?><?php if (canDeleteInquiries()): ?><option value="delete">삭제</option><?php endif; ?></select><button class="btn small" type="submit" form="bulkForm" onclick="return confirmBulk()">적용</button></div><span style="color:#8696a0">체크한 문의를 일괄 처리할 수 있습니다.</span></div><?php endif; ?>
 <?php if($totalPages>1):?><nav class="pagination"><?php if($page>1):?><a class="page-link" href="?<?=h(qstr(['page'=>$page-1,'open'=>null]))?>">‹</a><?php endif;?><?php $s=max(1,$page-3);$e=min($totalPages,$page+3);for($p=$s;$p<=$e;$p++):?><a class="page-link <?=$p===$page?'active':''?>" href="?<?=h(qstr(['page'=>$p,'open'=>null]))?>"><?=$p?></a><?php endfor;?><?php if($page<$totalPages):?><a class="page-link" href="?<?=h(qstr(['page'=>$page+1,'open'=>null]))?>">›</a><?php endif;?></nav><?php endif;?>
 </div></section>
 </main></div>

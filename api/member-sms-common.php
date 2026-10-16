@@ -51,7 +51,7 @@ function member_sms_consume_rate(PDO $pdo, string $phone): void
     }
 }
 
-function member_sms_send(string $phone, string $code): bool
+function member_sms_send(string $phone, string $code, string $purpose = '회원가입'): bool
 {
     $config = require __DIR__ . '/../config/sms.php';
     $host = strtolower((string)($_SERVER['HTTP_HOST'] ?? ''));
@@ -79,7 +79,7 @@ function member_sms_send(string $phone, string $code): bool
     $body = json_encode([
         'type' => 'SMS', 'contentType' => 'COMM', 'countryCode' => '82',
         'from' => $config['sender'],
-        'content' => '[오토지니] 회원가입 인증번호는 ' . $code . ' 입니다. (10분 유효)',
+        'content' => '[오토지니] ' . $purpose . ' 인증번호는 ' . $code . ' 입니다. (10분 유효)',
         'messages' => [['to' => preg_replace('/\D/', '', $phone)]],
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     if ($body === false) throw new RuntimeException('문자 요청을 준비하지 못했습니다.');

@@ -131,8 +131,8 @@ $queryBase = [
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>유입 분석 - 오토지니 관리자</title>
 <link rel="stylesheet" href="./sidebar.css?v=<?= filemtime(__DIR__ . '/sidebar.css') ?>">
-<link rel="stylesheet" href="./traffic-page.css"><link rel="stylesheet" href="./admin-ui.css"><link rel="stylesheet" href="./date-range-picker.css"><script src="./date-range-picker.js" defer></script>
-<link rel="stylesheet" href="./traffic-table.css"></head>
+<link rel="stylesheet" href="./traffic-page.css?v=<?= filemtime(__DIR__ . '/./traffic-page.css') ?>"><link rel="stylesheet" href="./admin-ui.css?v=<?= filemtime(__DIR__ . '/./admin-ui.css') ?>"><link rel="stylesheet" href="./date-range-picker.css?v=<?= filemtime(__DIR__ . '/./date-range-picker.css') ?>"><script src="./date-range-picker.js?v=<?= filemtime(__DIR__ . '/./date-range-picker.js') ?>" defer></script>
+<link rel="stylesheet" href="./traffic-table.css?v=<?= filemtime(__DIR__ . '/./traffic-table.css') ?>"></head>
 <body><div class="admin-shell">
 <?php $currentAdminPage='traffic'; require __DIR__ . '/sidebar.php'; ?>
 <main class="main">

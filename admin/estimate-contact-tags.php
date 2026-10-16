@@ -31,6 +31,7 @@ function getEstimateContactTagColors(PDO $pdo): array
 {
     $colors = estimateContactTagDefaultColors();
     try {
+        ensureEstimateContactTagColors($pdo);
         foreach ($pdo->query('SELECT contact_tag, background_color FROM admin_estimate_contact_tag_colors')->fetchAll(PDO::FETCH_ASSOC) as $row) {
             if (isset($colors[$row['contact_tag']]) && preg_match('/^#[0-9a-fA-F]{6}$/D', $row['background_color'])) {
                 $colors[$row['contact_tag']] = strtolower($row['background_color']);

@@ -61,6 +61,7 @@ try {
     unset($_SESSION['signup_phone_verified'], $_SESSION['signup_phone_verified_at'],
         $_SESSION['signup_phone_code_hash'], $_SESSION['signup_phone_code_expires_at']);
     session_regenerate_id(true);
+    $_SESSION['member_auth_stamp']=hash('sha256',$hash);
     $_SESSION['member_id'] = $id;
     member_response(['ok' => true, 'member' => member_public($member)]);
 } catch (PDOException $e) {

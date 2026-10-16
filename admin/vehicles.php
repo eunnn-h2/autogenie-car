@@ -1545,9 +1545,6 @@ if ($searchType !== 'all') $q = '';
 if ($searchType !== 'brand') $brandId = 0;
 if ($searchType !== 'fuel') $fuelType = '';
 if ($searchType !== 'status') $active = '';
-$dateBasis = (string)($_GET['date_basis'] ?? 'created');
-if (!in_array($dateBasis, ['created', 'updated'], true)) $dateBasis = 'created';
-
 $normalizeFilterDate = static function (mixed $value): string {
     $value = trim((string)$value);
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) return '';
@@ -1563,6 +1560,25 @@ if ($dateFrom !== '' && $dateTo !== '' && $dateFrom > $dateTo) {
 $vehiclePage = max(1, (int)($_GET['page'] ?? 1));
 $perPage = (int)($_GET['per_page'] ?? 10);
 if (!in_array($perPage, [10, 20, 50, 100], true)) $perPage = 20;
+$vehicleSortOrders = [
+    'created_desc' => 'v.created_at DESC, v.id DESC',
+    'updated_desc' => 'v.updated_at DESC, v.id DESC',
+    'name_asc' => 'v.name ASC, b.name ASC, v.id ASC',
+    'name_desc' => 'v.name DESC, b.name ASC, v.id ASC',
+    'price_asc' => 'CASE WHEN v.base_price > 0 THEN 0 ELSE 1 END ASC, v.base_price ASC, v.name ASC, v.id ASC',
+    'price_desc' => 'CASE WHEN v.base_price > 0 THEN 0 ELSE 1 END ASC, v.base_price DESC, v.name ASC, v.id ASC',
+];
+$sortBy = (string)($_GET['sort_by'] ?? 'created_desc');
+if (!isset($vehicleSortOrders[$sortBy])) $sortBy = 'created_desc';
+$dateBasis = $sortBy === 'updated_desc' ? 'updated' : 'created';
+$vehicleSortLabels = [
+    'created_desc' => '등록일 최신순',
+    'updated_desc' => '수정일 최신순',
+    'name_asc' => '차량명 가나다순',
+    'name_desc' => '차량명 역순',
+    'price_asc' => '차량가 낮은순',
+    'price_desc' => '차량가 높은순',
+];
 $vehicleId = $isVehicleDetailPage ? (int)($_GET['vehicle_id'] ?? 0) : 0;
 
 $totalRows = 0;
@@ -1665,7 +1681,7 @@ try {
         FROM car_vehicles v
         JOIN car_brands b ON b.id = v.brand_id
         {$whereSql}
-        ORDER BY v.id DESC
+        ORDER BY {$vehicleSortOrders[$sortBy]}
         LIMIT {$perPage} OFFSET {$offset}
     ";
     $stmt = $pdo->prepare($vehicleSql);
@@ -1739,18 +1755,18 @@ if ($isVehicleDetailPage && $vehicleId > 0 && $vehicleDetail === null && $crudMe
 }
 
 function adminQuery(array $overrides = []): string {
-    global $q, $brandId, $fuelType, $active, $searchType, $dateBasis, $dateFrom, $dateTo, $vehiclePage, $perPage;
+    global $q, $brandId, $fuelType, $active, $searchType, $dateFrom, $dateTo, $vehiclePage, $perPage, $sortBy;
     $base = [
         'search_type' => $searchType !== 'all' ? $searchType : null,
         'q' => $q !== '' ? $q : null,
         'brand_id' => $brandId > 0 ? $brandId : null,
         'fuel_type' => $fuelType !== '' ? $fuelType : null,
         'active' => $active !== '' ? $active : null,
-        'date_basis' => $dateBasis !== 'created' ? $dateBasis : null,
         'from' => $dateFrom !== '' ? $dateFrom : null,
         'to' => $dateTo !== '' ? $dateTo : null,
         'page' => $vehiclePage,
         'per_page' => $perPage,
+        'sort_by' => $sortBy !== 'newest' ? $sortBy : null,
     ];
     $merged = array_merge($base, $overrides);
     foreach ($merged as $k => $v) {
@@ -1770,7 +1786,7 @@ function adminQuery(array $overrides = []): string {
 <link rel="stylesheet" href="./date-range-picker.css?v=<?= filemtime(__DIR__ . '/date-range-picker.css') ?>">
 <script src="./date-range-picker.js?v=<?= filemtime(__DIR__ . '/date-range-picker.js') ?>" defer></script>
 
-<link rel="stylesheet" href="./admin-ui.css"></head>
+<link rel="stylesheet" href="./admin-ui.css?v=<?= filemtime(__DIR__ . '/./admin-ui.css') ?>"></head>
 <body>
 <div class="admin-layout">
     
@@ -1825,17 +1841,17 @@ function adminQuery(array $overrides = []): string {
                 <input type="hidden" name="page" value="1">
                 <div class="filter-top vehicle-filter-grid">
                     <div class="vehicle-date-filters">
-                    <div class="filter-group date-basis-group">
-                        <label>날짜 기준</label>
-                        <select name="date_basis">
-                            <option value="created" <?= $dateBasis === 'created' ? 'selected' : '' ?>>등록일</option>
-                            <option value="updated" <?= $dateBasis === 'updated' ? 'selected' : '' ?>>수정일</option>
+                    <div class="filter-group sort-order-group">
+                        <label for="vehicleSortBy">정렬</label>
+                        <select id="vehicleSortBy" name="sort_by" onchange="this.form.submit()" aria-label="차량 목록 정렬">
+                            <?php foreach ($vehicleSortLabels as $value => $label): ?>
+                                <option value="<?= h($value) ?>" <?= $sortBy === $value ? 'selected' : '' ?>><?= h($label) ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
-
                     <div class="filter-group date-range-group">
                         <label>기간</label>
-                        <div class="vehicle-date-range" data-date-range data-label="<?= $dateBasis === 'updated' ? '수정일' : '등록일' ?>">
+                        <div class="vehicle-date-range" data-date-range data-auto-submit="true" data-label="<?= $dateBasis === 'updated' ? '수정일' : '등록일' ?>">
                             <input type="date" name="from" value="<?= h($dateFrom) ?>" aria-label="조회 시작일" hidden>
                             <span data-range-separator hidden>~</span>
                             <input type="date" name="to" value="<?= h($dateTo) ?>" aria-label="조회 종료일" hidden>
@@ -1952,6 +1968,21 @@ function adminQuery(array $overrides = []): string {
 
             <div class="table-wrap vehicle-list-wrap">
                 <table class="admin-table vehicle-list-table">
+                    <colgroup>
+                        <col style="width:3%">
+                        <col style="width:5.5%">
+                        <col style="width:10.5%">
+                        <col style="width:<?= $hasRecommended ? '9' : '14' ?>%">
+                        <col style="width:5.5%">
+                        <col style="width:9.5%">
+                        <col style="width:9.5%">
+                        <col style="width:6.5%">
+                        <col style="width:12.5%">
+                        <col style="width:8.5%">
+                        <col style="width:10%">
+                        <?php if ($hasRecommended): ?><col style="width:5%"><?php endif; ?>
+                        <col style="width:5%">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th class="check"><input type="checkbox" id="checkAll" aria-label="현재 페이지 전체 선택"></th>
@@ -2758,17 +2789,26 @@ function submitBulkSection(type) {
         history.scrollRestoration = 'manual';
     }
 
+    document.querySelectorAll('#product-list .pagination a').forEach(link => {
+        link.addEventListener('click', event => {
+            if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+            const destination = new URL(link.href, window.location.href);
+            destination.hash = 'product-list';
+            const destinationKey = 'autogenieAdminVehicleScroll:' + destination.pathname + destination.search;
+            sessionStorage.removeItem(destinationKey);
+            sessionStorage.removeItem('autogenieAdminVehicleScrollPath:' + destination.pathname);
+            // Let the browser move directly to the list without a second scroll restoration.
+            link.href = destination.href;
+        });
+    });
+
     const saved = sessionStorage.getItem(scrollKey);
     if (saved !== null) {
         const y = Number(saved);
         sessionStorage.removeItem(scrollKey);
 
         if (Number.isFinite(y)) {
-            // 브라우저의 기본 앵커/복원 동작보다 뒤에서 현재 위치를 확정합니다.
-            requestAnimationFrame(() => {
-                window.scrollTo(0, y);
-                requestAnimationFrame(() => window.scrollTo(0, y));
-            });
+            window.scrollTo(0, y);
         }
     }
 

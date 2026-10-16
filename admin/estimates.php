@@ -40,87 +40,46 @@ $rows = [];
 $tableMissing = false;
 $quickTableMissing = false;
 
-// 일반 직접견적
-if ($type === '' || $type === 'DIRECT') {
-    $params = [];
-    $where = [];
-    applyEstimateDateRange($where, $params, $dates, 'e.created_at');
-    if ($status !== '') { $where[] = 'e.status = ?'; $params[] = $status; }
-    if ($owner === 'mine') { $where[] = 'e.assigned_admin_id = ?'; $params[] = (int)$_SESSION['admin_id']; }
-    elseif ($owner === 'unassigned') { $where[] = 'e.assigned_admin_id IS NULL'; }
-    elseif ($owner === 'handoff') { $where[] = "e.assigned_admin_id IS NOT NULL AND (a.id IS NULL OR a.is_active <> 1 OR UPPER(COALESCE(a.role, '')) <> 'SALES')"; }
-    if ($contactTag === 'NONE') {
-        $where[] = "NOT EXISTS (SELECT 1 FROM admin_estimate_contact_tags ct WHERE ct.estimate_source = 'DIRECT' AND ct.estimate_id = e.id)";
-    } elseif ($contactTag !== '') {
-        $where[] = "EXISTS (SELECT 1 FROM admin_estimate_contact_tags ct WHERE ct.estimate_source = 'DIRECT' AND ct.estimate_id = e.id AND ct.contact_tag = ?)";
-        $params[] = $contactTag;
-    }
-    if ($q !== '') {
-        $where[] = '(e.estimate_no LIKE ? OR e.customer_name LIKE ? OR e.customer_phone LIKE ? OR e.vehicle_name LIKE ?)';
-        $like = '%' . $q . '%';
-        array_push($params, $like, $like, $like, $like);
-    }
-    $sql = 'SELECT e.*, v.image_path AS _vehicle_image, a.name AS _assigned_name, a.username AS _assigned_username, a.is_active AS _assigned_is_active, a.role AS _assigned_role FROM estimate_direct e LEFT JOIN car_vehicles v ON v.id = e.vehicle_id LEFT JOIN admin_accounts a ON a.id = e.assigned_admin_id' . ($where ? ' WHERE ' . implode(' AND ', $where) : '') . ' ORDER BY e.id DESC LIMIT 500';
-    try {
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-        foreach ($stmt->fetchAll() as $r) {
-            $r['_source'] = 'DIRECT';
-            $r['_source_label'] = '차량견적';
-            $r['_vehicle_display'] = trim((string)($r['brand_name'] ?? '') . ' ' . (string)($r['vehicle_name'] ?? '')) ?: '-';
-            $r['_condition_display'] = productLabel($r['product_type'] ?? null) . ' / ' . (($r['contract_months'] ?? null) ? $r['contract_months'] . '개월' : '-');
-            $r['_monthly_display'] = isset($r['monthly_payment']) && $r['monthly_payment'] !== null ? number_format((int)$r['monthly_payment']) . '원' : '-';
-            $rows[] = $r;
+$perPage=(int)($_GET['per_page']??20);if(!in_array($perPage,[20,50,100],true))$perPage=20;
+$page=max(1,(int)($_GET['page']??1));
+$dueOnly=($_GET['due']??'')==='1';
+$unions=[];$unionParams=[];
+foreach(['estimate_direct'=>'DIRECT','estimate_quick'=>'QUICK'] as $estimateTable=>$source){
+    if($type!=='' && $type!==$source)continue;
+    $where=[];$params=[];applyEstimateDateRange($where,$params,$dates,'e.created_at');
+    if($status!==''){$where[]='e.status=?';$params[]=$status;}
+    if($owner==='mine'){$where[]='e.assigned_admin_id=?';$params[]=(int)$_SESSION['admin_id'];}
+    elseif($owner==='unassigned')$where[]='e.assigned_admin_id IS NULL';
+    elseif($owner==='handoff')$where[]="e.assigned_admin_id IS NOT NULL AND (a.id IS NULL OR a.is_active<>1 OR a.role<>'SALES')";
+    if($contactTag==='NONE')$where[]="NOT EXISTS(SELECT 1 FROM admin_estimate_contact_tags ct WHERE ct.estimate_source='$source' AND ct.estimate_id=e.id)";
+    elseif($contactTag!==''){$where[]="EXISTS(SELECT 1 FROM admin_estimate_contact_tags ct WHERE ct.estimate_source='$source' AND ct.estimate_id=e.id AND ct.contact_tag=?)";$params[]=$contactTag;}
+    if($dueOnly)$where[]="e.next_contact_at IS NOT NULL AND e.next_contact_at<DATE_ADD(CURDATE(),INTERVAL 1 DAY) AND e.status NOT IN ('CONTRACTED','CANCELED')";
+    if($q!==''){$where[]='(e.estimate_no LIKE ? OR e.customer_name LIKE ? OR e.customer_phone LIKE ? OR e.'.($source==='DIRECT'?'vehicle_name':'car_type').' LIKE ?)';$like='%'.$q.'%';array_push($params,$like,$like,$like,$like);}
+    $unions[]="SELECT e.id,e.created_at,'$source' source FROM $estimateTable e LEFT JOIN admin_accounts a ON a.id=e.assigned_admin_id".($where?' WHERE '.implode(' AND ',$where):'');array_push($unionParams,...$params);
+}
+$searchCount=0;$totalPages=1;
+if($unions){
+    $unionSql=implode(' UNION ALL ',$unions);
+    $cq=$pdo->prepare('SELECT COUNT(*) FROM ('.$unionSql.') matching');$cq->execute($unionParams);$searchCount=(int)$cq->fetchColumn();
+    $totalPages=max(1,(int)ceil($searchCount/$perPage));$page=min($page,$totalPages);$offset=($page-1)*$perPage;
+    $iq=$pdo->prepare('SELECT * FROM ('.$unionSql.") matching ORDER BY created_at DESC,source DESC,id DESC LIMIT $perPage OFFSET $offset");$iq->execute($unionParams);$keys=$iq->fetchAll(PDO::FETCH_ASSOC);
+    foreach($keys as $key){
+        $source=$key['source'];$estimateTable=$source==='QUICK'?'estimate_quick':'estimate_direct';
+        $vq=$pdo->prepare("SELECT e.*,a.name _assigned_name,a.username _assigned_username,a.is_active _assigned_is_active,a.role _assigned_role".($source==='DIRECT'?',v.image_path _vehicle_image':'')." FROM $estimateTable e LEFT JOIN admin_accounts a ON a.id=e.assigned_admin_id".($source==='DIRECT'?' LEFT JOIN car_vehicles v ON v.id=e.vehicle_id':'').' WHERE e.id=?');$vq->execute([(int)$key['id']]);$r=$vq->fetch(PDO::FETCH_ASSOC);if(!$r)continue;
+        $r['_source']=$source;$r['_source_label']=$source==='QUICK'?'간편견적':'차량견적';
+        if($source==='DIRECT'){
+            $r['_vehicle_display']=trim(($r['brand_name']??'').' '.($r['vehicle_name']??''))?:'-';
+            $r['_condition_display']=productLabel($r['product_type']??null).' / '.(!empty($r['contract_months'])?$r['contract_months'].'개월':'-');
+            $r['_monthly_display']=isset($r['monthly_payment'])?number_format((int)$r['monthly_payment']).'원':'-';
+        }else{
+            $r['_vehicle_display']=$r['car_type']?:'상담 후 결정';$r['_condition_display']=productLabel($r['product_type']??null).' / '.($r['monthly_budget']??'');$r['_monthly_display']='-';$r['trim_name']=null;$r['_vehicle_image']='';
         }
-    } catch (PDOException $e) {
-        $tableMissing = str_contains($e->getMessage(), "doesn't exist");
-        if (!$tableMissing) throw $e;
+        $rows[]=$r;
     }
 }
-
-// 간편견적
-if ($type === '' || $type === 'QUICK') {
-    $params = [];
-    $where = [];
-    applyEstimateDateRange($where, $params, $dates, 'q.created_at');
-    if ($status !== '') { $where[] = 'q.status = ?'; $params[] = $status; }
-    if ($owner === 'mine') { $where[] = 'q.assigned_admin_id = ?'; $params[] = (int)$_SESSION['admin_id']; }
-    elseif ($owner === 'unassigned') { $where[] = 'q.assigned_admin_id IS NULL'; }
-    elseif ($owner === 'handoff') { $where[] = "q.assigned_admin_id IS NOT NULL AND (a.id IS NULL OR a.is_active <> 1 OR UPPER(COALESCE(a.role, '')) <> 'SALES')"; }
-    if ($contactTag === 'NONE') {
-        $where[] = "NOT EXISTS (SELECT 1 FROM admin_estimate_contact_tags ct WHERE ct.estimate_source = 'QUICK' AND ct.estimate_id = q.id)";
-    } elseif ($contactTag !== '') {
-        $where[] = "EXISTS (SELECT 1 FROM admin_estimate_contact_tags ct WHERE ct.estimate_source = 'QUICK' AND ct.estimate_id = q.id AND ct.contact_tag = ?)";
-        $params[] = $contactTag;
-    }
-    if ($q !== '') {
-        $where[] = '(q.estimate_no LIKE ? OR q.customer_name LIKE ? OR q.customer_phone LIKE ? OR q.car_type LIKE ?)';
-        $like = '%' . $q . '%';
-        array_push($params, $like, $like, $like, $like);
-    }
-    $sql = 'SELECT q.*, a.name AS _assigned_name, a.username AS _assigned_username, a.is_active AS _assigned_is_active, a.role AS _assigned_role FROM estimate_quick q LEFT JOIN admin_accounts a ON a.id = q.assigned_admin_id' . ($where ? ' WHERE ' . implode(' AND ', $where) : '') . ' ORDER BY q.id DESC LIMIT 500';
-    try {
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-        foreach ($stmt->fetchAll() as $r) {
-            $r['_source'] = 'QUICK';
-            $r['_source_label'] = '간편견적';
-            $r['_vehicle_display'] = $r['car_type'] ?: '상담 후 결정';
-            $parts = [];
-            if (!empty($r['product_type'])) $parts[] = productLabel($r['product_type']);
-            else $parts[] = '이용방식 상담';
-            if (!empty($r['monthly_budget'])) $parts[] = $r['monthly_budget'];
-            $r['_condition_display'] = implode(' / ', $parts);
-            $r['_monthly_display'] = '-';
-            $r['trim_name'] = null;
-            $rows[] = $r;
-        }
-    } catch (PDOException $e) {
-        $quickTableMissing = str_contains($e->getMessage(), "doesn't exist");
-        if (!$quickTableMissing) throw $e;
-    }
+function estimatePageUrl(array $changes=[]):string{
+    $query=array_merge($_GET,$changes);foreach($query as $key=>$value)if($value===''||$value===null)unset($query[$key]);return './estimates.php'.($query?'?'.http_build_query($query):'');
 }
-
 
 // 목록에서 바로 확인할 수 있도록 각 견적의 가장 최근 상담 메모를 붙인다.
 $latestNotes = [];
@@ -238,7 +197,7 @@ foreach ([['table' => 'estimate_direct', 'source' => 'DIRECT'], ['table' => 'est
     }
 }
 function quickFilterUrl(array $set = []): string {
-    $params = $set;
+    $params = array_merge(array_intersect_key($_GET,array_flip(['q','from','to','per_page'])),$set);
     return './estimates.php' . ($params ? '?' . http_build_query($params) : '');
 }
 ?>
@@ -284,14 +243,14 @@ function quickFilterUrl(array $set = []): string {
 <?php if ($status !== ''): ?><input type="hidden" name="status" value="<?=h($status)?>"><?php endif; ?>
 <?php if ($owner !== ''): ?><input type="hidden" name="owner" value="<?=h($owner)?>"><?php endif; ?>
 <?php if ($contactTag !== ''): ?><input type="hidden" name="contact_tag" value="<?=h($contactTag)?>"><?php endif; ?>
-<input name="q" value="<?=h($q)?>" placeholder="견적번호 / 고객명 / 연락처 / 차량·관심차종"><button type="submit">검색</button><a class="estimate-reset reset" href="./estimates.php">초기화</a></form>
+<?php if($dueOnly): ?><input type="hidden" name="due" value="1"><?php endif; ?><input type="hidden" name="per_page" value="<?=$perPage?>"><input name="q" value="<?=h($q)?>" placeholder="견적번호 / 고객명 / 연락처 / 차량·관심차종"><button type="submit">검색</button><a class="estimate-reset reset" href="./estimates.php">초기화</a></form>
 <form id="bulkForm" method="post" action="./estimate-actions.php">
-<input type="hidden" name="return_query" value="<?=h(http_build_query(['type'=>$type,'status'=>$status,'owner'=>$owner,'contact_tag'=>$contactTag,'q'=>$q,'from'=>$dates['from'],'to'=>$dates['to']]))?>">
+<input type="hidden" name="return_query" value="<?=h(http_build_query(['type'=>$type,'status'=>$status,'owner'=>$owner,'contact_tag'=>$contactTag,'q'=>$q,'from'=>$dates['from'],'to'=>$dates['to'],'page'=>$page,'per_page'=>$perPage,'due'=>$dueOnly?'1':'']))?>">
 <div class="bulkbar">
-    <span class="estimate-list-total">총 <b><?=number_format(count($rows))?></b>건</span>
-    <strong>선택 항목</strong>
+    <span class="estimate-list-total">총 <b><?=number_format($searchCount)?></b>건</span>
+    <label class="estimate-per-page">표시 <select aria-label="페이지당 목록 수" onchange="location.href=this.value"><?php foreach([20,50,100] as $size): ?><option value="<?=h(estimatePageUrl(['per_page'=>$size,'page'=>1]))?>" <?=$perPage===$size?'selected':''?>><?=$size?>개</option><?php endforeach; ?></select></label><strong>선택 항목</strong>
     <span class="selected-count"><span id="selectedCount">0</span>건 선택</span>
-    <?php if (canDeleteData()): ?><button id="estimateBulkDelete" class="action-btn danger" type="submit" name="action" value="bulk_delete" onclick="return confirmBulkDelete()">선택 삭제</button><?php endif; ?>
+    <?php if (canDeleteEstimates()): ?><button id="estimateBulkDelete" class="action-btn danger" type="submit" name="action" value="bulk_delete" onclick="return confirmBulkDelete()">선택 삭제</button><?php endif; ?>
 </div>
 <div class="table-wrap"><table class="table estimates-table"><thead><tr><th><input class="check" type="checkbox" id="checkAll" aria-label="전체 선택"></th><th>신청일</th><th>차량 이미지</th><th>차종</th><th>구분</th><th>상태</th><th>상담구분</th><th>고객</th><th>연락처</th><th>담당자</th><th>상담메모</th><th>관리</th></tr></thead><tbody>
 <?php if (!$rows): ?><tr><td colspan="12" style="padding:50px;color:#9aabb4">저장된 견적이 없습니다.</td></tr><?php endif; ?>
@@ -314,7 +273,7 @@ function quickFilterUrl(array $set = []): string {
 <td><span class="estimate-kind"><?=h($r['_source_label'])?></span><span class="estimate-product-type"><?=h(!empty($r['product_type']) ? productLabel($r['product_type']) : '상담 후 결정')?></span></td>
 <td><span class="estimate-status estimate-status--<?=h(strtolower((string)$r['status']))?>"><?=h(statusLabel((string)$r['status']))?></span></td>
 <td class="estimate-contact-tag-cell"><?php if ($contactTag !== '' && isset($contactTagOptions[$contactTag])): ?><span class="estimate-contact-tag estimate-contact-tag--<?=h(strtolower($contactTag))?>"><?=h($contactTagOptions[$contactTag])?></span><?php else: ?><span class="estimate-contact-tag-empty">-</span><?php endif; ?></td>
-<td><a class="detail-link" href="./estimate-detail.php?type=<?=strtolower(h($r['_source']))?>&id=<?=(int)$r['id']?>"><?=h($r['customer_name'])?></a></td><td><?=h($r['customer_phone'])?></td>
+<td><a class="detail-link" href="./estimate-detail.php?type=<?=strtolower(h($r['_source']))?>&id=<?=(int)$r['id']?>"><?=h($r['customer_name'])?></a></td><td><a href="tel:<?=h(preg_replace('/\D/','',$r['customer_phone']))?>"><?=h($r['customer_phone'])?></a></td>
 <td>
     <?php $hasActiveSalesOwner = !empty($r['assigned_admin_id']) && (int)($r['_assigned_is_active'] ?? 0) === 1 && strtoupper((string)($r['_assigned_role'] ?? '')) === 'SALES'; ?>
     <div class="estimate-owner-cell">
@@ -328,14 +287,19 @@ function quickFilterUrl(array $set = []): string {
         <?php elseif (empty($r['assigned_admin_id'])): ?><span class="estimate-unassigned">미배정</span><?php endif; ?>
     </div>
 </td>
-<td class="estimate-note-cell"><?php $latestNote = $latestNotes[$rowKey] ?? ''; ?><?php if ($latestNote !== ''): ?><span class="estimate-note-preview" title="<?=h($latestNote)?>"><?=h($latestNote)?></span><?php else: ?><span class="estimate-note-empty">-</span><?php endif; ?></td>
+<td class="estimate-note-cell"><?php if(!empty($r['next_contact_at'])): ?><small class="estimate-next-contact">다음 연락 <?=h(date('m/d H:i',strtotime($r['next_contact_at'])))?></small><?php endif; ?><?php $latestNote = $latestNotes[$rowKey] ?? ''; ?><?php if ($latestNote !== ''): ?><span class="estimate-note-preview" title="<?=h($latestNote)?>"><?=h($latestNote)?></span><?php else: ?><span class="estimate-note-empty">-</span><?php endif; ?></td>
 <td><div class="row-actions"><a class="action-btn edit small" href="./estimate-detail.php?type=<?=strtolower(h($r['_source']))?>&id=<?=(int)$r['id']?>&edit=1"><?php if (canUpdateData()): ?><svg class="estimate-edit-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5 4 4M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15z"/></svg><?php endif; ?><?=canUpdateData() ? '수정' : '상세'?></a></div></td>
 </tr><?php endforeach; ?>
-</tbody></table></div></form></div></div></main></div><form id="singleActionForm" method="post" action="./estimate-actions.php" hidden>
+</tbody></table></div></form>
+<?php if($totalPages>1): ?><nav class="estimate-pagination" aria-label="견적 목록 페이지">
+<?php if($page>1): ?><a href="<?=h(estimatePageUrl(['page'=>$page-1]))?>">이전</a><?php endif; ?>
+<?php for($number=max(1,$page-3);$number<=min($totalPages,$page+3);$number++): ?><a href="<?=h(estimatePageUrl(['page'=>$number]))?>" <?=$number===$page?'aria-current="page"':''?>><?=$number?></a><?php endfor; ?>
+<?php if($page<$totalPages): ?><a href="<?=h(estimatePageUrl(['page'=>$page+1]))?>">다음</a><?php endif; ?></nav><?php endif; ?>
+</div></div></main></div><form id="singleActionForm" method="post" action="./estimate-actions.php" hidden>
     <input type="hidden" name="action" id="singleAction">
     <input type="hidden" name="row_key" id="singleRowKey">
     <input type="hidden" name="csrf_token" value="<?=h($_SESSION['estimate_action_csrf'])?>">
-    <input type="hidden" name="return_query" value="<?=h(http_build_query(['type'=>$type,'status'=>$status,'owner'=>$owner,'q'=>$q,'from'=>$dates['from'],'to'=>$dates['to']]))?>">
+    <input type="hidden" name="return_query" value="<?=h(http_build_query(['type'=>$type,'status'=>$status,'owner'=>$owner,'q'=>$q,'from'=>$dates['from'],'to'=>$dates['to'],'page'=>$page,'per_page'=>$perPage,'due'=>$dueOnly?'1':'']))?>">
 </form>
 <script>
 const checkAll = document.getElementById('checkAll');
