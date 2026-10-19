@@ -2556,6 +2556,49 @@ function isStandardOption(option) {
     return raw === true || raw === 1 || ['1','Y','YES','TRUE','기본','기본옵션','포함'].includes(String(raw).trim().toUpperCase());
 }
 
+function fitVehicleOptionImage(img) {
+    // Uploaded WebP images can include transparent borders around the actual photo.
+    // Measure those borders for display while keeping the uploaded file intact.
+    try {
+        const frame = img.closest('.vehicle-info-option-image');
+        frame.style.maxWidth = `${img.naturalWidth}px`;
+        frame.style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`;
+        const canvas = document.createElement('canvas');
+        const scale = Math.min(1, 1000 / Math.max(img.naturalWidth, img.naturalHeight));
+        canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
+        canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        let left = canvas.width, top = canvas.height, right = -1, bottom = -1;
+        for (let y = 0; y < canvas.height; y++) {
+            for (let x = 0; x < canvas.width; x++) {
+                if (data[(y * canvas.width + x) * 4 + 3] < 16) continue;
+                left = Math.min(left, x);
+                right = Math.max(right, x);
+                top = Math.min(top, y);
+                bottom = Math.max(bottom, y);
+            }
+        }
+        if (right < left || (left === 0 && top === 0 && right === canvas.width - 1 && bottom === canvas.height - 1)) return;
+        const width = right - left + 1, height = bottom - top + 1;
+        frame.style.maxWidth = `${img.naturalWidth * width / canvas.width}px`;
+        frame.style.aspectRatio = `${width} / ${height}`;
+        Object.assign(img.style, {
+            position: 'absolute',
+            width: `${canvas.width / width * 100}%`,
+            height: `${canvas.height / height * 100}%`,
+            maxWidth: 'none',
+            left: `${-left / width * 100}%`,
+            top: `${-top / height * 100}%`
+        });
+    } catch (_) {
+        // Remote images without canvas access still use the regular cover layout.
+    } finally {
+        img.classList.add('is-ready');
+    }
+}
+
 function renderVehicleOptionCards(options) {
     return options.map((option, index) => {
         const name = getOptionName(option, index);
@@ -2569,7 +2612,7 @@ function renderVehicleOptionCards(options) {
         const imageSize = imageWidth > 0 && imageHeight > 0 ? ` width="${imageWidth}" height="${imageHeight}"` : '';
         return `
             <div class="vehicle-info-option ${image ? 'has-image' : ''}">
-                ${image ? `<div class="vehicle-info-option-image"><img src="${escapeHtml(image)}" alt="${escapeHtml(name)}"${imageSize} loading="lazy" decoding="async" onerror="this.closest('.vehicle-info-option-image').remove()"></div>` : ''}
+                ${image ? `<div class="vehicle-info-option-image${getOptionField(option, ['image_kind'], '') === 'icon' ? ' is-icon' : ''}"><img src="${escapeHtml(image)}" alt="${escapeHtml(name)}"${imageSize} loading="lazy" decoding="async" onload="fitVehicleOptionImage(this)" onerror="this.closest('.vehicle-info-option-image').remove()"></div>` : ''}
                 ${image && imageNote ? `<div class="vehicle-info-option-image-note">${escapeHtml(imageNote)}</div>` : ''}
                 <div class="vehicle-info-option-body">
                     <div class="vehicle-info-option-top">
@@ -2611,13 +2654,13 @@ function renderVehicleInfo(vehicleKey) {
         <div class="vehicle-info-hero">
             <h2 class="vehicle-info-vehicle-name">${escapeHtml(getVehicleName(vehicle))}</h2>
             <div class="vehicle-info-trim">${escapeHtml(trimName)}</div>
-            <div class="vehicle-info-image">${vehicleImageHtml(vehicle, `info-${vehicleKey}`)}</div>
+            <div class="vehicle-info-image">${vehicle.info_content?.hero_image ? `<img src="${escapeHtml(vehicle.info_content.hero_image)}" alt="${escapeHtml(getVehicleName(vehicle))}">` : vehicleImageHtml(vehicle, `info-${vehicleKey}`)}</div>
         </div>
 
         <section class="vehicle-info-card">
-            <h3 class="vehicle-info-section-title">${usingOfficialSiteSummary ? '주요 사양 및 옵션' : escapeHtml(trimName)}</h3>
+            <h3 class="vehicle-info-section-title">${vehicle.info_content ? escapeHtml(vehicle.info_content.title) : (usingOfficialSiteSummary ? '주요 사양 및 옵션' : escapeHtml(trimName))}</h3>
             <p class="vehicle-info-section-desc">
-                ${usingOfficialSiteSummary
+                ${vehicle.info_content ? escapeHtml(vehicle.info_content.fitment_note || '') : usingOfficialSiteSummary
                     ? '차종별 주요 사양입니다. 실제 적용 여부와 기본·선택 구분은 연식·트림·패키지에 따라 달라집니다.'
                     : (usingTemporaryOptions
                         ? '상세 사양은 담당자 상담으로 확인해 주세요.'

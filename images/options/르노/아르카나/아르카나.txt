@@ -1,0 +1,117 @@
+﻿아르카나 차량정보
+공식 차량명: 르노 아르카나
+확인일: 2026-10-19
+적용 기준: 1.6 GTe iconic 가솔린 기준
+대표 출처: https://www.renault.co.kr/ko/model/detail_option.jsp?mcode=A214&mtcode=BNBALFZJ11EDE
+
+안내: 공식 설명 또는 기능명을 바탕으로 간추린 등록용 요약입니다.
+모델 소개 사양·선택 품목·장착 액세서리를 항목별로 구분했습니다. 적용 연식·엔진·트림과 함께 사용하세요.
+선택 품목의 패키지 구성은 한 항목으로 묶었으며, 액세서리는 별도 장착 상품입니다.
+
+[01] 9.3인치 디스플레이와 openR link
+내용: 세로형 화면에서 무선 스마트폰 미러링과 다양한 서비스를 이용합니다.
+이미지: 9.3인치 디스플레이와 openR link.webp
+분류: 인포테인먼트
+사양 구분: 모델 소개 사양
+적용 안내: 1.6 GTe iconic 사양과 대조 · 서비스별 지원 조건 상이
+설명 기준: 공식 설명 요약
+출처: https://www.renault.co.kr/ko/model/arkana_overview.jsp
+
+[02] 2열 폴딩 시트
+내용: 뒷좌석을 접어 트렁크 적재 공간을 넓힐 수 있습니다.
+이미지: 2열 폴딩 시트.webp
+분류: 공간
+사양 구분: 모델 소개 사양
+적용 안내: 공식 모델 소개 사양 · 트림별 적용 상이
+설명 기준: 공식 설명 요약
+출처: https://www.renault.co.kr/ko/model/arkana_overview.jsp
+
+[03] 카멜 브라운 인조 가죽시트 패키지
+내용: 인조 가죽시트·앞좌석 전동 조절·운전석 요추 지지·뒷좌석 열선을 묶은 패키지입니다.
+이미지: 카멜 브라운 인조 가죽시트 패키지.webp
+분류: 선택 패키지
+사양 구분: 선택 품목
+적용 안내: 해당 기준 트림의 선택 품목
+설명 기준: 공식 설명 요약
+출처: https://www.renault.co.kr/ko/model/detail_option.jsp?mcode=A214&mtcode=BNBALFZJ11EDE
+
+[04] 360° 어라운드 뷰 모니터 + BSW + RCTA
+내용: 주변 영상과 사각지대·후방 접근 차량 경보를 묶은 선택 품목입니다.
+이미지: 360° 어라운드 뷰 모니터 + BSW + RCTA.webp
+분류: 선택 패키지
+사양 구분: 선택 품목
+적용 안내: 해당 기준 트림의 선택 품목
+설명 기준: 공식 설명 요약
+출처: https://www.renault.co.kr/ko/model/detail_option.jsp?mcode=A214&mtcode=BNBALFZJ11EDE
+
+[05] BOSE 서라운드 사운드 시스템 (9스피커)
+내용: 서브우퍼를 포함한 스피커 9개로 구성한 선택 오디오입니다.
+이미지: BOSE 서라운드 사운드 시스템 (9스피커).webp
+분류: 오디오
+사양 구분: 선택 품목
+적용 안내: 해당 기준 트림의 선택 품목
+설명 기준: 공식 설명 요약
+출처: https://www.renault.co.kr/ko/model/detail_option.jsp?mcode=A214&mtcode=BNBALFZJ11EDE
+
+[06] 파워 테일게이트
+내용: 운전석 또는 트렁크 버튼으로 테일게이트를 자동 개폐합니다.
+이미지: 파워 테일게이트.webp
+분류: 액세서리
+사양 구분: 장착 액세서리
+적용 안내: 별도 장착 액세서리
+설명 기준: 공식 설명 요약
+출처: https://www.renault.co.kr/ko/model/detail_option.jsp?mcode=A214&mtcode=BNBALFZJ11EDE
+
+[07] 뒷좌석 전용 초고속 급속 충전기
+내용: USB PD·PPS 등 지원 기기를 뒷좌석에서 급속 충전합니다.
+이미지: 뒷좌석 전용 초고속 급속 충전기.webp
+분류: 액세서리
+사양 구분: 장착 액세서리
+적용 안내: 별도 장착 액세서리
+설명 기준: 공식 설명 요약
+출처: https://www.renault.co.kr/ko/model/detail_option.jsp?mcode=A214&mtcode=BNBALFZJ11EDE
+
+[08] 리어스포일러 (블랙)
+내용: 검정색 리어 스포일러로 후면에 디자인 포인트를 더합니다.
+이미지: 리어스포일러 (블랙).webp
+분류: 액세서리
+사양 구분: 장착 액세서리
+적용 안내: iconic 적용 액세서리
+설명 기준: 공식 설명 요약
+출처: https://www.renault.co.kr/ko/model/detail_option.jsp?mcode=A214&mtcode=BNBALFZJ11EDE
+
+[09] 프리미엄 스포츠 페달
+내용: 풋레스트·가속·브레이크 페달로 구성한 액세서리 세트입니다.
+이미지: 프리미엄 스포츠 페달.webp
+분류: 액세서리
+사양 구분: 장착 액세서리
+적용 안내: 별도 장착 액세서리
+설명 기준: 공식 설명 요약
+출처: https://www.renault.co.kr/ko/model/detail_option.jsp?mcode=A214&mtcode=BNBALFZJ11EDE
+
+[10] 로장주 도어 스팟 램프
+내용: 도어 하단에 로장주 문양을 비추는 조명 액세서리입니다.
+이미지: 로장주 도어 스팟 램프.webp
+분류: 액세서리
+사양 구분: 장착 액세서리
+적용 안내: 별도 장착 액세서리
+설명 기준: 공식 기능명·사양 표기 기반 요약
+출처: https://www.renault.co.kr/ko/model/detail_option.jsp?mcode=A214&mtcode=BNBALFZJ11EDE
+
+[11] 일루미네이팅 키킹 플레이트
+내용: 운전석과 동승석 도어 하단에 조명 장식을 더합니다.
+이미지: 일루미네이팅 키킹 플레이트.webp
+분류: 액세서리
+사양 구분: 장착 액세서리
+적용 안내: 별도 장착 액세서리
+설명 기준: 공식 설명 요약
+출처: https://www.renault.co.kr/ko/model/detail_option.jsp?mcode=A214&mtcode=BNBALFZJ11EDE
+
+[12] 사이드 스텝
+내용: 차량 측면에 설치하는 발판형 액세서리입니다.
+이미지: 사이드 스텝.webp
+분류: 액세서리
+사양 구분: 장착 액세서리
+적용 안내: 별도 장착 액세서리
+설명 기준: 공식 기능명·사양 표기 기반 요약
+출처: https://www.renault.co.kr/ko/model/detail_option.jsp?mcode=A214&mtcode=BNBALFZJ11EDE

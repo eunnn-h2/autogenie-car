@@ -22,6 +22,7 @@ if ($isVehicleCreatePage) requireVehicleCreate();
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/admin_helpers.php';
 require_once __DIR__ . '/../config/vehicle-price-basis.php';
+require_once __DIR__ . '/../config/vehicle-info.php';
 require_once __DIR__ . '/vehicle-template-example.php';
 
 $isVehicleDetailPage = defined('AUTOGENIE_VEHICLE_DETAIL_PAGE') && AUTOGENIE_VEHICLE_DETAIL_PAGE === true;
@@ -1149,6 +1150,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crud_action'])) {
             $_GET['vehicle_id'] = $vehicleIdPost;
         }
 
+        if ($crudAction === 'update_vehicle_info') {
+            $vehicleIdPost = (int)($_POST['vehicle_id'] ?? 0);
+            $_GET['vehicle_id'] = $vehicleIdPost;
+            $exists = $pdo->prepare('SELECT id FROM car_vehicles WHERE id = ?');
+            $exists->execute([$vehicleIdPost]);
+            if (!$exists->fetchColumn()) throw new RuntimeException('차량을 찾을 수 없습니다.');
+            $title = trim((string)($_POST['info_title'] ?? ''));
+            if ($title === '') throw new RuntimeException('영역 제목을 입력해 주세요.');
+            $items = $_POST['info_items'] ?? [];
+            if (!is_array($items) || count($items) > 100) throw new RuntimeException('항목은 최대 100개까지 저장할 수 있습니다.');
+            $content = ['title' => $title, 'fitment_note' => trim((string)($_POST['info_note'] ?? '')), 'options' => []];
+            $uploadedPaths = [];
+            try {
+                $content['hero_image'] = (string)($_POST['info_hero'] ?? '');
+                $heroFile = $_FILES['info_hero_upload'] ?? [];
+                if (($heroFile['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+                    if (($heroFile['error'] ?? -1) !== UPLOAD_ERR_OK || !getimagesize((string)($heroFile['tmp_name'] ?? ''))) throw new RuntimeException('올바른 상단 사진을 선택해 주세요.');
+                    $heroPath = ag_upload_original_name($heroFile, 'images/options/custom/' . bin2hex(random_bytes(12)), dirname(__DIR__));
+                    if ($heroPath) { $content['hero_image'] = $heroPath; $uploadedPaths[] = dirname(__DIR__) . '/' . $heroPath; }
+                }
+                $content['hero_image'] = agVehicleInfoImagePath($content['hero_image']);
+                foreach ($items as $key => $item) {
+                    if (!is_array($item) || !ctype_digit((string)$key)) throw new RuntimeException('잘못된 항목입니다.');
+                    $name = trim((string)($item['option_name'] ?? ''));
+                    if ($name === '') throw new RuntimeException('각 항목의 제목을 입력해 주세요.');
+                    $path = (string)($item['image_path'] ?? '');
+                    $file = $_FILES['info_image_' . $key] ?? [];
+                    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+                        if (($file['error'] ?? -1) !== UPLOAD_ERR_OK || !getimagesize((string)($file['tmp_name'] ?? ''))) throw new RuntimeException('올바른 이미지 파일을 선택해 주세요.');
+                        $uploaded = ag_upload_original_name($file, 'images/options/custom/' . bin2hex(random_bytes(12)), dirname(__DIR__));
+                        if ($uploaded) { $path = $uploaded; $uploadedPaths[] = dirname(__DIR__) . '/' . $uploaded; }
+                    }
+                    $path = agVehicleInfoImagePath($path);
+                    $content['options'][] = ['option_name' => $name, 'description' => trim((string)($item['description'] ?? '')), 'image_path' => $path, 'image_kind' => ($item['image_kind'] ?? '') === 'icon' ? 'icon' : 'photo', 'is_active' => (int)($item['is_active'] ?? 1)];
+                }
+                agVehicleInfoSave($pdo, $vehicleIdPost, $content);
+            } catch (Throwable $error) {
+                foreach ($uploadedPaths as $uploadedPath) { if (is_file($uploadedPath)) unlink($uploadedPath); }
+                throw $error;
+            }
+            $crudMessage = '차량 정보의 내용과 사진을 저장했습니다.';
+        }
+
         if ($crudAction === 'delete_vehicle') {
             $vehicleIdPost = (int)($_POST['vehicle_id'] ?? 0);
 
@@ -2088,6 +2132,8 @@ function adminQuery(array $overrides = []): string {
         <?php endif; ?>
 
         <?php if ($isVehicleDetailPage && $vehicleDetail): ?>
+        <link rel="stylesheet" href="./vehicle-detail-collapse.css?v=<?= filemtime(__DIR__ . '/vehicle-detail-collapse.css') ?>">
+        <script src="./vehicle-detail-collapse.js?v=<?= filemtime(__DIR__ . '/vehicle-detail-collapse.js') ?>" defer></script>
         <section id="vehicle-detail" class="admin-card detail-card">
             <div class="card-title">
                 <div>
@@ -2126,13 +2172,16 @@ function adminQuery(array $overrides = []): string {
                 </div>
             </div>
 
-            <nav class="vehicle-section-nav" aria-label="차량 상세관리 영역"><a href="#vehicle-basic">기본정보</a><a href="#vehicle-colors">색상 <?= count($detailColors) ?></a><a href="#vehicle-trims">트림 <?= count($detailTrims) ?></a><a href="#vehicle-prices">가격 <?= count($detailPrices) ?></a></nav>
+            <div class="vehicle-detail-toolbar"><nav class="vehicle-section-nav" aria-label="차량 상세관리 영역"><a href="#vehicle-basic">기본정보</a><a href="#vehicle-colors">색상 <?= count($detailColors) ?></a><a href="#vehicle-trims">트림 <?= count($detailTrims) ?></a><a href="#vehicle-prices">가격 <?= count($detailPrices) ?></a><a href="#vehicle-info-editor">차량 정보</a></nav>
+            <div class="vehicle-collapse-controls">
+                <button type="button" class="gray-btn" id="vehicle-toggle-all" aria-expanded="false">전체 펼치기</button></div>
+            </div>
             <form method="post" enctype="multipart/form-data" class="vehicle-edit-form" id="vehicle-basic">
                 <input type="hidden" name="crud_action" value="update_vehicle">
                 <input type="hidden" name="vehicle_id" value="<?= (int)$vehicleDetail['id'] ?>">
 
                 <div class="vehicle-edit-header">
-                    <h3>차량 기본정보 수정</h3>
+                    <h3>기본정보</h3>
                     <div class="vehicle-edit-header-actions">
                         <?php if (canUpdateVehicleData()): ?>
                         <button type="submit" class="save-btn">저장</button>
@@ -2229,7 +2278,7 @@ function adminQuery(array $overrides = []): string {
 
             <div class="crud-section" id="vehicle-colors">
                 <div class="crud-section-head">
-                    <div><h3>색상 관리 (<?= count($detailColors) ?>)</h3></div>
+                    <div><h3>색상 <?= count($detailColors) ?></h3></div>
                     <div class="crud-section-head-actions">
                         <?php if (canCreateVehicleData()): ?>
                         <button type="button" class="new-item-btn" data-target="addColorPanel" onclick="toggleAddPanel(this)">색상추가</button>
@@ -2301,7 +2350,7 @@ function adminQuery(array $overrides = []): string {
 
             <div class="crud-section" id="vehicle-trims">
                 <div class="crud-section-head">
-                    <h3>트림 관리 (<?= count($detailTrims) ?>)</h3>
+                    <h3>트림 <?= count($detailTrims) ?></h3>
                     <div class="crud-section-head-actions">
                         <?php if (canCreateVehicleData()): ?>
                         <button type="button" class="new-item-btn" data-target="addTrimPanel" onclick="toggleAddPanel(this)">트림추가</button>
@@ -2356,7 +2405,7 @@ function adminQuery(array $overrides = []): string {
 
             <div class="crud-section" id="vehicle-prices">
                 <div class="crud-section-head">
-                    <h3>가격 관리 (<?= count($detailPrices) ?>)</h3>
+                    <h3>가격 <?= count($detailPrices) ?></h3>
                     <div class="crud-section-head-actions">
                         <?php if (canCreateVehicleData()): ?>
                         <button type="button" class="new-item-btn" data-target="addPricePanel" onclick="toggleAddPanel(this)">가격추가</button>
@@ -2417,6 +2466,7 @@ function adminQuery(array $overrides = []): string {
                     <?php endforeach; ?>
                 </div>
             </div>
+            <?php require __DIR__ . '/vehicle-info-editor.php'; ?>
         </section>
         <?php endif; ?>
 

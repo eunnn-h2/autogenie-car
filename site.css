@@ -1990,19 +1990,32 @@ body.modal-open {
 }
 
 .vehicle-info-option-image {
+    position: relative;
+    aspect-ratio: 16 / 9;
     width: 100%;
     border-radius: 14px;
     overflow: hidden;
     background: #f1f2f4;
     margin-bottom: 12px;
+    margin-inline: auto;
 }
 
 .vehicle-info-option-image img {
+    visibility: hidden;
     display: block;
     width: 100%;
-    height: auto;
-    max-height: 360px;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vehicle-info-option-image img.is-ready {
+    visibility: visible;
+}
+
+.vehicle-info-option-image.is-icon {
+    max-width: 121px !important;
+    background: transparent;
+    border-radius: 0;
 }
 
 .vehicle-info-option-body {
@@ -5426,7 +5439,7 @@ body.home-main-active
         height: auto;
     }
     .vehicle-info-option-image img {
-        max-height: 320px;
+        max-height: none;
     }
     .vehicle-info-option-top {
         align-items: flex-start;

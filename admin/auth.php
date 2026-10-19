@@ -281,6 +281,7 @@ function requireVehicleImport(): void {
 }
 
 function requireVehicleCrudAction(string $action): void {
+    if ($action === 'update_vehicle_info') { requireVehicleUpdate(); return; }
     $createActions = ['add_vehicle_manual','copy_vehicle','add_color','add_trim','add_price'];
     $updateActions = ['set_price_validity','bulk_update_vehicles','update_vehicle','update_color','update_trim','update_price','bulk_update_colors','bulk_update_trims','bulk_update_prices'];
     $deleteActions = ['bulk_delete_vehicles','delete_vehicle','delete_color','delete_trim','delete_price'];

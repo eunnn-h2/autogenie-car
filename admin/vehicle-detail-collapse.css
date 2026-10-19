@@ -1,0 +1,13 @@
+#vehicle-detail .vehicle-section-collapsed > :not(.vehicle-edit-header):not(.crud-section-head) { display:none !important; }
+#vehicle-detail .vehicle-section-collapsed > .vehicle-edit-header .vehicle-edit-header-actions,
+#vehicle-detail .vehicle-section-collapsed > .vehicle-edit-header > .save-btn,
+#vehicle-detail .vehicle-section-collapsed > .crud-section-head .crud-section-head-actions { display:none; }
+#vehicle-detail .vehicle-section-toggle { display:flex; align-items:center; gap:20px; border:0; background:none; color:inherit; padding:4px 0; font:inherit; font-weight:700; text-align:left; cursor:pointer; }
+#vehicle-detail .vehicle-section-toggle span { color:#64748b; font-size:12px; font-weight:400; white-space:nowrap; }
+#vehicle-detail .vehicle-section-toggle:focus-visible { outline:2px solid #4338ca; outline-offset:4px; }
+#vehicle-detail .vehicle-section-collapsed > .vehicle-edit-header,
+#vehicle-detail .vehicle-section-collapsed > .crud-section-head { border-bottom:0; }
+#vehicle-detail .vehicle-detail-toolbar { display:flex; align-items:center; gap:16px; margin:20px 0; overflow-x:auto; }
+#vehicle-detail .vehicle-detail-toolbar .vehicle-section-nav { flex-wrap:nowrap; flex-shrink:0; margin:0; }
+#vehicle-detail .vehicle-collapse-controls { display:flex; flex-shrink:0; gap:8px; margin-left:auto; white-space:nowrap; }
+#vehicle-detail .vehicle-detail-toolbar a { white-space:nowrap; }

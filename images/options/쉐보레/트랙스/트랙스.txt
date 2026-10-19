@@ -1,0 +1,189 @@
+﻿트랙스 차량정보
+공식 차량명: 쉐보레 트랙스 크로스오버
+확인일: 2026-10-19
+적용 기준: 공식 2026년형 트랙스 크로스오버 · 트림·선택 사양별 적용 상이
+대표 출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+안내: 공식 설명 또는 기능명을 바탕으로 간추린 등록용 요약입니다.
+전 트림 공통 기본 품목 목록은 아닙니다. 등록할 차량의 연식·구동방식·트림·선택 품목과 대조하세요.
+일부 안전 기능은 공식 사이트의 기능 아이콘입니다. 원본 크기와 비율을 유지했으며 작은 아이콘도 확대하지 않았습니다.
+
+[01] 어댑티브 크루즈 컨트롤
+내용: 앞차와 간격을 유지하며 정차·재출발을 지원합니다.
+이미지: 어댑티브 크루즈 컨트롤.webp
+분류: 주행 보조
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 아이콘
+이미지 크기: 121 × 121
+설명 기준: 공식 설명 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+[02] 전방 충돌 경고 시스템 및 전방거리 감지 시스템
+내용: 전방 차량 접근 위험과 차간 거리를 알려줍니다.
+이미지: 전방 충돌 경고 시스템 및 전방거리 감지 시스템.webp
+분류: 안전
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 아이콘
+이미지 크기: 121 × 121
+설명 기준: 공식 설명 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+[03] 전방 보행자 감지 및 제동 시스템
+내용: 전방 보행자 충돌 위험 시 제동을 보조합니다.
+이미지: 전방 보행자 감지 및 제동 시스템.webp
+분류: 안전
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 아이콘
+이미지 크기: 121 × 121
+설명 기준: 공식 설명 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+[04] 차선 이탈 방지 경고 및 차선 유지 보조 시스템
+내용: 의도치 않은 차선 이탈을 경고하고 조향을 보조합니다.
+이미지: 차선 이탈 방지 경고 및 차선 유지 보조 시스템.webp
+분류: 주행 보조
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 아이콘
+이미지 크기: 121 × 121
+설명 기준: 공식 설명 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+[05] 차선 변경 경고 시스템 및 사각지대 경고 시스템
+내용: 사각지대 차량과 차선 변경 위험을 경고합니다.
+이미지: 차선 변경 경고 시스템 및 사각지대 경고 시스템.webp
+분류: 안전
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 아이콘
+이미지 크기: 121 × 121
+설명 기준: 공식 설명 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+[06] 후방 주차 보조 시스템 및 후방 카메라
+내용: 후방 영상과 센서 경고로 주차를 돕습니다.
+이미지: 후방 주차 보조 시스템 및 후방 카메라.webp
+분류: 주차 보조
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 아이콘
+이미지 크기: 121 × 121
+설명 기준: 공식 설명 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+[07] 후측방 경고 시스템
+내용: 후진 중 좌우에서 접근하는 차량을 경고합니다.
+이미지: 후측방 경고 시스템.webp
+분류: 주차 보조
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 아이콘
+이미지 크기: 419 × 419
+설명 기준: 공식 설명 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+[08] 11인치 컬러 터치 스크린 & 무선 폰 프로젝션
+내용: 대형 화면에서 무선 스마트폰 미러링을 이용합니다.
+이미지: 11인치 컬러 터치 스크린 & 무선 폰 프로젝션.webp
+분류: 인포테인먼트
+적용 안내: 11인치 화면 적용 트림·선택 품목 및 스마트폰 지원 여부 확인
+이미지 구분: 공식 기능 이미지
+이미지 크기: 815 × 458
+설명 기준: 공식 기능명 기반 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+[09] 무선 충전 시스템
+내용: 호환 스마트폰을 케이블 없이 충전합니다.
+이미지: 무선 충전 시스템.webp
+분류: 편의
+적용 안내: 지원 스마트폰 및 트림·선택 품목 확인
+이미지 구분: 공식 기능 이미지
+이미지 크기: 815 × 458
+설명 기준: 공식 기능명 기반 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+[10] 액티브 노이즈 캔슬레이션 (ANC)
+내용: 능동 소음 제어로 실내 정숙성을 높입니다.
+이미지: 액티브 노이즈 캔슬레이션 (ANC).webp
+분류: 정숙성
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 이미지
+이미지 크기: 815 × 458
+설명 기준: 공식 기능명 기반 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+[11] 파워 리프트 게이트
+내용: 버튼 조작으로 테일게이트를 자동 개폐합니다.
+이미지: 파워 리프트 게이트.webp
+분류: 편의
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 이미지
+이미지 크기: 510 × 340
+설명 기준: 공식 기능명 기반 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+[12] 오토홀드 (AUTO HOLD)
+내용: 정차 중 브레이크에서 발을 떼도 정차를 유지합니다.
+이미지: 오토홀드 (AUTO HOLD).webp
+분류: 편의
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 이미지
+이미지 크기: 510 × 340
+설명 기준: 공식 기능명 기반 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover
+
+[13] 운전석 8 way 전동시트 & 파워 요추 받침
+내용: 전동 시트 조절과 요추 받침을 제공합니다.
+이미지: 운전석 8 way 전동시트 & 파워 요추 받침.webp
+분류: 시트
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 이미지
+이미지 크기: 868 × 488
+설명 기준: 공식 기능명 기반 요약
+출처: https://www.chevrolet.co.kr/content/experience-fragments/chevrolet/as/kr/ko/partials/suvs/trax-crossover-subcontent/convenience-modal/master.html
+
+[14] 앞좌석 3단 열선 시트
+내용: 앞좌석 온열 기능을 3단계로 조절합니다.
+이미지: 앞좌석 3단 열선 시트.webp
+분류: 시트
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 이미지
+이미지 크기: 868 × 488
+설명 기준: 공식 기능명 기반 요약
+출처: https://www.chevrolet.co.kr/content/experience-fragments/chevrolet/as/kr/ko/partials/suvs/trax-crossover-subcontent/convenience-modal/master.html
+
+[15] 앞좌석 3단 통풍 시트
+내용: 앞좌석 통풍 기능을 3단계로 조절합니다.
+이미지: 앞좌석 3단 통풍 시트.webp
+분류: 시트
+적용 안내: ACTIV·RS 기본 품목 · 등록 트림과 대조
+이미지 구분: 공식 기능 이미지
+이미지 크기: 868 × 488
+설명 기준: 공식 기능명 기반 요약
+출처: https://www.chevrolet.co.kr/content/experience-fragments/chevrolet/as/kr/ko/partials/suvs/trax-crossover-subcontent/convenience-modal/master.html
+
+[16] 풀 오토 에어컨
+내용: 설정 온도에 맞춰 실내 냉난방을 조절합니다.
+이미지: 풀 오토 에어컨.webp
+분류: 공조
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 이미지
+이미지 크기: 868 × 488
+설명 기준: 공식 기능명 기반 요약
+출처: https://www.chevrolet.co.kr/content/experience-fragments/chevrolet/as/kr/ko/partials/suvs/trax-crossover-subcontent/convenience-modal/master.html
+
+[17] 뒷좌석 6:4 폴딩시트
+내용: 뒷좌석을 나눠 접어 적재 공간을 넓힙니다.
+이미지: 뒷좌석 6·4 폴딩시트.webp
+분류: 공간
+적용 안내: 트림·선택 품목에 따라 적용 상이
+이미지 구분: 공식 기능 이미지
+이미지 크기: 868 × 488
+설명 기준: 공식 기능명 기반 요약
+출처: https://www.chevrolet.co.kr/content/experience-fragments/chevrolet/as/kr/ko/partials/suvs/trax-crossover-subcontent/convenience-modal/master.html
+
+[18] 온스타 커넥티드 서비스
+내용: 앱에서 원격 제어와 차량 상태를 확인합니다.
+이미지: 온스타 커넥티드 서비스.webp
+분류: 커넥티비티
+적용 안내: 공식 안내: 2025년형 이후 ACTIV·RS 대상 · 서비스 이용 조건 확인
+이미지 구분: 공식 기능 이미지
+이미지 크기: 1728 × 690
+설명 기준: 공식 설명 요약
+출처: https://www.chevrolet.co.kr/cuvs/trax-crossover

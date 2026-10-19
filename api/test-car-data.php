@@ -7,6 +7,7 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../config/vehicle-price-basis.php';
 require_once __DIR__ . '/../config/vehicle-options.php';
+require_once __DIR__ . '/../config/vehicle-info.php';
 
 try {
     // 모든 화면에서 car_vehicles.image_path를 공통 대표 이미지로 사용합니다.
@@ -106,8 +107,11 @@ try {
         $optionStmt = null;
     }
 
+    $vehicleInfoOverrides = agVehicleInfoOverrides($pdo);
     foreach ($vehicles as &$vehicle) {
         $vehicleId = (int)$vehicle['id'];
+        $customInfo = $vehicleInfoOverrides[$vehicleId] ?? null;
+        $vehicle['info_content'] = $customInfo;
 
         $colorStmt->execute([':vehicle_id' => $vehicleId]);
         $colors = $colorStmt->fetchAll(PDO::FETCH_ASSOC);
@@ -149,6 +153,10 @@ try {
 
             $summary = agVehicleOptionSummary((string)$vehicle['brand_name'], (string)$vehicle['vehicle_name']);
             $trim = array_merge($trim, agVehicleOptionsForTrim($trim['options'], $summary));
+            if ($customInfo !== null) {
+                $trim['options'] = $customInfo['options'];
+                $trim['model_options'] = [];
+            }
         }
         unset($trim);
 
