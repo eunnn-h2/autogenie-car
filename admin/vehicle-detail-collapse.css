@@ -11,3 +11,43 @@
 #vehicle-detail .vehicle-detail-toolbar .vehicle-section-nav { flex-wrap:nowrap; flex-shrink:0; margin:0; }
 #vehicle-detail .vehicle-collapse-controls { display:flex; flex-shrink:0; gap:8px; margin-left:auto; white-space:nowrap; }
 #vehicle-detail .vehicle-detail-toolbar a { white-space:nowrap; }
+
+/* Match button dimensions while retaining each button's original typography. */
+.main:has(#vehicle-detail) .top > .gray-btn,
+#vehicle-detail :is(.gray-btn, .danger-btn, .save-btn, .new-item-btn, .bulk-save-btn, .small-btn, .add-btn) {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    box-sizing:border-box;
+    min-width:100px;
+    height:38px;
+    padding:0 14px;
+    border-radius:6px;
+    white-space:nowrap;
+    vertical-align:middle;
+}
+#vehicle-detail .crud-row-actions .small-btn {
+    min-width:40px;
+    padding:0 6px;
+}
+
+/* Keep detail editors readable without stretching every field across one row. */
+#vehicle-basic > .vehicle-edit-body {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+    align-items:start;
+}
+#vehicle-basic .vehicle-edit-group { min-width:0; margin:0; }
+#vehicle-basic .vehicle-edit-group-title { flex-wrap:wrap; }
+#vehicle-basic .vehicle-edit-grid.basic-grid,
+#vehicle-basic .vehicle-edit-grid.setting-grid {
+    grid-template-columns:minmax(0,1fr);
+    gap:16px;
+}
+#vehicle-basic .vehicle-edit-field { min-width:0; }
+@media (max-width:600px) {
+    #vehicle-basic > .vehicle-edit-body,
+    #vehicle-basic .vehicle-edit-grid.basic-grid,
+    #vehicle-basic .vehicle-edit-grid.setting-grid { grid-template-columns:minmax(0,1fr); }
+}

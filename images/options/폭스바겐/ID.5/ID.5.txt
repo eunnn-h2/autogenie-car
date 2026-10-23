@@ -1,0 +1,137 @@
+﻿ID.5
+자료 확인일: 2026-10-22
+국내 사양 기준: MY26 · 2026.05 발행
+수록 기능: 8개
+차종 안내: 국내 MY26 Pro Lite / Pro 리플렛 기준입니다. 무선 앱커넥트는 Pro 전용이며 Pro Lite에 포함한 것으로 표시하지 않았습니다. 선정한 나머지 항목은 두 트림에 공통 적용됩니다.
+내용은 제조사 자료의 짧은 요약입니다. 적용 트림 조건에 맞게 등록하세요.
+
+────────────────────────────────────────
+01. 12.9인치 디스커버 맥스 인포테인먼트 시스템
+제목: 12.9인치 디스커버 맥스 인포테인먼트 시스템
+이미지: 12.9인치 디스커버 맥스 인포테인먼트 시스템.webp
+내용: 12.9인치 터치스크린과 조명식 터치 슬라이더로 미디어와 주요 차량 기능을 직관적으로 조작할 수 있습니다.
+국내 적용 트림: Pro Lite / Pro
+정리 근거: 가격·기본 사양표의 12.9인치 디스커버 맥스. 국내 내비게이션 미적용이며, 지도 안내 기능이 탑재된 것으로 설명하지 않았습니다.
+기능 상세 페이지: https://www.volkswagen.co.kr/ko/models/id5.html/__layer/layers/models/id5_2024/key_features/discover-pro/master.layer
+국내 공식 모델 페이지: https://www.volkswagen.co.kr/ko/models/id5.html
+국내 사양표: https://www.volkswagen.co.kr/idhub/content/dam/onehub_pkw/importers/kr/models/id5/leaflet/ID5_Price%20List_260519_web.pdf
+사양표 PDF 페이지: 4~5쪽 (첫 페이지부터 센 번호)
+자료 연식: MY26 · 2026.05 발행
+원문 항목명: "디스커버 맥스" 인포테인먼트 시스템
+이미지 주소: https://assets.volkswagen.com/is/image/volkswagenag/max-2?Zm10PXBuZy1hbHBoYSZ3aWQ9MTkyMCZiZmM9b2ZmJjdhNzA=
+이미지 크기: 1920 × 1080 px
+이미지 안내: 폭스바겐 국내 공식 페이지에서 해당 기능에 연결한 공통 이미지입니다.
+
+────────────────────────────────────────
+02. 파노라마 글래스 루프
+제목: 파노라마 글래스 루프
+이미지: 파노라마 글래스 루프.webp
+내용: 넓은 글래스 루프가 실내에 개방감을 더하며, 전동 차양막으로 햇빛 유입을 조절할 수 있습니다.
+국내 적용 트림: Pro Lite / Pro
+정리 근거: MY26 Pro Lite 기본 사양에 파노라마 글래스 루프. 5쪽 기능 설명에서 전동 차양막 확인.
+기능 상세 페이지: https://www.volkswagen.co.kr/ko/models/id5.html/__layer/layers/models/id5_2024/comfort/Panoramicglassroof/master.layer
+국내 공식 모델 페이지: https://www.volkswagen.co.kr/ko/models/id5.html
+국내 사양표: https://www.volkswagen.co.kr/idhub/content/dam/onehub_pkw/importers/kr/models/id5/leaflet/ID5_Price%20List_260519_web.pdf
+사양표 PDF 페이지: 4~5쪽 (첫 페이지부터 센 번호)
+자료 연식: MY26 · 2026.05 발행
+원문 항목명: 파노라마 글래스 루프
+이미지 주소: https://assets.volkswagen.com/is/image/volkswagenag/panorama_1920X1080?Zm10PXBuZy1hbHBoYSZ3aWQ9MTkyMCZiZmM9b2ZmJjdhNzA=
+이미지 크기: 1920 × 1080 px
+이미지 안내: 폭스바겐 국내 공식 페이지에서 해당 기능에 연결한 공통 이미지입니다.
+
+────────────────────────────────────────
+03. 무선 앱커넥트
+제목: 무선 앱커넥트
+이미지: 무선 앱커넥트.webp
+내용: 호환 스마트폰을 케이블 없이 연결해 Apple CarPlay 또는 Android Auto의 지원 기능을 차량 화면에서 사용할 수 있습니다.
+국내 적용 트림: Pro 전용 (Pro Lite 제외)
+정리 근거: ID.4는 Pro Lite 기본 사양, ID.5 MY26은 Pro 추가 사양. 호환 스마트폰·앱이 필요합니다.
+기능 상세 페이지: https://www.volkswagen.co.kr/ko/models/id5.html/__layer/layers/models/id5_2024/key_features/Wireless_app_connect/master.layer
+국내 공식 모델 페이지: https://www.volkswagen.co.kr/ko/models/id5.html
+국내 사양표: https://www.volkswagen.co.kr/idhub/content/dam/onehub_pkw/importers/kr/models/id5/leaflet/ID5_Price%20List_260519_web.pdf
+사양표 PDF 페이지: 4~5쪽 (첫 페이지부터 센 번호)
+자료 연식: MY26 · 2026.05 발행
+원문 항목명: 무선 App-Connect
+이미지 주소: https://assets.volkswagen.com/is/image/volkswagenag/IC0884-display-ID-4-4?Zm10PXBuZy1hbHBoYSZ3aWQ9MTkyMCZiZmM9b2ZmJjdhNzA=
+이미지 크기: 1920 × 1080 px
+이미지 안내: 폭스바겐 국내 공식 페이지에서 해당 기능에 연결한 공통 이미지입니다.
+
+────────────────────────────────────────
+04. 트렁크 이지 오픈 앤 클로즈
+제목: 트렁크 이지 오픈 앤 클로즈
+이미지: 트렁크 이지 오픈 앤 클로즈.webp
+내용: 스마트키를 소지한 상태에서 범퍼 아래로 발을 움직이는 동작을 이용해 전동 트렁크를 편리하게 열고 닫을 수 있습니다.
+국내 적용 트림: Pro Lite / Pro
+정리 근거: ID.4는 Pro 추가 사양, ID.5 MY26은 Pro Lite 기본 사양에 전동식 파워 트렁크 및 이지 오픈 앤 클로즈.
+기능 상세 페이지: https://www.volkswagen.co.kr/ko/models/id5.html/__layer/layers/models/id5_2024/comfort/Doorhandlelight/master.layer
+국내 공식 모델 페이지: https://www.volkswagen.co.kr/ko/models/id5.html
+국내 사양표: https://www.volkswagen.co.kr/idhub/content/dam/onehub_pkw/importers/kr/models/id5/leaflet/ID5_Price%20List_260519_web.pdf
+사양표 PDF 페이지: 4~5쪽 (첫 페이지부터 센 번호)
+자료 연식: MY26 · 2026.05 발행
+원문 항목명: 트렁크 이지 오픈 앤 클로즈(전동 트렁크)
+이미지 주소: https://assets.volkswagen.com/is/image/volkswagenag/Trunk?Zm10PXBuZy1hbHBoYSZ3aWQ9MTkyMCZiZmM9b2ZmJjdhNzA=
+이미지 크기: 1920 × 1080 px
+
+────────────────────────────────────────
+05. 배터리 충전 최적화 모드
+제목: 배터리 충전 최적화 모드
+이미지: 배터리 충전 최적화 모드.webp
+내용: 최적화 메뉴에서 배터리 히터를 활성화해 급속 충전에 적합한 배터리 온도를 준비하도록 돕습니다.
+국내 적용 트림: Pro Lite / Pro
+정리 근거: 국내 리플렛 5쪽 배터리 급속 충전 최적화 / 배터리 충전 최적화 모드. 실제 충전 성능은 차량·배터리·충전기와 외부 환경에 따라 달라집니다.
+기능 상세 페이지: https://www.volkswagen.co.kr/ko/models/id5.html/__layer/layers/models/id5_2024/key_features/battery-optimization/master.layer
+국내 공식 모델 페이지: https://www.volkswagen.co.kr/ko/models/id5.html
+국내 사양표: https://www.volkswagen.co.kr/idhub/content/dam/onehub_pkw/importers/kr/models/id5/leaflet/ID5_Price%20List_260519_web.pdf
+사양표 PDF 페이지: 4~5쪽 (첫 페이지부터 센 번호)
+자료 연식: MY26 · 2026.05 발행
+원문 항목명: 배터리 충전 최적화 모드
+이미지 주소: https://assets.volkswagen.com/is/image/volkswagenag/DB2023AU00865_web_1160?Zm10PXBuZy1hbHBoYSZ3aWQ9MTkxOCZiZmM9b2ZmJjA2MTU=
+이미지 크기: 1918 × 1080 px
+
+────────────────────────────────────────
+06. 트래블 어시스트
+제목: 트래블 어시스트
+이미지: 트래블 어시스트.webp
+내용: 고속도로와 잘 정비된 도로에서 앞차와의 거리를 고려해 설정한 속도와 차로를 유지하도록 보조합니다.
+국내 적용 트림: Pro Lite / Pro
+정리 근거: ID.4는 Pro 추가 사양, ID.5 MY26은 Pro Lite 기본 사양. 운전자의 지속적인 주의와 조작이 필요한 주행 보조 기능입니다.
+기능 상세 페이지: https://www.volkswagen.co.kr/ko/models/id5.html/__layer/layers/models/id5_2024/iq_drive/Travelassist/master.layer
+국내 공식 모델 페이지: https://www.volkswagen.co.kr/ko/models/id5.html
+국내 사양표: https://www.volkswagen.co.kr/idhub/content/dam/onehub_pkw/importers/kr/models/id5/leaflet/ID5_Price%20List_260519_web.pdf
+사양표 PDF 페이지: 4~5쪽 (첫 페이지부터 센 번호)
+자료 연식: MY26 · 2026.05 발행
+원문 항목명: 트래블 어시스트
+이미지 주소: https://assets.volkswagen.com/is/image/volkswagenag/assist2?Zm10PXBuZy1hbHBoYSZ3aWQ9MTkyMCZiZmM9b2ZmJjdhNzA=
+이미지 크기: 1920 × 1080 px
+
+────────────────────────────────────────
+07. 프론트 어시스트 및 긴급제동 시스템
+제목: 프론트 어시스트 및 긴급제동 시스템
+이미지: 프론트 어시스트 및 긴급제동 시스템.webp
+내용: 전방의 차량과 보행자 등을 감지해 충돌 위험을 경고하고, 필요한 상황에서 제동을 보조해 충돌 위험이나 피해를 줄이도록 돕습니다.
+국내 적용 트림: Pro Lite / Pro
+정리 근거: 기본 사양표의 전방추돌경고 및 긴급제동 시스템. 시스템의 인식·작동 조건 안에서 작동하는 보조 기능입니다.
+기능 상세 페이지: https://www.volkswagen.co.kr/ko/models/id5.html/__layer/layers/models/id5_2024/iq_drive/Frontassist/master.layer
+국내 공식 모델 페이지: https://www.volkswagen.co.kr/ko/models/id5.html
+국내 사양표: https://www.volkswagen.co.kr/idhub/content/dam/onehub_pkw/importers/kr/models/id5/leaflet/ID5_Price%20List_260519_web.pdf
+사양표 PDF 페이지: 4~5쪽 (첫 페이지부터 센 번호)
+자료 연식: MY26 · 2026.05 발행
+원문 항목명: 전방추돌경고 프론트 어시스트 및 긴급제동시스템
+이미지 주소: https://assets.volkswagen.com/is/image/volkswagenag/emengecy%20assist3?Zm10PXBuZy1hbHBoYSZ3aWQ9MTkyMCZiZmM9b2ZmJjdhNzA=
+이미지 크기: 1920 × 1080 px
+
+────────────────────────────────────────
+08. 이머전시 어시스트
+제목: 이머전시 어시스트
+이미지: 이머전시 어시스트.webp
+내용: 운전자가 주행 상황에 반응하지 않으면 경고를 보내고, 반응이 계속 없을 경우 차량의 감속과 정지를 보조합니다.
+국내 적용 트림: Pro Lite / Pro
+정리 근거: ID.4는 Pro 추가 사양, ID.5 MY26은 Pro Lite 기본 사양. 운전자 보조 기능이며 모든 상황에서 정지를 보장하지 않습니다.
+기능 상세 페이지: https://www.volkswagen.co.kr/ko/models/id5.html/__layer/layers/models/id5_2024/iq_drive/Emergencyassist/master.layer
+국내 공식 모델 페이지: https://www.volkswagen.co.kr/ko/models/id5.html
+국내 사양표: https://www.volkswagen.co.kr/idhub/content/dam/onehub_pkw/importers/kr/models/id5/leaflet/ID5_Price%20List_260519_web.pdf
+사양표 PDF 페이지: 4~5쪽 (첫 페이지부터 센 번호)
+자료 연식: MY26 · 2026.05 발행
+원문 항목명: 이머전시 어시스트
+이미지 주소: https://assets.volkswagen.com/is/image/volkswagenag/emengecy%20assist?Zm10PXBuZy1hbHBoYSZ3aWQ9MTkyMCZiZmM9b2ZmJjdhNzA=
+이미지 크기: 1920 × 1080 px

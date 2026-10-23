@@ -1,0 +1,135 @@
+﻿S90
+범위: B5 마일드 하이브리드 세단 · T8 및 ES90과 구분
+수록 기능: 8개
+자료 확인일: 2026-10-21
+국내 확인 기준: MY26 공식 브로슈어 옵션표
+안내: MY26 B5 마일드 하이브리드 기준입니다. 국내 브로슈어에서 11.2인치 센터 디스플레이 적용을 확인했습니다.
+설명은 국내 자료의 짧은 요약입니다. 적용 트림은 항목별 조건을 따릅니다.
+
+──────────────────────────────────────────
+01. 11.2인치 센터 디스플레이
+제목: 11.2인치 센터 디스플레이
+이미지: 11.2인치 센터 디스플레이.webp
+내용: 터치 화면에서 내비게이션·미디어·공조 등 주요 차량 기능을 직관적으로 조작합니다.
+분류: 디스플레이
+국내 적용 조건: 국내 MY26 S90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/s90/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-S90.pdf?ver=20260224
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 11.2인치 센터 디스플레이
+이미지 출처: https://prismedia.volvocars.com/images/0901aca7-41ba-498f-88ae-b6c8c5fa8937/11-inch_centre_display_8N02_S90L_1_HD.jpg
+이미지 크기: 1920 × 1080 px
+
+──────────────────────────────────────────
+02. 헤드업 디스플레이
+제목: 헤드업 디스플레이
+이미지: 헤드업 디스플레이.webp
+내용: 운전자 전방 시야에 속도와 경로 안내를 표시해 도로에 집중하도록 돕습니다.
+분류: 디스플레이
+국내 적용 조건: 국내 MY26 S90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/s90/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-S90.pdf?ver=20260224
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 헤드업 디스플레이
+이미지 출처: https://prismedia.volvocars.com/images/716fae64-4e51-40fc-9f14-29280a1d3554/Head-up_display_KH02_S90L_1_HD.jpg
+이미지 크기: 1920 × 1080 px
+
+──────────────────────────────────────────
+03. 4구역 독립 온도 조절 시스템
+제목: 4구역 독립 온도 조절 시스템
+이미지: 4구역 독립 온도 조절 시스템.webp
+내용: 운전자·동반석·뒷좌석에서 구역별로 온도와 바람을 조절해 쾌적함을 높입니다.
+분류: 공조
+국내 적용 조건: 국내 MY26 S90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/s90/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-S90.pdf?ver=20260224
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 실내 온도 조절 장치
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt6c1f4710f46e8e74/6800a1492d47e7ccf8a4c047/features-comfort-climate-1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+04. 이중 접합 라미네이티드 윈도
+제목: 이중 접합 라미네이티드 윈도
+이미지: 이중 접합 라미네이티드 윈도.webp
+내용: 접합 유리가 외부 소음을 줄이고 편안하고 조용한 실내 환경을 돕습니다.
+분류: 편의
+국내 적용 조건: 국내 MY26 S90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/s90/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-S90.pdf?ver=20260224
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 라미네이트 처리된 사이드 윈도우
+이미지 출처: https://prismedia.volvocars.com/images/b273036f-c91a-43ec-a89f-b4fe5b1930b1/Laminated_side_and_rear_windows_T602_S90L_1_HD.jpg
+이미지 크기: 1920 × 1080 px
+
+──────────────────────────────────────────
+05. 실내 공기 청정 시스템
+제목: 실내 공기 청정 시스템
+이미지: 실내 공기 청정 시스템.webp
+내용: 미세먼지 등 오염물질의 실내 유입을 줄이고 공기 상태를 관리합니다.
+분류: 공조
+국내 적용 조건: 국내 MY26 S90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/s90/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-S90.pdf?ver=20260224
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 첨단 공기 청정 시스템
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blte241314ddab92fc7/67feebd50fcb9f05a8b33f96/features-comfort-climate-4.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+06. 사각지대 경보 및 조향 어시스트
+제목: 사각지대 경보 및 조향 어시스트
+이미지: 사각지대 경보 및 조향 어시스트.webp
+내용: 옆 차선의 차량을 감지해 경고하며 충돌 위험 시 조향을 보조합니다.
+분류: 주행 보조
+국내 적용 조건: 국내 MY26 S90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/s90/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-S90.pdf?ver=20260224
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 혼잡한 트래픽 속에서 스트레스를 낮추세요.
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt6a370591db35d158/67feed5948f586053e5a3514/features-safety-1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+07. 전방 충돌 경보 및 긴급제동 서포트
+제목: 전방 충돌 경보 및 긴급제동 서포트
+이미지: 전방 충돌 경보 및 긴급제동 서포트.webp
+내용: 차량·보행자 등과의 충돌 위험을 감지해 경고하고 필요할 때 제동을 보조합니다.
+분류: 안전
+국내 적용 조건: 국내 MY26 S90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/s90/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-S90.pdf?ver=20260224
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 충돌을 방지합니다.
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/bltc1f31cf1bdfb7c5f/67feed714088ba5a7f6eda61/features-safety-3.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+08. 360° 서라운드 뷰 카메라
+제목: 360° 서라운드 뷰 카메라
+이미지: 360° 서라운드 뷰 카메라.webp
+내용: 차량 주변을 위에서 내려다보는 화면으로 보여줘 좁은 공간의 주차와 이동을 돕습니다.
+분류: 주차 보조
+국내 적용 조건: 국내 MY26 S90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/s90/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-S90.pdf?ver=20260224
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 360° 서라운드 뷰 카메라가 시야를 확보합니다.​
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/bltb01bc40b7dd47110/67feed93b43529ff208895c8/features-safety-6.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px

@@ -1,202 +1,374 @@
-﻿G80 EV 선택 품목
-확인일: 2026-10-19
-출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
-설명: 공식 안내를 바탕으로 기능 중심으로 정리한 등록용 문구입니다.
-이미지: WebP / 원본 비율 유지
+﻿G80 EV
+자료 연식: 2027년형
+국내 선택 품목 세부 항목: 29개
+자료 확인일: 2026-10-22
+범위: 국내 공식 선택 품목 자료: 2027년형. 전기차 기준입니다. 현재 국내 빌더와 제네시스 공식 선택 품목 데이터를 기준으로 정리했습니다.
+관리자 화면의 2026년 표기와 현재 공식 자료의 연식이 다를 수 있습니다. 등록 대상의 연식을 확인하세요.
+패키지 세부 기능을 정리한 목록이며 모든 차량에 기본 적용된다는 의미는 아닙니다.
+국내 페이지: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+공식 선택 품목 데이터: https://www.genesis.com/wsvc/kr/api/v2/structure/data?key=btomodel&lngloc=ko-KR&model=JI5B
 
-[패키지별 구성]
+패키지별 구성
+헤드업 디스플레이
+구성: 헤드업 디스플레이
+후륜 조향 시스템
+구성: 후륜 조향 시스템
+컨비니언스 패키지
+구성: 운전석·동승석 에르고 모션 시트 / 실외 V2L 젠더 / 향균 패키지 (콘솔 암레스트 수납함 자외선 살균기능)
+드라이빙 어시스턴스 패키지Ⅰ
+구성: 서라운드 뷰 모니터 / 후측방 모니터 / 주차 거리 경고 (측방) / 주차 충돌방지 보조 (전/측/후방) / 원격 스마트 주차 보조 2 (주차 구획선 인식 및 사선 주차 포함)
+드라이빙 어시스턴스 패키지Ⅱ
+구성: 전방 충돌방지 보조 2 (교차로 교차 차량, 추월 시 대향차, 측방 접근차, 회피 조향 보조 기능 포함) / 스마트 크루즈 컨트롤 (운전 스타일 연동) / 내비게이션 기반 스마트 크루즈 컨트롤 (진출입로) / 고속도로 주행 보조 2 (차로 변경 보조 제어 기능 포함) / 앞좌석 프리액티브 시트벨트 / 후측방 충돌방지 보조 (주행) / 지능형 헤드램프 / 운전자 전방 주시 경고 카메라
+컨비니언스 패키지 + 2열 컴포트 패키지
+구성: 운전석·동승석 에르고 모션 시트 / 실외 V2L 젠더 / 향균 패키지 (콘솔 암레스트 수납함 자외선 살균기능) / 뒷좌석 자세 메모리 시스템 / 뒷좌석 전동 시트 / 통풍 시트 / VIP 좌석 레그레스트 (2방향) / 뒷좌석 에르고 모션 시트 / 뒷좌석 이지 클로즈 시스템 / 뒷좌석 윙아웃 헤드레스트 / 뒷좌석 목베개 / 뒷좌석 화장거울 / 뒷좌석 스마트폰 무선 충전 / 3존+ 공조 (2열 LCD 공조 조절 장치, 2열 풍량 독립 제어 포함) / 뒷좌석 전동식 도어 커튼
+빌트인 캠 패키지
+구성: 빌트인 캠 2 (보조배터리 포함) / 증강현실 내비게이션
 
-■ 헤드업 디스플레이
-  - 헤드업 디스플레이 → 헤드업 디스플레이.webp
-
-■ 후륜 조향 시스템
-  - 후륜 조향 시스템 → 후륜 조향 시스템.webp
-
-■ 컨비니언스 패키지
-  - 운전석·동승석 에르고 모션 시트 → 운전석·동승석 에르고 모션 시트.webp
-  - 실외 V2L 젠더 → 실외 V2L 젠더.webp
-  - 향균 패키지 (콘솔 암레스트 수납함 자외선 살균기능) → 향균 패키지.webp
-
-■ 드라이빙 어시스턴스 패키지Ⅰ
-  - 서라운드 뷰 모니터 → 서라운드 뷰 모니터.webp
-  - 후측방 모니터 → 후측방 모니터.webp
-  - 주차 거리 경고 (측방) → 주차 거리 경고.webp
-  - 주차 충돌방지 보조 (전/측/후방) → 주차 충돌방지 보조.webp
-  - 원격 스마트 주차 보조 2 (주차 구획선 인식 및 사선 주차 포함) → 원격 스마트 주차 보조 2.webp
-
-■ 드라이빙 어시스턴스 패키지Ⅱ
-  - 전방 충돌방지 보조 2 (교차로 교차 차량, 추월 시 대향차, 측방 접근차, 회피 조향 보조 기능 포함) → 전방 충돌방지 보조 2.webp
-  - 스마트 크루즈 컨트롤 (운전 스타일 연동) → 스마트 크루즈 컨트롤.webp
-  - 내비게이션 기반 스마트 크루즈 컨트롤 (진출입로) → 내비게이션 기반 스마트 크루즈 컨트롤.webp
-  - 고속도로 주행 보조 2 (차로 변경 보조 제어 기능 포함) → 고속도로 주행 보조 2.webp
-  - 앞좌석 프리액티브 시트벨트 → 앞좌석 프리액티브 시트벨트.webp
-  - 후측방 충돌방지 보조 (주행) → 후측방 충돌방지 보조.webp
-  - 지능형 헤드램프 → 지능형 헤드램프.webp
-  - 운전자 전방 주시 경고 카메라 → 운전자 전방 주시 경고 카메라.webp
-
-■ 2열 컴포트 패키지
-  - 뒷좌석 자세 메모리 시스템 → 뒷좌석 자세 메모리 시스템.webp
-  - 뒷좌석 전동 시트 (14방향) → 뒷좌석 전동 시트.webp
-  - VIP 좌석 레그레스트 (2방향) → VIP 좌석 레그레스트.webp
-  - 뒷좌석 에르고 모션 시트 → 뒷좌석 에르고 모션 시트.webp
-  - 뒷좌석 이지 클로즈 시스템 → 뒷좌석 이지 클로즈 시스템.webp
-  - 뒷좌석 윙아웃 헤드레스트 → 뒷좌석 윙아웃 헤드레스트.webp
-  - 뒷좌석 무선 충전 → 뒷좌석 무선 충전.webp
-  - 3존+ 공조 (2열 LCD 공조 조절 장치, 2열 풍량 독립 제어 포함) → 3존+ 공조.webp
-  - 뒷좌석 전동식 도어 커튼 → 뒷좌석 전동식 도어 커튼.webp
-
-■ 빌트인 캠 패키지
-  - 빌트인 캠 2 (보조배터리 포함) → 빌트인 캠 2.webp
-  - 증강현실 내비게이션 → 증강현실 내비게이션.webp
-
-
-[옵션별 설명 및 이미지]
-
--헤드업 디스플레이
-속도·내비게이션·주행 보조 정보를 운전자 시선 높이에 표시합니다.
+세부 기능
+──────────────────────────────────────────
+01. 헤드업 디스플레이
+제목: 헤드업 디스플레이
 이미지: 헤드업 디스플레이.webp
-소속: 헤드업 디스플레이
+내용: 속도·내비게이션·주행 보조 정보를 운전자 시선 높이에 표시합니다.
+포함 선택 품목: 헤드업 디스플레이
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-popular-head-up-display-960x540.jpg
+이미지 크기: 960 × 540 px
 
--후륜 조향 시스템
-저속에서는 반대 방향, 중고속에서는 같은 방향으로 뒷바퀴를 조향합니다.
+──────────────────────────────────────────
+02. 후륜 조향 시스템
+제목: 후륜 조향 시스템
 이미지: 후륜 조향 시스템.webp
-소속: 후륜 조향 시스템
+내용: 저속에서는 반대 방향, 중고속에서는 같은 방향으로 뒷바퀴를 조향합니다.
+포함 선택 품목: 후륜 조향 시스템
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-rws-960x540.jpg
+이미지 크기: 960 × 540 px
 
--운전석·동승석 에르고 모션 시트
-공기주머니로 몸을 지지하며 스트레칭과 주행 연동 지지 조절을 지원합니다.
+──────────────────────────────────────────
+03. 운전석·동승석 에르고 모션 시트
+제목: 운전석·동승석 에르고 모션 시트
 이미지: 운전석·동승석 에르고 모션 시트.webp
-소속: 컨비니언스 패키지
+내용: 공기주머니로 몸을 지지하며 스트레칭과 주행 연동 지지 조절을 지원합니다.
+포함 선택 품목: 컨비니언스 패키지 / 컨비니언스 패키지 + 2열 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-front-ergo-motion-seat-960x540.jpg
+이미지 크기: 960 × 540 px
 
--실외 V2L 젠더
-충전구에 전용 220V 젠더를 연결해 외부 전자기기에 전원을 공급합니다.
+──────────────────────────────────────────
+04. 실외 V2L 젠더
+제목: 실외 V2L 젠더
 이미지: 실외 V2L 젠더.webp
-소속: 컨비니언스 패키지
+내용: 충전구에 전용 220V 젠더를 연결해 외부 전자기기에 전원을 공급합니다.
+포함 선택 품목: 컨비니언스 패키지 / 컨비니언스 패키지 + 2열 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-outdoor-v2l-gender-connector-960x540.jpg
+이미지 크기: 960 × 540 px
 
--향균 패키지 (콘솔 암레스트 수납함 자외선 살균기능)
-콘솔 수납함의 UV-C LED로 소지품을 살균합니다.
+──────────────────────────────────────────
+05. 향균 패키지 (콘솔 암레스트 수납함 자외선 살균기능)
+제목: 향균 패키지 (콘솔 암레스트 수납함 자외선 살균기능)
 이미지: 향균 패키지.webp
-소속: 컨비니언스 패키지
-※ 국제인증기관 Intertek 검증을 받은 자사 시험결과 기준으로, 실사용 환경에 따라 결과가 다를 수 있습니다.
+내용: 콘솔 수납함의 UV-C LED로 소지품을 살균합니다.
+포함 선택 품목: 컨비니언스 패키지 / 컨비니언스 패키지 + 2열 컴포트 패키지
+적용 참고: 살균 성능은 Intertek 검증 시험 기준이며 사용 환경에 따라 달라집니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-antibacterial-package-960x540.jpg
+이미지 크기: 960 × 540 px
 
--서라운드 뷰 모니터
-주변 카메라 영상을 여러 각도로 표시해 주차·출차를 돕습니다.
+──────────────────────────────────────────
+06. 서라운드 뷰 모니터
+제목: 서라운드 뷰 모니터
 이미지: 서라운드 뷰 모니터.webp
-소속: 드라이빙 어시스턴스 패키지Ⅰ
+내용: 주변 카메라 영상을 여러 각도로 표시해 주차·출차를 돕습니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅰ
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-svm-960x540.jpg
+이미지 크기: 960 × 540 px
 
--후측방 모니터
-방향지시등에 연동해 후측방 영상을 클러스터에 표시합니다.
+──────────────────────────────────────────
+07. 후측방 모니터
+제목: 후측방 모니터
 이미지: 후측방 모니터.webp
-소속: 드라이빙 어시스턴스 패키지Ⅰ
+내용: 방향지시등에 연동해 후측방 영상을 클러스터에 표시합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅰ
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-bvm-960x540.jpg
+이미지 크기: 960 × 540 px
 
--주차 거리 경고 (측방)
-주차·출차 중 측면 장애물 접근을 경고합니다.
+──────────────────────────────────────────
+08. 주차 거리 경고 (측방)
+제목: 주차 거리 경고 (측방)
 이미지: 주차 거리 경고.webp
-소속: 드라이빙 어시스턴스 패키지Ⅰ
+내용: 주차·출차 중 측면 장애물 접근을 경고합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅰ
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-parking-warning-960x540.jpg
+이미지 크기: 960 × 540 px
 
--주차 충돌방지 보조 (전/측/후방)
-주차·출차 중 충돌 위험을 경고하고 필요 시 제동을 보조합니다.
+──────────────────────────────────────────
+09. 주차 충돌방지 보조 (전/측/후방)
+제목: 주차 충돌방지 보조 (전/측/후방)
 이미지: 주차 충돌방지 보조.webp
-소속: 드라이빙 어시스턴스 패키지Ⅰ
+내용: 주차·출차 중 충돌 위험을 경고하고 필요 시 제동을 보조합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅰ
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-parking-assist-960x540.jpg
+이미지 크기: 960 × 540 px
 
--원격 스마트 주차 보조 2 (주차 구획선 인식 및 사선 주차 포함)
-공간을 탐색하고 조향·속도·변속을 제어하며 스마트키 원격 주차를 지원합니다.
+──────────────────────────────────────────
+10. 원격 스마트 주차 보조 2 (주차 구획선 인식 및 사선 주차 포함)
+제목: 원격 스마트 주차 보조 2 (주차 구획선 인식 및 사선 주차 포함)
 이미지: 원격 스마트 주차 보조 2.webp
-소속: 드라이빙 어시스턴스 패키지Ⅰ
+내용: 공간을 탐색하고 조향·속도·변속을 제어하며 스마트키 원격 주차를 지원합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅰ
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-rspa-960x540.jpg
+이미지 크기: 960 × 540 px
 
--전방 충돌방지 보조 2 (교차로 교차 차량, 추월 시 대향차, 측방 접근차, 회피 조향 보조 기능 포함)
-전방·교차로 충돌 위험을 감지해 경고하고 제동·회피 조향을 보조합니다.
+──────────────────────────────────────────
+11. 전방 충돌방지 보조 2 (교차로 교차 차량, 추월 시 대향차, 측방 접근차, 회피 조향 보조 기능 포함)
+제목: 전방 충돌방지 보조 2 (교차로 교차 차량, 추월 시 대향차, 측방 접근차, 회피 조향 보조 기능 포함)
 이미지: 전방 충돌방지 보조 2.webp
-소속: 드라이빙 어시스턴스 패키지Ⅱ
+내용: 전방·교차로 충돌 위험을 감지해 경고하고 제동·회피 조향을 보조합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅱ
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-forward-collision-960x540.jpg
+이미지 크기: 960 × 540 px
 
--스마트 크루즈 컨트롤 (운전 스타일 연동)
-학습한 운전 스타일을 크루즈 주행에 반영합니다.
+──────────────────────────────────────────
+12. 스마트 크루즈 컨트롤 (운전 스타일 연동)
+제목: 스마트 크루즈 컨트롤 (운전 스타일 연동)
 이미지: 스마트 크루즈 컨트롤.webp
-소속: 드라이빙 어시스턴스 패키지Ⅱ
+내용: 학습한 운전 스타일을 크루즈 주행에 반영합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅱ
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-smart-cruise-control-960x540.jpg
+이미지 크기: 960 × 540 px
 
--내비게이션 기반 스마트 크루즈 컨트롤 (진출입로)
-지도 정보에 따라 안전구간·곡선·진출입로에서 속도를 조절합니다.
+──────────────────────────────────────────
+13. 내비게이션 기반 스마트 크루즈 컨트롤 (진출입로)
+제목: 내비게이션 기반 스마트 크루즈 컨트롤 (진출입로)
 이미지: 내비게이션 기반 스마트 크루즈 컨트롤.webp
-소속: 드라이빙 어시스턴스 패키지Ⅱ
-※ 사전 감속은 고속도로 진출시에만 작동합니다.
+내용: 지도 정보에 따라 안전구간·곡선·진출입로에서 속도를 조절합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅱ
+적용 참고: 사전 감속 기능은 고속도로 진출 상황에 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-navigation-curise-control-960x540.jpg
+이미지 크기: 960 × 540 px
 
--고속도로 주행 보조 2 (차로 변경 보조 제어 기능 포함)
-고속도로·자동차전용도로에서 차간거리·속도·차로 중앙 유지와 차로 변경을 보조합니다.
+──────────────────────────────────────────
+14. 고속도로 주행 보조 2 (차로 변경 보조 제어 기능 포함)
+제목: 고속도로 주행 보조 2 (차로 변경 보조 제어 기능 포함)
 이미지: 고속도로 주행 보조 2.webp
-소속: 드라이빙 어시스턴스 패키지Ⅱ
+내용: 고속도로·자동차전용도로에서 차간거리·속도·차로 중앙 유지와 차로 변경을 보조합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅱ
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-highway-driving-assist-960x540.jpg
+이미지 크기: 960 × 540 px
 
--앞좌석 프리액티브 시트벨트
-충돌 직전 안전벨트를 당겨 탑승자 몸을 지지합니다.
+──────────────────────────────────────────
+15. 앞좌석 프리액티브 시트벨트
+제목: 앞좌석 프리액티브 시트벨트
 이미지: 앞좌석 프리액티브 시트벨트.webp
-소속: 드라이빙 어시스턴스 패키지Ⅱ
+내용: 충돌 직전 안전벨트를 당겨 탑승자 몸을 지지합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅱ
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-pre-active-seatbelt-960x540.jpg
+이미지 크기: 960 × 540 px
 
--후측방 충돌방지 보조 (주행)
-후측방 접근 차량을 경고하며 충돌 위험 시 회피 조향을 보조합니다.
+──────────────────────────────────────────
+16. 후측방 충돌방지 보조 (주행)
+제목: 후측방 충돌방지 보조 (주행)
 이미지: 후측방 충돌방지 보조.webp
-소속: 드라이빙 어시스턴스 패키지Ⅱ
+내용: 후측방 접근 차량을 경고하며 충돌 위험 시 회피 조향을 보조합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅱ
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-blindspot-collision-960x540.jpg
+이미지 크기: 960 × 540 px
 
--지능형 헤드램프
-상향등 일부를 차단해 다른 차량의 눈부심을 줄입니다.
+──────────────────────────────────────────
+17. 지능형 헤드램프
+제목: 지능형 헤드램프
 이미지: 지능형 헤드램프.webp
-소속: 드라이빙 어시스턴스 패키지Ⅱ
-※ 100km/h 이상 주행 시 고속주행모드 진입하여 대향차의 눈부심을 방지 하기 위해 운전석 측 상향등은 전체 소등이 이루어지며, 동승석 측의 상향등 만으로 지능형 헤드램프가 구현됩니다.
+내용: 상향등 일부를 차단해 다른 차량의 눈부심을 줄입니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅱ
+적용 참고: 시속 100km 이상에서는 운전석 쪽 상향등이 꺼지고 동승석 쪽으로 지능형 제어를 수행합니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-ifs-960x540.jpg
+이미지 크기: 960 × 540 px
 
--운전자 전방 주시 경고 카메라
-시선·눈감음을 감지해 주시 태만이나 졸음 상태를 경고합니다.
+──────────────────────────────────────────
+18. 운전자 전방 주시 경고 카메라
+제목: 운전자 전방 주시 경고 카메라
 이미지: 운전자 전방 주시 경고 카메라.webp
-소속: 드라이빙 어시스턴스 패키지Ⅱ
+내용: 시선·눈감음을 감지해 주시 태만이나 졸음 상태를 경고합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지Ⅱ
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-navigation-curise-control-960x540.jpg
+이미지 크기: 960 × 540 px
 
--뒷좌석 자세 메모리 시스템
-저장된 시트 위치를 버튼으로 불러옵니다.
+──────────────────────────────────────────
+19. 뒷좌석 자세 메모리 시스템
+제목: 뒷좌석 자세 메모리 시스템
 이미지: 뒷좌석 자세 메모리 시스템.webp
-소속: 2열 컴포트 패키지
+내용: 저장된 시트 위치를 버튼으로 불러옵니다.
+포함 선택 품목: 컨비니언스 패키지 + 2열 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-rear-ims-960x540.jpg
+이미지 크기: 960 × 540 px
 
--뒷좌석 전동 시트 (14방향)
-뒷좌석을 14방향 전동 조절하며 열선·통풍을 지원합니다.
+──────────────────────────────────────────
+20. 뒷좌석 전동 시트 / 통풍 시트
+제목: 뒷좌석 전동 시트 / 통풍 시트
 이미지: 뒷좌석 전동 시트.webp
-소속: 2열 컴포트 패키지
+내용: 뒷좌석 각도를 전동 조절하고 열선·통풍 기능으로 쾌적한 착석감을 제공합니다.
+포함 선택 품목: 컨비니언스 패키지 + 2열 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-rear-powered-seat-960x540.jpg
+이미지 크기: 960 × 540 px
 
--VIP 좌석 레그레스트 (2방향)
-2열 오른쪽 VIP 좌석의 다리를 받쳐줍니다.
+──────────────────────────────────────────
+21. VIP 좌석 레그레스트 (2방향)
+제목: VIP 좌석 레그레스트 (2방향)
 이미지: VIP 좌석 레그레스트.webp
-소속: 2열 컴포트 패키지
+내용: 2열 오른쪽 VIP 좌석의 다리를 받쳐줍니다.
+포함 선택 품목: 컨비니언스 패키지 + 2열 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-leg-rest-960x540.jpg
+이미지 크기: 960 × 540 px
 
--뒷좌석 에르고 모션 시트
-시트 내 공기주머니를 조절해 몸을 지지합니다.
+──────────────────────────────────────────
+22. 뒷좌석 에르고 모션 시트
+제목: 뒷좌석 에르고 모션 시트
 이미지: 뒷좌석 에르고 모션 시트.webp
-소속: 2열 컴포트 패키지
+내용: 시트 내 공기주머니를 조절해 몸을 지지합니다.
+포함 선택 품목: 컨비니언스 패키지 + 2열 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-rear-ergo-motion-seat-960x540.jpg
+이미지 크기: 960 × 540 px
 
--뒷좌석 이지 클로즈 시스템
-버튼으로 도어를 닫고, 하차 시 가볍게 밀어 열 수 있습니다.
+──────────────────────────────────────────
+23. 뒷좌석 이지 클로즈 시스템
+제목: 뒷좌석 이지 클로즈 시스템
 이미지: 뒷좌석 이지 클로즈 시스템.webp
-소속: 2열 컴포트 패키지
+내용: 버튼으로 도어를 닫고, 하차 시 가볍게 밀어 열 수 있습니다.
+포함 선택 품목: 컨비니언스 패키지 + 2열 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-rear-easyclose-system-960x540.jpg
+이미지 크기: 960 × 540 px
 
--뒷좌석 윙아웃 헤드레스트
-뒷좌석 목베개·윙아웃 헤드레스트·화장 거울을 제공합니다.
+──────────────────────────────────────────
+24. 뒷좌석 윙아웃 헤드레스트 / 뒷좌석 목베개 / 뒷좌석 화장거울
+제목: 뒷좌석 윙아웃 헤드레스트 / 뒷좌석 목베개 / 뒷좌석 화장거울
 이미지: 뒷좌석 윙아웃 헤드레스트.webp
-소속: 2열 컴포트 패키지
+내용: 윙아웃 헤드레스트와 목베개로 휴식을 돕고 뒷좌석 화장거울을 제공합니다.
+포함 선택 품목: 컨비니언스 패키지 + 2열 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-wingout-headrest-960x540.jpg
+이미지 크기: 960 × 540 px
 
--뒷좌석 무선 충전
-패드에 스마트폰을 올려 무선 충전합니다.
+──────────────────────────────────────────
+25. 뒷좌석 스마트폰 무선 충전
+제목: 뒷좌석 스마트폰 무선 충전
 이미지: 뒷좌석 무선 충전.webp
-소속: 2열 컴포트 패키지
+내용: 뒷좌석 무선 충전 패드로 호환 스마트폰을 케이블 없이 충전합니다.
+포함 선택 품목: 컨비니언스 패키지 + 2열 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-rear-phone-charge-960x540.jpg
+이미지 크기: 960 × 540 px
 
--3존+ 공조 (2열 LCD 공조 조절 장치, 2열 풍량 독립 제어 포함)
-앞좌석과 뒷좌석 온도를 독립 제어하며 2열 LCD 조절창을 제공합니다. 2열 풍량도 별도로 조절합니다.
+──────────────────────────────────────────
+26. 3존+ 공조 (2열 LCD 공조 조절 장치, 2열 풍량 독립 제어 포함)
+제목: 3존+ 공조 (2열 LCD 공조 조절 장치, 2열 풍량 독립 제어 포함)
 이미지: 3존+ 공조.webp
-소속: 2열 컴포트 패키지
+내용: 앞좌석과 뒷좌석 온도를 독립 제어하며 2열 LCD 조절창을 제공합니다. 2열 풍량도 별도로 조절합니다.
+포함 선택 품목: 컨비니언스 패키지 + 2열 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-tri-zone-960x540.jpg
+이미지 크기: 960 × 540 px
 
--뒷좌석 전동식 도어 커튼
-버튼으로 조작하는 전동 커튼으로 뒷좌석 햇빛과 외부 시선을 차단합니다.
+──────────────────────────────────────────
+27. 뒷좌석 전동식 도어 커튼
+제목: 뒷좌석 전동식 도어 커튼
 이미지: 뒷좌석 전동식 도어 커튼.webp
-소속: 2열 컴포트 패키지
+내용: 버튼으로 조작하는 전동 커튼으로 뒷좌석 햇빛과 외부 시선을 차단합니다.
+포함 선택 품목: 컨비니언스 패키지 + 2열 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-rear-electronic-door-curtain-960x540.jpg
+이미지 크기: 960 × 540 px
 
--빌트인 캠 2 (보조배터리 포함)
-전후방 영상·음성·주행 정보를 기록하며 앱·OTA를 지원합니다. 주차 녹화는 최대 120시간입니다.
+──────────────────────────────────────────
+28. 빌트인 캠 2 (보조배터리 포함)
+제목: 빌트인 캠 2 (보조배터리 포함)
 이미지: 빌트인 캠 2.webp
-소속: 빌트인 캠 패키지
-※ 주행시간이 보조 배터리를 충전하기에 충분하지 않거나 보조 배터리의 노후화에 따라 설정한 시간만큼 주차 녹화가 작동되지 않을 수 있습니다.
+내용: 전·후방 영상을 기록하며 차량 화면과 앱에서 확인할 수 있습니다. 주차 녹화 시간은 배터리 상태와 설정에 따라 달라집니다.
+포함 선택 품목: 빌트인 캠 패키지
+적용 참고: 주행에 따른 보조배터리 충전량과 배터리 노후 상태에 따라 주차 녹화 시간이 줄어들 수 있습니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-built-in-cam2-960x540.jpg
+이미지 크기: 960 × 540 px
 
--증강현실 내비게이션
-전방 카메라 영상에 길 안내 정보를 겹쳐 표시합니다.
+──────────────────────────────────────────
+29. 증강현실 내비게이션
+제목: 증강현실 내비게이션
 이미지: 증강현실 내비게이션.webp
-소속: 빌트인 캠 패키지
+내용: 전방 카메라 영상에 길 안내 정보를 겹쳐 표시합니다.
+포함 선택 품목: 빌트인 캠 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/shop/build/electrified-g80
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/electrified-g80-2027-ji5b/option2/pc-image/ev-g80-27my-bto-options-augmented-reality-navigation-960x540.jpg
+이미지 크기: 960 × 540 px

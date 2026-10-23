@@ -10107,7 +10107,8 @@ body.detail-mode #vehicleDetailView #app {
     --faq-icon-canvas-size: 42px;
 }
 #faqView:not(.mypage-qna-mode) .ag-faq-category-icon--rent {
-    --faq-icon-canvas-size: 35px;
+    --faq-icon-canvas-size: 40px;
+    --faq-icon-frame-width: 28px;
 }
 #faqView:not(.mypage-qna-mode) .ag-faq-category-icon--lease {
     --faq-icon-canvas-size: 44px;
@@ -10162,6 +10163,11 @@ body.detail-mode #vehicleDetailView #app {
     font-size: 12px !important;
     font-weight: 700 !important;
     cursor: pointer !important;
+    transition: color 180ms ease, transform 180ms ease !important;
+}
+
+#faqView:not(.mypage-qna-mode) .ag-qna-show-all:hover {
+    color: #ff6028 !important;
 }
 
 #faqView .ag-qna-show-all[hidden] {
@@ -10169,9 +10175,20 @@ body.detail-mode #vehicleDetailView #app {
     visibility: hidden !important;
 }
 
-#faqView:not(.mypage-qna-mode) .ag-qna-show-all span {
-    font-size: 21px !important;
-    line-height: 1 !important;
+#faqView:not(.mypage-qna-mode) .ag-qna-show-all span[aria-hidden="true"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 10px !important;
+    height: 12px !important;
+    font-size: 17px !important;
+    line-height: 12px !important;
+    transform: translateY(-1px) !important;
+    transition: transform 220ms cubic-bezier(0.2, 0.75, 0.25, 1) !important;
+}
+
+#faqView:not(.mypage-qna-mode) .ag-qna-show-all[aria-expanded="true"] span[aria-hidden="true"] {
+    transform: translateY(-1px) rotate(-90deg) !important;
 }
 
 #faqView:not(.mypage-qna-mode) .qna-list {
@@ -10251,6 +10268,7 @@ body.detail-mode #vehicleDetailView #app {
     border-right: 1.7px solid #7d8996 !important;
     border-bottom: 1.7px solid #7d8996 !important;
     transform: translateY(-68%) rotate(45deg) !important;
+    transition: transform 220ms cubic-bezier(0.2, 0.75, 0.25, 1) !important;
 }
 
 #faqView:not(.mypage-qna-mode) .faq-item.open .faq-question::after {
@@ -10258,21 +10276,50 @@ body.detail-mode #vehicleDetailView #app {
 }
 
 #faqView:not(.mypage-qna-mode) .faq-answer {
-    display: none !important;
+    display: grid !important;
+    grid-template-rows: 0fr !important;
+    overflow: hidden !important;
     margin: 0 !important;
-    padding: 12px 13px 13px !important;
+    padding: 0 !important;
     border: 0 !important;
-    border-top: 1px solid #ecf0f3 !important;
+    border-top: 1px solid transparent !important;
     border-radius: 0 !important;
     background: #fafbfc !important;
     color: #536071 !important;
     font-size: 13px !important;
     line-height: 1.8 !important;
     word-break: keep-all !important;
+    transition: grid-template-rows 280ms cubic-bezier(0.2, 0.75, 0.25, 1), border-top-color 220ms ease !important;
+}
+
+#faqView:not(.mypage-qna-mode) .faq-answer-content {
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 13px !important;
+    opacity: 0 !important;
+    transform: translateY(-4px) !important;
+    transition: opacity 180ms ease, transform 220ms ease, padding 280ms ease !important;
 }
 
 #faqView:not(.mypage-qna-mode) .faq-item.open .faq-answer {
-    display: block !important;
+    grid-template-rows: 1fr !important;
+    border-top-color: #ecf0f3 !important;
+}
+
+#faqView:not(.mypage-qna-mode) .faq-item.open .faq-answer-content {
+    padding: 12px 13px 13px !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #faqView:not(.mypage-qna-mode) .ag-qna-show-all,
+    #faqView:not(.mypage-qna-mode) .ag-qna-show-all span[aria-hidden="true"],
+    #faqView:not(.mypage-qna-mode) .faq-question::after,
+    #faqView:not(.mypage-qna-mode) .faq-answer,
+    #faqView:not(.mypage-qna-mode) .faq-answer-content {
+        transition: none !important;
+    }
 }
 
 #faqView:not(.mypage-qna-mode) .ag-faq-empty {

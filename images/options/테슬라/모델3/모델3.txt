@@ -1,0 +1,118 @@
+﻿모델3
+자료 확인일: 2026-10-22
+국내 사양 기준: 현재 Tesla 대한민국 모델·주문 페이지 및 한국어 사용자 매뉴얼
+수록 기능: 8개
+차종 안내: 현재 국내 Model 3 기본형·Premium·Performance의 차이를 구분했습니다. 후면 화면은 Premium / Performance, 통풍시트·듀얼 무선 충전·엠비언트 라이트·어쿠스틱 글래스 항목은 Premium 범위로 표시했습니다. 기본형에 Premium 장비를 모두 적용하지 않았습니다.
+제목과 내용은 등록용 한국어 요약입니다. 적용 트림과 조건을 확인하세요.
+
+────────────────────────────────────────
+01. 대형 센터 터치스크린
+제목: 대형 센터 터치스크린
+이미지: 대형 센터 터치스크린.webp
+내용: 중앙 터치스크린에서 주요 차량 설정과 주행 정보를 확인하고, 실내 기능을 직관적으로 조작할 수 있습니다.
+국내 적용 트림·조건: 현재 국내 Model 3 공통 기능
+정리 근거: 현재 국내 모델 페이지의 직관적인 조작 및 제원, 국내 주문 페이지의 화면 구성을 확인했습니다. 화면 크기는 생산 시점 차이를 고려해 제목·설명에 고정하지 않았습니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/model3
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/model3
+원문 항목명: 직관적인 조작
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-3-Standard-Control-LHD-Desktop-APAC.jpg
+이미지 크기: 942 × 580 px
+이미지 안내: 제조사 한국어 모델 페이지의 해당 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+02. 8인치 후면 터치스크린
+제목: 8인치 후면 터치스크린
+이미지: 8인치 후면 터치스크린.webp
+내용: 뒷좌석 탑승자가 8인치 터치스크린으로 실내 온도와 엔터테인먼트 기능을 조작할 수 있습니다.
+국내 적용 트림·조건: 국내 Premium / Performance (기본형 제외)
+정리 근거: Premium 인테리어의 후면 디스플레이와 Performance 듀얼 디스플레이 설명에 각각 확인됩니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/model3
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/model3
+원문 항목명: 후면 디스플레이
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-3-Premium-Minimalist-Interior-Carousel-Slide-3-LHD-Desktop-APAC-Poster.jpg
+이미지 크기: 1356 × 580 px
+이미지 안내: 제조사 한국어 페이지의 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+03. 앞좌석 통풍시트
+제목: 앞좌석 통풍시트
+이미지: 앞좌석 통풍시트.webp
+내용: 앞좌석 통풍 기능을 휴대폰으로 미리 켜거나 실내 온도에 맞춰 자동으로 조절하도록 설정할 수 있습니다.
+국내 적용 트림·조건: 국내 Model 3 Premium 기준 (기본형과 구분)
+정리 근거: Premium 기능 카드의 통풍시트 설명 기준입니다. Performance의 통풍 스포츠 시트와는 시트 형태가 다릅니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/model3
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/model3
+원문 항목명: 통풍시트
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-3-Premium-Minimalist-Interior-Carousel-Slide-4-LHD-Desktop-APAC-Poster.jpg
+이미지 크기: 1356 × 580 px
+이미지 안내: 제조사 한국어 페이지의 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+04. 듀얼 스마트폰 무선 충전
+제목: 듀얼 스마트폰 무선 충전
+이미지: 듀얼 스마트폰 무선 충전.webp
+내용: 호환 스마트폰 두 대를 동시에 올려두고 케이블 없이 충전할 수 있습니다.
+국내 적용 트림·조건: 국내 Model 3 Premium 기준 (기본형과 구분)
+정리 근거: Premium 기능 카드에서 두 대 동시 충전을 확인했습니다. 호환 휴대폰과 적합한 케이스가 필요합니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/model3
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/model3
+원문 항목명: 무선 충전
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-3-Premium-Minimalist-Interior-Carousel-Slide-5-LHD-Desktop-APAC-Poster.jpg
+이미지 크기: 1356 × 580 px
+이미지 안내: 제조사 한국어 페이지의 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+05. 엠비언트 라이트
+제목: 엠비언트 라이트
+이미지: 엠비언트 라이트.webp
+내용: 실내를 감싸는 엠비언트 라이트를 취향에 맞게 설정해 탑승 공간의 분위기를 바꿀 수 있습니다.
+국내 적용 트림·조건: 국내 Model 3 Premium 기준 (기본형과 구분)
+정리 근거: Premium 미니멀리스트 인테리어 설명 기준입니다. 기본형 전체의 장비로 표시하지 않았습니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/model3
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/model3
+원문 항목명: 미니멀리스트 인테리어
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-3-Premium-Minimalist-Interior-LHD-Desktop-APAC-Poster.jpg
+이미지 크기: 2200 × 1100 px
+이미지 안내: 제조사 한국어 모델 페이지의 해당 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+06. 어쿠스틱 글래스 및 글래스 루프
+제목: 어쿠스틱 글래스 및 글래스 루프
+이미지: 어쿠스틱 글래스 및 글래스 루프.webp
+내용: 차음 유리가 실내로 들어오는 소음을 줄이고, 글래스 루프가 채광과 탁 트인 시야를 제공합니다.
+국내 적용 트림·조건: 국내 Model 3 Premium 기준 (기본형과 구분)
+정리 근거: Premium 정숙한 실내 공간 설명의 어쿠스틱 글래스와 글래스 루프를 함께 정리했습니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/model3
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/model3
+원문 항목명: 정숙한 실내 공간
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-3-Premium-A-Quiet-Cabin-Desktop-Zen-Grey-APAC-LHD.jpg
+이미지 크기: 2856 × 1428 px
+이미지 안내: 제조사 한국어 모델 페이지의 해당 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+07. Tesla 앱 원격 실내 온도 제어
+제목: Tesla 앱 원격 실내 온도 제어
+이미지: Tesla 앱 원격 실내 온도 제어.webp
+내용: Tesla 앱으로 탑승 전에 실내 온도를 미리 조절하고 차량 상태를 원격으로 확인할 수 있습니다.
+국내 적용 트림·조건: 현재 국내 Model 3 공통 기능
+정리 근거: 국내 기본형과 Premium 페이지에 공통으로 안내되는 앱 리모트 액세스 기능입니다. 앱·차량 연결 및 통신이 필요합니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/model3
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/model3
+원문 항목명: 언제 어디서나 접속 가능
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-3-Premium-Connected-Desktop.jpg
+이미지 크기: 2448 × 1224 px
+이미지 안내: 제조사 한국어 모델 페이지의 해당 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+08. 전방 충돌 경고 및 액티브 긴급 제동
+제목: 전방 충돌 경고 및 액티브 긴급 제동
+이미지: 전방 충돌 경고 및 액티브 긴급 제동.webp
+내용: 전방 충돌 위험을 경고하고 필요한 상황에서 제동을 보조해 충돌 위험이나 피해를 줄이는 데 도움을 줍니다.
+국내 적용 트림·조건: 현재 국내 Model 3 공통 기능
+정리 근거: 국내 공식 페이지에서 기본 사양으로 안내하는 액티브 세이프티 기능입니다. FSD와 구분했으며 운전자의 주의가 필요한 보조 기능입니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ownersmanual/model3/ko_kr/GUID-8EA7EF10-7D27-42AC-A31A-96BCE5BC0A85.html
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/model3
+원문 항목명: 충돌 방지 어시스트
+이미지 주소: https://www.tesla.com/ownersmanual/images/GUID-CFBA12B6-C5CC-4DFD-B33E-D5656C20F60A-online-en-US.png
+이미지 크기: 437 × 437 px
+이미지 안내: 한국어 사용자 매뉴얼에서 충돌 방지 기능을 설명하는 제조사 이미지를 사용했습니다.

@@ -1,218 +1,368 @@
-﻿GV80 선택 품목
-확인일: 2026-10-19
-출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto.html
-설명: 공식 안내를 바탕으로 기능 중심으로 정리한 등록용 문구입니다.
-이미지: WebP / 원본 비율 유지
+﻿GV80
+자료 연식: 2027년형
+국내 선택 품목 세부 항목: 28개
+자료 확인일: 2026-10-22
+범위: 국내 공식 선택 품목 자료: 2027년형. 가솔린 모델 기준입니다. 5·6·7인승의 패키지 구성을 구분했습니다.
+관리자 화면의 2026년 표기와 현재 공식 자료의 연식이 다를 수 있습니다. 등록 대상의 연식을 확인하세요.
+패키지 세부 기능을 정리한 목록이며 모든 차량에 기본 적용된다는 의미는 아닙니다.
+국내 페이지: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+공식 선택 품목 데이터: https://www.genesis.com/wsvc/kr/api/v2/structure/data?key=btomodel&lngloc=ko-KR&model=JXNB
 
-[패키지별 구성]
+패키지별 구성
+헤드업 디스플레이
+구성: 헤드업 디스플레이
+파노라마 선루프
+구성: 파노라마 선루프
+하이테크 패키지
+구성: 고스트 도어 클로징 / 디지털 센터 미러
+앞좌석 컴포트 패키지
+구성: 운전석 & 동승석 에르고 모션 시트 (18방향, 쿠션 익스텐션, 볼스터 전동 조절 적용, 스트레칭 모드 포함) / 동승석 자세 메모리 시스템
+드라이빙 어시스턴스 패키지
+구성: 전방 충돌방지 보조2 (교차로 교차 차량, 측방 접근차, 추월 시 대향차, 회피 조향 보조 기능 포함) / 후측방 충돌방지 보조 (주행) / 주차 충돌방지 보조 (전/측방) / 지능형 헤드램프 / 운전자 전방 주시 경고 카메라 / 앞좌석 프리액티브 시트벨트 / 고속도로 주행 보조2 (차로 변경 보조 제어 기능 포함) / 내비게이션 기반 스마트 크루즈 컨트롤 (진출입로) / 원격 스마트 주차 보조2 (주차 구획선 인식 및 사선 주차,실내 원터치 조작 포함)
+뒷좌석 컴포트 패키지 [5인승]
+구성: 2열 전동 (리클라이닝, 슬라이딩, 틸팅) 및 통풍 시트 / 뒷좌석 전동식 도어커튼 / 3존+ 공조 (2열 LCD 공조 조절 장치, 풍량 독립제어 포함) / 뒷좌석 목베개 및 화장 거울 / 윙아웃 헤드레스트 / 220V 파워아웃렛 / 러기지 스크린, 러기지 매트, 러기지 네트
+뒷좌석 컴포트 패키지 [6인승]
+구성: 2열 전동 (리클라이닝, 슬라이딩, 틸팅) 및 통풍 시트 / 뒷좌석 전동식 도어커튼 / 3존+ 공조 (2열 LCD 공조 조절 장치, 풍량 독립제어 포함) / 뒷좌석 목베개 및 화장 거울 / 윙아웃 헤드레스트 / 220V 파워아웃렛 / 러기지 스크린, 러기지 매트, 러기지 네트
+뒷좌석 컴포트 패키지 [7인승]
+구성: 2열 전동 (리클라이닝, 슬라이딩, 틸팅) 및 통풍 시트 / 뒷좌석 전동식 도어커튼 / 3존+ 공조 (2열 LCD 공조 조절 장치, 풍량 독립제어 포함) / 뒷좌석 목베개 및 화장 거울 / 윙아웃 헤드레스트 / 220V 파워아웃렛 / 러기지 스크린, 러기지 매트, 러기지 네트
+뱅앤올룹슨 사운드 패키지
+구성: 뱅앤올룹슨 고해상도 사운드 시스템 (18스피커) / 액티브 노이즈 컨트롤 - 로드 (ANC-R)
+빌트인 캠 패키지
+구성: 빌트인 캠 2 (보조 배터리 포함) / 증강현실 내비게이션
 
-■ 헤드업 디스플레이
-  - 헤드업 디스플레이 → 헤드업 디스플레이.webp
-
-■ 파노라마 선루프
-  - 파노라마 선루프 → 파노라마 선루프.webp
-
-■ 하이테크 패키지
-  - 고스트 도어 클로징 → 고스트 도어 클로징.webp
-  - 디지털 센터 미러 → 디지털 센터 미러.webp
-
-■ 앞좌석 컴포트 패키지
-  - 운전석 & 동승석 에르고 모션 시트 (18방향, 쿠션 익스텐션, 볼스터 전동 조절 적용, 스트레칭 모드 포함) → 운전석 & 동승석 에르고 모션 시트.webp
-  - 동승석 자세 메모리 시스템 → 동승석 자세 메모리 시스템.webp
-
-■ 드라이빙 어시스턴스 패키지
-  - 전방 충돌방지 보조2 (교차로 교차 차량, 측방 접근차, 추월 시 대향차, 회피 조향 보조 기능 포함) → 전방 충돌방지 보조2.webp
-  - 후측방 충돌방지 보조 (주행) → 후측방 충돌방지 보조.webp
-  - 주차 충돌방지 보조 (전/측방) → 주차 충돌방지 보조.webp
-  - 지능형 헤드램프 → 지능형 헤드램프.webp
-  - 운전자 전방 주시 경고 카메라 → 운전자 전방 주시 경고 카메라.webp
-  - 앞좌석 프리액티브 시트벨트 → 앞좌석 프리액티브 시트벨트.webp
-  - 고속도로 주행 보조2 (차로 변경 보조 제어 기능 포함) → 고속도로 주행 보조2.webp
-  - 내비게이션 기반 스마트 크루즈 컨트롤 (진출입로) → 내비게이션 기반 스마트 크루즈 컨트롤.webp
-  - 원격 스마트 주차 보조2 (주차 구획선 인식 및 사선 주차,실내 원터치 조작 포함) → 원격 스마트 주차 보조2.webp
-
-■ 뒷좌석 컴포트 패키지 [5인승]
-  - 2열 전동 (리클라이닝, 슬라이딩, 틸팅) 및 통풍 시트 → 2열 전동 및 통풍 시트.webp
-  - 뒷좌석 전동식 도어커튼 → 뒷좌석 전동식 도어커튼.webp
-  - 3존+ 공조 (2열 LCD 공조 조절 장치, 풍량 독립제어 포함) → 3존+ 공조.webp
-  - 뒷좌석 목베개 및 화장 거울 → 뒷좌석 목베개 및 화장 거울.webp
-  - 윙아웃 헤드레스트 → 윙아웃 헤드레스트.webp
-  - 220V 파워아웃렛 → 220V 파워아웃렛.webp
-  - 러기지 스크린, 러기지 매트, 러기지 네트 → 러기지 스크린, 러기지 매트, 러기지 네트.webp
-
-■ 뒷좌석 컴포트 패키지 [6인승]
-  - 2열 전동 (리클라이닝, 슬라이딩, 틸팅) 및 통풍 시트 → 2열 전동 및 통풍 시트.webp
-  - 뒷좌석 전동식 도어커튼 → 뒷좌석 전동식 도어커튼.webp
-  - 3존+ 공조 (2열 LCD 공조 조절 장치, 풍량 독립제어 포함) → 3존+ 공조 (6인승).webp
-  - 뒷좌석 목베개 및 화장 거울 → 뒷좌석 목베개 및 화장 거울.webp
-  - 윙아웃 헤드레스트 → 윙아웃 헤드레스트.webp
-  - 220V 파워아웃렛 → 220V 파워아웃렛.webp
-  - 러기지 스크린, 러기지 매트, 러기지 네트 → 러기지 스크린, 러기지 매트, 러기지 네트.webp
-
-■ 뒷좌석 컴포트 패키지 [7인승]
-  - 2열 전동 (리클라이닝, 슬라이딩, 틸팅) 및 통풍 시트 → 2열 전동 및 통풍 시트 (7인승).webp
-  - 뒷좌석 전동식 도어커튼 → 뒷좌석 전동식 도어커튼.webp
-  - 3존+ 공조 (2열 LCD 공조 조절 장치, 풍량 독립제어 포함) → 3존+ 공조 (6인승).webp
-  - 뒷좌석 목베개 및 화장 거울 → 뒷좌석 목베개 및 화장 거울.webp
-  - 윙아웃 헤드레스트 → 윙아웃 헤드레스트.webp
-  - 220V 파워아웃렛 → 220V 파워아웃렛.webp
-  - 러기지 스크린, 러기지 매트, 러기지 네트 → 러기지 스크린, 러기지 매트, 러기지 네트.webp
-
-■ 뱅앤올룹슨 사운드 패키지
-  - 뱅앤올룹슨 고해상도 사운드 시스템 (18스피커) → 뱅앤올룹슨 고해상도 사운드 시스템.webp
-  - 액티브 노이즈 컨트롤 - 로드 (ANC-R) → 액티브 노이즈 컨트롤 - 로드.webp
-
-■ 빌트인 캠 패키지
-  - 빌트인 캠 2 (보조 배터리 포함) → 빌트인 캠 2.webp
-  - 증강현실 내비게이션 → 증강현실 내비게이션.webp
-
-
-[옵션별 설명 및 이미지]
-
--헤드업 디스플레이
-속도·내비게이션·주행 보조 정보를 운전자 시선 높이에 표시합니다.
+세부 기능
+──────────────────────────────────────────
+01. 헤드업 디스플레이
+제목: 헤드업 디스플레이
 이미지: 헤드업 디스플레이.webp
-소속: 헤드업 디스플레이
+내용: 속도·내비게이션·주행 보조 정보를 운전자 시선 높이에 표시합니다.
+포함 선택 품목: 헤드업 디스플레이
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-popular-head-up-display-960x540.jpg
+이미지 크기: 960 × 540 px
 
--파노라마 선루프
-채광·환기를 위한 선루프입니다.
+──────────────────────────────────────────
+02. 파노라마 선루프
+제목: 파노라마 선루프
 이미지: 파노라마 선루프.webp
-소속: 파노라마 선루프
+내용: 채광·환기를 위한 선루프입니다.
+포함 선택 품목: 파노라마 선루프
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-panoramic-sunroof-960x540.jpg
+이미지 크기: 960 × 540 px
 
--고스트 도어 클로징
-덜 닫힌 도어를 자동으로 끝까지 닫아줍니다.
+──────────────────────────────────────────
+03. 고스트 도어 클로징
+제목: 고스트 도어 클로징
 이미지: 고스트 도어 클로징.webp
-소속: 하이테크 패키지
+내용: 덜 닫힌 도어를 자동으로 끝까지 닫아줍니다.
+포함 선택 품목: 하이테크 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-ghost-door-960x540.jpg
+이미지 크기: 960 × 540 px
 
--디지털 센터 미러
-전용 카메라 영상을 미러에 표시해 후방 시야를 확보합니다.
+──────────────────────────────────────────
+04. 디지털 센터 미러
+제목: 디지털 센터 미러
 이미지: 디지털 센터 미러.webp
-소속: 하이테크 패키지
+내용: 전용 카메라 영상을 미러에 표시해 후방 시야를 확보합니다.
+포함 선택 품목: 하이테크 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-dcm-960x540.jpg
+이미지 크기: 960 × 540 px
 
--운전석 & 동승석 에르고 모션 시트 (18방향, 쿠션 익스텐션, 볼스터 전동 조절 적용, 스트레칭 모드 포함)
-공기주머니로 몸을 지지하며 스트레칭과 주행 연동 지지 조절을 지원합니다.
+──────────────────────────────────────────
+05. 운전석 & 동승석 에르고 모션 시트 (18방향, 쿠션 익스텐션, 볼스터 전동 조절 적용, 스트레칭 모드 포함)
+제목: 운전석 & 동승석 에르고 모션 시트 (18방향, 쿠션 익스텐션, 볼스터 전동 조절 적용, 스트레칭 모드 포함)
 이미지: 운전석 & 동승석 에르고 모션 시트.webp
-소속: 앞좌석 컴포트 패키지
+내용: 공기주머니로 몸을 지지하며 스트레칭과 주행 연동 지지 조절을 지원합니다.
+포함 선택 품목: 앞좌석 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-motion-seat-960x540.jpg
+이미지 크기: 960 × 540 px
 
--동승석 자세 메모리 시스템
-저장된 시트 위치를 버튼으로 불러옵니다.
+──────────────────────────────────────────
+06. 동승석 자세 메모리 시스템
+제목: 동승석 자세 메모리 시스템
 이미지: 동승석 자세 메모리 시스템.webp
-소속: 앞좌석 컴포트 패키지
+내용: 저장된 시트 위치를 버튼으로 불러옵니다.
+포함 선택 품목: 앞좌석 컴포트 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-Integrated-memory-system-for-the-front-passenger-960x540.jpg
+이미지 크기: 960 × 540 px
 
--전방 충돌방지 보조2 (교차로 교차 차량, 측방 접근차, 추월 시 대향차, 회피 조향 보조 기능 포함)
-전방·교차로 충돌 위험을 감지해 경고하고 제동·회피 조향을 보조합니다.
+──────────────────────────────────────────
+07. 전방 충돌방지 보조2 (교차로 교차 차량, 측방 접근차, 추월 시 대향차, 회피 조향 보조 기능 포함)
+제목: 전방 충돌방지 보조2 (교차로 교차 차량, 측방 접근차, 추월 시 대향차, 회피 조향 보조 기능 포함)
 이미지: 전방 충돌방지 보조2.webp
-소속: 드라이빙 어시스턴스 패키지
+내용: 전방·교차로 충돌 위험을 감지해 경고하고 제동·회피 조향을 보조합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-forward-collision-960x540.jpg
+이미지 크기: 960 × 540 px
 
--후측방 충돌방지 보조 (주행)
-후측방 접근 차량을 경고하며 충돌 위험 시 회피 조향을 보조합니다.
+──────────────────────────────────────────
+08. 후측방 충돌방지 보조 (주행)
+제목: 후측방 충돌방지 보조 (주행)
 이미지: 후측방 충돌방지 보조.webp
-소속: 드라이빙 어시스턴스 패키지
+내용: 후측방 접근 차량을 경고하며 충돌 위험 시 회피 조향을 보조합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-side-warning-960x540.jpg
+이미지 크기: 960 × 540 px
 
--주차 충돌방지 보조 (전/측방)
-주차·출차 중 충돌 위험을 경고하고 필요 시 제동을 보조합니다.
+──────────────────────────────────────────
+09. 주차 충돌방지 보조 (전/측방)
+제목: 주차 충돌방지 보조 (전/측방)
 이미지: 주차 충돌방지 보조.webp
-소속: 드라이빙 어시스턴스 패키지
+내용: 주차·출차 중 충돌 위험을 경고하고 필요 시 제동을 보조합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-pca-960x540.jpg
+이미지 크기: 960 × 540 px
 
--지능형 헤드램프
-상향등 일부를 차단해 다른 차량의 눈부심을 줄입니다.
+──────────────────────────────────────────
+10. 지능형 헤드램프
+제목: 지능형 헤드램프
 이미지: 지능형 헤드램프.webp
-소속: 드라이빙 어시스턴스 패키지
-※ 100km/h 이상 주행 시 고속주행모드 진입하여 대향차의 눈부심을 방지 하기 위해 운전석 측 상향등은 전체 소등이 이루어지며, 동승석 측의 상향등 만으로 지능형 헤드램프가 구현됩니다.
+내용: 상향등 일부를 차단해 다른 차량의 눈부심을 줄입니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 시속 100km 이상에서는 운전석 쪽 상향등이 꺼지고 동승석 쪽으로 지능형 제어를 수행합니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-ifs-960x540.jpg
+이미지 크기: 960 × 540 px
 
--운전자 전방 주시 경고 카메라
-시선·눈감음을 감지해 주시 태만이나 졸음 상태를 경고합니다.
+──────────────────────────────────────────
+11. 운전자 전방 주시 경고 카메라
+제목: 운전자 전방 주시 경고 카메라
 이미지: 운전자 전방 주시 경고 카메라.webp
-소속: 드라이빙 어시스턴스 패키지
+내용: 시선·눈감음을 감지해 주시 태만이나 졸음 상태를 경고합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-warning-camera-960x540.jpg
+이미지 크기: 960 × 540 px
 
--앞좌석 프리액티브 시트벨트
-충돌 직전 안전벨트를 당겨 탑승자 몸을 지지합니다.
+──────────────────────────────────────────
+12. 앞좌석 프리액티브 시트벨트
+제목: 앞좌석 프리액티브 시트벨트
 이미지: 앞좌석 프리액티브 시트벨트.webp
-소속: 드라이빙 어시스턴스 패키지
+내용: 충돌 직전 안전벨트를 당겨 탑승자 몸을 지지합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-active-seatbelt-960x540.jpg
+이미지 크기: 960 × 540 px
 
--고속도로 주행 보조2 (차로 변경 보조 제어 기능 포함)
-고속도로·자동차전용도로에서 차간거리·속도·차로 중앙 유지와 차로 변경을 보조합니다.
+──────────────────────────────────────────
+13. 고속도로 주행 보조2 (차로 변경 보조 제어 기능 포함)
+제목: 고속도로 주행 보조2 (차로 변경 보조 제어 기능 포함)
 이미지: 고속도로 주행 보조2.webp
-소속: 드라이빙 어시스턴스 패키지
+내용: 고속도로·자동차전용도로에서 차간거리·속도·차로 중앙 유지와 차로 변경을 보조합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-highway-assist2-960x540.jpg
+이미지 크기: 960 × 540 px
 
--내비게이션 기반 스마트 크루즈 컨트롤 (진출입로)
-지도 정보에 따라 안전구간·곡선·진출입로에서 속도를 조절합니다.
+──────────────────────────────────────────
+14. 내비게이션 기반 스마트 크루즈 컨트롤 (진출입로)
+제목: 내비게이션 기반 스마트 크루즈 컨트롤 (진출입로)
 이미지: 내비게이션 기반 스마트 크루즈 컨트롤.webp
-소속: 드라이빙 어시스턴스 패키지
-※ 사전 감속은 고속도로 진출 시에만 작동합니다.
+내용: 지도 정보에 따라 안전구간·곡선·진출입로에서 속도를 조절합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 사전 감속 기능은 고속도로 진출 상황에 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-smart-navigation-cruise-960x540.jpg
+이미지 크기: 960 × 540 px
 
--원격 스마트 주차 보조2 (주차 구획선 인식 및 사선 주차,실내 원터치 조작 포함)
-공간을 탐색하고 조향·속도·변속을 제어하며 스마트키 원격 주차를 지원합니다.
+──────────────────────────────────────────
+15. 원격 스마트 주차 보조2 (주차 구획선 인식 및 사선 주차,실내 원터치 조작 포함)
+제목: 원격 스마트 주차 보조2 (주차 구획선 인식 및 사선 주차,실내 원터치 조작 포함)
 이미지: 원격 스마트 주차 보조2.webp
-소속: 드라이빙 어시스턴스 패키지
+내용: 공간을 탐색하고 조향·속도·변속을 제어하며 스마트키 원격 주차를 지원합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-rspa-960x540.jpg
+이미지 크기: 960 × 540 px
 
--2열 전동 (리클라이닝, 슬라이딩, 틸팅) 및 통풍 시트
-2열 리클라이닝·슬라이딩·틸팅과 통풍, 운전석 원격 시트 조절을 지원합니다.
+──────────────────────────────────────────
+16. 2열 전동 (리클라이닝, 슬라이딩, 틸팅) 및 통풍 시트
+제목: 2열 전동 (리클라이닝, 슬라이딩, 틸팅) 및 통풍 시트
 이미지: 2열 전동 및 통풍 시트.webp
-소속: 뒷좌석 컴포트 패키지 [5인승] / 뒷좌석 컴포트 패키지 [6인승]
-※ 상기 이미지는 6인승 시트의 대표 이미지입니다. 구매하시는 사양 별로 상이할 수 있으니 반드시 실차 확인을 권장 드립니다.
+내용: 2열 리클라이닝·슬라이딩·틸팅과 통풍, 운전석 원격 시트 조절을 지원합니다.
+포함 선택 품목: 뒷좌석 컴포트 패키지 [5인승] / 뒷좌석 컴포트 패키지 [6인승]
+적용 참고: 제공 사진은 6인승 시트 예시입니다. 실제 구성별 차이를 확인하세요.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-powered-seat-960x540.jpg
+이미지 크기: 960 × 540 px
 
--뒷좌석 전동식 도어커튼
-버튼으로 조작하는 전동 커튼으로 뒷좌석 햇빛과 외부 시선을 차단합니다.
+──────────────────────────────────────────
+17. 뒷좌석 전동식 도어커튼
+제목: 뒷좌석 전동식 도어커튼
 이미지: 뒷좌석 전동식 도어커튼.webp
-소속: 뒷좌석 컴포트 패키지 [5인승] / 뒷좌석 컴포트 패키지 [6인승] / 뒷좌석 컴포트 패키지 [7인승]
+내용: 버튼으로 조작하는 전동 커튼으로 뒷좌석 햇빛과 외부 시선을 차단합니다.
+포함 선택 품목: 뒷좌석 컴포트 패키지 [5인승] / 뒷좌석 컴포트 패키지 [6인승] / 뒷좌석 컴포트 패키지 [7인승]
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-electric-curtains-960x540.jpg
+이미지 크기: 960 × 540 px
 
--3존+ 공조 (2열 LCD 공조 조절 장치, 풍량 독립제어 포함)
-앞좌석과 뒷좌석 온도를 독립 제어하며 2열 LCD 조절창을 제공합니다. 2열 풍량도 별도로 조절합니다.
+──────────────────────────────────────────
+18. 3존+ 공조 (2열 LCD 공조 조절 장치, 풍량 독립제어 포함)
+제목: 3존+ 공조 (2열 LCD 공조 조절 장치, 풍량 독립제어 포함)
 이미지: 3존+ 공조.webp
-소속: 뒷좌석 컴포트 패키지 [5인승]
+내용: 앞좌석과 뒷좌석 온도를 독립 제어하며 2열 LCD 조절창을 제공합니다. 2열 풍량도 별도로 조절합니다.
+포함 선택 품목: 뒷좌석 컴포트 패키지 [5인승]
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-tri-zone-960x540.jpg
+이미지 크기: 960 × 540 px
 
--뒷좌석 목베개 및 화장 거울
-뒷좌석 목베개와 화장 거울을 제공합니다.
+──────────────────────────────────────────
+19. 뒷좌석 목베개 및 화장 거울
+제목: 뒷좌석 목베개 및 화장 거울
 이미지: 뒷좌석 목베개 및 화장 거울.webp
-소속: 뒷좌석 컴포트 패키지 [5인승] / 뒷좌석 컴포트 패키지 [6인승] / 뒷좌석 컴포트 패키지 [7인승]
+내용: 뒷좌석 목베개와 화장 거울을 제공합니다.
+포함 선택 품목: 뒷좌석 컴포트 패키지 [5인승] / 뒷좌석 컴포트 패키지 [6인승] / 뒷좌석 컴포트 패키지 [7인승]
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-neck-pillow-960x540.jpg
+이미지 크기: 960 × 540 px
 
--윙아웃 헤드레스트
-머리와 목을 지지해 뒷좌석 휴식을 돕습니다.
+──────────────────────────────────────────
+20. 윙아웃 헤드레스트
+제목: 윙아웃 헤드레스트
 이미지: 윙아웃 헤드레스트.webp
-소속: 뒷좌석 컴포트 패키지 [5인승] / 뒷좌석 컴포트 패키지 [6인승] / 뒷좌석 컴포트 패키지 [7인승]
+내용: 머리와 목을 지지해 뒷좌석 휴식을 돕습니다.
+포함 선택 품목: 뒷좌석 컴포트 패키지 [5인승] / 뒷좌석 컴포트 패키지 [6인승] / 뒷좌석 컴포트 패키지 [7인승]
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-wing-out-headrest-960x540.jpg
+이미지 크기: 960 × 540 px
 
--220V 파워아웃렛
-2열 220V 콘센트로 200W 이하 전자기기를 사용합니다.
+──────────────────────────────────────────
+21. 220V 파워아웃렛
+제목: 220V 파워아웃렛
 이미지: 220V 파워아웃렛.webp
-소속: 뒷좌석 컴포트 패키지 [5인승] / 뒷좌석 컴포트 패키지 [6인승] / 뒷좌석 컴포트 패키지 [7인승]
+내용: 2열 220V 콘센트로 200W 이하 전자기기를 사용합니다.
+포함 선택 품목: 뒷좌석 컴포트 패키지 [5인승] / 뒷좌석 컴포트 패키지 [6인승] / 뒷좌석 컴포트 패키지 [7인승]
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-hev-27my-bto-options-220v-power-960x540.jpg
+이미지 크기: 960 × 540 px
 
--러기지 스크린, 러기지 매트, 러기지 네트
-적재 공간용 매트·스크린·네트를 제공합니다.
+──────────────────────────────────────────
+22. 러기지 스크린, 러기지 매트, 러기지 네트
+제목: 러기지 스크린, 러기지 매트, 러기지 네트
 이미지: 러기지 스크린, 러기지 매트, 러기지 네트.webp
-소속: 뒷좌석 컴포트 패키지 [5인승] / 뒷좌석 컴포트 패키지 [6인승] / 뒷좌석 컴포트 패키지 [7인승]
-※ 후석 컴포트 패키지 내 러기지 매트는 제네시스 액세서리로 제공되는 프로텍션 매트 패키지 내 러기지 매트와는 다른 재질입니다.
+내용: 적재 공간용 매트·스크린·네트를 제공합니다.
+포함 선택 품목: 뒷좌석 컴포트 패키지 [5인승] / 뒷좌석 컴포트 패키지 [6인승] / 뒷좌석 컴포트 패키지 [7인승]
+적용 참고: 패키지의 러기지 매트는 액세서리 프로텍션 매트와 재질이 다릅니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-outdoor-luggage-mat-and-screen-960x540.jpg
+이미지 크기: 960 × 540 px
 
--3존+ 공조 (2열 LCD 공조 조절 장치, 풍량 독립제어 포함)
-앞좌석과 뒷좌석 온도를 독립 제어하며 2열 LCD 조절창을 제공합니다. 2열 풍량도 별도로 조절합니다.
+──────────────────────────────────────────
+23. 3존+ 공조 (2열 LCD 공조 조절 장치, 풍량 독립제어 포함)
+제목: 3존+ 공조 (2열 LCD 공조 조절 장치, 풍량 독립제어 포함)
 이미지: 3존+ 공조 (6인승).webp
-소속: 뒷좌석 컴포트 패키지 [6인승] / 뒷좌석 컴포트 패키지 [7인승]
-※ 6, 7인승의 경우, 2열·3열 자동 히터 컨트롤러가 적용되어 각 열 공조를 독립적으로 컨트롤 하실 수 있습니다.
+내용: 앞좌석과 뒷좌석 온도를 독립 제어하며 2열 LCD 조절창을 제공합니다. 2열 풍량도 별도로 조절합니다.
+포함 선택 품목: 뒷좌석 컴포트 패키지 [6인승] / 뒷좌석 컴포트 패키지 [7인승]
+적용 참고: 6·7인승은 2열과 3열에 자동 히터 제어기를 적용해 열별 공조를 조절합니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-tri-zone-960x540.jpg
+이미지 크기: 960 × 540 px
 
--2열 전동 (리클라이닝, 슬라이딩, 틸팅) 및 통풍 시트
-2열 리클라이닝·슬라이딩·틸팅과 통풍, 운전석 원격 시트 조절을 지원합니다.
+──────────────────────────────────────────
+24. 2열 전동 (리클라이닝, 슬라이딩, 틸팅) 및 통풍 시트
+제목: 2열 전동 (리클라이닝, 슬라이딩, 틸팅) 및 통풍 시트
 이미지: 2열 전동 및 통풍 시트 (7인승).webp
-소속: 뒷좌석 컴포트 패키지 [7인승]
-※ 7인승 적용 시, 슬라이딩 사양은 수동 슬라이딩 사양으로 적용됩니다.
-※ 상기 이미지는 6인승 시트의 대표 이미지입니다. 구매하시는 사양 별로 상이할 수 있으니 반드시 실차 확인을 권장 드립니다.
+내용: 2열 리클라이닝·슬라이딩·틸팅과 통풍, 운전석 원격 시트 조절을 지원합니다.
+포함 선택 품목: 뒷좌석 컴포트 패키지 [7인승]
+적용 참고: 7인승의 2열 슬라이딩은 수동 방식입니다. 제공 사진은 6인승 시트 예시입니다. 실제 구성별 차이를 확인하세요.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-powered-seat-960x540.jpg
+이미지 크기: 960 × 540 px
 
--뱅앤올룹슨 고해상도 사운드 시스템 (18스피커)
-18개 스피커를 적용한 고해상도 오디오 시스템입니다.
+──────────────────────────────────────────
+25. 뱅앤올룹슨 고해상도 사운드 시스템 (18스피커)
+제목: 뱅앤올룹슨 고해상도 사운드 시스템 (18스피커)
 이미지: 뱅앤올룹슨 고해상도 사운드 시스템.webp
-소속: 뱅앤올룹슨 사운드 패키지
+내용: 18개 스피커를 적용한 고해상도 오디오 시스템입니다.
+포함 선택 품목: 뱅앤올룹슨 사운드 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-18-speaker-960x540.jpg
+이미지 크기: 960 × 540 px
 
--액티브 노이즈 컨트롤 - 로드 (ANC-R)
-도로 소음과 반대 위상의 소리를 출력해 실내 소음을 줄입니다.
+──────────────────────────────────────────
+26. 액티브 노이즈 컨트롤 - 로드 (ANC-R)
+제목: 액티브 노이즈 컨트롤 - 로드 (ANC-R)
 이미지: 액티브 노이즈 컨트롤 - 로드.webp
-소속: 뱅앤올룹슨 사운드 패키지
+내용: 도로 소음과 반대 위상의 소리를 출력해 실내 소음을 줄입니다.
+포함 선택 품목: 뱅앤올룹슨 사운드 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-noise-control-960x540.jpg
+이미지 크기: 960 × 540 px
 
--빌트인 캠 2 (보조 배터리 포함)
-전후방 영상·음성·주행 정보를 기록하며 앱·OTA를 지원합니다. 주차 녹화는 최대 20시간입니다.
+──────────────────────────────────────────
+27. 빌트인 캠 2 (보조 배터리 포함)
+제목: 빌트인 캠 2 (보조 배터리 포함)
 이미지: 빌트인 캠 2.webp
-소속: 빌트인 캠 패키지
-※ 주행시간이 보조 배터리를 충전하기에 충분하지 않거나 보조 배터리의 노후화에 따라 설정한 시간만큼 주차 녹화가 작동되지 않을 수 있습니다.
+내용: 전후방 영상·음성·주행 정보를 기록하며 앱·OTA를 지원합니다. 주차 녹화는 최대 20시간입니다.
+포함 선택 품목: 빌트인 캠 패키지
+적용 참고: 주행에 따른 보조배터리 충전량과 배터리 노후 상태에 따라 주차 녹화 시간이 줄어들 수 있습니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-built-in-cam2-960x540.jpg
+이미지 크기: 960 × 540 px
 
--증강현실 내비게이션
-전방 카메라 영상에 길 안내 정보를 겹쳐 표시합니다.
+──────────────────────────────────────────
+28. 증강현실 내비게이션
+제목: 증강현실 내비게이션
 이미지: 증강현실 내비게이션.webp
-소속: 빌트인 캠 패키지
+내용: 전방 카메라 영상에 길 안내 정보를 겹쳐 표시합니다.
+포함 선택 품목: 빌트인 캠 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2027
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-suv-genesis/gv80/bto/packages2?code=BBBBBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/gv80-2027-jxnb/option2/pc-image/gv80-27my-bto-options-augmented-reality-960x540.jpg
+이미지 크기: 960 × 540 px

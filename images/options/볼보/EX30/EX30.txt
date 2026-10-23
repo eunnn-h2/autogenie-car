@@ -1,0 +1,119 @@
+﻿EX30
+범위: 순수 전기 EX30 · 현재 국내 MY27 P5 Long Range Core·Ultra 기준 · Cross Country 별도
+수록 기능: 7개
+자료 확인일: 2026-10-21
+국내 확인 기준: MY27 공식 브로슈어 옵션표
+안내: 현재 국내 공식 링크의 MY27 P5 Long Range Core·Ultra 브로슈어 기준입니다. 관리자 화면의 2026년식에 일괄 적용하는 사양표는 아닙니다. 공기 청정·파일럿 어시스트·파크 파일럿·360° 카메라는 Ultra 조건으로 표시했습니다.
+설명은 국내 자료의 짧은 요약입니다. 적용 트림은 항목별 조건을 따릅니다.
+
+──────────────────────────────────────────
+01. 12.3인치 센터 디스플레이
+제목: 12.3인치 센터 디스플레이
+이미지: 12.3인치 센터 디스플레이.webp
+내용: 터치 화면에서 내비게이션·미디어·공조 등 주요 차량 기능을 직관적으로 조작합니다.
+분류: 디스플레이
+국내 적용 조건: 국내 MY27 EX30 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex30-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY27-EX30.pdf?ver=20261019
+브로슈어 연식: MY27
+옵션표 PDF 페이지: 9, 10, 11쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 12.3인치 센터 디스플레이
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt377d738c2f36d401/67bc69399ab12346aa6dffab/Features-display-connectivity-1-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+02. 실내 공기 청정 시스템
+제목: 실내 공기 청정 시스템
+이미지: 실내 공기 청정 시스템.webp
+내용: 미세먼지 등 오염물질의 실내 유입을 줄이고 공기 상태를 관리합니다.
+분류: 공조
+국내 적용 조건: MY27 EX30 P5 Long Range Ultra 적용 · Core 제외
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex30-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY27-EX30.pdf?ver=20261019
+브로슈어 연식: MY27
+옵션표 PDF 페이지: 9, 10, 11쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 첨단 공기 청정 시스템
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt98a953be9e156fa1/67bdd3319ab123e9b46e04e8/Features-comfort-climate-1-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+03. 전방 충돌 경보 및 긴급제동 서포트
+제목: 전방 충돌 경보 및 긴급제동 서포트
+이미지: 전방 충돌 경보 및 긴급제동 서포트.webp
+내용: 차량·보행자 등과의 충돌 위험을 감지해 경고하고 필요할 때 제동을 보조합니다.
+분류: 안전
+국내 적용 조건: 국내 MY27 EX30 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex30-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY27-EX30.pdf?ver=20261019
+브로슈어 연식: MY27
+옵션표 PDF 페이지: 9, 10, 11쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 충돌을 방지합니다.
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blta4e8fc9391e9b69f/67bdd980975e7e03efd842d6/Features-safety-1-1x1.jpg?branch=prod_alias
+이미지 크기: 3840 × 2160 px
+
+──────────────────────────────────────────
+04. 운전자 경고 시스템
+제목: 운전자 경고 시스템
+이미지: 운전자 경고 시스템.webp
+내용: 운전자의 눈과 머리 움직임 등을 살펴 주의 산만이나 졸음 징후가 있을 때 경고합니다.
+분류: 안전
+국내 적용 조건: 국내 MY27 EX30 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex30-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY27-EX30.pdf?ver=20261019
+브로슈어 연식: MY27
+옵션표 PDF 페이지: 9, 10, 11쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 운전자 경고 시스템
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt222339bc33bc3164/67bdd7b60dd866ed5f88cba2/Features-safety-2-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+05. 파일럿 어시스트
+제목: 파일럿 어시스트
+이미지: 파일럿 어시스트.webp
+내용: 앞차와의 간격과 차선 유지를 보조해 운전자의 주행 부담을 줄입니다.
+분류: 주행 보조
+국내 적용 조건: MY27 EX30 P5 Long Range Ultra 적용 · Core 제외
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex30-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY27-EX30.pdf?ver=20261019
+브로슈어 연식: MY27
+옵션표 PDF 페이지: 9, 10, 11쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 파일럿 보조 시스템 (Pilot Assist)
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt5eb1064c9b5e11a5/67bddacf0dd866b40588cbb0/Features-safety-4-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+06. 파크 파일럿 어시스트
+제목: 파크 파일럿 어시스트
+이미지: 파크 파일럿 어시스트.webp
+내용: 주차 공간 탐색과 조향·가속·제동을 보조해 편리한 주차를 돕습니다.
+분류: 주차 보조
+국내 적용 조건: MY27 EX30 P5 Long Range Ultra 적용 · Core 제외
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex30-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY27-EX30.pdf?ver=20261019
+브로슈어 연식: MY27
+옵션표 PDF 페이지: 9, 10, 11쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 파크 파일럿 보조 시스템(Park Pilot Assist)
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt00d16288317c9f3b/67bddb4d9ab1235e8a6e0515/Features-safety-5-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+07. 360° 서라운드 뷰 카메라
+제목: 360° 서라운드 뷰 카메라
+이미지: 360° 서라운드 뷰 카메라.webp
+내용: 차량 주변을 위에서 내려다보는 화면으로 보여줘 좁은 공간의 주차와 이동을 돕습니다.
+분류: 주차 보조
+국내 적용 조건: MY27 EX30 P5 Long Range Ultra 적용 · Core 제외
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex30-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY27-EX30.pdf?ver=20261019
+브로슈어 연식: MY27
+옵션표 PDF 페이지: 9, 10, 11쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 360° 서라운드 뷰 카메라가 시야를 확보합니다.​
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt7d404010a4767478/67bddc219ab12391046e051c/Features-safety-6-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px

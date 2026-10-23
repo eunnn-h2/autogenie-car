@@ -1,0 +1,135 @@
+﻿XC40
+범위: B4 AWD 마일드 하이브리드 · EX40 순수 전기차와 구분
+수록 기능: 8개
+자료 확인일: 2026-10-21
+국내 확인 기준: MY26 공식 브로슈어 옵션표
+안내: MY26 B4 AWD 기준입니다. 360° 카메라는 Ultra Bright·Ultra Dark 조건을 표시했습니다.
+설명은 국내 자료의 짧은 요약입니다. 적용 트림은 항목별 조건을 따릅니다.
+
+──────────────────────────────────────────
+01. 9인치 센터 디스플레이
+제목: 9인치 센터 디스플레이
+이미지: 9인치 센터 디스플레이.webp
+내용: 터치 화면에서 내비게이션·미디어·공조 등 주요 차량 기능을 직관적으로 조작합니다.
+분류: 디스플레이
+국내 적용 조건: 국내 MY26 XC40 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc40/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC40.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 9인치 중앙 디스플레이
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt65b9bd61b6857ab1/68ef4cba5b46c95e272dc128/P09_XC40_center_display_home_screen_autocrop_1X1.png?branch=prod_alias
+이미지 크기: 1080 × 1080 px
+
+──────────────────────────────────────────
+02. 12.3인치 운전자 디스플레이
+제목: 12.3인치 운전자 디스플레이
+이미지: 12.3인치 운전자 디스플레이.webp
+내용: 디지털 계기판에서 속도와 주행·경로 정보를 한눈에 확인합니다.
+분류: 디스플레이
+국내 적용 조건: 국내 MY26 XC40 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc40/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC40.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 12.3인치 운전자 디스플레이
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blte663ed2b93a38334/68ef4cba5b46c9a0122dc126/P10_XC40_driver_display_autocrop_1X1.png?branch=prod_alias
+이미지 크기: 1080 × 1080 px
+
+──────────────────────────────────────────
+03. 후측방 경보 및 긴급제동 서포트
+제목: 후측방 경보 및 긴급제동 서포트
+이미지: 후측방 경보 및 긴급제동 서포트.webp
+내용: 후진 중 측면에서 접근하는 차량을 감지해 경고하고 필요할 때 제동을 보조합니다.
+분류: 안전
+국내 적용 조건: 국내 MY26 XC40 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc40/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC40.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 위험성을 낮춘 후진을 할 수 있습니다.​
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/bltcf8b8b22bfae68f7/68494415aed027e72e2938e4/features-safety-5-1X1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+04. 실내 공기 청정 시스템
+제목: 실내 공기 청정 시스템
+이미지: 실내 공기 청정 시스템.webp
+내용: 미세먼지 등 오염물질의 실내 유입을 줄이고 공기 상태를 관리합니다.
+분류: 공조
+국내 적용 조건: 국내 MY26 XC40 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc40/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC40.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 공기 청정기 및 원격 실내 사전 정화
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt3edcd64aebc78593/68493e77b54775c85cf404ae/features-comfort-climate-2-1X1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+05. 전방 충돌 경보 및 긴급제동 서포트
+제목: 전방 충돌 경보 및 긴급제동 서포트
+이미지: 전방 충돌 경보 및 긴급제동 서포트.webp
+내용: 차량·보행자 등과의 충돌 위험을 감지해 경고하고 필요할 때 제동을 보조합니다.
+분류: 안전
+국내 적용 조건: 국내 MY26 XC40 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc40/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC40.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 충돌을 방지합니다.
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt91e3246743f36c3a/6849437814f6c372524cfb27/features-safety-1-1X1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+06. 차선 유지 보조
+제목: 차선 유지 보조
+이미지: 차선 유지 보조.webp
+내용: 의도치 않은 차선 이탈을 감지하면 경고와 미세한 조향으로 차선 복귀를 돕습니다.
+분류: 주행 보조
+국내 적용 조건: 국내 MY26 XC40 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc40/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC40.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 차선 유지
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt88b3266a7d4eae1b/684943e00c0d4475bd0c31ab/features-safety-3-1X1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+07. 사각지대 경보 및 조향 어시스트
+제목: 사각지대 경보 및 조향 어시스트
+이미지: 사각지대 경보 및 조향 어시스트.webp
+내용: 옆 차선의 차량을 감지해 경고하며 충돌 위험 시 조향을 보조합니다.
+분류: 주행 보조
+국내 적용 조건: 국내 MY26 XC40 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc40/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC40.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 혼잡한 트래픽 속에서 스트레스를 낮추세요.
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt2d2b1ee395908c1d/684943f8b547754eadf40669/features-safety-4-1X1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+08. 360° 서라운드 뷰 카메라
+제목: 360° 서라운드 뷰 카메라
+이미지: 360° 서라운드 뷰 카메라.webp
+내용: 차량 주변을 위에서 내려다보는 화면으로 보여줘 좁은 공간의 주차와 이동을 돕습니다.
+분류: 주차 보조
+국내 적용 조건: MY26 XC40 B4 AWD Ultra Bright·Ultra Dark 적용 · Plus Bright 제외
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc40/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC40.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 360° 서라운드 뷰 카메라가 시야를 확보합니다.​
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt110b1f77135b3982/6849442b332c2c7a3fd114c2/features-safety-6-1X1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px

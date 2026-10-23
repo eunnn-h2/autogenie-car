@@ -1,101 +1,168 @@
-﻿G70 선택 품목
-확인일: 2026-10-19
-출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto.html
-설명: 공식 안내를 바탕으로 기능 중심으로 정리한 등록용 문구입니다.
-이미지: WebP / 원본 비율 유지
+﻿G70
+자료 연식: 2026년형
+국내 선택 품목 세부 항목: 12개
+자료 확인일: 2026-10-22
+범위: 국내 공식 선택 품목 자료: 2026년형. 가솔린 모델 기준입니다.
+관리자 화면의 2026년 표기와 현재 공식 자료의 연식이 다를 수 있습니다. 등록 대상의 연식을 확인하세요.
+패키지 세부 기능을 정리한 목록이며 모든 차량에 기본 적용된다는 의미는 아닙니다.
+국내 페이지: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+공식 선택 품목 데이터: https://www.genesis.com/wsvc/kr/api/v2/structure/data?key=btomodel&lngloc=ko-KR&model=JU5B
 
-[패키지별 구성]
+패키지별 구성
+와이드 선루프
+구성: 와이드 선루프
+전자제어 서스펜션 [가솔린 2.5 터보 + 기본모델]
+구성: 전자제어 서스펜션
+컨비니언스 패키지
+구성: 스마트 전동식 트렁크 / 제네시스 디지털 키 2 터치 / 앞좌석 스마트폰 무선 충전
+하이테크 패키지
+구성: 12.3인치 3D 클러스터 / 지능형 헤드램프
+렉시콘 사운드 패키지
+구성: 렉시콘 15스피커 시스템 (퀀텀 로직 서라운드)
+드라이빙 어시스턴스 패키지
+구성: 서라운드 뷰 모니터 / 후측방 모니터 / 빌트인 캠 / 보조배터리
 
-■ 와이드 선루프
-  - 와이드 선루프 → 와이드 선루프.webp
-
-■ 전자제어 서스펜션 [기본모델]
-  - 전자제어 서스펜션 → 전자제어 서스펜션.webp
-
-■ 컨비니언스 패키지
-  - 스마트 전동식 트렁크 → 스마트 전동식 트렁크.webp
-  - 제네시스 디지털 키 2 터치 → 제네시스 디지털 키 2 터치.webp
-  - 앞좌석 스마트폰 무선 충전 → 앞좌석 스마트폰 무선 충전.webp
-
-■ 하이테크 패키지
-  - 12.3인치 3D 클러스터 → 12.3인치 3D 클러스터.webp
-  - 지능형 헤드램프 → 지능형 헤드램프.webp
-
-■ 렉시콘 사운드 패키지
-  - 렉시콘 15스피커 시스템 (퀀텀 로직 서라운드) → 렉시콘 15스피커 시스템.webp
-
-■ 드라이빙 어시스턴스 패키지
-  - 서라운드 뷰 모니터 → 서라운드 뷰 모니터.webp
-  - 후측방 모니터 → 후측방 모니터.webp
-  - 빌트인 캠 → 빌트인 캠.webp
-  - 보조배터리 → 보조배터리.webp
-
-
-[옵션별 설명 및 이미지]
-
--와이드 선루프
-채광·환기를 위한 선루프입니다.
+세부 기능
+──────────────────────────────────────────
+01. 와이드 선루프
+제목: 와이드 선루프
 이미지: 와이드 선루프.webp
-소속: 와이드 선루프
+내용: 채광·환기를 위한 선루프입니다.
+포함 선택 품목: 와이드 선루프
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2026
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/g70-2026-ju5b/option2/pc-image/g70-26my-bto-options-wide-sunroof-960x540.jpg
+이미지 크기: 960 × 540 px
 
--전자제어 서스펜션
-주행 모드에 맞춰 쇽업소버 감쇠력을 바꿉니다.
+──────────────────────────────────────────
+02. 전자제어 서스펜션
+제목: 전자제어 서스펜션
 이미지: 전자제어 서스펜션.webp
-소속: 전자제어 서스펜션 [기본모델]
-※ 가솔린 2.5터보 모델 선택 시 선택 가능(가솔린 3.3 터보 모델 및 스포츠 모델 선택 시 기본 적용)
+내용: 주행 모드에 맞춰 쇽업소버 감쇠력을 바꿉니다.
+포함 선택 품목: 전자제어 서스펜션 [가솔린 2.5 터보 + 기본모델]
+적용 참고: 가솔린 2.5 터보는 선택 품목이며, 3.3 터보와 스포츠 모델에는 기본 적용됩니다.
+자료 연식: 2026
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/g70-2026-ju5b/option2/pc-image/g70-26my-bto-options-ecs-960x540.jpg
+이미지 크기: 960 × 540 px
 
--스마트 전동식 트렁크
-스마트키와 연동해 트렁크가 자동으로 열리도록 설정합니다.
+──────────────────────────────────────────
+03. 스마트 전동식 트렁크
+제목: 스마트 전동식 트렁크
 이미지: 스마트 전동식 트렁크.webp
-소속: 컨비니언스 패키지
+내용: 스마트키와 연동해 트렁크가 자동으로 열리도록 설정합니다.
+포함 선택 품목: 컨비니언스 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2026
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/g70-2026-ju5b/option2/pc-image/G70_SMART_TRUNK_960x540.jpg
+이미지 크기: 960 × 540 px
 
--제네시스 디지털 키 2 터치
-스마트폰 NFC로 출입·시동·키 공유·개인화를 지원합니다.
+──────────────────────────────────────────
+04. 제네시스 디지털 키 2 터치
+제목: 제네시스 디지털 키 2 터치
 이미지: 제네시스 디지털 키 2 터치.webp
-소속: 컨비니언스 패키지
+내용: 스마트폰 NFC로 출입·시동·키 공유·개인화를 지원합니다.
+포함 선택 품목: 컨비니언스 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2026
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/g70-2026-ju5b/option2/pc-image/g70-26my-bto-options-digital-key2-960x540.jpg
+이미지 크기: 960 × 540 px
 
--앞좌석 스마트폰 무선 충전
-패드에 스마트폰을 올려 무선 충전합니다. 스마트폰 방치 알림을 지원합니다.
+──────────────────────────────────────────
+05. 앞좌석 스마트폰 무선 충전
+제목: 앞좌석 스마트폰 무선 충전
 이미지: 앞좌석 스마트폰 무선 충전.webp
-소속: 컨비니언스 패키지
-※ 컨비니언스 패키지(앞좌석 스마트폰 무선 충전) 적용 시 앞좌석 C타입 USB 단자가 미적용됩니다.
+내용: 패드에 스마트폰을 올려 무선 충전합니다. 스마트폰 방치 알림을 지원합니다.
+포함 선택 품목: 컨비니언스 패키지
+적용 참고: 컨비니언스 패키지의 무선 충전을 적용하면 앞좌석 USB-C 단자가 빠집니다.
+자료 연식: 2026
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/g70-2026-ju5b/option2/pc-image/g70-26my-bto-options-charging-pad-960x540.jpg
+이미지 크기: 960 × 540 px
 
--12.3인치 3D 클러스터
-운전자 눈을 인식하는 무안경 3D 계기판으로 주행 정보를 표시합니다.
+──────────────────────────────────────────
+06. 12.3인치 3D 클러스터
+제목: 12.3인치 3D 클러스터
 이미지: 12.3인치 3D 클러스터.webp
-소속: 하이테크 패키지
+내용: 운전자 눈을 인식하는 무안경 3D 계기판으로 주행 정보를 표시합니다.
+포함 선택 품목: 하이테크 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2026
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/g70-2026-ju5b/option2/pc-image/g70-26my-bto-options-3d-cluster-960x540.jpg
+이미지 크기: 960 × 540 px
 
--지능형 헤드램프
-상향등 일부를 차단해 다른 차량의 눈부심을 줄입니다.
+──────────────────────────────────────────
+07. 지능형 헤드램프
+제목: 지능형 헤드램프
 이미지: 지능형 헤드램프.webp
-소속: 하이테크 패키지
-※ 100km/h 이상 주행 시 고속주행모드 진입하여 대향차의 눈부심을 방지 하기 위해 운전석 측 상향등은 전체 소등이 이루어지며, 동승석 측의 상향등 만으로 지능형 헤드램프가 구현됩니다.
+내용: 상향등 일부를 차단해 다른 차량의 눈부심을 줄입니다.
+포함 선택 품목: 하이테크 패키지
+적용 참고: 시속 100km 이상에서는 운전석 쪽 상향등이 꺼지고 동승석 쪽으로 지능형 제어를 수행합니다.
+자료 연식: 2026
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/g70-2026-ju5b/option2/pc-image/g70-26my-bto-options-ifs-960x540.jpg
+이미지 크기: 960 × 540 px
 
--렉시콘 15스피커 시스템 (퀀텀 로직 서라운드)
-15개 스피커와 퀀텀 로직 서라운드로 입체 음향을 제공합니다.
+──────────────────────────────────────────
+08. 렉시콘 15스피커 시스템 (퀀텀 로직 서라운드)
+제목: 렉시콘 15스피커 시스템 (퀀텀 로직 서라운드)
 이미지: 렉시콘 15스피커 시스템.webp
-소속: 렉시콘 사운드 패키지
+내용: 15개 스피커와 퀀텀 로직 서라운드로 입체 음향을 제공합니다.
+포함 선택 품목: 렉시콘 사운드 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2026
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/g70-2026-ju5b/option2/pc-image/g70-26my-bto-options-lexicon-speaker-960x540.jpg
+이미지 크기: 960 × 540 px
 
--서라운드 뷰 모니터
-주변 카메라 영상을 여러 각도로 표시해 주차·출차를 돕습니다.
+──────────────────────────────────────────
+09. 서라운드 뷰 모니터
+제목: 서라운드 뷰 모니터
 이미지: 서라운드 뷰 모니터.webp
-소속: 드라이빙 어시스턴스 패키지
+내용: 주변 카메라 영상을 여러 각도로 표시해 주차·출차를 돕습니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2026
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/g70-2026-ju5b/option2/pc-image/g70-26my-bto-options-svm-960x540.jpg
+이미지 크기: 960 × 540 px
 
--후측방 모니터
-방향지시등에 연동해 후측방 영상을 클러스터에 표시합니다.
+──────────────────────────────────────────
+10. 후측방 모니터
+제목: 후측방 모니터
 이미지: 후측방 모니터.webp
-소속: 드라이빙 어시스턴스 패키지
-※ 상기 이미지는 하이테크 패키지 선택 시 적용되는 12.3인치 클러스터가 적용된 이미지입니다. 12.3인치 클러스터 적용 시 클러스터 좌·우 원형에서 각각 후측방 영상을 제공합니다.
-※ 하이테크 패키지 미 선택 시, 8인치 클러스터가 적용됩니다. 8인치 클러스터 적용 시 클러스터 우측 LCD 부위에서 좌·우 후측방 영상을 제공합니다.
+내용: 방향지시등에 연동해 후측방 영상을 클러스터에 표시합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 사진은 하이테크 패키지의 12.3인치 클러스터 구성으로, 좌우 원형 영역에 해당 방향 영상을 표시합니다. 하이테크 패키지를 고르지 않으면 8인치 클러스터 오른쪽 LCD 영역에 좌우 후측방 영상을 표시합니다.
+자료 연식: 2026
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/g70-2026-ju5b/option2/pc-image/g70-26my-bto-options-bsvm-960x540.jpg
+이미지 크기: 960 × 540 px
 
--빌트인 캠
-차량 화면·스마트폰으로 녹화 영상을 확인합니다.
+──────────────────────────────────────────
+11. 빌트인 캠
+제목: 빌트인 캠
 이미지: 빌트인 캠.webp
-소속: 드라이빙 어시스턴스 패키지
+내용: 차량 화면·스마트폰으로 녹화 영상을 확인합니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 선택 패키지 및 차량 구성에 따라 적용됩니다.
+자료 연식: 2026
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/g70-2026-ju5b/option2/pc-image/g70-26my-bto-options-built-in-cam-960x540.jpg
+이미지 크기: 960 × 540 px
 
--보조배터리
-주차 중에도 빌트인 캠을 최대 12시간 작동시킵니다.
+──────────────────────────────────────────
+12. 보조배터리
+제목: 보조배터리
 이미지: 보조배터리.webp
-소속: 드라이빙 어시스턴스 패키지
-※ 주행시간이 보조 배터리를 충전하기에 충분하지 않거나 보조 배터리의 노후화에 따라 설정한 시간만큼 주차 녹화가 작동되지 않을 수 있습니다.
-※ 보조 배터리는 제조원 별도 보증 품목이며, 자세한 내용은 별도 제공되는 보증서를 참조하시기 바랍니다.
+내용: 주차 중에도 빌트인 캠을 최대 12시간 작동시킵니다.
+포함 선택 품목: 드라이빙 어시스턴스 패키지
+적용 참고: 주행에 따른 보조배터리 충전량과 배터리 노후 상태에 따라 주차 녹화 시간이 줄어들 수 있습니다. 보조배터리는 제조원의 별도 보증을 적용합니다.
+자료 연식: 2026
+설명 출처: https://www.genesis.com/kr/ko/models/luxury-sedan-genesis/g70/bto/packages2?code=BCBCBBB&packages=
+이미지 출처: https://www.genesis.com/content/dam/genesis-p2/kr/admin/bto-information/g70-2026-ju5b/option2/pc-image/g70-26my-bto-options-auxiliary-battery-960x540.jpg
+이미지 크기: 960 × 540 px

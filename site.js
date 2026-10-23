@@ -3026,7 +3026,46 @@ function bindBottomNavigation(){
     const faqCategories = Array.from(document.querySelectorAll('#faqView [data-faq-filter]'));
     let selectedFaqCategory = '전체';
     let showAllFaqItems = false;
+    let faqFilterInitialized = false;
     const faqShowAll = document.getElementById('agQnaShowAll');
+    const faqShowAllLabel = document.getElementById('agQnaShowAllLabel');
+    const faqItemAnimations = new WeakMap();
+    const setFaqItemVisibility = (item, visible, delay = 0) => {
+        const currentAnimation = faqItemAnimations.get(item);
+        if (currentAnimation?.visible === visible) return;
+        if (!currentAnimation && item.hidden === !visible) return;
+
+        const currentStyle = currentAnimation ? getComputedStyle(item) : null;
+        const startHeight = currentAnimation ? item.getBoundingClientRect().height : (visible ? 0 : item.getBoundingClientRect().height);
+        const startOpacity = currentStyle ? Number(currentStyle.opacity) : (visible ? 0 : 1);
+        const startTransform = currentStyle ? currentStyle.transform : (visible ? 'translateY(-8px)' : 'translateY(0px)');
+        currentAnimation?.animation.cancel();
+
+        if (!faqFilterInitialized || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            item.hidden = !visible;
+            faqItemAnimations.delete(item);
+            return;
+        }
+
+        if (visible) item.hidden = false;
+        const endHeight = visible ? item.getBoundingClientRect().height : 0;
+        const animation = item.animate([
+            { height: `${startHeight}px`, opacity: startOpacity, transform: startTransform },
+            { height: `${endHeight}px`, opacity: visible ? 1 : 0, transform: visible ? 'translateY(0px)' : 'translateY(-8px)' }
+        ], {
+            duration: 260,
+            delay,
+            easing: 'cubic-bezier(0.22, 0.7, 0.25, 1)',
+            fill: 'both'
+        });
+        faqItemAnimations.set(item, { animation, visible });
+        animation.onfinish = () => {
+            if (faqItemAnimations.get(item)?.animation !== animation) return;
+            if (!visible) item.hidden = true;
+            animation.cancel();
+            faqItemAnimations.delete(item);
+        };
+    };
     const filterFaqItems = () => {
         const query = String(faqSearch?.value || '').trim().toLocaleLowerCase('ko-KR');
         let visibleCount = 0;
@@ -3041,23 +3080,25 @@ function bindBottomNavigation(){
             const matches = matchesCategory && matchesQuery;
             if (matches) matchingCount += 1;
             const visible = matches && (!limitResults || matchingCount <= 5);
-            item.hidden = !visible;
+            setFaqItemVisibility(item, visible, matchingCount > 5 ? Math.min((matchingCount - 5) * 24, 96) : 0);
             if (!visible) {
                 item.classList.remove('open');
                 item.querySelector('.faq-question')?.setAttribute('aria-expanded', 'false');
             }
             if (visible) visibleCount += 1;
         });
+        faqFilterInitialized = true;
         const empty = document.getElementById('agFaqEmpty');
         if (empty) empty.hidden = visibleCount > 0;
         if (faqShowAll) {
-            faqShowAll.hidden = !limitResults || matchingCount <= 5;
+            faqShowAll.hidden = selectedFaqCategory !== '전체' || matchingCount <= 5;
             faqShowAll.setAttribute('aria-expanded', String(showAllFaqItems));
+            if (faqShowAllLabel) faqShowAllLabel.textContent = showAllFaqItems ? '접기' : '전체보기';
         }
     };
     faqShowAll?.addEventListener('click', () => {
         selectedFaqCategory = '전체';
-        showAllFaqItems = true;
+        showAllFaqItems = !showAllFaqItems;
         faqCategories.forEach(tab => {
             const active = tab.dataset.faqFilter === '전체';
             tab.classList.toggle('active', active);

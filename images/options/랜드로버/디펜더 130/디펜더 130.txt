@@ -1,0 +1,86 @@
+﻿디펜더 130
+자료 확인일: 2026-10-22
+국내 사양 기준: MY26 공식 모델별 사양표 및 국내 전차종 가격표
+선정 수: 6개
+차종 안내: 국내 MY26 P400 X-Dynamic HSE와 P400 Outbound 가솔린 기준입니다. 매트릭스 LED는 X-Dynamic HSE에만 표시했습니다. Outbound의 프리미엄 LED와 구분했습니다.
+내용은 제조사 자료의 짧은 요약입니다. 기능별 적용 트림을 확인해 등록하세요.
+
+────────────────────────────────────────
+01. 13.1인치 터치스크린 및 피비 프로
+제목: 13.1인치 터치스크린 및 피비 프로
+이미지: 13.1인치 터치스크린 및 피비 프로.webp
+내용: 13.1인치 터치스크린에서 내비게이션과 차량 설정을 확인하고 주요 기능을 간편하게 조작할 수 있습니다.
+국내 적용 트림: P400 X-Dynamic HSE / P400 Outbound
+국내 사양 근거: https://www.landroverkorea.co.kr/defender/defender-130/models-and-specifications.html
+사양표 확인 항목: 13.1인치 터치스크린 및 피비 프로
+기능 설명·이미지 원문 페이지: https://www.landroverkorea.co.kr/defender/defender-130/index.html
+원문 항목명: 직관적인 컨트롤
+이미지 주소: https://www.landroverkorea.co.kr/content/dam/lrdx/global/l663/26my/int/L66326GL_303104383_049.jpg
+이미지 크기: 2560 × 1440 px
+
+────────────────────────────────────────
+02. 메리디안 사운드 시스템
+제목: 메리디안 사운드 시스템
+이미지: 메리디안 사운드 시스템.webp
+내용: 메리디안 오디오 시스템이 차량 실내에서 음악을 풍부하고 선명하게 감상할 수 있도록 돕습니다.
+국내 적용 트림: P400 X-Dynamic HSE / P400 Outbound
+국내 사양 근거: https://www.landroverkorea.co.kr/defender/defender-130/models-and-specifications.html
+사양표 확인 항목: 메리디안 사운드 시스템
+기능 설명·이미지 원문 페이지: https://www.landroverkorea.co.kr/defender/defender-130/index.html
+원문 항목명: 생생한 사운드
+이미지 주소: https://www.landroverkorea.co.kr/content/dam/lrdx/global/l663/25my/int/L66325GL_303103289_026.jpg
+이미지 크기: 2560 × 1440 px
+
+────────────────────────────────────────
+03. 클리어사이트 룸 미러
+제목: 클리어사이트 룸 미러
+이미지: 클리어사이트 룸 미러.webp
+내용: 카메라의 실시간 후방 영상을 룸 미러에 표시합니다. 탑승자나 적재물로 실내 후방 시야가 가려져도 뒤쪽 도로를 확인할 수 있습니다.
+국내 적용 트림: P400 X-Dynamic HSE / P400 Outbound
+국내 사양 근거: https://www.landroverkorea.co.kr/defender/defender-130/models-and-specifications.html
+사양표 확인 항목: 클리어사이트 룸 미러
+기능 설명·이미지 원문 페이지: https://www.landroverkorea.co.kr/defender/defender-130/index.html
+원문 항목명: 여유로운 적재 공간
+이미지 주소: https://jlr.scene7.com/is/image/jlr/L663_20MY_305_DX-1?wid=1280&hei=720&scl=1&qlt=100
+이미지 크기: 1280 × 720 px
+
+────────────────────────────────────────
+04. 실내 공기 정화 시스템 플러스
+제목: 실내 공기 정화 시스템 플러스
+이미지: 실내 공기 정화 시스템 플러스.webp
+내용: 미세먼지 여과와 실내 공기 관리 기능을 통해 탑승 공간을 쾌적하게 유지하도록 돕습니다.
+국내 적용 트림: P400 X-Dynamic HSE / P400 Outbound
+국내 사양 근거: https://www.landroverkorea.co.kr/defender/defender-130/models-and-specifications.html
+사양표 확인 항목: 실내 공기 정화 시스템 플러스
+기능 설명·이미지 원문 페이지: https://www.landroverkorea.co.kr/defender/defender-130/index.html
+원문 항목명: 실내 공기 정화 시스템
+이미지 주소: https://www.landroverkorea.co.kr/content/dam/lrdx/global/l663/26my/int/L66326GL_303104383_103.jpg
+이미지 크기: 2560 × 1440 px
+
+────────────────────────────────────────
+05. 3D 서라운드 카메라 및 도강 수심 감지
+제목: 3D 서라운드 카메라 및 도강 수심 감지
+이미지: 3D 서라운드 카메라 및 도강 수심 감지.webp
+내용: 차량 주변을 여러 각도로 확인할 수 있도록 돕고, 도강 시에는 수심 정보를 제공해 주변 상황을 파악할 수 있게 해줍니다.
+국내 적용 트림: P400 X-Dynamic HSE / P400 Outbound
+국내 사양 근거: https://www.landroverkorea.co.kr/defender/defender-130/models-and-specifications.html
+사양표 확인 항목: 3D 서라운드 카메라 및 도강 수심 감지
+기능 설명·이미지 원문 페이지: https://www.landroverkorea.co.kr/defender/defender-130/index.html
+원문 항목명: 거침없는 도강
+이미지 주소: https://www.landroverkorea.co.kr/content/dam/lrdx/global/l663/26my/int/L66326GL_303104383_059_ALT_CROP.jpg
+이미지 크기: 2560 × 1440 px
+이미지 설명: 제조사 해당 차종 페이지에서 카메라·수심 감지 기능을 설명하는 데 사용한 도강 장면입니다.
+
+────────────────────────────────────────
+06. 매트릭스 LED 헤드램프 및 시그니처 DRL
+제목: 매트릭스 LED 헤드램프 및 시그니처 DRL
+이미지: 매트릭스 LED 헤드램프 및 시그니처 DRL.webp
+내용: 매트릭스 LED 헤드램프와 시그니처 주간 주행등이 적용되어 야간 시야 확보와 차량 식별을 돕습니다.
+국내 적용 트림: P400 X-Dynamic HSE
+국내 사양 근거: https://www.landroverkorea.co.kr/defender/defender-130/models-and-specifications.html
+사양표 확인 항목: 매트릭스 LED 헤드램프 및 시그니처 DRL
+기능 설명·이미지 원문 페이지: https://www.landroverkorea.co.kr/defender/defender-130/index.html
+원문 항목명: 매트릭스 LED 헤드램프 및 시그니처 DRL
+이미지 주소: https://jlr.scene7.com/is/image/jlr/L66326GL_303104383_014?wid=1280&hei=720&scl=1&qlt=100
+이미지 크기: 1280 × 720 px
+이미지 설명: 제조사 2026년형 디펜더 공통 헤드램프 디자인 이미지입니다.

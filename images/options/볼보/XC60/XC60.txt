@@ -1,0 +1,135 @@
+﻿XC60
+범위: B5 AWD 마일드 하이브리드 · T8 플러그인 하이브리드 별도
+수록 기능: 8개
+자료 확인일: 2026-10-21
+국내 확인 기준: MY26 공식 브로슈어 옵션표
+안내: B5 AWD 마일드 하이브리드 기준입니다. 4구역 공조는 국내 B5 구성으로, T8의 2구역 구성과 구분했습니다.
+설명은 국내 자료의 짧은 요약입니다. 적용 트림은 항목별 조건을 따릅니다.
+
+──────────────────────────────────────────
+01. 11.2인치 센터 디스플레이
+제목: 11.2인치 센터 디스플레이
+이미지: 11.2인치 센터 디스플레이.webp
+내용: 터치 화면에서 내비게이션·미디어·공조 등 주요 차량 기능을 직관적으로 조작합니다.
+분류: 디스플레이
+국내 적용 조건: 국내 MY26 XC60 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc60/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC60.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 11.2인치 센터 디스플레이
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt18dd77e03ef58be7/68873f9be8b8b817b1536d4d/P13_XC60_center_display_home_screen_1X1.jpg?branch=prod_alias
+이미지 크기: 1080 × 1080 px
+
+──────────────────────────────────────────
+02. 헤드업 디스플레이
+제목: 헤드업 디스플레이
+이미지: 헤드업 디스플레이.webp
+내용: 운전자 전방 시야에 속도와 경로 안내를 표시해 도로에 집중하도록 돕습니다.
+분류: 디스플레이
+국내 적용 조건: 국내 MY26 XC60 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc60/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC60.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 헤드업 디스플레이
+이미지 출처: https://prismedia.volvocars.com/images/bf441078-a7db-4fd2-876e-e14d7d8c8045/Head-up_display_KH02_XC60_1_HD.jpg
+이미지 크기: 1920 × 1080 px
+
+──────────────────────────────────────────
+03. 4구역 독립 온도 조절 시스템
+제목: 4구역 독립 온도 조절 시스템
+이미지: 4구역 독립 온도 조절 시스템.webp
+내용: 운전자·동반석·뒷좌석에서 구역별로 온도와 바람을 조절해 쾌적함을 높입니다.
+분류: 공조
+국내 적용 조건: MY26 XC60 B5 AWD 마일드 하이브리드의 4구역 공조 · T8의 2구역 구성과 구분
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc60/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC60.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 실내 온도 조절 장치
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt1cc924289ac4917d/6792be1ea98e1b5d16a8dea3/Media_Highlights_Comfort_Climate_1-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+04. 실내 공기 청정 시스템
+제목: 실내 공기 청정 시스템
+이미지: 실내 공기 청정 시스템.webp
+내용: 미세먼지 등 오염물질의 실내 유입을 줄이고 공기 상태를 관리합니다.
+분류: 공조
+국내 적용 조건: 국내 MY26 XC60 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc60/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC60.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 첨단 공기 청정 시스템
+이미지 출처: https://prismedia.volvocars.com/images/adaf13ef-fd7f-49f1-aed2-db1886f12b56/Air_purifier_and_remote_cabin_pre_cleaning_XC60_1_HD.jpg
+이미지 크기: 1920 × 1080 px
+
+──────────────────────────────────────────
+05. 후측방 경보 및 긴급제동 서포트
+제목: 후측방 경보 및 긴급제동 서포트
+이미지: 후측방 경보 및 긴급제동 서포트.webp
+내용: 후진 중 측면에서 접근하는 차량을 감지해 경고하고 필요할 때 제동을 보조합니다.
+분류: 안전
+국내 적용 조건: 국내 MY26 XC60 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc60/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC60.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 위험성을 낮춘 후진을 할 수 있습니다.​
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/bltabbccbae53ceca35/6792c2c218b2695c3a4a72ba/safety-1x1-1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+06. 전방 충돌 경보 및 긴급제동 서포트
+제목: 전방 충돌 경보 및 긴급제동 서포트
+이미지: 전방 충돌 경보 및 긴급제동 서포트.webp
+내용: 차량·보행자 등과의 충돌 위험을 감지해 경고하고 필요할 때 제동을 보조합니다.
+분류: 안전
+국내 적용 조건: 국내 MY26 XC60 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc60/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC60.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 충돌을 방지합니다.
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/bltb014ca234941d440/6792c421e0c453517adce4f3/safety-1x1-3.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+07. 사각지대 경보 및 조향 어시스트
+제목: 사각지대 경보 및 조향 어시스트
+이미지: 사각지대 경보 및 조향 어시스트.webp
+내용: 옆 차선의 차량을 감지해 경고하며 충돌 위험 시 조향을 보조합니다.
+분류: 주행 보조
+국내 적용 조건: 국내 MY26 XC60 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc60/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC60.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 혼잡한 트래픽 속에서 스트레스를 낮추세요.
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt8554134573566cae/6792c49fe0c453b3dddce4f5/safety-1x1-4.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+08. 360° 서라운드 뷰 카메라
+제목: 360° 서라운드 뷰 카메라
+이미지: 360° 서라운드 뷰 카메라.webp
+내용: 차량 주변을 위에서 내려다보는 화면으로 보여줘 좁은 공간의 주차와 이동을 돕습니다.
+분류: 주차 보조
+국내 적용 조건: 국내 MY26 XC60 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/xc60/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-XC60.pdf?ver=20251208
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 12, 13, 14쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 360° 서라운드 뷰 카메라가 시야를 확보합니다.​
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt7780c1d219a81340/6792c5aea98e1b2d83a8deb1/safety-1x1-6.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px

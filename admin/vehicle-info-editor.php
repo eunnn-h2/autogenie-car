@@ -9,7 +9,8 @@ $infoItems = $info['options'] ?? [];
 #vehicle-info-editor textarea { resize:vertical; }
 #vehicle-info-items { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; align-items:start; margin:16px 0; }
 #vehicle-info-editor .vehicle-info-item { min-width:0; margin:0; padding:16px; }
-#vehicle-info-editor .vehicle-info-item img { max-width:100%; }
+#vehicle-info-editor .vehicle-info-preview { display:flex; align-items:center; justify-content:center; width:320px; max-width:100%; height:180px; margin:12px 0; overflow:hidden; }
+#vehicle-info-editor .vehicle-info-preview img { display:block; width:auto; height:auto; max-width:100%; max-height:100%; object-fit:contain; }
 #vehicle-info-editor .vehicle-info-item-title { margin:0; color:#17324d; font-size:18px; font-weight:700; line-height:1.5; cursor:pointer; overflow-wrap:anywhere; }
 #vehicle-info-editor details[open] > .vehicle-info-item-title { margin-bottom:16px; }
 #vehicle-info-editor p { color:#64748b; line-height:1.6; }

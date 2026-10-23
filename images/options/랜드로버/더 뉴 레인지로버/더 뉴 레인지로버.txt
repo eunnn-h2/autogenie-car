@@ -1,0 +1,110 @@
+﻿더 뉴 레인지로버
+자료 확인일: 2026-10-22
+국내 사양 기준: MY26 공식 모델별 사양표 및 국내 전차종 가격표
+선정 수: 8개
+차종 안내: 첨부 목록의 더 뉴 레인지로버는 L460입니다. 제공 견적 주소는 K27이므로, 본 자료는 별도 MY26 국내 공식 모델 페이지의 공통 주요 장비를 대조했습니다. HSE는 해당 MY26 모델 페이지에 표기되지만 2026-04-08 전차종 가격표에는 나오지 않으므로, 가격표의 최신 판매 트림과 동일한 목록으로 해석하지 않습니다. PHEV 전용 장비와 SV 전용 장비는 선정하지 않았습니다.
+내용은 제조사 자료의 짧은 요약입니다. 기능별 적용 트림을 확인해 등록하세요.
+
+────────────────────────────────────────
+01. 13.1인치 터치스크린 및 피비 프로
+제목: 13.1인치 터치스크린 및 피비 프로
+이미지: 13.1인치 터치스크린 및 피비 프로.webp
+내용: 13.1인치 커브드 터치스크린으로 인포테인먼트와 주요 차량 설정을 직관적으로 확인하고 조작할 수 있습니다.
+국내 적용 트림: 국내 MY26 HSE / Autobiography / SV 계열 중 해당 사양표 적용 모델
+국내 사양 근거: https://www.rangerover.com/ko-kr/range-rover-26my/models-and-specifications.html
+사양표 확인 항목: 13.1인치 터치스크린 및 피비 프로
+기능 설명·이미지 원문 페이지: https://www.rangerover.com/ko-kr/range-rover-26my/highlights.html
+원문 항목명: 13.1인치 터치스크린
+이미지 주소: https://jlr.scene7.com/is/image/jlr/L46025GL_303103153_010?wid=1280&hei=720&scl=1&qlt=100
+이미지 크기: 1280 × 720 px
+
+────────────────────────────────────────
+02. 헤드업 디스플레이
+제목: 헤드업 디스플레이
+이미지: 헤드업 디스플레이.webp
+내용: 주요 차량 정보와 주행 정보를 윈드스크린에 표시해 운전자가 전방에 시선을 유지하도록 돕습니다.
+국내 적용 트림: 국내 MY26 HSE / Autobiography / SV 계열 중 해당 사양표 적용 모델
+국내 사양 근거: https://www.rangerover.com/ko-kr/range-rover-26my/models-and-specifications.html
+사양표 확인 항목: 헤드업 디스플레이
+기능 설명·이미지 원문 페이지: https://www.rangerover.com/ko-kr/range-rover-26my/highlights.html
+원문 항목명: 직관적인 운전자 디스플레이
+이미지 주소: https://jlr.scene7.com/is/image/jlr/L46024GL_303101569_003_CROP?wid=1280&hei=720&scl=1&qlt=100
+이미지 크기: 1280 × 720 px
+
+────────────────────────────────────────
+03. 4존 실내 온도 조절 시스템
+제목: 4존 실내 온도 조절 시스템
+이미지: 4존 실내 온도 조절 시스템.webp
+내용: 운전석과 조수석, 2열 좌우 탑승자가 각자의 선호에 맞춰 온도와 풍량을 조절할 수 있습니다.
+국내 적용 트림: 국내 MY26 HSE / Autobiography / SV 계열 중 해당 사양표 적용 모델
+국내 사양 근거: https://www.rangerover.com/ko-kr/range-rover-26my/models-and-specifications.html
+사양표 확인 항목: 4존 실내 온도 조절 시스템
+기능 설명·이미지 원문 페이지: https://www.rangerover.com/ko-kr/range-rover-26my/highlights.html
+원문 항목명: 4존 실내 온도 조절 시스템
+이미지 주소: https://jlr.scene7.com/is/image/jlr/L460_22MY_022_GLHD?wid=1280&hei=720&scl=1&qlt=100
+이미지 크기: 1280 × 720 px
+
+────────────────────────────────────────
+04. 실내 공기 정화 시스템 프로
+제목: 실내 공기 정화 시스템 프로
+이미지: 실내 공기 정화 시스템 프로.webp
+내용: PM2.5 필터와 실내 공기 관리 기능을 통해 미세먼지와 공기 상태를 관리하고 쾌적한 탑승 환경을 유지하도록 돕습니다.
+국내 적용 트림: 국내 MY26 HSE / Autobiography / SV 계열 중 해당 사양표 적용 모델
+국내 사양 근거: https://www.rangerover.com/ko-kr/range-rover-26my/models-and-specifications.html
+사양표 확인 항목: 실내 공기 정화 시스템 프로
+기능 설명·이미지 원문 페이지: https://www.rangerover.com/ko-kr/range-rover-26my/highlights.html
+원문 항목명: 실내 공기 정화 시스템 프로
+이미지 주소: https://jlr.scene7.com/is/image/jlr/L46025GL_303103153_019?wid=1280&hei=720&scl=1&qlt=100
+이미지 크기: 1280 × 720 px
+
+────────────────────────────────────────
+05. 클리어사이트 룸 미러
+제목: 클리어사이트 룸 미러
+이미지: 클리어사이트 룸 미러.webp
+내용: 후방 카메라의 실시간 영상을 룸 미러로 확인할 수 있습니다. 뒷좌석 탑승자나 적재물이 있어도 후방 도로 시야를 확보하는 데 도움이 됩니다.
+국내 적용 트림: 국내 MY26 HSE / Autobiography / SV 계열 중 해당 사양표 적용 모델
+국내 사양 근거: https://www.rangerover.com/ko-kr/range-rover-26my/models-and-specifications.html
+사양표 확인 항목: 클리어사이트 룸 미러
+기능 설명·이미지 원문 페이지: https://www.rangerover.com/ko-kr/range-rover-26my/highlights.html
+원문 항목명: 클리어사이트(CLEARSIGHT) 룸 미러
+이미지 주소: https://jlr.scene7.com/is/image/jlr/L460_22MY_045_GLHD_2560x1440?wid=1280&hei=720&scl=1&qlt=100
+이미지 크기: 1280 × 720 px
+
+────────────────────────────────────────
+06. 3D 서라운드 카메라 및 클리어사이트 그라운드 뷰
+제목: 3D 서라운드 카메라 및 클리어사이트 그라운드 뷰
+이미지: 3D 서라운드 카메라 및 클리어사이트 그라운드 뷰.webp
+내용: 차량 주변을 여러 각도로 확인하고 보닛 아래 지면을 살펴볼 수 있어 저속 주행이나 좁은 공간에서 주변 상황을 파악하도록 돕습니다.
+국내 적용 트림: 국내 MY26 HSE / Autobiography / SV 계열 중 해당 사양표 적용 모델
+국내 사양 근거: https://www.rangerover.com/ko-kr/range-rover-26my/models-and-specifications.html
+사양표 확인 항목: 3D 서라운드 카메라 및 클리어사이트 그라운드 뷰
+기능 설명·이미지 원문 페이지: https://www.rangerover.com/ko-kr/range-rover-26my/highlights.html
+원문 항목명: 3D 서라운드 카메라
+이미지 주소: https://jlr.scene7.com/is/image/jlr/L46025GL_303103153_013?wid=1280&hei=720&scl=1&qlt=100
+이미지 크기: 1280 × 720 px
+
+────────────────────────────────────────
+07. 올 휠 스티어링
+제목: 올 휠 스티어링
+이미지: 올 휠 스티어링.webp
+내용: 앞바퀴와 뒷바퀴의 조향을 함께 제어해 저속에서는 기동성을 높이고 고속에서는 안정적인 주행을 돕습니다.
+국내 적용 트림: 국내 MY26 HSE / Autobiography / SV 계열 중 해당 사양표 적용 모델
+국내 사양 근거: https://www.rangerover.com/ko-kr/range-rover-26my/models-and-specifications.html
+사양표 확인 항목: 올 휠 스티어링
+기능 설명·이미지 원문 페이지: https://www.rangerover.com/ko-kr/range-rover-26my/highlights.html
+원문 항목명: 올 휠 스티어링
+이미지 주소: https://jlr.scene7.com/is/image/jlr/L460_22MY_181_GLHD?wid=1280&hei=720&scl=1&qlt=100
+이미지 크기: 1280 × 720 px
+
+────────────────────────────────────────
+08. 전자식 에어 서스펜션 및 어댑티브 다이내믹스
+제목: 전자식 에어 서스펜션 및 어댑티브 다이내믹스
+이미지: 전자식 에어 서스펜션 및 어댑티브 다이내믹스.webp
+내용: 노면과 차체 움직임에 맞춰 서스펜션의 반응을 조절해 주행 안정성과 안락한 승차감을 높여줍니다.
+국내 적용 트림: 국내 MY26 HSE / Autobiography / SV 계열 중 해당 사양표 적용 모델
+국내 사양 근거: https://www.rangerover.com/ko-kr/range-rover-26my/models-and-specifications.html
+사양표 확인 항목: 전자식 에어 서스펜션 및 어댑티브 다이내믹스
+기능 설명·이미지 원문 페이지: https://www.rangerover.com/ko-kr/range-rover-26my/index.html
+원문 항목명: 움직임 속의 고요함
+이미지 주소: https://jlr.scene7.com/is/image/jlr/L460_22MY_054_GLHD_DX-2?wid=1280&hei=720&scl=1&qlt=100
+이미지 크기: 1280 × 720 px

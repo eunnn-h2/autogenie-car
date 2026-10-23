@@ -1,0 +1,63 @@
+﻿X4 차량정보 (국내 기준)
+수정일: 2026-10-20
+국내 대상 모델: X4 G02 국내 출시 모델
+항목 수: 4
+
+[사용 안내]
+국내 출시 자료에서 적용이 확인되는 기능만 선별했습니다. 해외 모델 사양을 국내 사양으로 대체하지 않았습니다.
+동일 차종이어도 생산 시기·연식·트림에 따라 적용 사양이 다릅니다. 아래 적용 모델·트림에 맞춰 등록하세요.
+국내 근거 자료의 발표일을 항목별로 기록했습니다. 발표 당시의 국내 적용 확인이며 모든 2026년 생산 차량의 공통 기본 사양표는 아닙니다.
+제목과 설명은 등록하기 쉽도록 간추렸습니다. 이미지는 제조사 공식 기능 이미지 또는 공식 영상 대표 이미지이며, 8시리즈는 국내 출시 자료의 공식 모델 사진을 사용했습니다.
+기존에 전달한 폴더명·TXT 파일명·남긴 이미지 파일명은 유지했습니다. 기능명을 구체화한 경우에도 기존 이미지 파일명은 유지합니다.
+
+[01] 3D 리어라이트
+내용: 입체적인 후면 조명으로 스포티한 디자인을 강조합니다.
+이미지: 풀 LED 리어 라이트.webp
+분류: 외장
+국내 적용: 국내 X4 G02 국내 출시 모델 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 뉴 X3 및 뉴 X4 국내 공식 출시
+자료 발표일: Mon Nov 01 09:00:00 CET 2021
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0354632KO
+확인 항목: 3D 리어라이트
+이미지 구분: 공식 기능 이미지
+이미지 크기: 890 × 596
+이미지 출처: https://bmw.scene7.com/is/image/BMW/bmw-x4-onepager-ms-exterieur-rear:3to2?fmt=webp-alpha&wid=890&fit=constrain%2C1
+
+[02] 앞좌석 스포츠 시트
+내용: 가죽 스포츠 시트로 착좌감과 지지력을 높입니다.
+이미지: 앞좌석 스포츠 시트.webp
+분류: 시트
+국내 적용: 국내 X4 G02 국내 출시 모델 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 뉴 X3 및 뉴 X4 국내 공식 출시
+자료 발표일: Mon Nov 01 09:00:00 CET 2021
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0354632KO
+확인 항목: 버네스카 가죽 스포츠 시트
+이미지 구분: 공식 기능 이미지
+이미지 크기: 2560 × 1709
+이미지 출처: https://bmw.scene7.com/is/image/BMW/X4_upholstery:3to2?fmt=webp-alpha&wid=2560&fit=constrain%2C1
+
+[03] BMW xDrive
+내용: 앞뒤 구동력을 가변 배분해 접지력을 높입니다.
+이미지: BMW xDrive.webp
+분류: 주행 성능
+국내 적용: 국내 X4 G02 국내 출시 모델 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 뉴 X3 및 뉴 X4 국내 공식 출시
+자료 발표일: Mon Nov 01 09:00:00 CET 2021
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0354632KO
+확인 항목: xDrive20i
+이미지 구분: 공식 기능 이미지
+이미지 크기: 1960 × 1311
+이미지 출처: https://bmw.scene7.com/is/image/BMW/bmw-x4-onepager-mc-dynamics-02:3to2?fmt=webp-alpha&wid=1960&fit=constrain%2C1
+
+[04] 드라이빙 어시스턴트 프로페셔널
+내용: 차간 거리와 차선 유지, 충돌 회피 조향을 보조합니다.
+이미지: 드라이빙 어시스턴트.webp
+분류: 안전
+국내 적용: 국내 X4 G02 국내 출시 모델 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 뉴 X3 및 뉴 X4 국내 공식 출시
+자료 발표일: Mon Nov 01 09:00:00 CET 2021
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0354632KO
+확인 항목: 드라이빙 어시스턴트 프로페셔널
+이미지 구분: 공식 기능 이미지
+이미지 크기: 1960 × 653
+이미지 출처: https://bmw.scene7.com/is/image/BMW/bmw-x4-onepager-mc-innovative-technologies-03:3to1?fmt=webp-alpha&wid=1960&fit=constrain%2C1

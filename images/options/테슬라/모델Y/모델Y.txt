@@ -1,0 +1,118 @@
+﻿모델Y
+자료 확인일: 2026-10-22
+국내 사양 기준: 현재 Tesla 대한민국 모델·주문 페이지 및 한국어 사용자 매뉴얼
+수록 기능: 8개
+차종 안내: 현재 국내 Model Y Premium 5인승 RWD / Long Range AWD 기준입니다. Model Y L 6인승과 구분했습니다. 핸즈프리 트렁크에는 호환 UWB 기기·앱 및 설정 조건이 있습니다.
+제목과 내용은 등록용 한국어 요약입니다. 적용 트림과 조건을 확인하세요.
+
+────────────────────────────────────────
+01. 전면 및 후면 터치스크린
+제목: 전면 및 후면 터치스크린
+이미지: 전면 및 후면 터치스크린.webp
+내용: 앞좌석과 뒷좌석 탑승자가 터치스크린에서 실내 온도와 엔터테인먼트 설정을 편리하게 조작할 수 있습니다.
+국내 적용 트림·조건: 국내 Model Y Premium 5인승 (RWD / Long Range AWD)
+정리 근거: 국내 모델 페이지의 안락한 전 좌석 및 제원, 국내 주문 페이지의 Premium 테크 구성을 대조했습니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/modely
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 프리미엄 승차감
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-Y-Premium-Comfort-Desktop-APAC-Poster.jpg
+이미지 크기: 2200 × 1100 px
+이미지 안내: 제조사 한국어 모델 페이지의 해당 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+02. 1열 열선 및 통풍시트
+제목: 1열 열선 및 통풍시트
+이미지: 1열 열선 및 통풍시트.webp
+내용: 앞좌석의 열선과 통풍 기능으로 계절과 실내 온도에 맞춰 쾌적한 착석 환경을 조절할 수 있습니다.
+국내 적용 트림·조건: 국내 Model Y Premium 5인승 (RWD / Long Range AWD)
+정리 근거: 국내 주문 페이지 Premium 인테리어 구성에서 1열 열선 및 통풍 시트를 확인하고, 한국어 매뉴얼의 실내 온도 조절 화면을 함께 확인했습니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ownersmanual/modely/ko_kr/GUID-4F3599A1-20D9-4A49-B4A0-5261F957C096.html
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 1열 열선 및 통풍시트
+이미지 주소: https://www.tesla.com/ownersmanual/images/GUID-649A09BE-06B8-4549-8A15-1CE2C2B4F86D-online-en-US.png
+이미지 크기: 380 × 190 px
+이미지 안내: 국내 한국어 사용자 매뉴얼에 수록된 제조사 기능 설명 이미지입니다.
+
+────────────────────────────────────────
+03. 전동 리클라이닝 및 폴딩 2열 시트
+제목: 전동 리클라이닝 및 폴딩 2열 시트
+이미지: 전동 리클라이닝 및 폴딩 2열 시트.webp
+내용: 2열 등받이의 각도를 조절하고 시트를 접어 승차 편의와 적재 공간을 필요에 맞게 활용할 수 있습니다.
+국내 적용 트림·조건: 국내 Model Y Premium 5인승 (RWD / Long Range AWD)
+정리 근거: 국내 모델 페이지의 전동 리클라이닝·평평하게 접히는 2열 시트와 한국어 5인승 매뉴얼의 전원 스위치 설명을 대조했습니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ownersmanual/modely/ko_kr/GUID-64C3BD83-0089-41A2-B9DD-9CDC0212D6AE.html
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 전동 리클라이닝 및 폴딩 2열 시트
+이미지 주소: https://www.tesla.com/ownersmanual/images/GUID-7AA7158F-5AB1-498D-9923-CA544E3B5E0E-online-en-US.png
+이미지 크기: 380 × 380 px
+이미지 안내: 국내 한국어 사용자 매뉴얼에 수록된 제조사 기능 설명 이미지입니다.
+
+────────────────────────────────────────
+04. 핸즈프리 트렁크
+제목: 핸즈프리 트렁크
+이미지: 핸즈프리 트렁크.webp
+내용: 호환 휴대폰 키를 소지하고 차량 뒤쪽에 접근하면 트렁크를 손으로 조작하지 않고 열 수 있습니다.
+국내 적용 트림·조건: 국내 Model Y Premium 5인승 (RWD / Long Range AWD)
+정리 근거: 한국어 매뉴얼의 핸즈프리 트렁크 기능 기준입니다. UWB를 지원하는 호환 기기·Tesla 앱과 핸즈프리 트렁크 설정이 필요합니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ownersmanual/modely/ko_kr/GUID-3667D28B-5B3B-49CE-A1C1-3D70AC60D9F6.html
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 핸즈프리 트렁크
+이미지 주소: https://www.tesla.com/ownersmanual/images/GUID-A9FF3EEF-3358-4BD7-8A42-CAEA66239567-online-en-US.png
+이미지 크기: 380 × 313 px
+이미지 안내: 국내 한국어 사용자 매뉴얼에 수록된 제조사 기능 설명 이미지입니다.
+
+────────────────────────────────────────
+05. Tesla 앱 원격 실내 온도 및 충전 제어
+제목: Tesla 앱 원격 실내 온도 및 충전 제어
+이미지: Tesla 앱 원격 실내 온도 및 충전 제어.webp
+내용: 앱에서 탑승 전 실내 온도를 조절하고, 충전 일정과 충전 진행 상태를 확인하거나 충전을 시작·중지할 수 있습니다.
+국내 적용 트림·조건: 국내 Model Y Premium 5인승 (RWD / Long Range AWD)
+정리 근거: 국내 Model Y 리모트 액세스 설명의 실내 온도 조절 및 충전 상태 확인을 함께 정리했습니다. 앱·차량 통신이 필요합니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/modely
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 언제 어디서나 리모트 액세스
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-Y-Premium-Remote-Desktop-NA.jpg
+이미지 크기: 2200 × 1100 px
+이미지 안내: 제조사 한국어 모델 페이지의 해당 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+06. 개선된 서스펜션 및 정숙한 실내
+제목: 개선된 서스펜션 및 정숙한 실내
+이미지: 개선된 서스펜션 및 정숙한 실내.webp
+내용: 서스펜션과 휠·타이어의 조화를 통해 부드러운 승차감을 제공하고, 소음 저감 기술로 실내를 차분하게 유지하도록 돕습니다.
+국내 적용 트림·조건: 국내 Model Y Premium 5인승 (RWD / Long Range AWD)
+정리 근거: 국내 Model Y 부드러운 승차감 카드 기준입니다. Model Y L의 어댑티브 서스펜션과 같은 사양으로 표시하지 않았습니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/modely
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 부드러운 승차감
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-Y-Premium-Sculpted-Carousel-Slide-2-Desktop-APAC-LHD-RHD.jpg
+이미지 크기: 2712 × 1356 px
+이미지 안내: 제조사 한국어 페이지의 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+07. 간접 반사형 일체형 테일램프
+제목: 간접 반사형 일체형 테일램프
+이미지: 간접 반사형 일체형 테일램프.webp
+내용: 차체 후면을 가로지르는 일체형 간접 반사 조명이 Model Y의 후면 디자인을 완성합니다.
+국내 적용 트림·조건: 국내 Model Y Premium 5인승 (RWD / Long Range AWD)
+정리 근거: 국내 Model Y 특색 있는 조명 카드의 간접 반사형 테일램프 설명 기준입니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/modely
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 특색 있는 조명
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-Y-Exterior-Carousel-Slide-3-Desktop.png
+이미지 크기: 2712 × 1356 px
+이미지 안내: 제조사 한국어 페이지의 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+08. 전방 충돌 경고 및 액티브 긴급 제동
+제목: 전방 충돌 경고 및 액티브 긴급 제동
+이미지: 전방 충돌 경고 및 액티브 긴급 제동.webp
+내용: 전방의 충돌 위험을 경고하고 필요한 상황에서 긴급 제동을 보조해 사고 위험이나 피해를 줄이는 데 도움을 줍니다.
+국내 적용 트림·조건: 국내 Model Y Premium 5인승 (RWD / Long Range AWD)
+정리 근거: 국내 Model Y 페이지에서 기본 제공으로 안내하는 액티브 세이프티 기능입니다. FSD 구매 여부와 별개이며 운전자 보조 기능입니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ownersmanual/modely/ko_kr/GUID-8EA7EF10-7D27-42AC-A31A-96BCE5BC0A85.html
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 충돌 방지 어시스트
+이미지 주소: https://www.tesla.com/ownersmanual/images/GUID-CFBA12B6-C5CC-4DFD-B33E-D5656C20F60A-online-en-US.png
+이미지 크기: 437 × 437 px
+이미지 안내: 한국어 사용자 매뉴얼에서 충돌 방지 기능을 설명하는 제조사 이미지를 사용했습니다.

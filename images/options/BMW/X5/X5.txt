@@ -1,0 +1,102 @@
+﻿X5 차량정보 (국내 기준)
+수정일: 2026-10-20
+국내 대상 모델: X5 xDrive30d·40i·M60i (충전 전용 기능 제외)
+항목 수: 7
+
+[사용 안내]
+국내 출시 자료에서 적용이 확인되는 기능만 선별했습니다. 해외 모델 사양을 국내 사양으로 대체하지 않았습니다.
+동일 차종이어도 생산 시기·연식·트림에 따라 적용 사양이 다릅니다. 아래 적용 모델·트림에 맞춰 등록하세요.
+국내 근거 자료의 발표일을 항목별로 기록했습니다. 발표 당시의 국내 적용 확인이며 모든 2026년 생산 차량의 공통 기본 사양표는 아닙니다.
+제목과 설명은 등록하기 쉽도록 간추렸습니다. 이미지는 제조사 공식 기능 이미지 또는 공식 영상 대표 이미지이며, 8시리즈는 국내 출시 자료의 공식 모델 사진을 사용했습니다.
+기존에 전달한 폴더명·TXT 파일명·남긴 이미지 파일명은 유지했습니다. 기능명을 구체화한 경우에도 기존 이미지 파일명은 유지합니다.
+
+[01] 드라이빙 어시스턴트 프로페셔널
+내용: 차선과 차간 거리를 유지하며 가감속·조향을 보조합니다.
+이미지: 드라이빙 어시스턴트 프로페셔널.webp
+분류: 주행 보조
+국내 적용: 국내 X5 xDrive30d·40i·M60i (충전 전용 기능 제외) 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 한층 높은 완성도의 뉴 X5 및 뉴 X6 국내 공식 출시
+자료 발표일: Thu Jul 06 09:00:00 CEST 2023
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0428819KO
+확인 항목: 드라이빙 어시스턴트 프로페셔널
+이미지 구분: 공식 영상 대표 이미지
+이미지 크기: 1024 × 342
+이미지 출처: https://bmw.scene7.com/is/image/BMW/bmw-driving-assistant-professional-3-1?qlt=80&wid=1024&fmt=webp
+
+[02] 파킹 어시스턴트 프로페셔널
+내용: 주변 시야 확인과 주차 조작을 보조합니다.
+이미지: 파킹 어시스턴트 프로페셔널.webp
+분류: 주차 보조
+국내 적용: 국내 X5 xDrive30d·40i·M60i (충전 전용 기능 제외) 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 한층 높은 완성도의 뉴 X5 및 뉴 X6 국내 공식 출시
+자료 발표일: Thu Jul 06 09:00:00 CEST 2023
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0428819KO
+확인 항목: 파킹 어시스턴트 프로페셔널
+이미지 구분: 공식 영상 대표 이미지
+이미지 크기: 1024 × 342
+이미지 출처: https://bmw.scene7.com/is/image/BMW/bmw-parking-assistant-professional-3-1?qlt=80&wid=1024&fmt=webp
+
+[03] 라이브 콕핏 프로페셔널
+내용: 헤드업 표시와 경로 안내로 전방 주시를 돕습니다.
+이미지: 라이브 콕핏 프로페셔널.webp
+분류: 디스플레이
+국내 적용: 국내 X5 xDrive30d·40i·M60i (충전 전용 기능 제외) 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 한층 높은 완성도의 뉴 X5 및 뉴 X6 국내 공식 출시
+자료 발표일: Thu Jul 06 09:00:00 CEST 2023
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0428819KO
+확인 항목: 라이브 콕핏 프로페셔널
+이미지 구분: 공식 영상 대표 이미지
+이미지 크기: 1024 × 342
+이미지 출처: https://bmw.scene7.com/is/image/BMW/global_tec-ani_live-cockpit-pro_dsk_us-discl_fb?qlt=80&wid=1024&fmt=webp
+
+[04] BMW 커브드 디스플레이
+내용: 고해상도 화면에서 차량 기능을 직관적으로 조작합니다.
+이미지: BMW 커브드 디스플레이.webp
+분류: 디스플레이
+국내 적용: 국내 X5 xDrive30d·40i·M60i (충전 전용 기능 제외) 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 한층 높은 완성도의 뉴 X5 및 뉴 X6 국내 공식 출시
+자료 발표일: Thu Jul 06 09:00:00 CEST 2023
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0428819KO
+확인 항목: 커브드 디스플레이
+이미지 구분: 공식 기능 이미지
+이미지 크기: 2560 × 1706
+이미지 출처: https://bmw.scene7.com/is/image/BMW/g05_interior_highlights_curveddisplay:3to2?fmt=webp-alpha&wid=2560&fit=constrain%2C1
+
+[05] 메리노 가죽 트림과 시트
+내용: 부드러운 소재로 착좌감과 실내 분위기를 높입니다.
+이미지: 메리노 가죽 트림과 시트.webp
+분류: 시트
+국내 적용: 국내 X5 xDrive30d·40i·M60i (충전 전용 기능 제외) 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 한층 높은 완성도의 뉴 X5 및 뉴 X6 국내 공식 출시
+자료 발표일: Thu Jul 06 09:00:00 CEST 2023
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0428819KO
+확인 항목: 메리노 가죽
+이미지 구분: 공식 기능 이미지
+이미지 크기: 2560 × 1706
+이미지 출처: https://bmw.scene7.com/is/image/BMW/g05_interior_highlights_decor:3to2?fmt=webp-alpha&wid=2560&fit=constrain%2C1
+
+[06] CraftedClarity 글라스
+내용: 크리스털 장식으로 센터 콘솔을 꾸밉니다.
+이미지: CraftedClarity 글라스.webp
+분류: 실내
+국내 적용: 국내 X5 xDrive30d·40i·M60i (충전 전용 기능 제외) 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 한층 높은 완성도의 뉴 X5 및 뉴 X6 국내 공식 출시
+자료 발표일: Thu Jul 06 09:00:00 CEST 2023
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0428819KO
+확인 항목: 크리스탈 소재의 컨트롤러
+이미지 구분: 공식 기능 이미지
+이미지 크기: 2560 × 1706
+이미지 출처: https://bmw.scene7.com/is/image/BMW/g05_interior_highlights_craftedclarity:3to2?fmt=webp-alpha&wid=2560&fit=constrain%2C1
+
+[07] 하만 카돈 서라운드 사운드
+내용: 전 좌석에 고품질 오디오를 제공합니다.
+이미지: 하만 카돈 서라운드 사운드.webp
+분류: 오디오
+국내 적용: 국내 X5 xDrive30d·40i·M60i (충전 전용 기능 제외) 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 한층 높은 완성도의 뉴 X5 및 뉴 X6 국내 공식 출시
+자료 발표일: Thu Jul 06 09:00:00 CEST 2023
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0428819KO
+확인 항목: 하만 카돈 서라운드 사운드
+이미지 구분: 공식 기능 이미지
+이미지 크기: 2560 × 1706
+이미지 출처: https://bmw.scene7.com/is/image/BMW/g05_carousel_columns_soundsystem:3to2?fmt=webp-alpha&wid=2560&fit=constrain%2C1

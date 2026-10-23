@@ -1,0 +1,135 @@
+﻿EX90
+범위: 순수 전기 EX90 · 국내 MY26 브로슈어 기준
+수록 기능: 8개
+자료 확인일: 2026-10-21
+국내 확인 기준: MY26 공식 브로슈어 옵션표
+안내: MY26 국내 브로슈어의 옵션표와 대조했습니다. 고해상도 픽셀 헤드라이트는 Ultra 적용이며 Plus의 일반 LED와 구분했습니다. 파일럿 어시스트는 운전자 보조 기능으로 정리했습니다.
+설명은 국내 자료의 짧은 요약입니다. 적용 트림은 항목별 조건을 따릅니다.
+
+──────────────────────────────────────────
+01. 14.5인치 센터 디스플레이
+제목: 14.5인치 센터 디스플레이
+이미지: 14.5인치 센터 디스플레이.webp
+내용: 터치 화면에서 내비게이션·미디어·공조 등 주요 차량 기능을 직관적으로 조작합니다.
+분류: 디스플레이
+국내 적용 조건: 국내 MY26 EX90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex90-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-EX90.pdf
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 18, 19, 20쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 14.5인치 센터 디스플레이
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt7c204b223cd3c8e6/69bb95d71b80b49695a3b259/P14_JPG_Full-EX90_14.5_inch_center_display.png?branch=prod_alias
+이미지 크기: 1080 × 1080 px
+
+──────────────────────────────────────────
+02. 디지털 키 플러스
+제목: 디지털 키 플러스
+이미지: 디지털 키 플러스.webp
+내용: 호환 스마트폰을 키로 사용해 차량 잠금을 해제하고 주행할 수 있습니다.
+분류: 편의
+국내 적용 조건: MY26 EX90 국내 브로슈어 적용 · 호환 스마트폰·OS 및 UWB 지원 조건 확인
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex90-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-EX90.pdf
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 18, 19, 20쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 디지털 키
+이미지 출처: https://prismedia.volvocars.com/images/0cf339c6-798e-45e6-86b0-107636994487/Phone_key_plus_0103_EX90_1_HD.jpg
+이미지 크기: 1920 × 1080 px
+
+──────────────────────────────────────────
+03. 운전자 상태 인식 시스템
+제목: 운전자 상태 인식 시스템
+이미지: 운전자 상태 인식 시스템.webp
+내용: 운전자의 눈과 머리 움직임 등을 살펴 주의가 산만하거나 졸릴 때 경고와 개입을 돕습니다.
+분류: 안전
+국내 적용 조건: 국내 MY26 EX90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex90-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-EX90.pdf
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 18, 19, 20쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 운전자 상태 인식 시스템
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt2459577882c181e9/6809c841705bb86890c0cfa0/features-safety-3-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+04. 실내 승객 감지 시스템
+제목: 실내 승객 감지 시스템
+이미지: 실내 승객 감지 시스템.webp
+내용: 실내의 미세한 움직임을 감지해 남겨진 사람이나 반려동물을 확인하도록 알립니다.
+분류: 안전
+국내 적용 조건: 국내 MY26 EX90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex90-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-EX90.pdf
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 18, 19, 20쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 탑승자 감지
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt6ea8aa168c2b877c/6809c942110ea992e36047bf/features-safety-5-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+05. 파일럿 어시스트
+제목: 파일럿 어시스트
+이미지: 파일럿 어시스트.webp
+내용: 차간 거리와 차선 유지를 보조해 운전자의 주행 부담을 줄입니다. 운전자의 지속적인 주의와 조작이 필요합니다.
+분류: 주행 보조
+국내 적용 조건: 국내 MY26 EX90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex90-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-EX90.pdf
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 18, 19, 20쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 파일럿 보조 시스템 (Pilot Assist)
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt7684e77fcddf2b5b/6809ca5220a9530b3ba61912/features-safety-7-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+06. 파크 파일럿 어시스트
+제목: 파크 파일럿 어시스트
+이미지: 파크 파일럿 어시스트.webp
+내용: 주차 공간 탐색과 조향·가속·제동을 보조해 편리한 주차를 돕습니다.
+분류: 주차 보조
+국내 적용 조건: 국내 MY26 EX90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex90-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-EX90.pdf
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 18, 19, 20쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 파크 파일럿 어시스트
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/bltd59c7398e9de50df/6809cad3110ea944e96047c6/features-safety-8-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+07. 고해상도 픽셀 헤드라이트
+제목: 고해상도 픽셀 헤드라이트
+이미지: 고해상도 픽셀 헤드라이트.webp
+내용: 교통 상황에 맞춰 빛의 패턴을 조절해 다른 운전자의 눈부심을 줄이고 시야를 확보합니다.
+분류: 안전
+국내 적용 조건: MY26 EX90 Ultra 적용 · Twin Motor Plus는 일반 LED 헤드램프
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex90-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-EX90.pdf
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 18, 19, 20쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 고해상도 픽셀 헤드라이트
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt741734f3d6720d28/6809cb9e344d9d6f6d5a9d1d/features-safety-9-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px
+
+──────────────────────────────────────────
+08. 360° 서라운드 뷰 카메라
+제목: 360° 서라운드 뷰 카메라
+이미지: 360° 서라운드 뷰 카메라.webp
+내용: 차량 주변을 위에서 내려다보는 화면으로 보여줘 좁은 공간의 주차와 이동을 돕습니다.
+분류: 주차 보조
+국내 적용 조건: 국내 MY26 EX90 브로슈어 적용 사양
+정리 근거: 국내 공식 기능 페이지 요약 · 국내 브로슈어의 옵션표 대조
+기능 설명 출처: https://www.volvocars.com/kr/cars/ex90-electric/features/
+국내 사양 근거: https://www.volvocar.co.kr/l/volvo-brochure/pdf/MY26-EX90.pdf
+브로슈어 연식: MY26
+옵션표 PDF 페이지: 18, 19, 20쪽 (파일의 첫 페이지부터 센 번호)
+원문 기능명: 3D 뷰가 있는 360° 카메라
+이미지 출처: https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blta66533049d52f01e/6809cb8a38c21d1471096c31/features-safety-10-1x1.jpg?branch=prod_alias
+이미지 크기: 2160 × 2160 px

@@ -2140,7 +2140,6 @@ function adminQuery(array $overrides = []): string {
                     <h2><?= h($vehicleDetail['brand_name']) ?> <?= h($vehicleDetail['name']) ?></h2>
                 </div>
                 <div class="crud-toolbar">
-                    <a class="gray-btn" href="./vehicles.php?<?= h(adminQuery(['vehicle_id' => null])) ?>#product-list">목록으로</a>
                     <?php if (canDeleteVehicleData()): ?>
                     <form method="post" onsubmit="return confirm('이 차량과 연결된 색상·트림·가격 데이터를 모두 삭제할까요?');">
                         <input type="hidden" name="crud_action" value="delete_vehicle">
@@ -2333,7 +2332,7 @@ function adminQuery(array $overrides = []): string {
                                 </div>
                             </div>
                         </div>
-                        <div><label>색상명</label><input type="text" name="color_name" value="<?= h($color['name']) ?>"></div>
+                        <div class="color-name-cell"><label>색상명</label><input type="text" name="color_name" value="<?= h($color['name']) ?>"></div>
                         <div><label>HEX</label><input type="text" name="hex_code" value="<?= h((string)($color['hex_code'] ?? '')) ?>"></div>
                         <div><label>테두리</label><input type="text" name="border_color" value="<?= h((string)($color['border_color'] ?? '')) ?>"></div>
                         <div class="color-path-cell"><label>이미지 경로</label><input type="text" name="color_image_path" value="<?= h((string)($color['image_path'] ?? '')) ?>"></div>

@@ -1,0 +1,63 @@
+﻿iX3 차량정보 (국내 기준)
+수정일: 2026-10-20
+국내 대상 모델: iX3 50 xDrive (NA5)
+항목 수: 4
+
+[사용 안내]
+국내 출시 자료에서 적용이 확인되는 기능만 선별했습니다. 해외 모델 사양을 국내 사양으로 대체하지 않았습니다.
+동일 차종이어도 생산 시기·연식·트림에 따라 적용 사양이 다릅니다. 아래 적용 모델·트림에 맞춰 등록하세요.
+국내 근거 자료의 발표일을 항목별로 기록했습니다. 발표 당시의 국내 적용 확인이며 모든 2026년 생산 차량의 공통 기본 사양표는 아닙니다.
+제목과 설명은 등록하기 쉽도록 간추렸습니다. 이미지는 제조사 공식 기능 이미지 또는 공식 영상 대표 이미지이며, 8시리즈는 국내 출시 자료의 공식 모델 사진을 사용했습니다.
+기존에 전달한 폴더명·TXT 파일명·남긴 이미지 파일명은 유지했습니다. 기능명을 구체화한 경우에도 기존 이미지 파일명은 유지합니다.
+
+[01] 인텔리전트 충전 플랩
+내용: 차량 접근 시 충전구 플랩이 스스로 열리고 닫힙니다.
+이미지: 인텔리전트 충전 플랩.webp
+분류: 충전
+국내 적용: 국내 iX3 50 xDrive (NA5) 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 차세대 프리미엄 순수전기 SAV ‘더 뉴 BMW iX3’ 국내 공식 출시
+자료 발표일: Thu Jun 18 14:44:09 CEST 2026
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0458645KO
+확인 항목: 인텔리전트 충전 플랩
+이미지 구분: 공식 영상 대표 이미지
+이미지 크기: 1024 × 1024
+이미지 출처: https://bmw.scene7.com/is/image/BMW/na5_overlay-ext_charging-flap_1920_1024_fb?qlt=80&wid=1024&fmt=webp
+
+[02] 파노라믹 글라스 선루프
+내용: 넓은 유리 루프로 실내 개방감을 높입니다.
+이미지: 파노라믹 글라스 선루프.webp
+분류: 실내
+국내 적용: 국내 iX3 50 xDrive (NA5) 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 차세대 프리미엄 순수전기 SAV ‘더 뉴 BMW iX3’ 국내 공식 출시
+자료 발표일: Thu Jun 18 14:44:09 CEST 2026
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0458645KO
+확인 항목: 대형 파노라믹 선루프
+이미지 구분: 공식 기능 이미지
+이미지 크기: 400 × 500
+이미지 출처: https://bmw.scene7.com/is/image/BMW/na5_overlay-int_panoramic-roof:4to5?fmt=webp-alpha&wid=2560&fit=constrain%2C1
+
+[03] 6세대 BMW eDrive
+내용: 앞뒤 전기 모터로 순수 전기 주행을 제공합니다.
+이미지: 6세대 BMW eDrive.webp
+분류: 주행 성능
+국내 적용: 국내 iX3 50 xDrive (NA5) 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 차세대 프리미엄 순수전기 SAV ‘더 뉴 BMW iX3’ 국내 공식 출시
+자료 발표일: Thu Jun 18 14:44:09 CEST 2026
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0458645KO
+확인 항목: 6세대 BMW eDrive
+이미지 구분: 공식 기능 이미지
+이미지 크기: 400 × 500
+이미지 출처: https://bmw.scene7.com/is/image/BMW/na5_overlay-efficiency-engine-technology:4to5?fmt=webp-alpha&wid=2560&fit=constrain%2C1
+
+[04] 800V 배터리 기술
+내용: 고전압 배터리 기술로 효율과 급속 충전을 지원합니다.
+이미지: 800V 배터리 기술.webp
+분류: 충전
+국내 적용: 국내 iX3 50 xDrive (NA5) 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 차세대 프리미엄 순수전기 SAV ‘더 뉴 BMW iX3’ 국내 공식 출시
+자료 발표일: Thu Jun 18 14:44:09 CEST 2026
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0458645KO
+확인 항목: 800V 고전압 아키텍처
+이미지 구분: 공식 영상 대표 이미지
+이미지 크기: 1024 × 448
+이미지 출처: https://bmw.scene7.com/is/image/BMW/na5_overlay_efficiency_battery_technology_1920_1024_768_fb?qlt=80&wid=1024&fmt=webp

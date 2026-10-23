@@ -2,61 +2,91 @@
 declare(strict_types=1);
 
 if (PHP_SAPI !== 'cli') { http_response_code(404); exit; }
-
 $root = dirname(__DIR__);
 require_once $root . '/config/database.php';
 require_once $root . '/config/vehicle-info.php';
 
-$models = ['G70', 'G80', 'G80 EV', 'G90', 'GV60 EV', 'GV70', 'GV70 EV', 'GV80'];
 $pending = [];
+$total = 0;
+$missing = 0;
 $select = $pdo->prepare('SELECT v.id, i.content FROM car_vehicles v JOIN car_brands b ON b.id=v.brand_id LEFT JOIN car_vehicle_info i ON i.vehicle_id=v.id WHERE b.name=? AND v.name=?');
-foreach ($models as $model) {
+$files = glob($root . '/images/options/제네시스/*/*.txt');
+if (count($files) !== 8) throw new RuntimeException('차종별 메모 수를 확인해 주세요.');
+foreach ($files as $file) {
+    $model = basename(dirname($file));
     $select->execute(['제네시스', $model]);
     $rows = $select->fetchAll();
     if (count($rows) !== 1) throw new RuntimeException("차량 매칭 오류: {$model}");
     $row = $rows[0];
-    $relativeDir = 'images/options/제네시스/' . $model;
-    $text = file_get_contents($root . '/' . $relativeDir . '/' . $model . '.txt');
+    $text = file_get_contents($file);
     if ($text === false || !mb_check_encoding($text, 'UTF-8')) throw new RuntimeException("메모 읽기 오류: {$model}");
-    // Only unindented dash headings start options; package lists are indented.
-    $blocks = preg_split('/^-([^\r\n]+)\R/mu', str_replace("\r\n", "\n", $text), -1, PREG_SPLIT_DELIM_CAPTURE);
+    $blocks = preg_split('/^(\d+)\.[ \t]*(.+)\n/mu', str_replace("\r\n", "\n", $text), -1, PREG_SPLIT_DELIM_CAPTURE);
     $options = [];
-    for ($i = 1; $i < count($blocks); $i += 2) {
-        $name = trim($blocks[$i]);
-        $body = trim($blocks[$i + 1]);
-        if (!preg_match('/^이미지:\s*(.+)$/mu', $body, $match)) throw new RuntimeException("이미지 지정 누락: {$model} / {$name}");
-        $filename = trim($match[1]);
-        if (basename($filename) !== $filename) throw new RuntimeException('이미지 파일명 오류');
-        $path = agVehicleInfoImagePath($relativeDir . '/' . $filename);
-        $size = is_file($root . '/' . $path) ? getimagesize($root . '/' . $path) : false;
-        if (!$size || ($size['mime'] ?? '') !== 'image/webp') throw new RuntimeException("이미지 확인 실패: {$model} / {$filename}");
-        $description = trim(preg_replace('/^(?:이미지|소속):[^\n]*\n?/mu', '', $body));
-        $description = trim(preg_replace('/^[ \t]*(?:분류|구분|사양[ \t]*구분|적용[ \t]*안내|설명[ \t]*기준|출처)[ \t]*:[^\n]*(?:\n|$)/mu', '', $description));
-        if ($description === '') throw new RuntimeException("설명 누락: {$model} / {$name}");
-        $options[] = ['option_name' => $name, 'description' => $description, 'image_path' => $path, 'is_active' => 1];
+    $withoutImage = 0;
+    for ($i = 1; $i < count($blocks); $i += 3) {
+        if ((int)$blocks[$i] !== intdiv($i - 1, 3) + 1) throw new RuntimeException("항목 번호 오류: {$model}");
+        $name = trim($blocks[$i + 1]);
+        $body = trim($blocks[$i + 2]);
+        if (!preg_match('/^제목:[ \t]*(.+)$/mu', $body, $titleMatch) || trim($titleMatch[1]) !== $name) throw new RuntimeException("제목 불일치: {$model}");
+        $path = '';
+        if (preg_match('/^이미지:[ \t]*(.*)$/mu', $body, $match)) {
+            $filename = trim($match[1]);
+            if ($filename !== '' && basename($filename) === $filename) {
+                $candidate = 'images/options/제네시스/' . $model . '/' . $filename;
+                if (is_file($root . '/' . $candidate)) {
+                    $size = getimagesize($root . '/' . $candidate);
+                    if (!$size) throw new RuntimeException("이미지 손상: {$candidate}");
+                    $path = agVehicleInfoImagePath($candidate);
+                }
+            }
+        }
+        if ($path === '') { $withoutImage++; continue; }
+        if (!preg_match('/^내용:[ \t]*([^\r\n]+)/mu', $body, $descriptionMatch)) throw new RuntimeException("설명 누락: {$model} / {$name}");
+        $description = trim($descriptionMatch[1]);
+        if (mb_strlen($name, 'UTF-8') > 32) {
+            $details = [];
+            $short = preg_replace_callback('/\((?:[^()]++|(?R))*\)/u', static function ($match) use (&$details) {
+                $details[] = trim(substr($match[0], 1, -1));
+                return '';
+            }, $name);
+            $short = trim(preg_replace('/\s+/u', ' ', $short));
+            if ($details && $short !== '') {
+                $name = $short;
+            }
+        }
+        if ($name === '' || $description === '' || mb_strlen($name) > 200 || mb_strlen($description) > 5000) throw new RuntimeException("항목 내용 오류: {$model} / {$name}");
+        $options[] = ['option_name' => $name, 'description' => $description, 'image_path' => $path, 'image_kind' => preg_match('/^이미지 구분:[ \t]*공식 기능 아이콘/mu', $body) ? 'icon' : 'photo', 'is_active' => 1];
     }
-    if (!$options || count($options) > 100) throw new RuntimeException("항목 수 오류: {$model}");
+    if (!preg_match('/^국내 선택 품목 세부 항목:[ \t]*(\d+)/mu', $text, $declaredCount)
+        || (int)$declaredCount[1] !== count($options) + $withoutImage
+        || count($options) > 100) throw new RuntimeException("항목 수 오류: {$model}");
     $existing = $row['content'] === null ? [] : json_decode($row['content'], true, 512, JSON_THROW_ON_ERROR);
+    if (!preg_match('/^범위:[ \t]*(.+)$/mu', $text, $basis)) throw new RuntimeException("자료 기준 누락: {$model}");
     $content = [
         'title' => $existing['title'] ?? '주요 사양 및 옵션',
-        'fitment_note' => $existing['fitment_note'] ?? '차종별 주요 사양 소개입니다. 실제 적용 여부와 기본·선택 구분은 연식·트림·패키지에 따라 달라집니다.',
+        'fitment_note' => '자료 기준: ' . trim($basis[1]) . '. 주요 기능 소개이며 전 트림 공통 기본 품목 목록은 아닙니다. 실제 적용 여부는 연식·트림·선택 사양에 따라 달라집니다.',
         'hero_image' => $existing['hero_image'] ?? '',
         'options' => $options,
     ];
     $pending[] = ['vehicle_id' => (int)$row['id'], 'model' => $model, 'previous_content' => $row['content'], 'content' => $content];
-    echo $model . ': ' . count($options) . "개 항목 및 이미지 확인\n";
+    $total += count($options);
+    $missing += $withoutImage;
+    echo "{$model}: " . count($options) . "개 항목, 이미지 없음 {$withoutImage}개\n";
 }
-
-if (!in_array('--apply', $argv, true)) { echo "검증 완료. --apply로 등록합니다.\n"; exit; }
+echo "총 " . count($pending) . "종 / {$total}개 항목 / 이미지 없음 {$missing}개\n";
+if (!in_array('--apply', $argv, true)) exit;
 
 $backup = tempnam(sys_get_temp_dir(), 'autogenie-genesis-info-');
-if ($backup === false || file_put_contents($backup, json_encode($pending, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR)) === false) throw new RuntimeException('백업 저장 실패');
+if (!$backup || file_put_contents($backup, json_encode($pending, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR)) === false) throw new RuntimeException('백업 저장 실패');
 echo "백업: {$backup}\n";
 $pdo->beginTransaction();
 try {
     $save = $pdo->prepare('INSERT INTO car_vehicle_info (vehicle_id, content) VALUES (?, ?) ON DUPLICATE KEY UPDATE content=VALUES(content)');
     $verify = $pdo->prepare('SELECT content FROM car_vehicle_info WHERE vehicle_id=?');
     foreach ($pending as $entry) {
+        $verify->execute([$entry['vehicle_id']]);
+        $current = $verify->fetchColumn();
+        if (($current === false ? null : $current) !== $entry['previous_content']) throw new RuntimeException('동시 수정이 있어 중단합니다.');
         $json = json_encode($entry['content'], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
         $save->execute([$entry['vehicle_id'], $json]);
         $verify->execute([$entry['vehicle_id']]);
@@ -67,4 +97,4 @@ try {
     if ($pdo->inTransaction()) $pdo->rollBack();
     throw $error;
 }
-echo "8종 등록 및 저장 검증 완료\n";
+echo "등록 및 저장 검증 완료\n";

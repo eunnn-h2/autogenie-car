@@ -1,0 +1,104 @@
+﻿모델Y L
+자료 확인일: 2026-10-22
+국내 사양 기준: 현재 Tesla 대한민국 모델·주문 페이지 및 한국어 사용자 매뉴얼
+수록 기능: 7개
+차종 안내: 국내 Model Y 페이지의 Model Y L Premium 6인승 AWD 영역과 한국어 6인승 매뉴얼 기준입니다. 일반 5인승 Model Y와 시트·오디오·서스펜션 구성을 구분했습니다.
+제목과 내용은 등록용 한국어 요약입니다. 적용 트림과 조건을 확인하세요.
+
+────────────────────────────────────────
+01. 3열 6인승 및 2열 캡틴 시트
+제목: 3열 6인승 및 2열 캡틴 시트
+이미지: 3열 6인승 및 2열 캡틴 시트.webp
+내용: 독립형 2열 캡틴 시트를 포함한 3열 6인승 구성입니다. 2열에는 열선·통풍과 전동 암레스트가 적용되어 탑승 편의를 높입니다.
+국내 적용 트림·조건: 국내 Model Y L Premium 6인승 AWD
+정리 근거: 국내 Model Y L 인테리어 카드의 3열 6인승, 2열 캡틴 시트·통풍·열선·전동 암레스트 설명을 확인했습니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/modely
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 3열, 6인승
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-Y-L-Luxury-Carousel-Slide-1-Desktop-RHD.jpg
+이미지 크기: 1920 × 960 px
+이미지 안내: 제조사 한국어 페이지의 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+02. 3열 전동 리클라이닝 및 원터치 폴딩
+제목: 3열 전동 리클라이닝 및 원터치 폴딩
+이미지: 3열 전동 리클라이닝 및 원터치 폴딩.webp
+내용: 3열 등받이 각도를 전동으로 조절하고 시트를 원터치로 접어 탑승 공간과 적재 공간을 편리하게 바꿀 수 있습니다.
+국내 적용 트림·조건: 국내 Model Y L Premium 6인승 AWD
+정리 근거: 국내 Model Y L 페이지의 3열 기능과 한국어 매뉴얼의 6인승 3열 시트 조절 설명을 대조했습니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ownersmanual/modely/ko_kr/GUID-52117C21-F5C7-451C-A499-95D946B50A1B.html
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 3열 전동 리클라이닝 및 원터치 폴딩
+이미지 주소: https://www.tesla.com/ownersmanual/images/GUID-60FB5984-BD34-411F-B3FA-95194BDB973E-online-en-US.png
+이미지 크기: 380 × 233 px
+이미지 안내: 국내 한국어 사용자 매뉴얼에 수록된 제조사 기능 설명 이미지입니다.
+
+────────────────────────────────────────
+03. 8인치 2열 터치스크린
+제목: 8인치 2열 터치스크린
+이미지: 8인치 2열 터치스크린.webp
+내용: 2열 터치스크린으로 실내 온도와 엔터테인먼트 기능을 편리하게 조작할 수 있습니다.
+국내 적용 트림·조건: 국내 Model Y L Premium 6인승 AWD
+정리 근거: 국내 Model Y L 제원에 8인치 후면 터치스크린이 명시되어 있습니다. 한국어 Model Y 매뉴얼의 후면 화면 이미지를 함께 사용했습니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ownersmanual/modely/ko_kr/GUID-A1DF67DE-94B4-4859-98B4-B0A5D342FAB3.html
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 8인치 2열 터치스크린
+이미지 주소: https://www.tesla.com/ownersmanual/images/GUID-5C8D02BE-729D-4DB7-A515-FA8B3D32080F-online-en-US.png
+이미지 크기: 380 × 363 px
+이미지 안내: 국내 한국어 사용자 매뉴얼에 수록된 제조사 기능 설명 이미지입니다.
+
+────────────────────────────────────────
+04. 19스피커 Tesla 오디오
+제목: 19스피커 Tesla 오디오
+이미지: 19스피커 Tesla 오디오.webp
+내용: 19개의 스피커로 구성된 Tesla 오디오 시스템이 몰입감 있는 음악 감상 환경을 제공합니다.
+국내 적용 트림·조건: 국내 Model Y L Premium 6인승 AWD
+정리 근거: 국내 Model Y L 정숙하고 편안한 주행 카드의 19스피커 오디오 설명을 확인했습니다. 일반 Model Y의 오디오 구성과 구분했습니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/modely
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 정숙하고 편안한 주행
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-Y-L-Luxury-Carousel-Slide-3-Desktop-RHD.jpg
+이미지 크기: 1600 × 800 px
+이미지 안내: 제조사 한국어 페이지의 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+05. 어댑티브 서스펜션 및 전자식 댐핑
+제목: 어댑티브 서스펜션 및 전자식 댐핑
+이미지: 어댑티브 서스펜션 및 전자식 댐핑.webp
+내용: 노면 상태에 맞춰 댐핑을 조절해 진동을 줄이고, 승차감과 접지력을 높이도록 돕습니다.
+국내 적용 트림·조건: 국내 Model Y L Premium 6인승 AWD
+정리 근거: 국내 Model Y L 정교한 핸들링 카드의 어댑티브 서스펜션과 전자식 댐핑 쇼크 설명 기준입니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/modely
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 정교한 핸들링
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-Y-L-Engineered-Carousel-Slide-3-Localized-Desktop-KR.jpg
+이미지 크기: 1600 × 800 px
+이미지 안내: 제조사 한국어 페이지의 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+06. 3열 탑승자 보호 에어백 시스템
+제목: 3열 탑승자 보호 에어백 시스템
+이미지: 3열 탑승자 보호 에어백 시스템.webp
+내용: 3열 전 좌석을 고려한 에어백 구성으로 탑승자 보호를 돕습니다. 2열에는 윈도·벨트라인 에어백이, 3열에는 측면 에어백이 적용됩니다.
+국내 적용 트림·조건: 국내 Model Y L Premium 6인승 AWD
+정리 근거: 국내 Model Y L 기본으로 갖춘 안전성 카드에서 2열 및 3열 에어백 구성을 확인했습니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ko_kr/modely
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 안전을 위한 설계
+이미지 주소: https://digitalassets.tesla.com/tesla-contents/image/upload/Model-Y-L-Safety-Desktop-CN.png
+이미지 크기: 3264 × 1632 px
+이미지 안내: 제조사 한국어 모델 페이지의 해당 기능 이미지 또는 기능 영상 대표 이미지입니다.
+
+────────────────────────────────────────
+07. 전방 충돌 경고 및 액티브 긴급 제동
+제목: 전방 충돌 경고 및 액티브 긴급 제동
+이미지: 전방 충돌 경고 및 액티브 긴급 제동.webp
+내용: 충돌 위험을 감지해 경고하고 필요한 상황에서 제동을 보조하여 사고 위험이나 충격을 줄이는 데 도움을 줍니다.
+국내 적용 트림·조건: 국내 Model Y L Premium 6인승 AWD
+정리 근거: 국내 Model Y L 액티브 세이프티 카드에서 기본 사양으로 확인하고 한국어 매뉴얼의 충돌 방지 어시스트 설명을 대조했습니다. FSD와 구분한 운전자 보조 기능입니다.
+기능 설명·이미지 원문 페이지: https://www.tesla.com/ownersmanual/modely/ko_kr/GUID-8EA7EF10-7D27-42AC-A31A-96BCE5BC0A85.html
+국내 적용 확인 페이지: https://www.tesla.com/ko_kr/modely
+원문 항목명: 전방 충돌 경고 및 액티브 긴급 제동
+이미지 주소: https://www.tesla.com/ownersmanual/images/GUID-CFBA12B6-C5CC-4DFD-B33E-D5656C20F60A-online-en-US.png
+이미지 크기: 437 × 437 px
+이미지 안내: 국내 한국어 사용자 매뉴얼에 수록된 제조사 기능 설명 이미지입니다.

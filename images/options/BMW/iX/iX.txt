@@ -1,0 +1,115 @@
+﻿iX 차량정보 (국내 기준)
+수정일: 2026-10-20
+국내 대상 모델: iX xDrive45·xDrive60·M70
+항목 수: 8
+
+[사용 안내]
+국내 출시 자료에서 적용이 확인되는 기능만 선별했습니다. 해외 모델 사양을 국내 사양으로 대체하지 않았습니다.
+동일 차종이어도 생산 시기·연식·트림에 따라 적용 사양이 다릅니다. 아래 적용 모델·트림에 맞춰 등록하세요.
+국내 근거 자료의 발표일을 항목별로 기록했습니다. 발표 당시의 국내 적용 확인이며 모든 2026년 생산 차량의 공통 기본 사양표는 아닙니다.
+제목과 설명은 등록하기 쉽도록 간추렸습니다. 이미지는 제조사 공식 기능 이미지 또는 공식 영상 대표 이미지이며, 8시리즈는 국내 출시 자료의 공식 모델 사진을 사용했습니다.
+기존에 전달한 폴더명·TXT 파일명·남긴 이미지 파일명은 유지했습니다. 기능명을 구체화한 경우에도 기존 이미지 파일명은 유지합니다.
+
+[01] 드라이빙 어시스턴트 프로페셔널
+내용: 차선과 차간 거리를 유지하며 가감속·조향을 보조합니다.
+이미지: 드라이빙 어시스턴트 프로페셔널.webp
+분류: 주행 보조
+국내 적용: 국내 iX xDrive45·xDrive60·M70 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 강렬한 디자인과 향상된 주행성능 갖춘 ‘뉴 iX’ 공식 출시
+자료 발표일: Wed Aug 06 04:07:00 CEST 2025
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0451799KO
+확인 항목: 드라이빙 어시스턴트 프로페셔널
+이미지 구분: 공식 영상 대표 이미지
+이미지 크기: 1024 × 342
+이미지 출처: https://bmw.scene7.com/is/image/BMW/bmw-driving-assistant-professional-3-1?qlt=80&wid=1024&fmt=webp
+
+[02] 파킹 어시스턴트 프로페셔널
+내용: 주변 시야 확인과 주차 조작을 보조합니다.
+이미지: 파킹 어시스턴트 프로페셔널.webp
+분류: 주차 보조
+국내 적용: 국내 iX xDrive60·M70 상위 사양에 적용 · xDrive45의 플러스 사양과 구분
+국내 확인 자료: BMW 코리아, 강렬한 디자인과 향상된 주행성능 갖춘 ‘뉴 iX’ 공식 출시
+자료 발표일: Wed Aug 06 04:07:00 CEST 2025
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0451799KO
+확인 항목: 파킹 어시스턴트 프로페셔널
+이미지 구분: 공식 영상 대표 이미지
+이미지 크기: 1024 × 342
+이미지 출처: https://bmw.scene7.com/is/image/BMW/global_tec-ani_bmw-parking-assistant-professional_dsk_fb-1?qlt=80&wid=1024&fmt=webp
+
+[03] 디지털 키 플러스
+내용: 호환 스마트 기기를 차량 키로 활용합니다.
+이미지: 디지털 키 플러스.webp
+분류: 편의
+국내 적용: 국내 iX xDrive45·xDrive60·M70 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 강렬한 디자인과 향상된 주행성능 갖춘 ‘뉴 iX’ 공식 출시
+자료 발표일: Wed Aug 06 04:07:00 CEST 2025
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0451799KO
+확인 항목: 디지털 키 플러스
+이미지 구분: 공식 영상 대표 이미지
+이미지 크기: 1024 × 342
+이미지 출처: https://bmw.scene7.com/is/image/BMW/global_tec-ani_digital-key-plus_dsk_fb-1?qlt=80&wid=1024&fmt=webp
+
+[04] BMW 키드니 아이코닉 글로우
+내용: 키드니 그릴 조명으로 외관의 존재감을 강조합니다.
+이미지: BMW 키드니 아이코닉 글로우.webp
+분류: 외장
+국내 적용: 국내 iX xDrive45·xDrive60·M70 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 강렬한 디자인과 향상된 주행성능 갖춘 ‘뉴 iX’ 공식 출시
+자료 발표일: Wed Aug 06 04:07:00 CEST 2025
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0451799KO
+확인 항목: 키드니 아이코닉 글로우
+이미지 구분: 공식 영상 대표 이미지
+이미지 크기: 1024 × 683
+이미지 출처: https://bmw.scene7.com/is/image/BMW/i20_bev_exterior_iconic-glow_fb?qlt=80&wid=1024&fmt=webp
+
+[05] M 다기능 시트
+내용: 다양한 조절과 지지력으로 착좌감을 높입니다.
+이미지: M 다기능 시트.webp
+분류: 시트
+국내 적용: 국내 iX xDrive45·xDrive60·M70 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 강렬한 디자인과 향상된 주행성능 갖춘 ‘뉴 iX’ 공식 출시
+자료 발표일: Wed Aug 06 04:07:00 CEST 2025
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0451799KO
+확인 항목: M 다기능 시트
+이미지 구분: 공식 영상 대표 이미지
+이미지 크기: 1024 × 683
+이미지 출처: https://bmw.scene7.com/is/image/BMW/i20_bev_interior_multifunction-seats_fb?qlt=80&wid=1024&fmt=webp
+
+[06] 파노라마 글라스 루프 스카이 라운지
+내용: 유리 루프의 투명도를 버튼으로 조절합니다.
+이미지: 파노라마 글라스 루프 스카이 라운지.webp
+분류: 실내
+국내 적용: 국내 iX xDrive45·xDrive60·M70 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 강렬한 디자인과 향상된 주행성능 갖춘 ‘뉴 iX’ 공식 출시
+자료 발표일: Wed Aug 06 04:07:00 CEST 2025
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0451799KO
+확인 항목: 파노라마 글라스 루프 스카이 라운지
+이미지 구분: 공식 기능 이미지
+이미지 크기: 1493 × 995
+이미지 출처: https://bmw.scene7.com/is/image/BMW/i20_bev_interior_glass-roof:3to2?fmt=webp-alpha&wid=1493&fit=constrain%2C1
+
+[07] 어댑티브 에어 서스펜션
+내용: 상황에 맞춰 차체 높이를 조절합니다.
+이미지: 어댑티브 에어 서스펜션.webp
+분류: 주행 성능
+국내 적용: 국내 iX xDrive45·xDrive60·M70 출시 자료 기준 · 동일 기능 적용 차량에 등록
+국내 확인 자료: BMW 코리아, 강렬한 디자인과 향상된 주행성능 갖춘 ‘뉴 iX’ 공식 출시
+자료 발표일: Wed Aug 06 04:07:00 CEST 2025
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0451799KO
+확인 항목: 에어 서스펜션
+이미지 구분: 공식 기능 이미지
+이미지 크기: 2560 × 1700
+이미지 출처: https://bmw.scene7.com/is/image/BMW/i20_bev_performance_air-suspension:3to2?fmt=webp-alpha&wid=2560&fit=constrain%2C1
+
+[08] 인테그랄 액티브 스티어링
+내용: 뒷바퀴 조향으로 좁은 공간의 기동성을 높입니다.
+이미지: 인테그랄 액티브 스티어링.webp
+분류: 주행 성능
+국내 적용: 국내 iX xDrive60·M70 적용 · xDrive45 제외
+국내 확인 자료: BMW 코리아, 강렬한 디자인과 향상된 주행성능 갖춘 ‘뉴 iX’ 공식 출시
+자료 발표일: Wed Aug 06 04:07:00 CEST 2025
+국내 적용 근거: https://www.press.bmwgroup.com/korea/article/detail/T0451799KO
+확인 항목: 인테그랄 액티브 스티어링
+이미지 구분: 공식 기능 이미지
+이미지 크기: 2560 × 1700
+이미지 출처: https://bmw.scene7.com/is/image/BMW/i20_bev_performance_integral-active-steering:3to2?fmt=webp-alpha&wid=2560&fit=constrain%2C1
